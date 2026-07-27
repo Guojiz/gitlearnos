@@ -27,7 +27,7 @@
 ## ChatGPT Work 示例
 
 ```text
-状态：私有 GitHub 目标仓库
+状态：私有 Git 目标仓库
 行为：GitLearnOS Router 或 AGENTS.zh-CN.md
 来源：只有获授权时使用连接文件或应用
 记忆：只缓存稳定偏好

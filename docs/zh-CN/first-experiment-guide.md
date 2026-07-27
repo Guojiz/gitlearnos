@@ -1,132 +1,54 @@
 # 第一次实验指南
 
-当新用户想试用 Repo as Review OS，但不清楚应该用哪个仓库时，先看这一页。
+先运行一个小而真实的学习事件，不要一开始就创建所有可能的空目录。
 
-## 两个仓库的关系
+## 两个仓库
 
 ```text
-Repo as Review OS 仓库
-→ 模板仓库
-→ 方法、文档、skill、示例、规则
+GitLearnOS 模板
+→ 方法与可复用资源
 
-你自己的空仓库
-→ 个人学习仓库
-→ 你的目标、来源、模型、复习、dashboard
+学习者仓库
+→ 私有学习状态
 ```
 
-不要把个人学习数据直接写进模板仓库。
+学习者仓库可以是空白本地 Git 仓库，也可以是私有远程仓库。
 
-AI 应该先读模板仓库，再把结构部署到用户自己的仓库里。
-
-## 推荐第一次实验流程
-
-1. 新建一个空的私有仓库。
-2. 把 Repo as Review OS 链接发给 AI。
-3. 把你的空目标仓库链接发给 AI。
-4. 让 AI 先识别自己的运行环境和权限边界。
-5. 让 AI 部署最小结构。
-6. 再告诉 AI 第一个学习目标。
-
-## 给 ChatGPT 的提示词
+## 指令
 
 ```text
-请阅读这个模板仓库：
-https://github.com/Guojiz/GitLearnOS
+请把 https://github.com/Guojiz/GitLearnOS 作为模板。
+我的学习仓库或本地路径是：<target>
+学科：<subject>
+目标或当前学习事件：<input>
 
-然后把 Repo as Review OS 的最小结构部署到我的空目标仓库：
-<粘贴你的目标仓库链接>
-
-请先识别你的运行环境和权限边界：
-- 你能不能读取模板仓库？
-- 你能不能读取目标仓库？
-- 你能不能写入目标仓库？
-- 是否需要我手动开启 connector、app 或权限？
-
-不要未经确认覆盖已有文件。
-部署完成后，先问我的第一个学习目标。
+先阅读 GITLEARNOS.zh-CN.md。检测真实的读取、写入、Git、来源和调度能力。
+只创建本次事件需要的文件。保留原始证据，只在有用时生成针对性问题，提交
+安全写回，并如实报告实际发生了什么以及如何撤销。
 ```
 
-## 给 Codex 或本地 coding agent 的提示词
+## 预期最小结果
 
 ```text
-请把 Repo as Review OS 仓库作为模板和文档来源。
-请把我的新空仓库或本地空文件夹作为目标学习仓库。
-
-不要把个人学习数据写进模板仓库。
-
-请在目标仓库中创建最小结构：
-- dashboard.md
-- goals/main-goal.md
-- sources/
-- models/
-- reviews/
-- templates/
-- agents/
-- automations/
-- archive/
-
-汇报每一个创建或修改的文件。
-然后问我的第一个学习目标。
-```
-
-## 如果下载到本地
-
-本地使用时也要保留同样关系：
-
-```text
-本地 Repo as Review OS 副本
-→ 参考模板
-
-本地 my-learning-os 文件夹
-→ 目标学习仓库
-```
-
-AI 可以读取模板文件夹，但应该把学习状态写入目标文件夹。
-
-## 部署完成后应该有什么
-
-目标仓库里应该出现：
-
-```text
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
 dashboard.md
-goals/main-goal.md
-sources/
-models/
-reviews/
-templates/
-agents/
-automations/
-archive/
+learner-profile.md
+subjects/<subject>/goals/main-goal.md
 ```
 
-然后 AI 应该问：
+如果输入是笔记、错题或教师反馈，还应出现一个或多个真实学科记录，不应出现
+空目录。
 
-```text
-你希望这个仓库支持的第一个学习目标是什么？
-```
+## 通过条件
 
-## 常见误解
+- 个人状态只进入学习者仓库；
+- 事件链接到目标与来源证据；
+- 学习者或教师的原始内容没有被覆盖；
+- 生成的问题依据当前薄弱点；
+- Agent 区分本地提交、远程 push 与调度；
+- 重复输入不会创建副本；
+- 存在一次可撤销 Git 更新和一份诚实回执。
 
-```text
-错误：
-把 Repo as Review OS 仓库本身当成自己的学习仓库。
-
-正确：
-把 Repo as Review OS 当模板，把结构部署到自己的仓库。
-```
-
-```text
-错误：
-还没部署好就直接发一道题，期待 AI 自动知道写到哪里。
-
-正确：
-先部署目标仓库，再发送目标、题目、笔记或复习任务。
-```
-
-```text
-错误：
-以为每个 AI 工具连接 GitHub 的方式都一样。
-
-正确：
-让 AI 先识别运行环境，并说明哪些步骤需要用户手动完成。
-```
+更正式的检查见对应[评测场景](../../evals/README.zh-CN.md)。

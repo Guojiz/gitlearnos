@@ -1,6 +1,6 @@
 # 学科文件夹模型
 
-GitLearnOS 使用一个由学习者拥有的仓库，并在其中按学科建立聚焦文件夹。“学科库”指文件夹，不是单独的 GitHub 仓库。
+GitLearnOS 使用一个由学习者拥有的仓库，并在其中按学科建立聚焦文件夹。“学科库”指文件夹，不是单独的 Git 仓库。
 
 ## 标准结构
 
@@ -20,7 +20,7 @@ my-gitlearnos/
 │   │   ├── knowledge-gaps/
 │   │   ├── handoffs/
 │   │   ├── reviews/
-│   │   └── sessions/
+│   │   └── events/
 │   └── english/
 └── archive/
 ```

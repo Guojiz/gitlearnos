@@ -1,6 +1,6 @@
 # Documentation Linking Policy
 
-Repo as Review OS documentation should be easy for both humans and AI agents to navigate.
+GitLearnOS documentation should be easy for both humans and AI agents to navigate.
 
 ## Rule
 

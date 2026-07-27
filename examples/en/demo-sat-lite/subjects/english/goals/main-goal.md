@@ -27,4 +27,5 @@ A learning OS should not only record answers. It should help the student extract
 
 ## Next action
 
-Start with `sources/practice-source-record.md`, then build the vocabulary-in-context model.
+Start with `../sources/practice-source-record.md`, then build the
+vocabulary-in-context model.

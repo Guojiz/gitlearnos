@@ -61,7 +61,7 @@
 
   <path d="M600 410 L600 452" class="arrow"/>
   <rect x="210" y="452" width="780" height="102" rx="18" class="repo"/>
-  <text x="600" y="485" text-anchor="middle" class="label">One Learner-Owned GitHub Repository</text>
+  <text x="600" y="485" text-anchor="middle" class="label">One Learner-Owned Git Repository</text>
   <text x="600" y="512" text-anchor="middle" class="small">root policy + dashboard · subjects/math/ · subjects/english/ · subjects/coding/</text>
   <text x="600" y="536" text-anchor="middle" class="small">inspectable · portable · correctable · reversible · agent-independent</text>
 

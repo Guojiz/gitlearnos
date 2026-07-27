@@ -1,6 +1,6 @@
 # Subject Folder Model
 
-GitLearnOS uses one learner-owned repository with focused subject folders. “Subject library” means a folder, not a separate GitHub repository.
+GitLearnOS uses one learner-owned repository with focused subject folders. “Subject library” means a folder, not a separate Git repository.
 
 ## Canonical shape
 
@@ -20,7 +20,7 @@ my-gitlearnos/
 │   │   ├── knowledge-gaps/
 │   │   ├── handoffs/
 │   │   ├── reviews/
-│   │   └── sessions/
+│   │   └── events/
 │   └── english/
 └── archive/
 ```

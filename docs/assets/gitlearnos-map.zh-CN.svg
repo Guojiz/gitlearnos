@@ -61,7 +61,7 @@
 
   <path d="M600 410 L600 452" class="arrow"/>
   <rect x="210" y="452" width="780" height="102" rx="18" class="repo"/>
-  <text x="600" y="485" text-anchor="middle" class="label">一个学习者拥有的 GitHub 仓库</text>
+  <text x="600" y="485" text-anchor="middle" class="label">一个学习者拥有的 Git 仓库</text>
   <text x="600" y="512" text-anchor="middle" class="small">根目录政策与总览 · subjects/math/ · subjects/english/ · subjects/coding/</text>
   <text x="600" y="536" text-anchor="middle" class="small">可检查 · 可迁移 · 可纠正 · 可撤销 · Agent 可替换</text>
 

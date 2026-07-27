@@ -3,44 +3,32 @@
 Status: `active` / `paused` / `completed` / `archived`  
 Subject:  
 Track: `school` / `self-study` / `mixed`  
-Need: `current-course` / `remediation` / `exam` / `exploration` / `advance` / `project` / `research` / `skill`  
 Created:  
-Horizon:  
 Deadline, optional:
 
 ## Goal
 
-- 
+-
 
-## Why
+## Why it matters
 
-- School requirement, personal interest, or relationship between them:
+-
 
-## Success criteria
+## Observable success
 
-- Observable outcome:
-- Successful output: response / explanation / tests / artifact / report / performance / external feedback
+- What the learner should be able to do:
 - Required independence:
-- Delayed or transfer evidence:
-- Evaluation: 0–3 / rubric / tests / milestone / other
+- Delayed or transfer evidence, when needed:
+- Evaluation method, optional: answer / rubric / tests / artifact / milestone
 
 ## Constraints
 
-- Current curriculum or teacher requirement:
-- Exam, homework, or project format:
-- Weekly time budget:
+- Current curriculum, teacher, exam, project, or time constraint:
 - Scope to avoid:
 
-## Relationship to the other track
+## Evidence and state
 
-- Shared concept or model:
-- Prerequisite goal:
-- Current priority conflict:
-- Resolution under learning-policy:
-
-## Current state
-
-- Sources:
-- Active gaps:
-- Next question set:
-- Keep the one current next action in dashboard only.
+- Relevant sources:
+- Current gap:
+- Current evidence:
+- Keep the single next action in `dashboard.md`.

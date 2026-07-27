@@ -1,57 +1,48 @@
 # 开始使用
 
-本页是给人类用户看的短入口。
+完整的第一条指令见[快速开始](../../QUICKSTART.zh-CN.md)。
 
-完整首次部署流程请先看：
-
-- [QUICKSTART.zh-CN.md](../../QUICKSTART.zh-CN.md)
-- [常见问题](../../FAQ.zh-CN.md)
-- [第一次实验指南](first-experiment-guide.md)
-- [什么内容放进 GitHub](what-goes-into-github.md)
-- [运行环境自适应](runtime-self-adaptation.md)
-
-## 基本想法
-
-Repo as Review OS 里有两个仓库角色：
+## 分开两个仓库
 
 ```text
-Repo as Review OS 仓库
-→ 模板仓库
-→ 方法、文档、skill、示例、规则
+GitLearnOS 模板仓库
+→ 协议、Skills、适配器、模板、示例、评测
 
-你的目标仓库
-→ 个人学习仓库
-→ 目标、来源、模型、复习、dashboard
+学习者仓库
+→ 私有目标、证据、问题、作答、反馈和当前状态
 ```
 
-不要把个人学习数据写进模板仓库。
+不要把个人学习状态写进公开模板。
 
-## 首次部署
+## 首次建立
 
-1. 创建一个空的或接近空的私有目标仓库。
-2. 连接一个能读取模板仓并写入目标仓的 AI 工具。
-3. 让 AI 先识别自己的运行环境和权限边界。
-4. 让 AI 在目标仓库中创建最小结构。
-5. 告诉 AI 你的第一个学习目标。
+1. 把模板与一个本地或远程目标交给能写入的 Agent。
+2. 提供一个学科、目标或真实学习事件。
+3. 让 Agent 检测真实的读取、写入、Git、来源和调度能力。
+4. 只创建当前确实需要的最小文件。
+5. 检查回执和 Git 提交。
 
-## 目标仓库最小结构
+最低可用目标为：
 
 ```text
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
 dashboard.md
-goals/main-goal.md
-sources/
-models/
-reviews/
-templates/
-agents/
-automations/
-archive/
+learner-profile.md
+subjects/
+└── <subject>/
+    └── goals/
+        └── main-goal.md
 ```
 
-## 重要边界
+Git 不保存空目录。来源、模型、薄弱点、交接、复习和事件只在第一次有真实内容
+时创建。
 
-本地工作区可以测试这套方法，但它不等于 GitHub-backed Review OS。
+## 能力边界
 
-除非 AI 确实验证过，否则不能声称自己拥有 GitHub 写入权限、已经 push、已经创建 Issues 或已经完成远程仓库更新。
+只有本地写权限也能完成核心闭环，但不代表可以远程 push、操作 GitHub Issues
+或建立调度任务。Agent 必须在回执中区分本地写入、提交、推送和后台执行。
 
-见 [本地运行说明](../local-runtime-note.md)。
+另见 [Git 适配器](../../adapters/git/README.zh-CN.md)与
+[迁移说明](../../MIGRATION-v2.zh-CN.md)。

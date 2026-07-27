@@ -1,10 +1,10 @@
 # Customer Clarity Checklist
 
-Use this checklist to review Repo as Review OS from a first-time user's perspective.
+Use this checklist to review GitLearnOS from a first-time user's perspective.
 
 ## A first-time user should understand
 
-- what Repo as Review OS is;
+- what GitLearnOS is;
 - why GitHub is used;
 - the difference between the template repository and the user's target repository;
 - what goes into GitHub;
@@ -63,7 +63,7 @@ The documentation is unclear if a user might think:
 When adding new docs, check whether they affect one of these concepts:
 
 - template repository vs target repository;
-- GitHub-backed runtime vs local reproduction;
+- hosted Git runtime vs local reproduction;
 - structured records vs raw source files;
 - AI permissions and manual user steps;
 - basic setup vs advanced automation.

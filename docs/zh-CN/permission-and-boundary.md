@@ -1,10 +1,10 @@
 # 权限与边界模型
 
-本页解释 Repo as Review OS 的权限边界。
+本页解释 GitLearnOS 的权限边界。
 
 运行路径也请参考 [运行环境自适应](runtime-self-adaptation.md) 和 [本地运行说明](../local-runtime-note.md)。
 
-Repo as Review OS 一开始就应该问一个问题：
+GitLearnOS 一开始就应该问一个问题：
 
 **AI 到底可以在不反复询问用户的情况下读取和修改什么？**
 

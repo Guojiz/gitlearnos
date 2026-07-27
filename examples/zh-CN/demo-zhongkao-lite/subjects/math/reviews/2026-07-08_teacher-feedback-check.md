@@ -50,8 +50,8 @@
 
 ## 写回
 
-- 缺口从 `resolved-externally` 更新为 `verified`；
-- 掌握状态从 `untested` 更新为 `demonstrated`；
+- 缺口从 `resolved` 更新为 `resolved`；
+- 掌握状态从 `unknown` 更新为 `demonstrated`；
 - 模型最近证据更新为 3；
 - 生成 [2026-07-15 延迟复习](2026-07-15_delayed-review.md)；
 - dashboard 更新。

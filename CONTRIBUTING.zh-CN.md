@@ -2,13 +2,15 @@
 
 感谢你考虑为 GitLearnOS 做贡献。
 
-这个项目目前是早期公开版本。贡献应该帮助它更容易理解、更安全、更适合真实学习工作流。
+当前分支是 `v2.0-draft`。贡献应该让协议更容易理解、更安全、更适合真实学习
+工作流。
 
 仓库已由 `Repo-as-Review-OS` 更名为 `GitLearnOS`，旧链接自动跳转。
 
 ## 这个项目是什么
 
-GitLearnOS 是一个基于 GitHub 的目标驱动型 AI 学习操作系统。
+GitLearnOS 是一套 Git 原生学习协议。核心必须能在本地 Git 中运行；平台专属
+能力应放进适配器。
 
 它不是用来上传私人学习资料的地方。这个仓库应该保存公开模板、方法和清理后的示例。
 
@@ -41,9 +43,9 @@ GitLearnOS 是一个基于 GitHub 的目标驱动型 AI 学习操作系统。
 
 ## 推荐贡献流程
 
-1. 先读 `README.zh-CN.md`。
-2. 再读 `START-HERE.zh-CN.md`。
-3. 再读 `PUBLIC-ALPHA.zh-CN.md`。
+1. 先读 `GITLEARNOS.zh-CN.md`。
+2. 再读 `README.zh-CN.md`。
+3. 再读 `START-HERE.zh-CN.md`。
 4. 看 `examples/zh-CN/demo-zhongkao-lite/`。
 5. 大改动前先开 issue。
 6. 保持改动小而清楚。
@@ -89,6 +91,7 @@ GitLearnOS 是一个基于 GitHub 的目标驱动型 AI 学习操作系统。
 - 没有私人或版权材料；
 - 长文档不要中英逐行混排；
 - 改动符合运行模型；
+- `evals/` 中相关文档场景仍能通过；
 - 新文件命名清楚、位置合理；
 - demo 是虚构或清理后的；
 - 必要时更新 README 或索引。

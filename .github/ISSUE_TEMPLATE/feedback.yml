@@ -1,11 +1,11 @@
 name: Feedback
-description: Share feedback after trying Repo as Review OS
+description: Share feedback after trying GitLearnOS
 labels: [feedback]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for trying Repo as Review OS. Please do not include private study records, copyrighted material, or personal files.
+        Thank you for trying GitLearnOS. Please do not include private study records, copyrighted material, or personal files.
   - type: textarea
     id: context
     attributes:

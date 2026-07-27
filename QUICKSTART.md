@@ -1,105 +1,87 @@
 # Quickstart
 
-GitLearnOS works best with one main agent that can read the template and operate a private target repository. ChatGPT Work is one standard tool-capable path, but learning does not need to happen inside ChatGPT.
+[中文](QUICKSTART.zh-CN.md)
 
-## Tool-capable path
+## You need
 
-1. Create or choose a private target repository.
-2. Connect it to the current main agent.
-3. Give one learning goal, the subject, and the current input.
-4. Let the agent organize, generate questions when useful, and write back.
+- one AI agent that can read and write a Git repository;
+- one local or remote target repository;
+- one subject, goal, or current learning event.
+
+The agent may initialize a new local Git repository when its environment
+supports that operation. A GitHub account is not required.
+
+## Send one request
 
 ```text
 Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
-Target repository: <link>
+My learning Git repository or local checkout is: <target>
 Subject: <subject>
-Learning goal: <goal>
+Goal: <goal>
+Current material or learning event: <input>
 
-Read START-HERE.md and AGENTS.md; use skills/repo-as-review-os/SKILL.md
-when supported. Use safe-auto, preserve existing content, and directly perform
-safe, reversible organization, question generation, synchronization, and
-writeback. Do not default to an AI tutoring session. Report changes, evidence,
-actual automation, and the next action. Keep shared policy at the repository
-root and route subject-specific state under subjects/<subject>/.
+Read GITLEARNOS.md and START-HERE.md first. Use
+skills/gitlearnos/SKILL.md when Skills are supported. Detect actual repository,
+Git, source, and scheduling capability. Use safe-auto: organize useful
+evidence, generate targeted questions when they serve the goal, and commit safe
+reversible writeback. Preserve original answers, notes, and external feedback.
+Do not store the full conversation or claim mastery without delayed independent
+evidence. Finish with changed files, actual automation, the next action, and
+the undo boundary.
 ```
 
-Do not ask the learner to create folders, copy templates, or update the dashboard when the agent can do it.
+Do not manually create the GitLearnOS folder tree when the agent can do it.
 
-## Minimum first state
+## Minimum first result
 
 ```text
 AGENTS.md
+gitlearnos.yml
 learning-policy.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
 ```
 
-Create only the active subject folder. Add its `sources/`, `knowledge-gaps/`, `models/`, `handoffs/`, `reviews/`, or `sessions/` only on first real use.
+Only the current subject and real files should exist. Sources, models, gaps,
+handoffs, reviews, and events appear on first use.
 
 ## Everyday requests
 
 ```text
-Organize these class notes, connect them to my recent gaps, and give me three variations.
+Organize these class notes and give me two fresh questions about the part I
+still cannot do.
 ```
 
 ```text
-Prepare my unresolved items as a question pack for tomorrow's tutor.
+Prepare my unresolved geometry issue as a question pack for tomorrow's tutor.
 ```
 
 ```text
-My teacher resolved the second item. Reconcile this feedback and my notes; do not reteach it.
+My teacher resolved it. Save this feedback, stop the old reteaching task, and
+check me again later with a new problem.
 ```
 
 ```text
-Import this practice-platform result, update my weak points, and test me this weekend.
-```
-
-```text
-Record this only. Do not generate questions or schedule review.
+Record this only. Do not generate questions or schedule a review.
 ```
 
 ```text
 Undo the last learning update.
 ```
 
-The learner describes the event and intent, not repository paths.
-
-## Automation modes
-
-- `safe-auto`: perform safe actions and report afterward; recommended;
-- `preview`: show changes before writing;
-- `manual`: return pending writeback only.
-
-Immediate and on-handoff automation are core. Scheduled background reminders exist only when the current runtime provides a real scheduler.
-
-## Read-only fallback
-
-Without write access, the agent should:
-
-1. read the minimum state supplied;
-2. organize or generate questions;
-3. return exact pending writeback;
-4. state clearly that the repository has not changed.
+The learner states the event and intent, not repository paths.
 
 ## Success check
 
-The agent can answer and act on:
+Setup is working when the agent can:
 
-- the active goal, due work, and waiting external feedback;
-- where new input belongs;
-- which subject folder owns the event and why;
-- why these questions were generated instead of random ones;
-- whether externally resolved issues stopped redundant teaching;
-- every changed file;
-- which automation actually ran;
-- the next action and undo path.
+- identify the active goal, evidence, due work, and one next action;
+- explain why a generated question serves the current gap;
+- preserve original evidence while revising AI interpretation;
+- write and commit safe changes without asking the learner to manage Git;
+- say exactly what automation and repository work actually ran;
+- complete the same loop in local Git without GitHub.
 
-If it only lists folders or makes the learner maintain files manually, setup is incomplete.
-
-## Privacy
-
-- Keep real state in a private target repository by default.
-- Keep teacher originals, full copyrighted material, and private screenshots in authorized sources.
-- Write back only necessary summaries, locators, and derived state.
-- Do not retain full conversations or unnecessary identity by default.
+Without write access, the agent should return exact pending writeback and say
+clearly that the repository did not change.

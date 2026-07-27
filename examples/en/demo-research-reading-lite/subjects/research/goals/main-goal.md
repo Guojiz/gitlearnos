@@ -27,4 +27,4 @@ This goal requires the AI to turn reading into reusable concepts, comparison poi
 
 ## Next action
 
-Start with `sources/paper-source-record.md`, then extract one concept model.
+Start with `../sources/paper-source-record.md`, then extract one concept model.

@@ -1,5 +1,8 @@
 # Parity with the Original Learning Repository
 
+This comparison is non-normative. [GITLEARNOS.md](../GITLEARNOS.md) defines v2
+requirements.
+
 The original `zhongkao` repository is GitLearnOS's practical implementation baseline. It tests whether the lightweight file workflow remains useful in real study.
 
 ## Behaviors that must survive
@@ -23,17 +26,19 @@ The reusable toolkit adds explicit:
 - learner-owned automation policy and transparent writeback receipts;
 - separate question-resolution and mastery states;
 - learner-profile evidence links;
-- knowledge-gap types and confidence;
+- optional knowledge-gap types and confidence when evidence supports them;
 - learner attempt before mastery claims;
 - hint-level tracking;
-- 0–3 observable evidence scoring;
+- optional 0–3 observable evidence scoring for suitable subjects;
 - transfer and delayed-recall checks;
 - deterministic next-review dates;
 - selective event writeback.
 
-## What GitHub alone cannot supply
+## What Git alone cannot supply
 
-GitHub does not organize by itself, generate questions, inspect unavailable originals, run an AI model, or guarantee background execution. One active main AI runtime supplies those capabilities when authorized.
+Git does not organize by itself, generate questions, inspect unavailable
+originals, run an AI model, or guarantee background execution. One active main
+AI runtime supplies those capabilities when authorized.
 
 ## Parity test
 

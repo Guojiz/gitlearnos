@@ -2,13 +2,15 @@
 
 Thank you for considering a contribution to GitLearnOS.
 
-This project is in public alpha. Contributions should help make the system easier to understand, safer to use, and more useful for real learning workflows.
+This branch is a `v2.0-draft`. Contributions should make the protocol easier to
+understand, safer to use, and more useful for real learning workflows.
 
 The repository was renamed from `Repo-as-Review-OS` to `GitLearnOS`; old links redirect.
 
 ## What this project is
 
-GitLearnOS is a goal-driven AI learning operating system built on GitHub.
+GitLearnOS is a Git-native learning protocol. The core must work in local Git;
+provider-specific features belong in adapters.
 
 It is not a place to upload private study records. It is a public template and method repository.
 
@@ -41,9 +43,9 @@ Please do not contribute:
 
 ## Recommended contribution path
 
-1. Read `README.md`.
-2. Read `START-HERE.md`.
-3. Read `PUBLIC-ALPHA.md`.
+1. Read `GITLEARNOS.md`.
+2. Read `README.md`.
+3. Read `START-HERE.md`.
 4. Look at `examples/zh-CN/demo-zhongkao-lite/`.
 5. Open an issue before making a large change.
 6. Keep changes small and reviewable.
@@ -89,6 +91,7 @@ Before submitting a PR, check that:
 - no private or copyrighted material is included;
 - long documents are not mixed line-by-line across languages;
 - the change fits the operating model;
+- the relevant documented scenario in `evals/` still passes;
 - new files have clear names and reasonable locations;
 - demos are fictional or cleaned;
 - README or index files are updated when needed.

@@ -1,61 +1,22 @@
-# Why GitHub
+# Why Git, and When GitHub Helps
 
-GitLearnOS uses GitHub because GitHub is not just storage. It is a writable learning timeline.
+This path is kept for old links. GitLearnOS v2 requires Git behavior, not
+GitHub.
 
-## 1. Every change has time and history
+## Why Git is core
 
-A normal folder stores files. GitHub records when files changed, what changed, and why.
+Git gives learning state stable files, change history, reversible updates, and
+an explicit version for conflict checks. Those properties make evidence and
+AI writeback inspectable without requiring a database or proprietary runtime.
 
-That matters for learning. Each problem, correction, summary, model, knowledge gap, and template update becomes part of a visible learning timeline.
+## What GitHub adds
 
-## 2. Pull and push create a learning rhythm
+GitHub can add browser access, remote backup, collaboration, pull requests,
+Issues, Actions, and convenient AI connectors. These are useful adapter
+capabilities, not learning semantics.
 
-A target repository can be read, updated, and written back.
+The same core loop works in local Git, GitLab, Gitea, or another standard Git
+host. Never claim a remote push or GitHub action when only a local commit was
+verified.
 
-For an AI tool, the cycle is:
-
-1. read the latest target repository state;
-2. solve or analyze a task;
-3. write the result back;
-4. leave a trace of what changed;
-5. use that trace next time.
-
-## 3. Problems can become models
-
-When the user solves a math problem, reads a paper, or makes a mistake, the AI can store more than the answer.
-
-It can store the original problem, source, solution path, mistake, recognition cue, common pattern, knowledge gap, and future review item.
-
-Over time, single problems become reusable models.
-
-## 4. Time-aware review becomes possible
-
-Because files and commits have history, the AI can ask:
-
-- What was added recently?
-- What has not been reviewed for a long time?
-- Which knowledge gaps keep returning?
-- What should appear in the next review set?
-
-## 5. Why not only an AI project
-
-An AI project can hold instructions and context, but it is not enough by itself.
-
-GitHub gives the AI an open file tree, structured writeback, history, and a durable workspace.
-
-## 6. Why not a heavy local setup
-
-Obsidian, local folders, command-line agents, and desktop editors can be powerful, but they add weight.
-
-For many users, the simplest form is:
-
-```text
-one AI app
-+ one target GitHub repository
-+ one connector
-+ one memory or project-rule layer
-```
-
-This can work from a phone and does not require a full local toolchain.
-
-This template repository provides the method. The user's target repository is the GitLearnOS workspace.
+See [Git adapters](../adapters/git/README.md).

@@ -32,7 +32,7 @@ one learner
 ChatGPT
 → daily learning runtime
 
-GitHub target repository
+Git target repository
 → source of truth for learning state
 
 local files
@@ -45,7 +45,7 @@ local files
 Claude
 → daily learning runtime
 
-GitHub target repository
+Git target repository
 → source of truth for learning state
 
 Claude Project / Artifacts
@@ -58,7 +58,7 @@ Claude Project / Artifacts
 OpenHanako / HanaAgent
 → daily desktop learning runtime
 
-local git + Obsidian or a GitHub repository
+local git + Obsidian or a Git repository
 → learning state layer
 
 local files / desk files
@@ -75,9 +75,11 @@ OpenHanako
 → becomes the active desktop learning runtime after deployment
 ```
 
-## GitHub and local state layers
+## Local and hosted Git state layers
 
-For ChatGPT and Claude, GitHub is the default state layer.
+For every runtime, the learner's chosen Git repository is the state layer.
+GitHub may be a convenient remote when a connector is available, but it is not
+the protocol default.
 
 A local git repository or Obsidian vault is valid only when the active runtime can actually access local files, or when the user manually applies exact patches from the AI.
 

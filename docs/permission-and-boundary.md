@@ -1,10 +1,10 @@
 # Permission and Boundary Model
 
-This page explains the permission boundary for Repo as Review OS.
+This page explains the permission boundary for GitLearnOS.
 
 For the runtime setup flow, also read [Runtime Self-Adaptation](runtime-self-adaptation.md) and [Local Runtime Note](local-runtime-note.md).
 
-Repo as Review OS should start by asking one question:
+GitLearnOS should start by asking one question:
 
 **What can the AI actually read and change without asking again?**
 

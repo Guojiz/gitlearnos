@@ -40,22 +40,26 @@ Agent 自动生成 [老师问题包](subjects/math/handoffs/2026-07-04_similarit
 Agent 自动：
 
 - 记录 [老师反馈来源](subjects/math/sources/2026-07-05_teacher-feedback.md)；
-- 将问题标记为 `resolved-externally`；
+- 将问题标记为 `resolved`；
 - 更新相似三角形模型；
 - 清除过时的“让 AI 重讲”任务；
 - 生成三天后的三道 [迁移验证题](subjects/math/reviews/2026-07-08_teacher-feedback-check.md)；
-- 写入一份最小 [跨渠道活动记录](subjects/math/sessions/2026-07-05_teacher-feedback-sync.md)；
+- 写入一份最小 [跨渠道活动记录](subjects/math/events/2026-07-05_teacher-feedback-sync.md)；
 - 不把“已由老师解决”冒充成独立掌握。
 
 ### 2026-07-08：独立验证
 
-学习者独立完成三道不同形式的题并解释对应顺序，获得 3 分。知识缺口进入 `verified`，掌握状态为 `demonstrated`，但还没有因为一次成功就标为长期稳定。
+学习者独立完成三道不同形式的题并解释对应顺序，按本学科可选量表获得 3 分。
+知识缺口保持 `resolved`，掌握状态更新为 `demonstrated`；后续延迟复测继续
+补强证据，不引入额外掌握状态。
 
 Agent 随后自动生成 [2026-07-15 延迟复习](subjects/math/reviews/2026-07-15_delayed-review.md)。当前环境没有真实调度器，因此诚实记录为“下次 Agent 接手时检查”，不声称已经建立后台提醒。
 
 ## 文件
 
 ```text
+gitlearnos.yml
+AGENTS.md
 learning-policy.md
 dashboard.md
 learner-profile.md
@@ -65,7 +69,7 @@ subjects/math/models/geometry-similarity-model.md
 subjects/math/knowledge-gaps/similarity-correspondence-gap.md
 subjects/math/handoffs/2026-07-04_similarity-teacher-pack.md
 subjects/math/reviews/
-subjects/math/sessions/
+subjects/math/events/
 ```
 
 ## 这个 demo 证明什么

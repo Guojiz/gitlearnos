@@ -1,17 +1,23 @@
 # GitLearnOS Skills
 
-One main agent loads the router and only the smallest relevant skill.
+One main agent reads `GITLEARNOS.md`, loads the router, and then loads only the
+smallest relevant Skill.
 
 ```text
-repo-as-review-os              intent router and shared automation contract
-repo-as-review-os-setup        bootstrap or migration
-repo-as-review-os-organize     capture, organize, deduplicate, external-feedback sync
-repo-as-review-os-question     learner questions and external question packs
-repo-as-review-os-session      optional live AI tutoring
-repo-as-review-os-source       provenance, availability, privacy
-repo-as-review-os-model        reusable understanding
-repo-as-review-os-review       administer, score, schedule, write back
-repo-as-review-os-maintenance  consistency, automation health, safe undo
+gitlearnos              intent router
+gitlearnos-setup        bootstrap or migration
+gitlearnos-organize     capture, organize, deduplicate, external-feedback sync
+gitlearnos-question     learner questions and external question packs
+gitlearnos-session      optional live AI tutoring
+gitlearnos-source       provenance, availability, privacy
+gitlearnos-model        reusable understanding
+gitlearnos-review       administer, evaluate, schedule, write back
+gitlearnos-maintenance  consistency, automation health, safe undo
 ```
 
-The core product capabilities are organization, question generation, and automated writeback. Session tutoring is optional. Responsibilities do not imply separate agents.
+The old `repo-as-review-os*` paths are compatibility aliases for one transition
+period. New prompts and documentation use `gitlearnos*`.
+
+The core product capabilities are organization, question generation, and
+automated writeback. Live tutoring is optional. Responsibilities do not imply
+separate agents.

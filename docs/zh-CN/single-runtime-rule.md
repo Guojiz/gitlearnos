@@ -32,7 +32,7 @@ GitLearnOS 强烈建议：同一时间只使用一个活跃学习运行层。
 ChatGPT 或 Claude
 → 日常学习运行层
 
-GitHub 目标仓库
+Git 目标仓库
 → 学习状态事实源
 
 本地文件
@@ -45,7 +45,7 @@ GitHub 目标仓库
 OpenHanako / HanaAgent
 → 日常桌面学习运行层
 
-本地 git + Obsidian 或 GitHub 仓库
+本地 git + Obsidian 或 Git 仓库
 → 学习状态层
 
 本地文件 / desk files

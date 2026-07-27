@@ -56,7 +56,7 @@
 
 | 缺口 | 处理状态 | 掌握状态 | 最近证据 | 下次动作 | 链接 |
 |---|---|---|---|---|---|
-|  | active / awaiting-feedback / resolved-externally | untested / developing / demonstrated |  |  |  |
+|  | open / resolved / needs-check | unknown / learning / demonstrated |  |  |  |
 
 ## 最近学习事件
 

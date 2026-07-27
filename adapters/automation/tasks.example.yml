@@ -1,0 +1,10 @@
+version: 1
+jobs:
+  - id: due-review
+    intent: generate concrete questions from due evidence
+    default_mode: on-handoff
+    schedule: null
+  - id: maintenance
+    intent: reconcile pending input, feedback, views, and contradictions
+    default_mode: on-handoff
+    schedule: null

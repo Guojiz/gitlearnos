@@ -1,8 +1,9 @@
 # Demo: Research Reading Lite
 
-This is a fictional English demo for Repo as Review OS.
+This is a fictional English demo for GitLearnOS.
 
-It shows how a university student or researcher can use one GitHub repository and one AI tool to turn reading into a goal-driven learning system.
+It shows how a university student or researcher can use one Git repository and
+one AI tool to turn reading into a goal-driven learning system.
 
 No real paper, private note, or copyrighted text is included.
 
@@ -27,22 +28,26 @@ paper reference
 → claim extraction
 → reusable concept model
 → comparison note
-→ review schedule
+→ review plan
 → dashboard update
 ```
 
 ## This demo includes
 
 ```text
-goals/main-goal.md
-sources/paper-source-record.md
-models/ai-learning-system-concept.md
-reviews/2026-07-03_review-set.md
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
+learner-profile.md
+subjects/research/goals/main-goal.md
+subjects/research/sources/paper-source-record.md
+subjects/research/models/ai-learning-system-concept.md
+subjects/research/reviews/2026-07-03_review-set.md
 dashboard.md
 ```
 
 ## What this demo shows
 
-Repo as Review OS is not only for exams.
+GitLearnOS is not only for exams.
 
 It can also support research reading by turning papers into source records, concept models, review tasks, and comparison structures.

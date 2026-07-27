@@ -2,98 +2,81 @@
 
 ## What is GitLearnOS?
 
-GitLearnOS is a GitHub-native learning-trace operating system for AI-assisted study.
+GitLearnOS is a Git-native learning protocol for one capable AI agent and one
+learner-owned repository. It organizes evidence, generates targeted questions,
+records answers and external feedback, and keeps each useful update reversible.
 
-It helps an AI tool organize goals, learner profile, source records, reusable models, knowledge gaps, review sets, dashboards, and handoff notes in one target repository.
+It is not a standalone tutoring app or a GitHub-only workflow.
 
 ## Is this repository my learning repository?
 
-No.
+No. This is the public template: protocol, Skills, adapters, examples, and
+evaluations. Personal learning records belong in a separate private repository.
 
-This repository is the template repository.
+## What do I need?
 
-Your own target repository is where your personal learning records should go.
-
-## What is the first thing I should do?
-
-Create an empty or nearly empty private target repository, then ask an AI tool to read this template repository and deploy the minimal GitLearnOS structure into your target repository.
+- an AI agent that can read and write a Git repository;
+- a local or remote learner repository;
+- one subject, goal, or real learning event.
 
 Start with [QUICKSTART.md](QUICKSTART.md).
 
-## Can it organize my learning data into GitHub?
+## Is GitHub required?
 
-Yes.
+No. Local Git, GitHub, GitLab, Gitea, and other standard Git remotes follow the
+same core protocol. GitHub is a convenient hosting and connector option.
 
-It organizes structured learning records into GitHub: goals, learner profile, source records, reusable models, knowledge gaps, review sets, dashboards, next review dates, and handoff notes.
+## Do I have to upload every source?
 
-It does not require every original file to be uploaded.
+No. Large files, screenshots, books, raw exports, and private working files may
+stay outside the repository. Keep a source record with an accurate locator,
+availability, and the part the agent actually used.
 
-See [What Goes Into GitHub](docs/what-goes-into-github.md).
+See [Source and learner state](docs/source-and-learner-state.md).
 
-## Do I have to upload all my files?
+## Does GitLearnOS save chat history?
 
-No.
+No. It stores useful learning events and evidence, not ordinary conversation or
+hidden reasoning. Original answers, notes, and teacher feedback are preserved;
+AI summaries and plans may be revised as evidence changes.
 
-Large files, original screenshots, textbook pages, raw exports, and local working files can stay outside GitHub when needed.
+## How is mastery decided?
 
-GitHub should keep the structured learning state.
+Reading, completion, immediate imitation, and a teacher resolving a question
+do not prove mastery. The minimum states are `unknown`, `learning`, and
+`demonstrated`; demonstration requires a later independent answer, plus transfer
+when the goal calls for it.
 
-## Can I use it locally?
+## Does it require a scheduler, server, database, or vector store?
 
-Yes, but local use is not identical to a GitHub-backed GitLearnOS.
+No. These are optional adapters. A scheduler is needed only for true background
+execution. Without one, the agent may check due work when it next runs, but it
+must not claim that a background task was created or completed.
 
-A local workspace can test the method and edit local files. It does not automatically mean the AI has GitHub access.
-
-See [Local Runtime Note](docs/local-runtime-note.md).
-
-## Does it require GitHub Actions?
-
-No.
-
-GitHub Actions can be an optional advanced layer, but basic setup does not require it.
-
-## Does it require API keys?
-
-No.
-
-Basic use can work with an AI tool that has repository access through a connector, MCP, or local workspace. API keys are only for advanced custom automation.
-
-## Which AI tools can run it?
-
-Any AI tool that can read the template, access the target repository, edit files, and report changes can run it.
-
-Examples include ChatGPT with a GitHub connector, Codex, Claude Code, Cursor, Windsurf, MCP workers, or other repository-aware agents.
-
-## How do I know whether the AI really has GitHub access?
-
-Ask it to identify its runtime and permission boundary before setup.
-
-It should say whether it can:
-
-- read the template repository;
-- read the target repository;
-- write to the target repository;
-- use local files only;
-- needs you to complete a manual setup step.
-
-It should not claim GitHub changes unless it can report the actual files changed.
-
-## What should success look like?
-
-After setup, the target repository should contain:
+## What should the first repository contain?
 
 ```text
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
 dashboard.md
 learner-profile.md
-goals/main-goal.md
-sources/
-models/
-knowledge-gaps/
-reviews/
-templates/
-agents/
-automations/
-archive/
+subjects/
+└── <subject>/
+    └── goals/
+        └── main-goal.md
 ```
 
-Then the AI should ask for your first learning goal.
+Other subject folders appear only when real content needs them.
+
+## How can I trust an agent's claims?
+
+Ask for the required receipt: mode, subject, organized evidence, questions,
+changed paths, automation actually completed, next action, and undo boundary.
+No access, write, push, scheduling, or mastery claim should appear without
+verifiable evidence.
+
+## How do I migrate an older repository?
+
+Follow [MIGRATION-v2.md](MIGRATION-v2.md). New files use the subject-folder
+model immediately; old paths may move gradually when links can be preserved.

@@ -1,13 +1,13 @@
 # Public Release Checklist
 
-Use this checklist before sharing Repo as Review OS in social feeds, school groups, research groups, or open-source communities.
+Use this checklist before sharing GitLearnOS in social feeds, school groups, research groups, or open-source communities.
 
 ## 1. Positioning
 
-- [ ] Does the project explain that it is a goal-driven AI learning operating system built on GitHub?
+- [ ] Does the project explain that it is a Git-native learning protocol?
 - [ ] Does it avoid sounding like a normal file archive?
 - [ ] Does it state that it is not tied to one AI product or one note-taking app?
-- [ ] Does it clearly say public alpha?
+- [ ] Does it clearly say `v2.0-draft` rather than implying a finished release?
 
 ## 2. Entry points
 
@@ -40,11 +40,14 @@ Use this checklist before sharing Repo as Review OS in social feeds, school grou
 ## 6. Suggested announcement
 
 ```text
-I am releasing Repo as Review OS as a public alpha.
+I am testing GitLearnOS v2.
 
-It is a goal-driven AI learning operating system built on GitHub, not a normal study archive.
+It is a Git-native learning protocol, not a normal study archive or a
+GitHub-only product.
 
-The core idea is to let AI organize learning around goals, sources, models, practice sets, spaced repetition, and automation. GitHub provides the file system, writeback, version history, and learning timeline.
+One capable AI agent organizes traceable evidence, asks from real gaps, records
+answers and feedback, and commits reversible state to a local or hosted Git
+repository.
 
 There is a small demo in the repository. You can give the repo to an AI tool and ask it to explain or help build your own learning OS.
 
@@ -53,10 +56,10 @@ Feedback, demos, templates, automation prompts, and issue reports are welcome.
 
 ## 7. Current recommendation
 
-It is ready to share as:
+Share the current branch as:
 
 ```text
-public alpha
+v2.0-draft
 ```
 
 Do not present it as a finished product.

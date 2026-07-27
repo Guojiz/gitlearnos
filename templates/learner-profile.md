@@ -1,87 +1,47 @@
 # Learner Profile
 
-> Inspectable learner state. Keep observations, learner preferences, and AI hypotheses separate.
+> Editable current view. Keep learner-stated facts, observations, and AI
+> hypotheses separate and link evidence.
 
 Updated:  
-Updated by:  
-Evidence window reviewed:
+Evidence reviewed:
 
 ## Active goals
 
-- Goal: [link]
-- Current priority:
-- Time constraint:
+| Goal | Priority or deadline | Link |
+|---|---|---|
+|  |  |  |
 
 ## Stable preferences
 
-Only include preferences that are explicit or repeatedly observed.
+Record only explicit or repeatedly useful preferences.
 
-| Preference | Source | Confidence | Last confirmed |
-|---|---|---|---|
-|  | learner-stated / observed |  |  |
+| Preference | Learner-stated or observed | Source |
+|---|---|---|
+|  |  |  |
 
-## Learning channels and support
+## Learning channels
 
-Record only durable information that changes coordination or question generation; avoid unnecessary identity.
+| Channel | Current use or limit | How the agent should help |
+|---|---|---|
+| teacher / class / paper / platform / AI / other |  |  |
 
-| Channel | Use | Availability or limit | How the agent should help |
-|---|---|---|---|
-| teacher / class / tutoring / platform / paper / AI |  |  |  |
+## Demonstrated patterns
 
-## Subject-specific adaptations
-
-Keep only stable differences that actually change organization, question generation, or handoff format.
-
-| Subject | Current method or constraint | Effective question or output form | Evidence link |
-|---|---|---|---|
-|  |  |  |  |
-
-## Demonstrated strengths
-
-| Strength | Observable evidence | Evidence link | Last demonstrated | Confidence |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-## Active weak patterns
-
-| Pattern | Observation, not interpretation | Evidence link | Frequency | Confidence | Gap link |
-|---|---|---|---:|---|---|
-|  |  |  |  |  |  |
+| Strength or recurring difficulty | Observation | Evidence |
+|---|---|---|
+|  |  |  |
 
 ## Working hypotheses
 
-Hypotheses guide the next check; they are not facts.
+Hypotheses are not facts.
 
-| Hypothesis | Why suspected | How to test | Status |
-|---|---|---|---|
-|  |  |  | open / supported / rejected |
+| Hypothesis | How to test it | Status |
+|---|---|---|
+|  |  | open / supported / rejected |
 
-## Organization, question, and explanation adaptation
+## Privacy boundary
 
-- Preferred language:
-- Helpful representation:
-- Current support level:
-- Useful question type and count:
-- Preferred external-handoff format:
-- What to avoid:
-- Evidence for these choices:
-
-## Recent change
-
-- Date:
-- What changed:
-- Evidence link:
-- Confidence:
-- Should native AI memory change? yes / no / pending
-
-## Privacy and memory boundary
-
-- Safe for native memory:
+- Safe for optional native AI memory:
 - Repository only:
 - Local or sensitive only:
-- Known memory conflict:
-
-## Next profile check
-
-- What should be tested next:
-- Trigger for updating this profile:

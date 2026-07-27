@@ -1,5 +1,9 @@
 # 早期公开版本
 
+> 这是 v1 的历史发布说明。v2 行为与状态以
+> [GITLEARNOS.zh-CN.md](GITLEARNOS.zh-CN.md)和
+> [README.zh-CN.md](README.zh-CN.md)为准。
+
 GitLearnOS 是可试用的早期个人学习控制层。它可以交给一个具备工具能力的主 Agent 运行；整理、出题、自动化与模板仍会根据真实使用反馈调整。
 
 仓库已由 `Repo-as-Review-OS` 更名为 `GitLearnOS`。
@@ -15,7 +19,7 @@ GitLearnOS 是可试用的早期个人学习控制层。它可以交给一个具
 - 即时自动写回与接手检查；
 - 来源、学习画像、模型、知识缺口、问题包、复习和活动模板；
 - 处理状态与掌握证据分离；
-- 基于证据的 0–3 评分与可复现复习间隔；
+- 适合的学科可选使用基于证据的 0–3 评分；
 - 从问老师到反馈同步再到自动出题的中文 demo。
 
 ## 这样试用
@@ -26,7 +30,7 @@ GitLearnOS 是可试用的早期个人学习控制层。它可以交给一个具
 学科：<学科>
 学习目标或当前输入：<内容>
 
-读 START-HERE.zh-CN.md 与 AGENTS.zh-CN.md，采用 safe-auto。
+读 GITLEARNOS.zh-CN.md 与 START-HERE.zh-CN.md，采用 safe-auto。
 自动整理，需要时针对性出题，并实际写回安全变化。不要默认进入
 AI 教学会话。共享政策留在根目录，学科专属状态写入
 subjects/<subject>/。汇报改动、证据、实际自动化、下一步和撤销能力。

@@ -25,11 +25,15 @@ mirror the English relative path when it is a translation. Every Skill under
 Stable machine identifiers remain in English. Other machine-facing files do not
 require a Chinese counterpart.
 
-For a learner repository, default to `safe-auto`: perform safe, reversible
-organization, question generation, short-term planning, and Git writeback;
-ask before high-impact operations listed in the protocol. Answer the learner's
-immediate need first, then make the smallest useful update. Do not capture
-incidental conversation merely because GitLearnOS is installed.
+For a learner repository, derive effective write authority from
+`gitlearnos.yml` and `learning-policy.md`; if they conflict or are unclear, use
+the stricter authority. Only under effective `safe-auto` may the agent perform
+safe, reversible organization, question generation, short-term planning, and
+Git writeback without another confirmation. Under `preview`, show the proposed
+change without writing. Under `manual`, or when automatic writes are disabled,
+wait for explicit approval or return exact pending writeback. Always answer the
+learner's immediate need first. Do not capture incidental conversation merely
+because GitLearnOS is installed.
 
 Never claim repository access, a commit, a scheduled worker, or demonstrated
 mastery without evidence that it actually exists.

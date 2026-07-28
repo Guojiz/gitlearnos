@@ -292,6 +292,13 @@ write `unknown` or `needs verification`; never fill the gap by guessing.
 
 Default mode is `safe-auto`.
 
+Effective write authority is the intersection of `gitlearnos.yml` and
+`learning-policy.md`. A default must never override an explicit stricter
+setting. If the files conflict or are unclear, use the stricter authority:
+`preview` shows the proposed change without writing, while `manual` or a policy
+that disables automatic writes requires explicit approval before any write or
+commit.
+
 The agent may automatically:
 
 - recognize clear learning events without an explicit GitLearnOS invocation;

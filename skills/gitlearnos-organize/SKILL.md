@@ -5,6 +5,8 @@ description: Capture, organize, deduplicate, connect, and reconcile learning inp
 
 # GitLearnOS Organize
 
+[中文](../../zh-CN/skills/gitlearnos-organize/SKILL.md)
+
 Follow the evidence, ownership, write-authority, and Git rules in
 `GITLEARNOS.md`. This Skill only defines the organization workflow.
 

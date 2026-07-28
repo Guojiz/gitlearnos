@@ -1,5 +1,7 @@
 # Optional Subject Skills
 
+[中文](../../zh-CN/skills/subjects/README.md)
+
 Subject Skills refine task forms and evaluation while the core GitLearnOS
 protocol retains ownership, evidence, automation, and Git behavior.
 

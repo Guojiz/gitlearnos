@@ -1,6 +1,6 @@
 # Goal Model
 
-[中文](zh-CN/goal-model.md)
+[中文](../zh-CN/docs/goal-model.md)
 
 Every durable learning change should serve an active or foreseeable goal. A
 goal needs only:

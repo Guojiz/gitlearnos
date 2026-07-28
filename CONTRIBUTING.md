@@ -46,7 +46,7 @@ Please do not contribute:
 1. Read `GITLEARNOS.md`.
 2. Read `README.md`.
 3. Read `START-HERE.md`.
-4. Look at `examples/zh-CN/demo-zhongkao-lite/`.
+4. Look at `zh-CN/examples/demo-zhongkao-lite/`.
 5. Open an issue before making a large change.
 6. Keep changes small and reviewable.
 7. Explain what problem your change solves.

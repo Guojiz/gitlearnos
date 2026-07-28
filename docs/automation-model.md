@@ -1,6 +1,6 @@
 # Automation Model
 
-[中文](zh-CN/automation-model.md)
+[中文](../zh-CN/docs/automation-model.md)
 
 The canonical behavior is in [GITLEARNOS.md](../GITLEARNOS.md). Provider
 mapping is in the [Automation Adapter](../adapters/automation/README.md).

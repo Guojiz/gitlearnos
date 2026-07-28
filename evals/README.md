@@ -1,6 +1,6 @@
 # GitLearnOS Evaluation
 
-[中文](README.zh-CN.md)
+[中文](../zh-CN/evals/README.md)
 
 GitLearnOS is evaluated through documented learning scenarios, not exact text
 matching. A human, an AI agent, or an optional skill-evaluation system may run

@@ -5,6 +5,8 @@ description: Extract or refine a reusable GitLearnOS concept or problem-solving 
 
 # GitLearnOS Reusable Model
 
+[中文](../../zh-CN/skills/gitlearnos-model/SKILL.md)
+
 Follow `GITLEARNOS.md`. A model is editable AI-derived state, never original
 evidence.
 

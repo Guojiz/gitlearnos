@@ -1,6 +1,6 @@
 # GitLearnOS — AceSAT Build for Impact
 
-[中文](zh-CN/acesat-build-for-impact.md)
+[中文](../zh-CN/docs/acesat-build-for-impact.md)
 
 ## Problem
 

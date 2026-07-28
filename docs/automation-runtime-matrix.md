@@ -1,6 +1,6 @@
 # Automation Runtime Matrix
 
-[中文](zh-CN/automation-runtime-matrix.md)
+[中文](../zh-CN/docs/automation-runtime-matrix.md)
 
 | Runtime | Repository access | Valid result |
 |---|---:|---|

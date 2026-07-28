@@ -1,6 +1,6 @@
 # Optional OpenSpace Integration
 
-[中文](README.zh-CN.md)
+[中文](../../zh-CN/integrations/openspace/README.md)
 
 [OpenSpace](https://github.com/HKUDS/OpenSpace) may later evaluate, discover, or
 propose improvements to generic GitLearnOS Skills. GitLearnOS borrows the idea

@@ -5,6 +5,8 @@ description: Audit and safely repair a learner-owned GitLearnOS repository for s
 
 # GitLearnOS Maintenance
 
+[中文](../../zh-CN/skills/gitlearnos-maintenance/SKILL.md)
+
 Follow `GITLEARNOS.md`. This Skill may repair deterministic state but may not
 invent evidence or rewrite preserved learner records.
 

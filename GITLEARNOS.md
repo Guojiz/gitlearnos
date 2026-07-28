@@ -1,6 +1,6 @@
 # GitLearnOS Protocol
 
-[中文](GITLEARNOS.zh-CN.md)
+[中文](zh-CN/GITLEARNOS.md)
 
 Protocol version: `2.0-draft`
 

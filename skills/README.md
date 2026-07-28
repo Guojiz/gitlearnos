@@ -1,5 +1,7 @@
 # GitLearnOS Skills
 
+[中文](../zh-CN/skills/README.md)
+
 One main agent reads `GITLEARNOS.md`, loads the router, and then loads only the
 smallest relevant Skill.
 

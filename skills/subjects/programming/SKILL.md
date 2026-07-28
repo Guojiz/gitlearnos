@@ -5,6 +5,8 @@ description: Refine GitLearnOS programming and project tasks through code, tests
 
 # Programming and Projects
 
+[中文](../../../zh-CN/skills/subjects/programming/SKILL.md)
+
 Follow `GITLEARNOS.md` and the active core Skill.
 
 - preserve the failing behavior, relevant code locator, and learner attempt;

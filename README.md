@@ -2,7 +2,7 @@
 
 **[Quickstart: give one request to your AI →](QUICKSTART.md)**
 
-[中文](README.zh-CN.md) ·
+[中文](zh-CN/README.md) ·
 [Website](https://guojiz.github.io/gitlearnos/) ·
 [Documentation map](DOCUMENTATION.md) ·
 [Protocol](GITLEARNOS.md)
@@ -182,7 +182,7 @@ one-time bulk relocation.
 
 ## Examples
 
-- [Teacher feedback to delayed mathematics review](examples/zh-CN/demo-zhongkao-lite/)
+- [Teacher feedback to delayed mathematics review](zh-CN/examples/demo-zhongkao-lite/)
 - [SAT Reading and Writing](examples/en/demo-sat-lite/)
 - [Research reading](examples/en/demo-research-reading-lite/)
 

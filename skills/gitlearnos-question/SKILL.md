@@ -5,6 +5,8 @@ description: Generate targeted, grounded, scoreable GitLearnOS questions from go
 
 # GitLearnOS Question Generation
 
+[中文](../../zh-CN/skills/gitlearnos-question/SKILL.md)
+
 Follow `GITLEARNOS.md`. This Skill refines question selection and persistence;
 it does not redefine mastery or write authority.
 

@@ -1,6 +1,6 @@
 # Operating Model
 
-[中文](OPERATING-MODEL.zh-CN.md)
+[中文](zh-CN/OPERATING-MODEL.md)
 
 This page is an overview. [GITLEARNOS.md](GITLEARNOS.md) is the canonical
 contract.

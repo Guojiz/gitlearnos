@@ -1,6 +1,6 @@
 # Agent Runtime Adapter
 
-[中文](AGENT-RUNTIME.zh-CN.md)
+[中文](zh-CN/AGENT-RUNTIME.md)
 
 GitLearnOS does not provide a model runtime. Any agent may implement the
 protocol if it reports its real capability honestly.

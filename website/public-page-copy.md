@@ -43,5 +43,6 @@ Start with one subject.
 
 - Website: https://guojiz.github.io/gitlearnos/
 - Repository: https://github.com/Guojiz/GitLearnOS
+- Documentation map: https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.md
 - Quickstart: https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md
 - Working demo: https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.md

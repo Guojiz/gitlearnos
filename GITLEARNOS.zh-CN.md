@@ -2,6 +2,9 @@
 
 [English](GITLEARNOS.md)
 
+> 本文件是方便人类阅读的中文翻译。唯一正式、机器可执行的契约是
+> [GITLEARNOS.md](GITLEARNOS.md)；冲突时以英文为准。
+
 协议版本：`2.0-draft`
 
 这是 GitLearnOS 唯一的平台无关行为规范。Agent 入口、Skills、模板、示例和适配器都必须遵守本文；其他文档与本文冲突时，以本文为准。

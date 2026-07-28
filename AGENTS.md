@@ -14,8 +14,9 @@ Before acting:
    evidence;
 5. select one primary Skill under `skills/gitlearnos*/`.
 
-For this template repository, preserve existing work and keep English and
-Chinese counterparts aligned.
+For this template repository, preserve existing work. English is canonical.
+Keep the human-facing English and Chinese pairs listed in `DOCUMENTATION.md`
+aligned. Machine-facing files do not require a Chinese counterpart.
 
 For a learner repository, default to `safe-auto`: perform safe, reversible
 organization, question generation, short-term planning, and Git writeback;

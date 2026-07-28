@@ -4,7 +4,9 @@
 
 [English](README.md) ·
 [官网](https://guojiz.github.io/gitlearnos/) ·
-[正式协议](GITLEARNOS.zh-CN.md)
+[文档地图](DOCUMENTATION.zh-CN.md) ·
+[英文正式协议](GITLEARNOS.md) ·
+[中文协议](GITLEARNOS.zh-CN.md)
 
 ![GitLearnOS 中文概览](docs/assets/gitlearnos-map.zh-CN.svg)
 

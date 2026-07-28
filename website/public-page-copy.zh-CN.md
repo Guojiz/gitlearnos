@@ -36,5 +36,6 @@ ChatGPT Work 可以直接使用能够持续保存的本地 Git 工作区。大�
 
 - 官网：https://guojiz.github.io/gitlearnos/
 - 仓库：https://github.com/Guojiz/GitLearnOS
+- 文档地图：https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.zh-CN.md
 - 快速开始：https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.zh-CN.md
 - 可运行演示：https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.zh-CN.md

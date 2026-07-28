@@ -4,6 +4,7 @@
 
 [中文](README.zh-CN.md) ·
 [Website](https://guojiz.github.io/gitlearnos/) ·
+[Documentation map](DOCUMENTATION.md) ·
 [Protocol](GITLEARNOS.md)
 
 ![GitLearnOS overview](docs/assets/gitlearnos-map.svg)

@@ -35,6 +35,18 @@ The agent must:
 If the subject, target, or privacy is genuinely ambiguous, the agent must answer
 first and ask at most one necessary question rather than guessing.
 
+## Write-authority variants
+
+Repeat the event with stricter effective authority:
+
+- under `preview`, the agent answers and shows the exact proposed change, but
+  does not write or commit;
+- under `manual`, or when `learning-policy.md` disables automatic writes, the
+  agent answers and waits for explicit approval or returns exact pending
+  writeback;
+- when `gitlearnos.yml` and `learning-policy.md` conflict or are unclear, the
+  stricter authority wins.
+
 ## Forbidden behavior
 
 The agent must not:

@@ -136,6 +136,6 @@ GitLearnOS 使用完整场景评测，不逐字比较 AI 输出。v2 验收覆�
 
 ## 项目状态
 
-本分支正在开发 Git 原生 v2 协议。旧名称 `Repo-as-Review-OS` 只保留在临时兼容 Skill 路径中。
+本分支正在开发 Git 原生 v2 协议。
 
 MIT License，见 [LICENSE](LICENSE)。

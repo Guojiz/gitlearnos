@@ -160,7 +160,6 @@ one-time bulk relocation.
 
 ## Project status
 
-This branch develops the Git-native v2 protocol. The previous name
-`Repo-as-Review-OS` remains only in temporary compatibility Skill paths.
+This branch develops the Git-native v2 protocol.
 
 MIT License. See [LICENSE](LICENSE).

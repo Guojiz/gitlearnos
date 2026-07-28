@@ -14,7 +14,7 @@ move only when links and history can be preserved safely.
 | behavior repeated across many documents | `GITLEARNOS.md` is the single protocol |
 | root-level subject files | `subjects/<subject>/...` |
 | `sessions/` | `events/` containing useful learning events, never full chat logs |
-| `repo-as-review-os*` Skills | `gitlearnos*` Skills |
+| `repo-as-review-os*` Skills | replace references with `gitlearnos*` Skills |
 | universal confidence and 0–3 scoring | optional subject-level evaluation |
 | reminder text treated as automation | only verified execution counts as completed |
 
@@ -29,8 +29,8 @@ move only when links and history can be preserved safely.
    corrections instead of replacing them.
 6. Move useful records from `sessions/` to `events/`; leave chat transcripts
    out of the durable state.
-7. Switch new Skill references to `skills/gitlearnos*/`. Compatibility stubs
-   keep the old names readable during the v2 transition.
+7. Replace Skill references with `skills/gitlearnos*/`; old Skill names are not
+   part of v2.
 8. Run the relevant scenarios in `evals/` before calling the migration
    complete.
 

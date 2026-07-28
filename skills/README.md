@@ -15,9 +15,6 @@ gitlearnos-review       administer, evaluate, schedule, write back
 gitlearnos-maintenance  consistency, automation health, safe undo
 ```
 
-The old `repo-as-review-os*` paths are compatibility aliases for one transition
-period. New prompts and documentation use `gitlearnos*`.
-
 The core product capabilities are organization, question generation, and
 automated writeback. Live tutoring is optional. Responsibilities do not imply
 separate agents.

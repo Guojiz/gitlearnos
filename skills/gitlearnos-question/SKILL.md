@@ -103,7 +103,13 @@ Create under `subjects/<subject>/handoffs/` with:
 - requested kind of feedback;
 - feedback and reconciliation fields.
 
-Update the linked gap to `routed` or `awaiting-feedback` and refresh the dashboard.
+Keep the linked gap in the v2 resolution vocabulary:
+
+- use `open` while the question is merely routed;
+- use `needs-check` when feedback or later verification is pending;
+- record destination, delivery, and response progress in the handoff file.
+
+Refresh the dashboard without copying handoff progress into a second gap state.
 
 ## Adapt from evidence
 

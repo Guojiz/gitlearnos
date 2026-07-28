@@ -51,7 +51,8 @@ The Git repository remains the source of truth.
 Native AI memory, project instructions, and external memory tools may accelerate retrieval, but they should not silently override repository files.
 
 ```text
-If memory conflicts with GitHub, trust GitHub first.
+If memory conflicts with the chosen Git repository, trust repository evidence
+first.
 Then propose a memory update.
 ```
 
@@ -151,7 +152,7 @@ Before deciding how to remember something, the AI should ask:
 ```text
 1. Is this stable or temporary?
 2. Is it private or public-safe?
-3. Should it be inspectable in GitHub?
+3. Should it be inspectable in the chosen Git repository?
 4. Should it be summarized into native AI memory?
 5. Should it only stay in the current chat?
 6. Is an external local memory tool available?
@@ -162,7 +163,7 @@ Before deciding how to remember something, the AI should ask:
 
 When meaningful learning state changes:
 
-1. update the relevant GitHub files;
+1. update the relevant repository files;
 2. update `learner-profile.md` if the change is durable;
 3. suggest a native memory update only for stable preferences or repeated patterns;
 4. if an external memory tool exists, let it index or recall supporting history;
@@ -177,7 +178,7 @@ Report:
 - runtime:
 - native memory: yes / no / unknown
 - project instructions: yes / no / unknown
-- GitHub access: write / read / pasted excerpt / none
+- Git repository access: write / read / pasted excerpt / none
 - external memory tool: yes / no / unknown
 
 Then decide where each piece of information belongs:

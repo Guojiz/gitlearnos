@@ -14,7 +14,7 @@ GitLearnOS v2 采用渐进迁移，不做破坏性重写。新内容遵守
 | 多份文档重复定义行为 | `GITLEARNOS.md` 是唯一协议 |
 | 学科文件放在根目录 | 放到 `subjects/<subject>/...` |
 | `sessions/` | `events/`，只保存有价值学习事件，不保存完整聊天 |
-| `repo-as-review-os*` Skills | `gitlearnos*` Skills |
+| `repo-as-review-os*` Skills | 把引用直接改为 `gitlearnos*` Skills |
 | 所有学科强制置信度与 0–3 评分 | 评分只作为可选学科方法 |
 | 写了提醒就算自动化 | 只有经过验证的真实执行才算完成 |
 
@@ -27,7 +27,7 @@ GitLearnOS v2 采用渐进迁移，不做破坏性重写。新内容遵守
 4. 只有在链接可更新、可检查时，才逐步移动旧文件。
 5. 原始作答、笔记和教师反馈保持不变；修正以新记录追加并链接旧记录。
 6. 把 `sessions/` 中有价值的记录迁入 `events/`，完整聊天不进入长期状态。
-7. 新 Skill 引用改为 `skills/gitlearnos*/`；v2 过渡期内旧名称由兼容入口继续读取。
+7. Skill 引用直接改为 `skills/gitlearnos*/`；旧 Skill 名称不属于 v2。
 8. 通过 `evals/` 中相关场景后，才宣布迁移完成。
 
 新旧路径可以暂时共存。不要为了目录看起来整齐而进行一次性大搬迁。

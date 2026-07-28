@@ -28,6 +28,8 @@ clear.
 - [Avoid fabrication and duplicates](scenarios/06-no-fabrication.md)
 - [Run without GitHub](scenarios/07-local-git.md)
 - [Adapt to constrained-access SAT study](scenarios/08-constrained-access-sat.md)
+- [Recognize an implicit learning event](scenarios/09-implicit-learning-event.md)
+- [Use GitHub for teaching collaboration](scenarios/10-github-teaching-collaboration.md)
 
 These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
 index, and a particular Git host are not required.

@@ -11,4 +11,6 @@ GitLearnOS 不提供模型运行环境。任何 Agent 都可以实现本协议�
 | 只读 | 查看已提供的仓库状态 | 返回精确的待写回内容 |
 | 仅当前上下文 | 没有长期仓库权限 | 完成一个聚焦任务，但不得声称拥有长期记忆 |
 
+Skills 是可选项。运行环境也可以通过自动发现的 `AGENTS.md`、持久项目指令、原生记忆或学习事件本身触发 GitLearnOS。可用时，大型来源文件放在持久项目或来源工作区中；Git 继续作为紧凑、可检查的状态层。
+
 本地 Git、GitHub、GitLab 和 Gitea 只是不同存储方式。Agent 的具体设置放在[中文 Agent 适配说明](adapters/agents/README.md)；学习行为统一遵守[中文协议](GITLEARNOS.md)。

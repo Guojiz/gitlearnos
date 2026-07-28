@@ -24,13 +24,32 @@ Start with [QUICKSTART.md](QUICKSTART.md).
 ## Is GitHub required?
 
 No. Local Git, GitHub, GitLab, Gitea, and other standard Git remotes follow the
-same core protocol. GitHub is a convenient hosting and connector option.
+same core protocol. GitHub is useful for private backup, cross-device
+continuity, teacher or tutor review, shared course materials, and group work.
+Keep shared materials separate from private learner state.
+
+## Must I invoke GitLearnOS or a Skill every time?
+
+No. After guided setup, `AGENTS.md` or project instructions provide mandatory
+behavior, native memory may provide an active cross-conversation trigger, and
+the agent should notice useful questions, answers, photographed pages, notes,
+feedback, and results automatically. Skills are optional workflow guides. The
+agent should not save incidental conversation.
+
+## Should I use Chat or Work?
+
+Use Chat for everyday learning when the current project/session has verified
+repository access. Use Work for setup, large imports, multi-file organization,
+maintenance, or substantial review. Capability, Skill availability, and credit
+treatment vary by plan and surface, so check the current account rather than
+assuming.
 
 ## Do I have to upload every source?
 
-No. Large files, screenshots, books, raw exports, and private working files may
-stay outside the repository. Keep a source record with an accurate locator,
-availability, and the part the agent actually used.
+No. Put large files, screenshots, books, raw exports, and private working files
+in persistent Project Sources or an authorized local source folder. Keep a
+source record in Git with an accurate locator, availability, and the part the
+agent actually used.
 
 See [Source and learner state](docs/source-and-learner-state.md).
 

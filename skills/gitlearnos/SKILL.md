@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: Route work in a learner-owned Git repository to the smallest GitLearnOS setup, organization, question, review, tutoring, source, model, or maintenance workflow using one capable main agent.
+description: Continuously recognize useful learning events and route them in a learner-owned Git repository to the smallest GitLearnOS setup, organization, question, review, tutoring, source, model, or maintenance workflow. Consider this Skill when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, or reveals a learning need—even without naming GitLearnOS or invoking a Skill.
 ---
 
 # GitLearnOS Router
@@ -10,6 +10,23 @@ description: Route work in a learner-owned Git repository to the smallest GitLea
 Read `GITLEARNOS.md` before acting. That protocol owns evidence, repository,
 permission, automation, and Git behavior; this Skill only selects the smallest
 workflow.
+
+## Activate from the event, not a command
+
+Do not wait for “use GitLearnOS,” “save this,” a Git request, or explicit Skill
+invocation. First decide whether the current input is a candidate learning
+event. Answer the learner's immediate request before repository administration.
+
+- clear durable value under `safe-auto`: use the smallest matching workflow and
+  write back when authorized;
+- likely value but uncertain: answer, then make one brief suggestion or ask one
+  necessary question;
+- incidental or unrelated input: do not load more Skills, scan the repository,
+  or mention capture.
+
+Skills are optional execution guides. `AGENTS.md`, project instructions, native
+memory, or the input itself may activate this router on a surface where Skills
+are unavailable.
 
 ## Read minimum context
 
@@ -22,7 +39,7 @@ workflow.
 5. infer the subject and ask only when a wrong write would otherwise occur;
 6. load one primary Skill and a helper only when necessary.
 
-## Route by intent
+## Route by intent or evidence
 
 | Intent | Skill |
 |---|---|

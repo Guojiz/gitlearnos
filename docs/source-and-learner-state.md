@@ -6,7 +6,7 @@ The core split is simple:
 
 ```text
 source layer
-→ materials, source records, models, evidence, Git history
+→ project or local materials, source records, models, evidence, Git history
 
 learner state layer
 → learner-profile.md, knowledge gaps, review results, dashboard, memory notes
@@ -21,7 +21,8 @@ The source layer is the part that should stay grounded and inspectable.
 In GitLearnOS, it usually includes:
 
 ```text
-local textbooks / PDFs / screenshots / original files
+ChatGPT Project Sources or another persistent project file area
++ local textbooks / PDFs / screenshots / original files
 + sources/
 + models/
 + knowledge-gaps/
@@ -39,9 +40,11 @@ Which knowledge gap was found?
 Can the learner inspect the evidence?
 ```
 
-External folders may keep the full textbook or original file. The chosen Git
-repository keeps source records, selected excerpts, summaries, model cards,
-knowledge-gap records, and links.
+Persistent project sources or external folders may keep the full textbook or
+original file. In ChatGPT, the Project **Sources** area is the preferred home
+for large materials that should be reusable across Chat and Work conversations.
+The chosen Git repository keeps source records, selected excerpts, summaries,
+model cards, knowledge-gap records, and links.
 
 ## Learner state layer
 
@@ -79,6 +82,9 @@ Local files are protected source material. The AI should not pretend it has read
 ```text
 native memory
 → active preference cache
+
+project sources
+→ large shared materials across related conversations
 
 Git repository
 → passive but inspectable source of truth

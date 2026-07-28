@@ -1,6 +1,6 @@
 ---
 name: gitlearnos-question
-description: Generate targeted, grounded, scoreable GitLearnOS questions from goals, sources, models, knowledge gaps, and prior performance. Use for diagnostic, practice, variation, transfer, delayed-review, or exam-style tasks, and for context-rich question packs that the learner can take to a teacher, tutor, peer, or another agent.
+description: Generate targeted, grounded, scoreable GitLearnOS questions from goals, sources, models, knowledge gaps, and prior performance. Consider it automatically when the learner asks a subject question, attempts a solution, reveals confusion, or shares material that warrants diagnosis, practice, transfer, delayed review, exam work, or a helper handoff—even without invoking GitLearnOS.
 ---
 
 # GitLearnOS Question Generation
@@ -16,6 +16,19 @@ Generate the next useful questions, not generic volume. Support two first-class 
 
 1. questions for the learner to answer;
 2. questions the learner can take to an external helper.
+
+## Implicit triggers
+
+A learner's subject question is both an immediate request and possible evidence.
+Answer or guide the learner as requested, then decide whether it reveals a
+durable gap, a useful source, or a reason for a fresh check. Do not manufacture
+a quiz after every casual question.
+
+When a clear active goal and target repository exist, a useful next question
+may be generated and persisted under `safe-auto` without waiting for “quiz me.”
+When relevance or desired difficulty is uncertain, offer one precise next
+question or ask one necessary clarification. Respect “answer only,” “no
+review,” and fatigue.
 
 ## Read
 

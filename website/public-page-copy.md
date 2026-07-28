@@ -10,15 +10,25 @@ You learn. It closes the loop.
 
 ## Short description
 
-Learning happens with teachers, school, paper, platforms, self-study, and AI. GitLearnOS lets one main agent organize those events, generate targeted questions, and commit durable state to one learner-owned local or hosted Git repository with `subjects/<subject>/` folders.
+Learning happens with teachers, school, paper, platforms, self-study, and AI.
+GitLearnOS lets one main agent notice those events without waiting for a Skill
+command, guide the next step, generate targeted questions, and commit durable
+state to one learner-owned local or hosted Git repository with
+`subjects/<subject>/` folders.
 
-ChatGPT Work can use a persistent local Git worktree directly. Most learning
-does not need GitHub; the public repository exists for distribution and the
-challenge submission.
+ChatGPT Chat or Work can use Git when the current project/session has verified
+repository access. Chat is suitable for daily questions, answers, page photos,
+and feedback even when Skills are unavailable; Work is useful for guided setup
+and larger multi-file tasks. Project Sources hold large textbooks, PDFs, and
+scans. Most learning does not need GitHub, but a private remote helps with
+backup, cross-device continuity, teacher review, and shared course work.
 
 ## Product promises
 
 - organize automatically;
+- recognize useful learning events without an explicit invocation;
+- use memory as an active trigger and Git as the source of truth;
+- guide setup and the next useful learning action;
 - generate questions from real gaps and evidence;
 - reconcile teacher feedback without forced AI reteaching;
 - keep shared policy at the root and focused subject state in subject folders;

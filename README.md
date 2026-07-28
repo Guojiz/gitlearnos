@@ -9,8 +9,9 @@
 
 ![GitLearnOS overview](docs/assets/gitlearnos-map.svg)
 
-**GitLearnOS gives an AI a learner-owned Git memory: organize real learning,
-generate targeted questions, and write useful results back automatically.**
+**GitLearnOS gives an AI a learner-owned Git memory: notice real learning,
+organize useful evidence, guide the next step, and write results back
+automatically.**
 
 Learning may happen with teachers, class, paper, books, practice platforms,
 projects, peers, or AI. GitLearnOS does not move all learning into one app. One
@@ -19,6 +20,31 @@ learner's own Git repository.
 
 Git stays in the background. The learner does not need to manage folders,
 commits, branches, or a Git hosting service during normal learning.
+
+## It should notice learning without a command
+
+Once configured, GitLearnOS should not wait for “use GitLearnOS,” “save this,”
+or an explicit Skill invocation. A subject question, attempted answer,
+photographed page, class note, teacher comment, practice result, or repeated
+difficulty can be a learning event.
+
+The agent answers the immediate need first. Under `safe-auto`, it then makes the
+smallest useful writeback when value, target, and privacy are clear. If the
+event is ambiguous it makes one brief suggestion or asks one necessary
+question. Incidental conversation is not stored.
+
+Cross-conversation continuity comes from:
+
+```mermaid
+flowchart TD
+    A["Project rules"] --> C["Proactive agent"]
+    B["Native memory"] --> C
+    D["Project Sources"] --> C
+    E["Current chat"] --> C
+    C --> F["Learner Git state"]
+```
+
+Skills improve a workflow but are never the only activation mechanism.
 
 ## The learning loop
 
@@ -34,13 +60,14 @@ goal and real learning input
 The primary success condition is observable improvement through answering and
 rechecking—not merely a tidy collection of notes.
 
-## Three core capabilities
+## Core capabilities
 
 | Capability | Result |
 |---|---|
 | Automatic organization | notes, mistakes, teacher feedback, and platform results become linked evidence and one next action |
 | Targeted questions | questions use the goal, source, current gap, and recent performance instead of random worksheet volume |
 | Automated writeback | safe changes, due checks, answers, and feedback are committed and reported without making the learner maintain files |
+| Proactive guidance | the agent notices useful learning events, suggests or performs one next step, and does not wait for repository commands |
 
 Live AI tutoring is optional. A learner may work mainly with a human teacher
 and use GitLearnOS for continuity, questions, and review.
@@ -67,9 +94,23 @@ universally available.
 
 One main AI agent that can read and write a Git repository.
 
-In ChatGPT Work and other environments with built-in file and Git operations,
-a persistent local worktree is enough for most learning workflows. The
-learner does not need a GitHub account or remote repository.
+OpenAI documents Git operations for local projects, and ChatGPT may hide the
+technical Git details from the everyday interface. Actual capability still
+depends on the current Chat, Work, Codex, or connector session, so the agent
+must verify it.
+
+- **Chat** is the preferred daily surface for short questions, answers, note
+  photos, and feedback when repository access is present. It must work without
+  Skills by using project instructions, `AGENTS.md`, native memory, and event
+  recognition.
+- **Work** is the guided path for setup, large imports, multi-file organization,
+  maintenance, and substantial review.
+- **Codex or another repository agent** is useful for technical setup,
+  migrations, validation, and visible Git review.
+
+Some accounts treat Chat and Work usage differently. Use the current plan and
+workspace UI as the source of truth rather than promising that Chat is always
+free or that a task never consumes credits.
 
 The target may be:
 
@@ -85,6 +126,17 @@ submission. That submission requirement is separate from how a learner uses
 GitLearnOS. Add a remote only for chosen backup, cross-device sync,
 collaboration, or publishing.
 
+GitHub becomes especially useful for private off-device backup, cross-device
+continuity, teacher or tutor review, shared course materials, and group project
+work. Keep shared teaching content separate from each learner's private answers,
+gaps, and history. See
+[Why Git, and when GitHub helps](docs/why-github.md).
+
+Large textbooks, PDFs, scans, media, and long-lived reference files should
+usually live in ChatGPT Project **Sources**, another agent's project file area,
+or an authorized local folder. Git stores compact state, provenance pointers,
+selected excerpts, and history.
+
 ## Start with one subject
 
 Send this to a write-capable agent:
@@ -97,13 +149,17 @@ Goal: <goal>
 Current material or learning event: <input>
 
 Read GITLEARNOS.md and START-HERE.md first. Use
-skills/gitlearnos/SKILL.md when Skills are supported. Detect actual repository,
-Git, source, and scheduling capability. Use safe-auto: organize useful
-evidence, generate targeted questions when they serve the goal, and commit safe
-reversible writeback. Preserve original answers, notes, and external feedback.
-Do not store the full conversation or claim mastery without delayed independent
-evidence. Finish with changed files, actual automation, the next action, and
-the undo boundary.
+skills/gitlearnos/SKILL.md when Skills are supported, but do not depend on
+explicit Skill invocation. Guide me through setup, put large source files in the
+project/source workspace, and configure durable instructions plus native memory
+when available. Future questions, answers, photographed pages, notes, feedback,
+and results should be considered automatically. Detect actual repository, Git,
+memory, source, and scheduling capability. Use safe-auto: answer first,
+organize useful evidence, guide the next step, and commit safe reversible
+writeback. Preserve original answers, notes, and external feedback. Do not store
+the full conversation or claim mastery without delayed independent evidence.
+Finish with activation surfaces, changed files, actual automation, the next
+action, and the undo boundary.
 ```
 
 The agent should initialize only the current subject and the files needed now.
@@ -170,9 +226,9 @@ it is not required.
 ## Evaluation
 
 GitLearnOS uses documented end-to-end scenarios rather than exact AI text
-matching. The v2 acceptance cases cover bootstrap, note organization, teacher
-feedback, due questions, answer writeback, non-fabrication, idempotency, and a
-complete local-Git workflow.
+matching. The v2 acceptance cases cover bootstrap, implicit learning-event
+recognition, note organization, teacher feedback, due questions, answer
+writeback, non-fabrication, idempotency, and a complete local-Git workflow.
 
 See [Evaluation](evals/README.md).
 

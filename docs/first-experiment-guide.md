@@ -11,6 +11,9 @@ GitLearnOS template
 
 learner repository
 → private learning state
+
+project sources or local source folder
+→ large textbooks, PDFs, scans, media, and references
 ```
 
 The learner repository may be an empty local Git repository or a private
@@ -25,9 +28,13 @@ Subject: <subject>
 Goal or current learning event: <input>
 
 Read GITLEARNOS.md first. Detect actual read, write, Git, source, and scheduler
-capabilities. Create only the files needed for this event. Preserve original
-evidence, generate a targeted question only when useful, commit safe writeback,
-and report what actually happened and how to undo it.
+capabilities. Guide setup one necessary step at a time. Configure durable
+instructions and memory when available so future learning questions, answers,
+pages, notes, feedback, and results can trigger GitLearnOS without a Skill name.
+Keep large sources in the project/source area. Create only the files needed for
+this event. Preserve original evidence, generate a targeted question only when
+useful, commit safe writeback, and report what actually happened and how to undo
+it.
 ```
 
 ## Expected minimum
@@ -52,6 +59,8 @@ records should also exist. Empty directories should not.
 - any question is grounded in the current gap;
 - the agent distinguishes local commit, remote push, and scheduling;
 - repeating the same input does not create a duplicate;
+- a later normal learning question can activate the workflow without naming it;
+- large originals remain outside Git unless explicitly authorized;
 - one reversible Git update and an honest receipt exist.
 
 Use the matching [evaluation scenario](../evals/README.md) for a more formal

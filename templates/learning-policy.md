@@ -10,6 +10,21 @@
 - Commit one meaningful learning event at a time: yes
 - Deduplicate repeated input: yes
 
+## Initiative and continuity
+
+- Notice learning events without an explicit GitLearnOS or Skill invocation: yes / suggest / no
+- Automatically write clear low-risk learning events: yes / suggest / no
+- Suggest repository capture when value is likely but uncertain: yes / no
+- Use native AI memory for the activation pointer and stable preferences: yes / ask / no
+- Native memory target pointer:
+- Remote sync after safe commits: yes / ask / no remote
+
+## Source workspace
+
+- Persistent project or source folder:
+- Put large textbooks, PDFs, scans, and media there by default: yes / ask / no
+- Store only locators, inspected excerpts, and derived learning state in Git: yes
+
 ## Questions and review
 
 - Generate questions when they serve the current goal: yes / ask / no
@@ -55,5 +70,7 @@
 - “do not store this”
 - “no review”
 - “preview first”
+- “answer only”
+- “not for my learning record”
 - “undo the last learning update”
 - “this belongs to physics”

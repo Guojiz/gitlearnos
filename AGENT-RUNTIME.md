@@ -12,6 +12,12 @@ protocol if it reports its real capability honestly.
 | Read-only | inspect supplied repository state | return exact pending writeback |
 | Context-only | no persistent repository access | complete one focused task without claiming memory |
 
+Skills are optional. A runtime may instead activate GitLearnOS through
+automatically discovered `AGENTS.md`, durable project instructions, native
+memory, or the learning event itself. Large source files belong in a persistent
+project/source workspace when available; Git remains the compact inspectable
+state layer.
+
 Local Git, GitHub, GitLab, and Gitea are storage choices. Agent-specific setup
 belongs in [adapters/agents](adapters/agents/README.md); the learning behavior
 stays in [GITLEARNOS.md](GITLEARNOS.md).

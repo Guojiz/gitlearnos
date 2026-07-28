@@ -6,14 +6,15 @@ This demo shows an AI agent taking useful action for a fictional SAT learner
 with constrained access. It uses plain Markdown and local Git; no custom app,
 API key, database, or background scheduler is required.
 
-ChatGPT Work can run this path with its built-in file and Git operations. The
-temporary learner repository stays local; GitHub is not part of the demo.
+A ChatGPT Chat or Work session can run this path when the current project has
+verified local file and Git operations. The temporary learner repository stays
+local; GitHub is not part of the demo.
 
 ## What the judge needs
 
 - this repository;
-- ChatGPT Work or another AI agent that can read, write, and commit a local Git
-  repository;
+- ChatGPT Chat, Work, or another AI agent that can read, write, and commit a
+  local Git repository;
 - about three minutes.
 
 The AI runtime itself may require a device and connectivity. This demo does not

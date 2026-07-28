@@ -14,10 +14,13 @@ learner-profile.md
 → compact repository-level learner memory
 
 Native AI memory
-→ stable preferences and durable learner summary when the platform supports it
+→ GitLearnOS activation pointer, stable preferences, and durable learner summary when the platform supports it
 
 Project instructions
 → stable operating rules and fixed materials
+
+Project sources
+→ large textbooks, PDFs, scans, media, and long-lived reference files
 
 External/local memory tools
 → optional enhanced retrieval for desktop agents, Claude Code, Codex, local models, or long-running workflows
@@ -36,7 +39,7 @@ Both matter.
 
 ```text
 Active memory
-→ helps the model remember stable preferences without being prompted
+→ helps the model notice GitLearnOS and stable preferences without being prompted
 
 Passive repository memory
 → gives inspectable, versioned, source-grounded learning state
@@ -66,9 +69,28 @@ Use native memory only for stable information:
 - durable constraints;
 - repeated mistake patterns;
 - repository operating preferences;
-- stable privacy boundaries.
+- stable privacy boundaries;
+- that GitLearnOS is installed and should consider implicit learning events;
+- the active project and learner-repository pointer.
 
 Do not store fast-changing or sensitive state there by default.
+
+This activation role matters most when a capable everyday Chat surface does not
+expose Skills. Memory wakes up the behavior; `AGENTS.md` or project instructions
+define it; the repository supplies current evidence.
+
+## What belongs in project sources
+
+Use a persistent project source area or authorized local folder for:
+
+- large textbooks and PDFs;
+- scan or image collections;
+- lecture media and long-lived reference files;
+- materials that should be available across related conversations but should
+  not be committed to Git.
+
+The Git repository should keep the source locator, access state, inspected
+excerpt, and derived learning record.
 
 ## What belongs in learner-profile.md
 
@@ -165,7 +187,8 @@ When meaningful learning state changes:
 
 1. update the relevant repository files;
 2. update `learner-profile.md` if the change is durable;
-3. suggest a native memory update only for stable preferences or repeated patterns;
+3. update or suggest native memory only for the activation pointer, stable
+   preferences, or repeated patterns;
 4. if an external memory tool exists, let it index or recall supporting history;
 5. report what changed and what was not changed.
 
@@ -178,6 +201,8 @@ Report:
 - runtime:
 - native memory: yes / no / unknown
 - project instructions: yes / no / unknown
+- project sources: yes / no / unknown
+- implicit activation: yes / suggest / no
 - Git repository access: write / read / pasted excerpt / none
 - external memory tool: yes / no / unknown
 
@@ -197,7 +222,8 @@ Do not silently store or overwrite memory. If uncertain, ask or mark as pending.
 ```text
 Git remembers the system.
 learner-profile.md remembers the learner.
-Native AI memory remembers stable preferences.
+Native AI memory wakes the system and remembers stable preferences.
+Project Sources hold large reusable material.
 External memory retrieves old context.
 Current chat does the current work.
 ```

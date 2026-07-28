@@ -66,8 +66,10 @@ database, vector service, custom server, or always-on process. It supports
 short asynchronous interactions, small incremental reads, existing local
 materials, and teacher handoffs.
 
-ChatGPT Work can perform the file and Git loop directly in a persistent local
-worktree. A learner does not need GitHub for normal use. GitHub hosts the public
+ChatGPT Chat or Work can perform the file and Git loop when the current local
+project/session has verified repository access. Skills are optional; durable
+project/repository instructions and memory keep daily interactions active. A
+learner does not need GitHub for normal use. GitHub hosts the public
 challenge submission; a remote is otherwise optional for user-chosen sync,
 backup, collaboration, or publishing.
 

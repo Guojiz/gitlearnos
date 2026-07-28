@@ -1,6 +1,6 @@
 ---
 name: gitlearnos-source
-description: Record and reconcile learning provenance from teachers, class, tutoring, paper notes, books, practice platforms, exams, peers, or AI without overstating access or completeness. Use when source availability, privacy, attribution, external feedback, or an unavailable original affects organization or question generation.
+description: Record and reconcile learning provenance from teachers, class, tutoring, photographed pages, screenshots, paper notes, books, practice platforms, exams, peers, or AI without overstating access or completeness. Consider it automatically whenever a learner supplies or refers to learning material, even without asking to save it.
 ---
 
 # GitLearnOS Source Handling
@@ -9,6 +9,15 @@ description: Record and reconcile learning provenance from teachers, class, tuto
 
 Follow `GITLEARNOS.md`. Original evidence is preserved; a correction becomes a
 new linked record rather than a silent rewrite.
+
+## Implicit source recognition
+
+A page photo, screenshot, pasted paragraph, worksheet, or remembered teacher
+comment is a candidate source. Handle the learner's immediate question first,
+then record the smallest useful provenance when policy and access permit.
+Distinguish what was visibly inspected from what is merely reported. Do not
+store an original image, copyrighted page, identity, or sensitive metadata
+unless authorized.
 
 ## Source states
 

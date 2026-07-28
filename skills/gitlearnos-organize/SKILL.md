@@ -1,6 +1,6 @@
 ---
 name: gitlearnos-organize
-description: Capture, organize, deduplicate, connect, and reconcile learning input from teachers, class, tutoring, paper notes, books, practice platforms, exams, peers, or AI. Use when the learner asks to record or organize material, sync external feedback, mark a problem resolved elsewhere, prepare durable state, or update the repository without forcing an AI tutoring session.
+description: Capture, organize, deduplicate, connect, and reconcile learning input from teachers, class, tutoring, photographed pages, screenshots, paper notes, books, practice platforms, exams, peers, or AI. Use automatically when the learner shares useful learning material, feedback, a result, correction, or resolved problem—even without asking to save it or naming GitLearnOS.
 ---
 
 # GitLearnOS Organize
@@ -13,6 +13,22 @@ Follow the evidence, ownership, write-authority, and Git rules in
 ## Goal
 
 Turn one natural-language learning event into the smallest correct durable state change. The learner describes what happened; do not ask them to choose repository paths.
+
+## Implicit triggers
+
+Consider this workflow when a learner:
+
+- sends a page, screenshot, worksheet, handwritten note, or book excerpt;
+- reports what a teacher, tutor, class, peer, or platform said;
+- shares a mistake, correction, result, useful method, or changed deadline;
+- asks a subject question whose context has durable value for an active goal.
+
+Do not delay the immediate answer just to organize files. Under `safe-auto`,
+make the smallest write after answering when subject, value, privacy, and target
+are clear. If the material is private or its role is uncertain, suggest capture
+briefly or ask one necessary question. Do not store the full image or original
+file unless authorized; a faithful note, locator, and inspected excerpt may be
+enough.
 
 ## Read
 

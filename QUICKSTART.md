@@ -6,14 +6,25 @@
 
 - one AI agent that can read and write a Git repository;
 - one local or remote target repository;
+- one persistent project/source area for large learning files when available;
 - one subject, goal, or current learning event.
 
 The agent may initialize a new local Git repository when its environment
 supports that operation. A GitHub account is not required.
 
-ChatGPT Work already provides file and Git operations. For most use, point it
-at a persistent local worktree and keep GitHub out of the learning loop. A
-remote is only needed when the learner chooses sync, collaboration, backup, or
+OpenAI documents Git operations for local projects, but ChatGPT capability
+still varies by surface and authorization. Test the current Chat, Work, or
+Codex session. Use Chat for small daily learning events when it has repository
+access; use Work for guided setup, large imports, and multi-file maintenance.
+Skills are helpful but not required.
+
+Some accounts separate Chat from limited Work task credits. The current account
+UI is authoritative; GitLearnOS must not promise universal credit treatment.
+
+Put large textbooks, PDFs, scan collections, media, and long-lived references
+in the ChatGPT Project **Sources** area or another persistent project/local
+source folder. Keep compact learning state and source locators in Git. A remote
+is only needed when the learner chooses sync, collaboration, backup, or
 publishing.
 
 ## Send one request
@@ -26,13 +37,19 @@ Goal: <goal>
 Current material or learning event: <input>
 
 Read GITLEARNOS.md and START-HERE.md first. Use
-skills/gitlearnos/SKILL.md when Skills are supported. Detect actual repository,
-Git, source, and scheduling capability. Use safe-auto: organize useful
-evidence, generate targeted questions when they serve the goal, and commit safe
+skills/gitlearnos/SKILL.md when Skills are supported, but do not depend on
+explicit Skill invocation. Guide me through setup one necessary step at a time.
+Use project Sources or an authorized local folder for large learning files.
+Configure durable project/repository instructions and, when available, native
+memory so future questions, attempted answers, photographed pages, notes,
+feedback, and results are recognized as candidate learning events without me
+naming GitLearnOS. Detect actual repository, Git, memory, source, and scheduling
+capability. Use safe-auto: answer my immediate need, organize useful evidence,
+suggest or generate targeted questions when they serve the goal, and commit safe
 reversible writeback. Preserve original answers, notes, and external feedback.
 Do not store the full conversation or claim mastery without delayed independent
-evidence. Finish with changed files, actual automation, the next action, and
-the undo boundary.
+evidence. Finish with activation surfaces, changed files, actual automation,
+the next action, and the undo boundary.
 ```
 
 Do not manually create the GitLearnOS folder tree when the agent can do it.
@@ -50,6 +67,18 @@ subjects/<subject>/goals/main-goal.md
 
 Only the current subject and real files should exist. Sources, models, gaps,
 handoffs, reviews, and events appear on first use.
+
+The setup agent should also report:
+
+```text
+Daily surface: Chat / Work / other
+Project or source workspace:
+Repository:
+Automatic instructions:
+Memory:
+Skills:
+Remote backup or collaboration:
+```
 
 ## Everyday requests
 
@@ -77,6 +106,20 @@ Undo the last learning update.
 
 The learner states the event and intent, not repository paths.
 
+After setup, the learner should not need to say “use GitLearnOS.” A normal
+question, attempted answer, or uploaded page may be enough:
+
+```text
+Why is the third step in this solution valid?
+```
+
+```text
+Here is today's class-note photo. What did I misunderstand?
+```
+
+The agent answers first, then silently decides whether a small durable update is
+useful. It does not save every casual conversation.
+
 ## Success check
 
 Setup is working when the agent can:
@@ -85,6 +128,9 @@ Setup is working when the agent can:
 - explain why a generated question serves the current gap;
 - preserve original evidence while revising AI interpretation;
 - write and commit safe changes without asking the learner to manage Git;
+- recognize a useful learning event in a later conversation without a Skill
+  name when configured memory or project instructions are available;
+- keep large sources in the project/source area and compact state in Git;
 - say exactly what automation and repository work actually ran;
 - complete the same loop in local Git without GitHub.
 

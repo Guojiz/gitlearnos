@@ -10,7 +10,7 @@ GitLearnOS 是可试用的早期个人学习控制层。它可以交给一个具
 
 ## 已可测试
 
-- ChatGPT Work 与仓库 Agent 的单一主 Agent 直接路径；
+- 具备相应权限的 ChatGPT Chat、Work 与仓库 Agent 单一主 Agent 直接路径；
 - 一个仓库内自动路由到 `subjects/<subject>/` 学科文件夹；
 - 老师、课堂、纸笔、题库、AI等跨渠道输入；
 - 自动整理、关联、去重和外部反馈同步；

@@ -4,12 +4,12 @@
 
 这个演示展示 AI Agent 如何为使用条件受限的虚构 SAT 学生采取实际行动。它只使用 Markdown 和本地 Git，不要求独立应用、API Key、数据库或后台调度器。
 
-ChatGPT Work 可以直接用自带的文件与 Git 操作运行这条路径。临时学习仓库保留在本地，演示不经过 GitHub。
+当前 Project 具备已验证本地文件与 Git 操作时，ChatGPT Chat 或 Work 会话都可以运行这条路径。临时学习仓库保留在本地，演示不经过 GitHub。
 
 ## 评委需要
 
 - 本仓库；
-- ChatGPT Work，或另一个能够读写并提交本地 Git 仓库的 AI Agent；
+- ChatGPT Chat、Work，或另一个能够读写并提交本地 Git 仓库的 AI Agent；
 - 大约三分钟。
 
 AI 运行环境本身仍可能需要设备和网络；本演示不会隐瞒这一点。

@@ -1,6 +1,6 @@
 ---
 name: gitlearnos-review
-description: Administer, evaluate, schedule, and write back an existing GitLearnOS question set using observable learner evidence without forcing one universal scoring system.
+description: Recognize and write back a learner answer or attempted solution, then administer, evaluate, and schedule an existing GitLearnOS question set using observable evidence. Use even when the learner simply sends an answer in a later conversation without naming the review or invoking GitLearnOS.
 ---
 
 # GitLearnOS Review
@@ -9,6 +9,15 @@ description: Administer, evaluate, schedule, and write back an existing GitLearn
 
 Follow `GITLEARNOS.md`. Use `gitlearnos-question` to create a new set; use this
 Skill after a planned question is due or the learner answers.
+
+## Implicit answer recognition
+
+An answer may arrive in another conversation as text, an image, a calculation,
+code, or a brief statement with no review command. Use memory or repository
+links to identify the likely pending question, but never force a match. If one
+clear pending item exists, score and write it back under policy. If several
+items could match, ask one short question. If none match, treat it as a new
+learning event rather than inventing provenance.
 
 ## Read
 

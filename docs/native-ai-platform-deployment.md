@@ -54,6 +54,39 @@ The platform may remember stable preferences, but the durable learning state sho
 
 Use ChatGPT when the learner wants the smoothest mobile/web daily learning workflow and strong persistent personalization.
 
+### Choose Chat or Work
+
+Use **Chat** for everyday learning when the current project/session has verified
+repository access:
+
+- asking or answering one subject question;
+- sharing one page, screenshot, or short note;
+- recording teacher feedback or a practice result;
+- receiving one next-step suggestion and a small safe writeback.
+
+Do not require Skills on this path. Project instructions, repository
+`AGENTS.md`, native memory, and the learning event itself should activate
+GitLearnOS. On accounts where Chat does not consume limited Work task credits,
+this also preserves Work for larger jobs; verify current plan behavior instead
+of promising it universally.
+
+Use **Work** for guided setup, large source intake, multi-file organization,
+maintenance, substantial reviews, or scheduled workflows. Use **Codex** when
+the learner or maintainer needs visible Git operations, migrations, tests, or
+technical review.
+
+OpenAI currently documents Git operations for local projects and shared project
+context across related chats. A particular Chat or Work session must still
+verify actual file and repository access.
+
+### Project source rule
+
+Create or select one persistent ChatGPT Project for the learner. Put large
+textbooks, PDFs, scan collections, media, and long-lived reference files in its
+**Sources** section when authorized. Chat and Work conversations in that project
+can use the shared sources and instructions. Keep compact state, locators,
+selected excerpts, and learning history in the Git repository.
+
 ### Setup instruction
 
 ```text
@@ -61,7 +94,11 @@ You are helping me run GitLearnOS in ChatGPT.
 
 Use my chosen state layer as the source of truth. Prefer a Git target repository. ChatGPT memory is an active preference cache, not the canonical learning repository.
 
-Before acting, identify your runtime, memory capability, file access, repository access, and permission boundary.
+Guide me through setup one necessary step at a time. Use this project's Sources for large textbooks, PDFs, scans, and reference files. Do not put large originals in Git by default.
+
+Before acting, identify your Chat, Work, or Codex surface; memory capability; project instructions; Skills; file access; repository access; and permission boundary.
+
+In future conversations, treat my subject questions, attempted answers, photographed pages, notes, teacher feedback, and results as candidate learning events even when I do not mention GitLearnOS or invoke a Skill. Answer my immediate need first. Under safe-auto, make the smallest useful writeback when value and privacy are clear; otherwise suggest it briefly or ask one necessary question.
 
 Follow this loop:
 source → model → knowledge gap → personalized practice → review result → learner-profile.md → next review.
@@ -77,6 +114,8 @@ Store only stable preferences:
 
 ```text
 GitLearnOS is the user's AI-assisted learning system.
+Notice useful learning events without waiting for an explicit invocation.
+The active ChatGPT Project and learner Git repository are: <targets>.
 The chosen state layer is the source of truth.
 learner-profile.md stores the inspectable learner profile.
 Practice should come from recent models and active knowledge gaps.
@@ -84,6 +123,18 @@ When memory conflicts with the state layer, trust the state layer first and sugg
 ```
 
 Do not store temporary tasks, raw private notes, stale gaps, or one-off practice results as permanent memory.
+
+Memory is a wake-up pointer, not the full system. Required behavior remains in
+project instructions or `AGENTS.md`; changing evidence remains in Git. If memory
+is disabled, tell the learner that future standalone chats may not recognize
+GitLearnOS unless they start inside the configured project or repository.
+
+Official references:
+
+- [Projects and chats](https://learn.chatgpt.com/docs/projects)
+- [Memories](https://learn.chatgpt.com/docs/customization/memories)
+- [Use ChatGPT](https://learn.chatgpt.com/docs/use-chatgpt)
+- [Skills and plugins](https://learn.chatgpt.com/docs/skills-and-plugins)
 
 ### Scheduled prompt boundary
 
@@ -115,6 +166,11 @@ Use artifacts for drafts, visual explanations, tables, small apps, or temporary 
 
 If you cannot write to the state layer, give exact file contents or patches for me to apply manually.
 ```
+
+The same portable rule applies to any other native agent: place mandatory
+behavior in its durable project/repository instructions, use native memory only
+as an activation and preference cache, keep large sources in its project file
+area or an authorized local folder, and keep inspectable learning state in Git.
 
 ### Artifact rule
 

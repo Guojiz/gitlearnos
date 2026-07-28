@@ -12,6 +12,9 @@ Use this checklist to review GitLearnOS from a first-time user's perspective.
 - which AI tools can run it;
 - what permissions the AI actually has;
 - what the first setup step is;
+- whether Chat, Work, Skills, memory, and Git are actually available;
+- where large learning files belong;
+- why GitHub may help with backup, teaching, and collaboration;
 - what success looks like after setup.
 
 ## Main entry path
@@ -43,6 +46,32 @@ Answer: yes, for testing or local workflows. But local access is not the same as
 
 Answer: no. Those are optional advanced layers.
 
+### Must I say “use GitLearnOS” or invoke a Skill every time?
+
+Answer: no. After guided setup, durable project/repository instructions and
+native memory—when available—should help the agent notice useful questions,
+answers, pages, notes, feedback, and results automatically. It should not save
+unrelated conversation.
+
+### Should I use Chat or Work?
+
+Answer: use Chat for short daily learning events when it has verified repository
+access. Use Work for setup, large imports, multi-file organization, maintenance,
+or substantial review. Skills are optional, and account credit treatment must
+be checked in the current plan rather than promised universally.
+
+### Where should textbooks and large files go?
+
+Answer: put them in persistent Project Sources or an authorized local source
+folder. Keep source locators, selected excerpts, and compact learning state in
+Git.
+
+### Why might I add GitHub?
+
+Answer: private backup, cross-device continuity, teacher or tutor review,
+shared course materials, and group projects. Keep shared materials separate
+from private learner state.
+
 ### Can the AI claim it has deployed the system?
 
 Answer: only if it has actually created or updated files in the target repository and can report the changes.
@@ -56,6 +85,9 @@ The documentation is unclear if a user might think:
 - GitHub Actions or API keys are required for the first setup;
 - every raw file must be uploaded to GitHub;
 - one AI tool can claim permissions it has not verified;
+- a Skill must be invoked before the agent can notice learning;
+- every large source file belongs in Git;
+- Chat, Work, and Codex have identical tools or credit rules;
 - the first action is to send a problem before creating the target repository.
 
 ## Maintenance rule

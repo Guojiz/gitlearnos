@@ -46,7 +46,7 @@ GitLearnOS 是一套 Git 原生学习协议。核心必须能在本地 Git 中�
 1. 先读 `zh-CN/GITLEARNOS.md`。
 2. 再读 `zh-CN/README.md`。
 3. 再读 `zh-CN/START-HERE.md`。
-4. 看 `examples/zh-CN/demo-zhongkao-lite/`。
+4. 看 `zh-CN/examples/demo-zhongkao-lite/`。
 5. 大改动前先开 issue。
 6. 保持改动小而清楚。
 7. 说明你的改动解决了什么问题。

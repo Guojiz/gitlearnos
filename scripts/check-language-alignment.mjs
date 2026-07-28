@@ -66,12 +66,67 @@ function fenceCount(text) {
 }
 
 function markdownTargets(text) {
-  return [...text.matchAll(/!?\[[^\]]*]\(([^)]+)\)/g)].map((match) =>
-    match[1].trim().replace(/^<|>$/g, ""),
-  );
+  const targets = [];
+  const source = withoutFencedCode(text);
+
+  for (let index = 0; index < source.length - 1; index += 1) {
+    if (source[index] !== "]" || source[index + 1] !== "(") continue;
+
+    let cursor = index + 2;
+    while (/\s/.test(source[cursor] ?? "")) cursor += 1;
+
+    let target = "";
+    if (source[cursor] === "<") {
+      cursor += 1;
+      while (cursor < source.length && source[cursor] !== ">") {
+        if (source[cursor] === "\\" && cursor + 1 < source.length) {
+          cursor += 1;
+        }
+        target += source[cursor];
+        cursor += 1;
+      }
+      if (source[cursor] !== ">") continue;
+    } else {
+      let nestedParentheses = 0;
+      while (cursor < source.length) {
+        const character = source[cursor];
+        if (character === "\\" && cursor + 1 < source.length) {
+          target += source[cursor + 1];
+          cursor += 2;
+          continue;
+        }
+        if (character === "(") {
+          nestedParentheses += 1;
+        } else if (character === ")") {
+          if (nestedParentheses === 0) break;
+          nestedParentheses -= 1;
+        } else if (/\s/.test(character) && nestedParentheses === 0) {
+          break;
+        }
+        target += character;
+        cursor += 1;
+      }
+      if (nestedParentheses !== 0) continue;
+    }
+
+    targets.push(target);
+  }
+
+  return targets;
 }
 
 const files = walk();
+
+const parserCases = [
+  ['[x](docs/target.md "Target")', ["docs/target.md"]],
+  ["[x](docs/a(b).md)", ["docs/a(b).md"]],
+  ['[x](<docs/a b.md> "Target")', ["docs/a b.md"]],
+];
+for (const [markdown, expected] of parserCases) {
+  if (JSON.stringify(markdownTargets(markdown)) !== JSON.stringify(expected)) {
+    fail(`Markdown destination parser failed its self-check: ${markdown}`);
+  }
+}
 
 for (const file of files) {
   if (

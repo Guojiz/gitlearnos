@@ -33,7 +33,7 @@ AI 原生记忆
 从这里开始：
 
 ```text
-skills/repo-as-review-os/SKILL.md
+skills/gitlearnos/SKILL.md
 ```
 
 然后只加载一个具体子 Skill。Skill 保存行为，不保存持续变化的个人状态。

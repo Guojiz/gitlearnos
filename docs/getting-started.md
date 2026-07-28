@@ -1,56 +1,49 @@
 # Getting Started
 
-This page is a short entry point for human users.
+Use [QUICKSTART.md](../QUICKSTART.md) for the complete first request.
 
-For the full first setup flow, start with:
-
-- [QUICKSTART.md](../QUICKSTART.md)
-- [First Experiment Guide](first-experiment-guide.md)
-- [What Goes Into GitHub](what-goes-into-github.md)
-- [Runtime Self-Adaptation](runtime-self-adaptation.md)
-
-## The basic idea
-
-Repo as Review OS uses two repositories roles:
+## Keep two repositories separate
 
 ```text
-Repo as Review OS repository
-→ template repository
-→ method, docs, skills, examples, rules
+GitLearnOS template
+→ protocol, Skills, adapters, templates, examples, evaluations
 
-Your target repository
-→ personal learning repository
-→ goals, sources, models, reviews, dashboard
+learner repository
+→ private goals, evidence, questions, answers, feedback, current state
 ```
 
-Do not write personal learning data into the template repository.
+Never place personal learning state in the public template.
 
 ## First setup
 
-1. Create an empty or nearly empty private target repository.
-2. Connect an AI tool that can read the template and write to the target.
-3. Ask the AI to identify its runtime and permission boundary.
-4. Ask it to create the minimal structure in the target repository.
-5. Give it your first learning goal.
+1. Give a write-capable agent the template and a local or remote target.
+2. Give it one subject, goal, or real learning event.
+3. Let it detect actual read, write, Git, source, and scheduler capability.
+4. Let it create only the minimum files needed now.
+5. Check the receipt and Git commit.
 
-## Minimal target structure
+The minimum useful target is:
 
 ```text
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
 dashboard.md
-goals/main-goal.md
-sources/
-models/
-reviews/
-templates/
-agents/
-automations/
-archive/
+learner-profile.md
+subjects/
+└── <subject>/
+    └── goals/
+        └── main-goal.md
 ```
 
-## Important boundary
+Git does not preserve empty folders. Sources, models, gaps, handoffs, reviews,
+and events appear only on first real use.
 
-A local workspace can test the method, but it is not the same as a GitHub-backed Review OS.
+## Capability boundary
 
-The AI must not claim GitHub write access, push, Issues, or remote updates unless it has verified those abilities.
+Local write access is enough for the complete core loop. It does not imply
+remote push, GitHub Issues, or scheduler access. The agent must distinguish
+local writes, commits, pushes, and background execution in its receipt.
 
-See [Local Runtime Note](local-runtime-note.md).
+See [Git adapters](../adapters/git/README.md) and
+[Migration](../MIGRATION-v2.md).

@@ -1,7 +1,7 @@
 # Demo 学习画像
 
 更新时间：2026-07-08  
-证据范围：[初次 AI 诊断](subjects/math/sessions/2026-07-03_similarity-session.md)、[老师反馈](subjects/math/sources/2026-07-05_teacher-feedback.md)、[迁移复习](subjects/math/reviews/2026-07-08_teacher-feedback-check.md)
+证据范围：[初次 AI 诊断](subjects/math/events/2026-07-03_similarity-session.md)、[老师反馈](subjects/math/sources/2026-07-05_teacher-feedback.md)、[迁移复习](subjects/math/reviews/2026-07-08_teacher-feedback-check.md)
 
 ## 活跃目标
 
@@ -21,7 +21,7 @@
 
 | 优势 | 可观察证据 | 证据链接 | 上次证明 | 可信度 |
 |---|---|---|---|---|
-| 能把平行线与相似三角形联系起来 | 初次作答主动提出相似 | [会话](subjects/math/sessions/2026-07-03_similarity-session.md) | 2026-07-03 | medium |
+| 能把平行线与相似三角形联系起来 | 初次作答主动提出相似 | [会话](subjects/math/events/2026-07-03_similarity-session.md) | 2026-07-03 | medium |
 | 能使用“等角→顶点顺序”流程 | 独立完成三种表达的迁移题 | [复习](subjects/math/reviews/2026-07-08_teacher-feedback-check.md) | 2026-07-08 | high |
 
 ## 活跃薄弱模式

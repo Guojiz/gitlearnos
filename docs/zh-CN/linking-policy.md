@@ -1,6 +1,6 @@
 # 文档链接规则
 
-Repo as Review OS 的文档应该同时方便人类阅读，也方便 AI Agent 接手。
+GitLearnOS 的文档应该同时方便人类阅读，也方便 AI Agent 接手。
 
 ## 规则
 

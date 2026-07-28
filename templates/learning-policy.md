@@ -1,78 +1,59 @@
-# Learning and Automation Policy
+# Learning Policy
 
-> This is the learner's durable authorization boundary. Natural language may override one event.
+> Durable learner authorization. A natural-language instruction may override
+> one event.
 
-## Execution mode
+## Mode
 
 - Mode: `safe-auto` / `preview` / `manual`
-- Prefer one writeback per learning event: yes / no
-- Deduplicate repeated input: yes / no
-- Report every change afterward: yes
+- Infer subject automatically: yes / no
+- Commit one meaningful learning event at a time: yes
+- Deduplicate repeated input: yes
 
-## Organization
+## Questions and review
 
-- Subject routing: infer automatically / ask every time / manual
-- When routing is ambiguous: ask only if write location changes / place in subject inbox
-- Cross-subject events: one primary owner plus links / ask
-- Auto-link existing goals and gaps: yes / no
-- Extract reusable models: only when durable / never
-- Retire obsolete tasks after resolution: yes / no
-- If connection is uncertain: ask / place in inbox
+- Generate questions when they serve the current goal: yes / ask / no
+- Default question count:
+- Schedule a later independent check: yes / ask / no
+- Without a real scheduler: check on next handoff / do not schedule
+- Hide answers before an attempt: yes / no
 
-## School and self-study balance
+## School and self-study
 
-- Default priority: deadline-based / school-first / self-study-first / manual
-- Exam-week rule:
-- Self-study time reserved each week:
-- Resume self-study after school displacement:
-- Shared concept across tracks: reuse model, gap, and mastery evidence
+- Current priority rule:
+- Deadlines or teacher constraints:
+- Self-study time to preserve:
 
-## Diverse-need defaults
+## Access and delivery
 
-- Current primary need:
-- Default session time:
-- Project or research evaluation: milestone / rubric / custom
-- Use 0–3 only when appropriate: yes
-- Schedule open exploration for spaced review: no / when requested
-
-## Questions
-
-- Generate after new material: yes / no / only when requested
-- Generate a short check after external resolution: yes / no / ask
-- Default count:
-- Default time budget:
-- Hide answers by default: yes / no
-- School alignment: current curriculum / teacher method / exam form
-- Self-study preference: conceptual depth / open task / project / transfer
-
-## Scheduling
-
-- Schedule next review automatically: yes / no
-- Without a real scheduler: record a date and check on handoff / do not schedule
-- Allowed reminder channels:
+- Primary device:
+- Connectivity or data limit:
+- Available study blocks:
+- Preferred language or assistive format:
+- Maximum questions per interaction:
+- Prefer existing local material before network access: yes / no
 
 ## Privacy
 
-- Default target repository: private
-- Store full conversations: no / yes
-- Store teacher or other names: no / when authorized
-- Store original images or files: no / when authorized
-- Local-only material:
+- Real learning repository should be private: yes
+- Store full conversations: no
+- Store original files or images: only when authorized
+- Store names or sensitive identity: only when necessary and authorized
+- Local-only sources:
 
 ## Always ask first
 
-- delete history;
-- restructure broadly;
-- overwrite original notes;
-- change main goals or this policy;
-- publish private content or change visibility;
+- delete or overwrite original evidence;
+- change a long-term goal or this policy;
+- restructure broadly when links may break;
+- publish, change visibility, or send data to an external service;
 - access secrets or change the license.
 
-## One-event natural-language overrides
+## One-event overrides
 
-- “record only; do not generate questions”
-- “do not store the original”
-- “do not schedule review”
+- “record only”
+- “do not store this”
+- “no review”
 - “preview first”
 - “undo the last learning update”
 - “this belongs to physics”

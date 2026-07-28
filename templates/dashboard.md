@@ -56,7 +56,7 @@ Automation policy: [link to learning-policy.md]
 
 | Gap | Resolution state | Mastery state | Recent evidence | Next action | Link |
 |---|---|---|---|---|---|
-|  | active / awaiting-feedback / resolved-externally | untested / developing / demonstrated |  |  |  |
+|  | open / resolved / needs-check | unknown / learning / demonstrated |  |  |  |
 
 ## Recent learning events
 

@@ -1,253 +1,193 @@
 # GitLearnOS
 
-**[Quickstart: start with one subject →](QUICKSTART.md)**
+**[Quickstart: give one request to your AI →](QUICKSTART.md)**
 
-[中文](README.zh-CN.md) · [Website](https://guojiz.github.io/gitlearnos/)
+[中文](README.zh-CN.md) ·
+[Website](https://guojiz.github.io/gitlearnos/) ·
+[Documentation map](DOCUMENTATION.md) ·
+[Protocol](GITLEARNOS.md)
 
-![GitLearnOS overview](docs/assets/repo-as-review-os-map.svg)
+![GitLearnOS overview](docs/assets/gitlearnos-map.svg)
 
-**GitLearnOS is a learner-owned control layer: organize automatically, generate targeted questions, and keep durable state in sync.**
+**GitLearnOS gives an AI a learner-owned Git memory: organize real learning,
+generate targeted questions, and write useful results back automatically.**
 
-Learning can happen with a teacher, in class, on paper, in a textbook or practice platform, with another AI, or in ChatGPT Work. GitLearnOS does not pull all learning into one platform. One replaceable main agent coordinates the resulting material, questions, feedback, evidence, and next actions in the learner's own GitHub repository.
+Learning may happen with teachers, class, paper, books, practice platforms,
+projects, peers, or AI. GitLearnOS does not move all learning into one app. One
+replaceable main agent connects the useful evidence and next actions inside the
+learner's own Git repository.
 
-This repository is **GitLearnOS** (renamed from `Repo-as-Review-OS`; old links redirect here). Status: early public release. See [PUBLIC-ALPHA.md](PUBLIC-ALPHA.md).
+Git stays in the background. The learner does not need to manage folders,
+commits, branches, or a Git hosting service during normal learning.
+
+## The learning loop
+
+```text
+goal and real learning input
+→ automatic organization with traceable evidence
+→ targeted question from the current gap
+→ learner answer or external feedback
+→ later independent check
+→ updated state and one reversible Git commit
+```
+
+The primary success condition is observable improvement through answering and
+rechecking—not merely a tidy collection of notes.
 
 ## Three core capabilities
 
-| Capability | Required behavior |
+| Capability | Result |
 |---|---|
-| Automatic organization | Capture notes, mistakes, teacher feedback, and platform results; connect them to goals and gaps; deduplicate and surface the next action |
-| Targeted question generation | Create diagnostic, variation, transfer, and review tasks—or a focused question pack for a teacher—from sources and learner state |
-| Automated execution and writeback | Apply safe state changes, schedule follow-up, retire obsolete tasks, and return an inspectable, reversible receipt |
+| Automatic organization | notes, mistakes, teacher feedback, and platform results become linked evidence and one next action |
+| Targeted questions | questions use the goal, source, current gap, and recent performance instead of random worksheet volume |
+| Automated writeback | safe changes, due checks, answers, and feedback are committed and reported without making the learner maintain files |
 
-Explanation, search, and live AI tutoring are useful supporting capabilities, not prerequisites. A learner may work mainly with a human teacher and use GitLearnOS only to organize, generate questions, and maintain continuity.
+Live AI tutoring is optional. A learner may work mainly with a human teacher
+and use GitLearnOS for continuity, questions, and review.
 
-## One repository, subject folders
+## Build for impact
 
-The learner authorizes one GitHub repository. Shared policy and cross-subject planning stay at the root; each subject keeps its own working state under `subjects/<subject>/`.
+The [AceSAT working demo](LIVE-DEMO.md) follows a fictional public-school
+student with limited data, a shared phone, short study periods, and no paid
+tutoring continuity. The agent uses an existing practice summary, chooses one
+high-value SAT question, preserves the answer, updates the next check, and
+prepares evidence that a teacher can inspect.
 
-```text
-my-gitlearnos/
-├── AGENTS.md
-├── learning-policy.md
-├── dashboard.md
-├── learner-profile.md
-└── subjects/
-    ├── math/
-    ├── english/
-    └── coding/
-```
+The demo is deliberately text-first and local-Git compatible. It does not
+require a custom app, always-on server, database, large download, or background
+scheduler. It still requires access to a capable AI runtime; GitLearnOS reduces
+overhead but does not pretend that devices, connectivity, or AI access are
+universally available.
 
-The agent infers the subject from the current material, routes all subject-specific files into that folder, and asks only when ambiguity would cause a wrong write. A natural-language correction such as “this belongs to physics” overrides routing. It never creates empty folder trees just to look complete.
+- [Run the three-minute demo](LIVE-DEMO.md)
+- [Read the one-page impact statement](docs/acesat-build-for-impact.md)
+- [Inspect the completed SAT fixture](examples/en/demo-sat-lite/)
 
-See [Subject Folder Model](docs/subject-folder-model.md).
+## What you need
 
-## Support school and self-study together
+One main AI agent that can read and write a Git repository.
 
-GitLearnOS shares knowledge state while preserving two goal tracks:
+In ChatGPT Work and other environments with built-in file and Git operations,
+a persistent local worktree is enough for most learning workflows. The
+learner does not need a GitHub account or remote repository.
 
-| Track | Typical work | Agent focus |
-|---|---|---|
-| school | curriculum, homework, exams, class notes, teacher requirements and feedback | align with school methods and deadlines, prepare help, organize mistakes, generate current-course questions |
-| self-study | interests, prerequisite repair, advanced learning, reading, projects, personal challenges | preserve continuity, plan paths, generate open and transfer tasks, prevent short-term school work from consuming everything |
+The target may be:
 
-One concept keeps one model and mastery history but may serve several goals. The dashboard marks each task's track, and `learning-policy.md` can express rules such as school-first during exam weeks while preserving self-study time otherwise.
+- a local Git repository;
+- a standard remote Git repository;
+- GitHub, GitLab, Gitea, or another Git host.
 
-## Adapt to diverse learning needs
+GitHub is a convenient path, not a core dependency. A database, vector store,
+server, custom app, multi-agent runtime, and OpenSpace are also optional.
 
-School and self-study are contexts, not product limits. The same organization, question, and automation engines adapt by need:
+This project is published on GitHub because the challenge requires a GitHub
+submission. That submission requirement is separate from how a learner uses
+GitLearnOS. Add a remote only for chosen backup, cross-device sync,
+collaboration, or publishing.
 
-| Need | Organization focus | Question or output focus |
-|---|---|---|
-| current course and homework | scope, teacher constraints, deadlines, class feedback | current method, assignment form, teacher handoff |
-| remediation | prerequisites, error chains, recurring blockers | small diagnostics and targeted variations |
-| exam preparation | syllabus, mistake distribution, time pressure | timed tasks, mixed retrieval, scoring, scheduling |
-| advanced or interest study | concept map, source path, open questions | explanation, comparison, exploration, broad transfer |
-| project or skill | milestones, artifacts, feedback, real constraints | implementation tasks, tests, artifact rubric, retrospective |
-| reading or research | sources, claims, evidence, uncertainty | extraction, critique, synthesis, research questions |
+## Start with one subject
 
-The agent first infers or confirms the current need, then adapts question form, evidence contract, and automation intensity. Not all learning requires a 0–3 problem score: code tests, artifacts, oral performance, critical reading, and teacher feedback may be the right evidence.
-
-## Start in two minutes
-
-You need one main agent that can read this template and operate a private target repository, plus one learning goal.
-
-Send this:
+Send this to a write-capable agent:
 
 ```text
 Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
-My private learning repository is: <target repository>
-The subject for this first input is: <subject>
-My learning goal is: <goal>
+My learning Git repository or local checkout is: <target>
+Subject: <subject>
+Goal: <goal>
+Current material or learning event: <input>
 
-Read START-HERE.md and AGENTS.md first. Use
-skills/repo-as-review-os/SKILL.md when skills are supported. Detect actual
-permissions, preserve existing files, and use safe-auto: perform safe,
-reversible organization, question generation, state sync, and writeback;
-ask only for high-impact actions. Do not force the request into an AI
-tutoring session. Never write my personal state into the template repository.
-Keep shared policy at the repository root and route subject-specific state to
-subjects/<subject>/. Create only files needed by the current learning event.
-Finish with a concise receipt of changes, evidence, and the next action.
+Read GITLEARNOS.md and START-HERE.md first. Use
+skills/gitlearnos/SKILL.md when Skills are supported. Detect actual repository,
+Git, source, and scheduling capability. Use safe-auto: organize useful
+evidence, generate targeted questions when they serve the goal, and commit safe
+reversible writeback. Preserve original answers, notes, and external feedback.
+Do not store the full conversation or claim mastery without delayed independent
+evidence. Finish with changed files, actual automation, the next action, and
+the undo boundary.
 ```
 
-ChatGPT Work is one primary path: when the target repository is connected, the agent should inspect and perform safe work directly. A read-only chat can produce exact pending writeback, but must not claim the repository changed.
+The agent should initialize only the current subject and the files needed now.
+See the complete [Quickstart](QUICKSTART.md).
 
-## Learn anywhere
-
-Typical requests:
-
-- “Organize these two pages of class notes and give me three variations.”
-- “Finish school priorities by Thursday but preserve two hours for my coding self-study.”
-- “Prepare my recent geometry gaps as a question pack for tomorrow's tutor.”
-- “My teacher resolved the second issue: check corresponding angles first. Here are my notes.”
-- “Import today's practice-platform mistakes and test me again this weekend.”
-- “Record this only; do not schedule a review.”
-- “Undo the last learning update.”
-
-The learner should not have to name folders or templates. The agent identifies the intent, chooses the smallest durable state change, acts, and reports.
-
-## Two loops
-
-The primary loop coordinates learning across channels:
+## One repository, subject folders
 
 ```text
-capture any learning event
-→ connect goal, source, and gap
-→ route to teacher, learner, AI, or another channel
-→ organize feedback or generate questions
-→ write back automatically
-→ update the next action
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
+dashboard.md
+learner-profile.md
+subjects/
+└── math/
+    ├── goals/
+    ├── sources/
+    ├── models/
+    ├── knowledge-gaps/
+    ├── handoffs/
+    ├── reviews/
+    └── events/
 ```
 
-When live AI tutoring is useful, use the optional teaching loop:
+Git does not preserve empty folders. The agent creates each optional folder on
+first real use.
 
-```text
-learner attempt
-→ diagnosis
-→ minimum useful support
-→ fresh verification
-→ evidence score
-→ writeback and review
-```
+## Truth before completeness
 
-“Resolved by a teacher” and “independently mastered” are different states. GitLearnOS can accept an external resolution and stop redundant teaching while recording whether mastery has been verified.
+- Original answers, notes, and external feedback are preserved.
+- Corrections become new linked records instead of silent rewrites.
+- AI summaries, models, gaps, and plans may be revised.
+- Important conclusions link evidence; missing evidence remains unknown.
+- Ordinary chat and hidden reasoning are not stored.
+- External resolution and independent mastery remain separate.
 
-## Question generation is not random worksheet generation
+The dashboard is a current view, not a second source of truth.
 
-Each question set should state:
+## Automation that acts
 
-- the goal and gap it serves;
-- the sources, models, and prior evidence used;
-- whether it is diagnostic, practice, variation, transfer, or delayed review;
-- difficulty, time budget, answer key or rubric;
-- learner result, support used, and next action.
+The portable base defines two operations:
 
-A teacher-facing question pack is also a first-class output. It should contain the problem locator, learner attempt, exact blocker, and what the teacher should check.
+- `due-review`: read due evidence and deliver concrete answerable questions;
+- `maintenance`: reconcile input, waiting feedback, stale views, and
+  contradictions.
 
-## Automation with learner control
+An interactive agent performs immediate work and checks due items when it
+resumes. Background work requires a real external scheduler with repository
+access. A reminder alone is not completed repository work.
 
-The recommended default is `safe-auto`:
+See [Automation adapters](adapters/automation/README.md).
 
-| Mode | Behavior |
-|---|---|
-| `safe-auto` | perform safe, low-risk, reversible actions and report afterward |
-| `preview` | show the planned changes before writing |
-| `manual` | provide suggestions or pending writeback only |
+## Skills and subject methods
 
-The target repository's `learning-policy.md` stores rules such as raw-conversation retention, automatic verification, and whether teacher names may be recorded. Natural language can override a single event: “do not store this,” “organize only,” or “always link teacher feedback.”
+Start with [skills/gitlearnos/SKILL.md](skills/gitlearnos/SKILL.md). The core
+Skills route setup, organization, question generation, review, source handling,
+models, optional tutoring, and maintenance.
 
-Automation has three tiers:
+Optional subject Skills refine mathematics, language, or programming task forms
+without changing the evidence and ownership contract. OpenSpace may later
+evaluate generic Skills through an [optional integration](integrations/openspace/README.md);
+it is not required.
 
-1. **Immediate:** organize, generate, and write back after user input;
-2. **On handoff:** inspect due work, unprocessed inbox items, and waiting feedback whenever an agent resumes;
-3. **Background:** schedule only when the current runtime truly supports it; never require it for the portable base.
+## Evaluation
 
-Rules and state stay in the repository while the executing agent may change. Automation must be transparent and idempotent, and one learning event should become one reversible update when the runtime supports atomic writes.
+GitLearnOS uses documented end-to-end scenarios rather than exact AI text
+matching. The v2 acceptance cases cover bootstrap, note organization, teacher
+feedback, due questions, answer writeback, non-fabrication, idempotency, and a
+complete local-Git workflow.
 
-## What it is
+See [Evaluation](evals/README.md).
 
-```text
-any learning channel
-+ one replaceable main AI agent
-+ one learner-owned repository with subject folders
-+ GitLearnOS rules and skills
-= a portable personal learning control layer
-```
+Existing repositories can move gradually with
+[the v2 migration guide](MIGRATION-v2.md); old evidence does not need a
+one-time bulk relocation.
 
-GitLearnOS is not:
+## Examples
 
-- a replacement for an AI application or human teacher;
-- a required multi-agent framework;
-- a RAG service or vector database;
-- a drive for every textbook and private original;
-- a note system that creates files for its own sake.
+- [Teacher feedback to delayed mathematics review](examples/zh-CN/demo-zhongkao-lite/)
+- [SAT Reading and Writing](examples/en/demo-sat-lite/)
+- [Research reading](examples/en/demo-research-reading-lite/)
 
-## Design standard
+## Project status
 
-GitLearnOS is evaluated by whether it preserves the learning-critical loop with the smallest practical system:
-
-1. outputs remain grounded in accessible sources;
-2. learner state evolves from evidence rather than claims;
-3. current gaps drive targeted questions;
-4. teacher feedback and learner results change future actions;
-5. every automation is inspectable, reversible, and controlled by the learner.
-
-It does not reproduce a full runtime, frontend, RAG stack, multi-agent system, database, or knowledge platform. The original `zhongkao` learning repository remains the practical implementation baseline.
-
-See [Product Positioning](docs/product-positioning.md) and [Evaluation Standard](docs/agentic-tutoring-standard.md).
-
-## Minimal target repository
-
-```text
-my-gitlearnos/
-├── AGENTS.md
-├── learning-policy.md
-├── dashboard.md
-├── learner-profile.md
-├── subjects/
-│   └── math/
-│       ├── goals/
-│       ├── sources/
-│       ├── knowledge-gaps/
-│       └── reviews/
-└── archive/
-```
-
-Git does not preserve empty folders. Create only the active subject and the state needed now; optional folders such as `handoffs/`, `models/`, or `sessions/` appear on first use.
-
-## Skills
-
-Start at [skills/repo-as-review-os/SKILL.md](skills/repo-as-review-os/SKILL.md). Load progressively by intent:
-
-- setup: bootstrap or migrate;
-- organize: capture, deduplicate, connect, and reconcile external feedback;
-- question: personalized practice and external question packs;
-- session: optional live AI tutoring;
-- source / model: provenance and reusable understanding;
-- review: scoring, scheduling, and result writeback;
-- maintenance: consistency, safe repair, and handoff health.
-
-One main agent is the standard runtime. These responsibilities do not require separate agents.
-
-## Sources, privacy, and memory
-
-- Keep real state in a private target repository by default.
-- Keep copyrighted books, teacher originals, private screenshots, and large originals local or in authorized sources.
-- Store only necessary summaries, locators, and derived state on GitHub.
-- Do not retain full conversations by default.
-- The learner can inspect, edit, export, switch agents, or undo updates.
-- When native AI memory conflicts with the repository, inspect evidence and honor the learner's correction.
-
-## Examples and entry points
-
-- [Chinese mathematics demo](examples/zh-CN/demo-zhongkao-lite/)
-- [Quickstart](QUICKSTART.md)
-- [Agent entry](START-HERE.md)
-- [Canonical agent rules](AGENTS.md)
-- [Runtime adaptation](docs/runtime-self-adaptation.md)
-- [Templates](templates/)
-
-## License
+This branch develops the Git-native v2 protocol.
 
 MIT License. See [LICENSE](LICENSE).

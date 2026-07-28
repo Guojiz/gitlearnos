@@ -39,7 +39,9 @@ Which knowledge gap was found?
 Can the learner inspect the evidence?
 ```
 
-Local folders may keep the full textbook or original file. GitHub keeps source records, selected excerpts, summaries, model cards, knowledge-gap records, and links.
+External folders may keep the full textbook or original file. The chosen Git
+repository keeps source records, selected excerpts, summaries, model cards,
+knowledge-gap records, and links.
 
 ## Learner state layer
 
@@ -70,7 +72,7 @@ What should be reviewed next?
 
 Native AI memory is active. It may surface automatically.
 
-GitHub is passive. The AI must read or search it.
+The Git repository is passive. The AI must read or search it.
 
 Local files are protected source material. The AI should not pretend it has read them unless it actually has access.
 
@@ -78,7 +80,7 @@ Local files are protected source material. The AI should not pretend it has read
 native memory
 → active preference cache
 
-GitHub repository
+Git repository
 → passive but inspectable source of truth
 
 local folders

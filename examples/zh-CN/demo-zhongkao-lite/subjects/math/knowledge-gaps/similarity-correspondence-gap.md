@@ -1,6 +1,6 @@
 # 知识缺口：相似三角形对应关系
 
-处理状态：`verified`  
+处理状态：`resolved`
 学科：`math`  
 掌握状态：`demonstrated`  
 缺口类型：`recognition`  
@@ -18,14 +18,14 @@
 - 2026-07-04 路由给补习老师；
 - 问题包：[老师问题包](../handoffs/2026-07-04_similarity-teacher-pack.md)；
 - 外部反馈：[老师反馈记录](../sources/2026-07-05_teacher-feedback.md)；
-- 2026-07-05 标记 `resolved-externally`；
-- 2026-07-08 独立迁移成功后标记 `verified`。
+- 2026-07-05 标记 `resolved`；
+- 2026-07-08 独立迁移成功后标记 `resolved`。
 
 ## 证据
 
 | 日期 | 渠道 | 观察或报告 | 证据类型 | 提示程度 | 分数 | 链接 |
 |---|---|---|---|---|---:|---|
-| 2026-07-03 | AI | 对应顺序写反，关键提示后改正 | demonstrated | major | 1 | [会话](../sessions/2026-07-03_similarity-session.md) |
+| 2026-07-03 | AI | 对应顺序写反，关键提示后改正 | demonstrated | major | 1 | [会话](../events/2026-07-03_similarity-session.md) |
 | 2026-07-04 | teacher handoff | 已整理具体卡点并等待老师反馈 | not-assessed | none |  | [问题包](../handoffs/2026-07-04_similarity-teacher-pack.md) |
 | 2026-07-05 | teacher | 老师给出“等角→顶点→相似式→比例”方法 | source-supported | external |  | [来源](../sources/2026-07-05_teacher-feedback.md) |
 | 2026-07-08 | self | 独立完成三道不同表达的对应关系题 | demonstrated | none | 3 | [复习](../reviews/2026-07-08_teacher-feedback-check.md) |
@@ -42,9 +42,9 @@
 
 ## 状态规则
 
-- `resolved-externally`：已有可追踪老师反馈；
-- `demonstrated`：已有一次独立迁移成功；
-- `stable`：仍需一次延迟后的独立成功；
+- `resolved`：问题已经获得可追踪的处理反馈；
+- `demonstrated`：已有一次间隔后的独立迁移成功；
+- 后续延迟复测继续补强证据，不新增掌握状态；
 - 需要迁移：是；
 - 需要延迟检验：是。
 

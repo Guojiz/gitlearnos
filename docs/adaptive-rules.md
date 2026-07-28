@@ -15,7 +15,7 @@ Stable principles:
 - link files to goals;
 - report changes;
 - protect local material;
-- use GitHub as the durable operating layer;
+- use the chosen Git repository as the durable operating layer;
 - keep learner state inspectable;
 - record knowledge gaps when they appear;
 - adapt to the actual AI environment instead of pretending every tool has the same abilities.
@@ -114,7 +114,7 @@ The AI should update it when:
 Use this rule:
 
 ```text
-GitHub learner-profile.md = inspectable source of truth
+Git learner-profile.md = inspectable source of truth
 Native AI memory = compact cache for stable preferences
 Project instructions = stable operating rules
 Current chat = temporary workspace

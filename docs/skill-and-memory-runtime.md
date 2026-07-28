@@ -33,7 +33,7 @@ Do not make native memory the only copy of learner state. Do not make the user m
 Start with:
 
 ```text
-skills/repo-as-review-os/SKILL.md
+skills/gitlearnos/SKILL.md
 ```
 
 Then load one focused subskill. Skills store behavior, not changing personal state.

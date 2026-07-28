@@ -1,13 +1,13 @@
 # Adaptive Memory and Learner Profile
 
-Repo as Review OS binds memory to the learning repository.
+GitLearnOS binds memory to the learning repository.
 
 The goal is not to force every AI platform to have the same memory feature. The goal is to keep the learner state portable, inspectable, and adaptable across tools.
 
 ## Memory layers
 
 ```text
-GitHub repository
+Git repository
 → source of truth for learning state, history, files, indexes, learner-profile.md, reviews, and handoff notes
 
 learner-profile.md
@@ -30,7 +30,7 @@ Current chat
 
 Native AI memory is relatively active: the model may surface it automatically during future sessions.
 
-GitHub is more passive: the AI must read or search the repository to recover the state.
+The Git repository is more passive: the AI must read or search the repository to recover the state.
 
 Both matter.
 
@@ -46,12 +46,13 @@ The AI should keep the two aligned without pretending they are the same thing.
 
 ## Source of truth rule
 
-GitHub remains the source of truth.
+The Git repository remains the source of truth.
 
 Native AI memory, project instructions, and external memory tools may accelerate retrieval, but they should not silently override repository files.
 
 ```text
-If memory conflicts with GitHub, trust GitHub first.
+If memory conflicts with the chosen Git repository, trust repository evidence
+first.
 Then propose a memory update.
 ```
 
@@ -114,7 +115,7 @@ load relevant context into the current agent session
 Bad use:
 
 ```text
-replace GitHub as source of truth
+replace the Git repository as source of truth
 hide learning state inside a private memory database
 pretend all agents share the same memory
 store sensitive material without user choice
@@ -132,7 +133,7 @@ Recommended boundary:
 MemPalace-style memory
 → local recall layer for conversations, project history, and old decisions
 
-Repo as Review OS
+GitLearnOS
 → learning operating layer and source of truth
 
 learner-profile.md
@@ -151,7 +152,7 @@ Before deciding how to remember something, the AI should ask:
 ```text
 1. Is this stable or temporary?
 2. Is it private or public-safe?
-3. Should it be inspectable in GitHub?
+3. Should it be inspectable in the chosen Git repository?
 4. Should it be summarized into native AI memory?
 5. Should it only stay in the current chat?
 6. Is an external local memory tool available?
@@ -162,7 +163,7 @@ Before deciding how to remember something, the AI should ask:
 
 When meaningful learning state changes:
 
-1. update the relevant GitHub files;
+1. update the relevant repository files;
 2. update `learner-profile.md` if the change is durable;
 3. suggest a native memory update only for stable preferences or repeated patterns;
 4. if an external memory tool exists, let it index or recall supporting history;
@@ -177,11 +178,11 @@ Report:
 - runtime:
 - native memory: yes / no / unknown
 - project instructions: yes / no / unknown
-- GitHub access: write / read / pasted excerpt / none
+- Git repository access: write / read / pasted excerpt / none
 - external memory tool: yes / no / unknown
 
 Then decide where each piece of information belongs:
-- GitHub source of truth
+- Git source of truth
 - learner-profile.md
 - native AI memory
 - project instructions
@@ -194,7 +195,7 @@ Do not silently store or overwrite memory. If uncertain, ask or mark as pending.
 ## Rule of thumb
 
 ```text
-GitHub remembers the system.
+Git remembers the system.
 learner-profile.md remembers the learner.
 Native AI memory remembers stable preferences.
 External memory retrieves old context.

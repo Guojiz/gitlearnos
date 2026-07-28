@@ -1,35 +1,29 @@
 # Architecture
 
-Repo as Review OS has four layers.
+GitLearnOS has four logical layers. They are file responsibilities, not
+services that must be deployed.
 
-## 1. Source layer
+## Evidence
 
-Keeps original materials traceable.
+Original learner answers, useful notes, external feedback, and accurate source
+locators. Preserve these records and correct them through linked additions.
 
-Rule: do not replace a source with a summary.
+## Derived state
 
-## 2. Model layer
+Goals, models, knowledge gaps, learner-profile observations, and plans. The
+agent may revise these when newer linked evidence justifies the change.
 
-Turns repeated mistakes into reusable patterns.
+## Action
 
-Each model should include:
+Targeted questions, review records, handoff packs, one next action, and the two
+portable automation intents. Actual execution depends on verified runtime
+capability.
 
-- recognition cue;
-- minimum method;
-- common trap;
-- next action.
+## Infrastructure
 
-## 3. Handoff layer
+Markdown and small YAML files in local or hosted Git. Agent, hosting,
+automation, search, and OpenSpace adapters are replaceable. None becomes the
+only copy of learning truth.
 
-Explains how future work should continue.
-
-A handoff file should include:
-
-- what to read first;
-- where new material should go;
-- what counts as complete;
-- what should stay private.
-
-## 4. Deployment layer
-
-Turns the general method into a public page or template.
+Subject-specific state lives under `subjects/<subject>/`; root files coordinate
+policy and current views. See [GITLEARNOS.md](../GITLEARNOS.md).

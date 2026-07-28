@@ -10,15 +10,15 @@ For the current main guides, read:
 
 ## Core principle
 
-GitHub is the operating layer.
+The Git repository is the operating layer.
 
 Local storage is the working/source layer.
 
 Do not collapse them into one place.
 
-## Put in GitHub
+## Put in the Git repository
 
-GitHub should store structured learning records:
+The Git repository should store structured learning records:
 
 - goals;
 - source records;
@@ -30,7 +30,7 @@ GitHub should store structured learning records:
 - next review dates;
 - handoff notes.
 
-GitHub is for structure, state, and reusable method.
+Git is for structure, state, and reusable method.
 
 ## Keep local when needed
 
@@ -48,7 +48,7 @@ Local storage is for original working material.
 
 ## How to reference local material
 
-If a source stays outside GitHub, create a source record in GitHub:
+If a source stays outside the repository, create a source record in it:
 
 ```text
 Status: local-only-source
@@ -61,7 +61,7 @@ Needed action: ask user for an excerpt if more detail is needed
 
 The AI should:
 
-1. use GitHub as the main map;
+1. use the Git repository as the main map;
 2. check whether a needed source is available or local-only;
 3. ask the user for only the needed excerpt;
 4. never pretend it has read a local file it cannot access;
@@ -69,7 +69,7 @@ The AI should:
 
 ## Local runtime warning
 
-A local workspace can reproduce part of the method, but it is not identical to a GitHub-backed Review OS.
+A local workspace can reproduce part of the method, but it is not identical to a hosted GitLearnOS.
 
 If the AI has only local file access, it must not claim that GitHub setup, push, Issues, or remote updates have happened.
 

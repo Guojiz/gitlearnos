@@ -8,9 +8,9 @@ Understand and compare three papers about AI-assisted learning systems in two we
 
 ## Today's focus
 
-- Read the source record for Paper A.
-- Review the AI learning system concept model.
-- Complete `reviews/2026-07-03_review-set.md`.
+- Read `subjects/research/sources/paper-source-record.md`.
+- Review `subjects/research/models/ai-learning-system-concept.md`.
+- Complete `subjects/research/reviews/2026-07-03_review-set.md`.
 - Update memory status and next review date.
 
 ## Active models
@@ -35,8 +35,8 @@ Understand and compare three papers about AI-assisted learning systems in two we
 
 ## AI next action
 
-1. Read the main goal.
-2. Read the source record.
-3. Read the concept model.
+1. Read the research subject goal.
+2. Read its linked source record.
+3. Read its concept model.
 4. Generate one comparison note after Paper B is added.
 5. Keep source records separate from summaries.

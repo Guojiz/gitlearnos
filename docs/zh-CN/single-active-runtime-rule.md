@@ -32,7 +32,7 @@ GitLearnOS 强烈建议一次只使用一个活跃学习运行层。
 ChatGPT
 → 日常学习运行层
 
-GitHub 目标仓库
+Git 目标仓库
 → 学习状态事实源
 
 本地文件
@@ -45,7 +45,7 @@ GitHub 目标仓库
 Claude
 → 日常学习运行层
 
-GitHub 目标仓库
+Git 目标仓库
 → 学习状态事实源
 
 Claude Project / Artifacts
@@ -58,7 +58,7 @@ Claude Project / Artifacts
 OpenHanako / HanaAgent
 → 桌面学习运行层
 
-本地 git + Obsidian 或 GitHub 仓库
+本地 git + Obsidian 或 Git 仓库
 → 学习状态层
 
 本地文件 / desk files
@@ -75,9 +75,10 @@ OpenHanako
 → 部署完成后成为桌面学习运行层
 ```
 
-## GitHub 与本地状态层
+## 本地与远程 Git 状态层
 
-对 ChatGPT 和 Claude，GitHub 是默认状态层。
+所有 Runtime 都以学习者选定的 Git 仓库作为状态层。有连接器时 GitHub 可能
+更方便，但不是协议默认项。
 
 本地 git / Obsidian 只有在运行层真的有本地文件访问权限，或者用户手动应用 AI 给出的补丁时，才适合作为状态层。
 

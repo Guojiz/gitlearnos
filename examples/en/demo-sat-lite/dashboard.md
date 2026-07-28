@@ -8,9 +8,9 @@ Improve SAT Reading and Writing accuracy in 6 weeks by turning repeated mistakes
 
 ## Today's focus
 
-- Review `models/vocabulary-in-context-model.md`.
-- Complete `reviews/2026-07-03_review-set.md`.
-- Update memory status and next review date.
+- Review `subjects/english/models/vocabulary-in-context-model.md`.
+- Answer one item from `subjects/english/reviews/2026-07-03_review-set.md`.
+- Record support used and update the next check without overstating mastery.
 
 ## Active models
 
@@ -20,22 +20,17 @@ Improve SAT Reading and Writing accuracy in 6 weeks by turning repeated mistakes
 
 ## Open questions
 
-- Which mistake types repeat most often?
-- Which models are stable enough to archive?
-- Which patterns need a short drill?
-- Which review items are overdue?
+- Can the student predict the required meaning before seeing choices?
 
 ## Missing items
 
-- Grammar punctuation model;
-- Rhetorical synthesis model;
-- Practice history log;
-- Weekly progress summary.
+- delayed independent evidence;
+- additional practice history needed before inferring a broader pattern.
 
 ## AI next action
 
-1. Read the main goal.
-2. Read the source record.
-3. Read the active model.
-4. Generate one short review prompt.
-5. Update next review date after the student completes it.
+1. Read the English subject goal.
+2. Read its linked source record.
+3. Read its active model.
+4. Deliver exactly one short plain-text review prompt.
+5. Preserve the answer and update the next check after the student completes it.

@@ -1,5 +1,8 @@
 # Public Alpha
 
+> Historical v1 release note. For v2 behavior and status, use
+> [GITLEARNOS.md](GITLEARNOS.md) and [README.md](README.md).
+
 GitLearnOS is an early, usable personal learning control layer for one tool-capable main agent. Organization, question generation, automation, and templates will continue to evolve from real use.
 
 The repository was renamed from `Repo-as-Review-OS` to `GitLearnOS`.
@@ -15,7 +18,7 @@ The repository was renamed from `Repo-as-Review-OS` to `GitLearnOS`.
 - immediate writeback and on-handoff checks;
 - source, profile, model, gap, handoff, review, and activity templates;
 - separate resolution and mastery state;
-- evidence-based 0–3 scoring and deterministic intervals;
+- optional evidence-based 0–3 scoring for suitable subjects;
 - a Chinese demo from teacher handoff through feedback sync to generated verification.
 
 ## Try it
@@ -26,7 +29,7 @@ Target repository: <private repository>
 Subject: <subject>
 Learning goal or current input: <content>
 
-Read START-HERE.md and AGENTS.md and use safe-auto. Organize automatically,
+Read GITLEARNOS.md and START-HERE.md and use safe-auto. Organize automatically,
 generate targeted questions when useful, and actually write safe changes.
 Do not default to an AI tutoring session. Report changes, evidence, actual
 automation, next action, and undo capability. Keep shared policy at the root

@@ -1,77 +1,53 @@
 # Targeted Question Set and Review
 
-Status: `draft` / `planned` / `attempted` / `scored` / `blocked` / `cancelled`  
+Status: `planned` / `attempted` / `complete` / `cancelled`
 Subject:  
 Purpose: `diagnostic` / `practice` / `variation` / `transfer` / `review` / `exam`  
-Track: `school` / `self-study` / `mixed`  
-Need: `current-course` / `remediation` / `exam` / `exploration` / `advance` / `project` / `research` / `skill`  
 Goal link:  
 Gap link:  
-Source or model:  
-Generated:  
-Attempted:  
-Scored:
+Grounded in:
+Generated:
 
-## Selection basis
+## Why these questions now
 
-- Why these questions now:
-- Prior performance used:
-- Novelty from recent questions:
-- Difficulty:
-- Estimated time:
-- Count or format constraint:
-- Source state: `grounded` / `general-knowledge` / `mixed`
-
-## Observable objective
-
-- 
+- Selection reason:
+- Difference from recent questions:
+- Estimated time, optional:
 
 ## Questions
 
-Do not reveal answers before an attempt.
+Keep answers hidden before an attempt unless policy says otherwise.
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
-## Answer key or rubric
+## Answer or success condition
 
-- Question 1:
-- Question 2:
-- Question 3:
-- Acceptable alternative solutions:
+-
 
-## Learner result
+## Learner answer
 
-- Response summary:
-- Independent parts:
-- Error or uncertainty:
-- Support: `none` / `minor` / `major` / `full-explanation`
-- Transfer: `not-required` / `pass` / `partial` / `fail` / `not-attempted`
+Preserve the original response or a faithful record.
 
-## Evidence score
+-
 
-Score: `0` / `1` / `2` / `3` / `not-assessed`
+## Feedback and evidence
 
-When the goal uses tests, a rubric, milestone, or artifact standard, record that result here without forcing it into 0–3.
-
-- 0: incorrect after substantial support;
-- 1: correct through major hints or imitation;
-- 2: correct with a minor hint or small execution error;
-- 3: independently correct; transfer succeeds when required.
+- Result: `incorrect` / `partial` / `correct` / `not-assessed`
+- Independent: yes / no / partly
+- Support used:
+- Transfer result, when required:
+- Optional subject score, test, rubric, or milestone:
 
 ## Writeback
 
-- Gap resolution state:
-- Mastery evidence:
-- Model update:
-- Learner-profile update, only if durable:
-- Dashboard update:
+- Gap or mastery change:
+- Evidence link:
+- Dashboard change:
 
-## Next review
+## Next check
 
-- Previous interval:
-- Next date or next handoff:
-- Rule:
-- Real scheduling created? yes / no / runtime unavailable
+- Date or next handoff:
+- Actual background scheduling created: yes / no
 - Next question type:

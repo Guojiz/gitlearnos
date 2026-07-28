@@ -1,6 +1,6 @@
 # Learning Cycle
 
-Repo as Review OS is not only a review system.
+GitLearnOS is not only a review system.
 
 Review is the ground layer of learning. The point is to return to old material and create new understanding from it.
 
@@ -49,10 +49,10 @@ The repository should not freeze old knowledge.
 
 It should let files evolve:
 
-- old cards can be rewritten;
-- models can be merged;
-- weak points can become stable;
-- stable items can be archived;
+- original answers and feedback stay preserved;
+- AI-derived cards and models can be revised or merged from linked evidence;
+- gaps can be resolved while mastery stays separately evidenced;
+- inactive items can be archived without erasing history;
 - review items can generate new tasks.
 
 ## Practical rule

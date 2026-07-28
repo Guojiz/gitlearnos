@@ -1,132 +1,58 @@
 # First Experiment Guide
 
-Use this guide when someone wants to try Repo as Review OS for the first time and is confused about which repository to use.
+Run one small, real learning event. Do not begin by scaffolding every possible
+folder.
 
-## The two-repository mental model
+## Two repositories
 
 ```text
-Repo as Review OS repository
-→ template repository
-→ method, docs, skills, examples, rules
+GitLearnOS template
+→ method and reusable assets
 
-Your own empty repository
-→ personal learning repository
-→ your goals, sources, models, reviews, dashboard
+learner repository
+→ private learning state
 ```
 
-Do not write personal learning data into the template repository.
+The learner repository may be an empty local Git repository or a private
+hosted repository.
 
-The AI should read the template repository, then deploy the structure into the user's own repository.
-
-## Recommended first experiment
-
-1. Create a new empty private repository.
-2. Give the AI the Repo as Review OS link.
-3. Give the AI the empty target repository link.
-4. Ask the AI to identify its runtime and permissions.
-5. Ask the AI to deploy the minimal structure.
-6. Give the AI the first learning goal.
-
-## Prompt for ChatGPT
+## Request
 
 ```text
-Read this template repository:
-https://github.com/Guojiz/GitLearnOS
+Use https://github.com/Guojiz/GitLearnOS as the template.
+My learner repository or local checkout is: <target>
+Subject: <subject>
+Goal or current learning event: <input>
 
-Deploy the minimal Repo as Review OS structure into my empty target repository:
-<paste target repository link>
-
-First identify your runtime and permission boundary:
-- can you read the template repository?
-- can you read the target repository?
-- can you write to the target repository?
-- do I need to manually enable any connector or permission?
-
-Do not overwrite existing files without asking.
-After setup, ask for my first learning goal.
+Read GITLEARNOS.md first. Detect actual read, write, Git, source, and scheduler
+capabilities. Create only the files needed for this event. Preserve original
+evidence, generate a targeted question only when useful, commit safe writeback,
+and report what actually happened and how to undo it.
 ```
 
-## Prompt for Codex or a local coding agent
+## Expected minimum
 
 ```text
-Use the Repo as Review OS repository as the template and documentation source.
-Use my new empty repository or local folder as the target learning repository.
-
-Do not write personal learning data into the template repository.
-
-Create the minimal structure in the target:
-- dashboard.md
-- goals/main-goal.md
-- sources/
-- models/
-- reviews/
-- templates/
-- agents/
-- automations/
-- archive/
-
-Report every file created or edited.
-Then ask for my first learning goal.
-```
-
-## If using a local copy
-
-A local setup should still keep the same roles:
-
-```text
-local copy of Repo as Review OS
-→ reference template
-
-local my-learning-os folder
-→ target learning repository
-```
-
-The AI may read the template folder, but it should write learning state into the target folder.
-
-## What should happen after setup
-
-The target repository should contain:
-
-```text
+gitlearnos.yml
+AGENTS.md
+learning-policy.md
 dashboard.md
-goals/main-goal.md
-sources/
-models/
-reviews/
-templates/
-agents/
-automations/
-archive/
+learner-profile.md
+subjects/<subject>/goals/main-goal.md
 ```
 
-The AI should then ask:
+If the input is a note, mistake, or teacher response, one or more real subject
+records should also exist. Empty directories should not.
 
-```text
-What is the first learning goal you want this repository to support?
-```
+## Pass conditions
 
-## Common confusion
+- personal state went only to the learner repository;
+- the event links to a goal and source evidence;
+- original learner or teacher content was not overwritten;
+- any question is grounded in the current gap;
+- the agent distinguishes local commit, remote push, and scheduling;
+- repeating the same input does not create a duplicate;
+- one reversible Git update and an honest receipt exist.
 
-```text
-Wrong:
-Use the Repo as Review OS repository itself as my learning repository.
-
-Correct:
-Use Repo as Review OS as the template and deploy its structure into my own repository.
-```
-
-```text
-Wrong:
-Send one problem before setup and expect the AI to know where to write.
-
-Correct:
-Deploy the target repository first, then send goals, problems, notes, or review tasks.
-```
-
-```text
-Wrong:
-Assume every AI tool connects to GitHub in the same way.
-
-Correct:
-Ask the AI to identify its runtime and tell the user which manual steps are needed.
-```
+Use the matching [evaluation scenario](../evals/README.md) for a more formal
+check.

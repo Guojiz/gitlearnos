@@ -1,28 +1,19 @@
-# 30-Second Intro
+# GitLearnOS in 30 Seconds
 
-GitLearnOS is a GitHub-native AI learning system.
+GitLearnOS is a Git-native learning protocol. One capable AI agent turns real
+learning events into linked evidence, targeted questions, answer records, and
+reversible updates inside a learner-owned repository.
 
-It turns a target GitHub repository into a learning timeline that an AI tool can read, update, review, and continue.
+The learner does not need to operate Git. The agent reads the current version,
+writes only useful state, commits a meaningful event, and reports what actually
+happened.
 
-The template repository provides the method, docs, skills, examples, and rules. The user's target repository stores personal learning state:
+The repository may be local or hosted anywhere standard Git works. GitHub is
+one optional host. Databases, vector search, servers, schedulers, multi-agent
+runtimes, and OpenSpace are optional.
 
-- goals;
-- source records;
-- reusable models;
-- knowledge gaps;
-- review sets;
-- dashboard;
-- next review dates;
-- AI handoff notes.
+Success is not a large note collection. It is better independent performance
+on later questions, supported by traceable evidence.
 
-The core idea is simple: GitHub stores the inspectable learning state, while the AI uses that state to explain, split, test, review, and hand off the learning process.
-
-Basic setup does not require GitHub Actions, API keys, or uploading every original file.
-
-Large or original materials can stay local. GitHub keeps the structured learning records.
-
-One-line version:
-
-```text
-GitLearnOS lets an AI maintain your learning system inside a GitHub repository you can inspect, verify, and continue over time.
-```
+Start with [Quickstart](../QUICKSTART.md) and use
+[GITLEARNOS.md](../GITLEARNOS.md) as the behavior contract.

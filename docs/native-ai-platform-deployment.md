@@ -19,11 +19,11 @@ Do not let ChatGPT and Claude both update the same learner profile, knowledge ga
 
 ## State layer rule for native platforms
 
-For ChatGPT and Claude, the default state layer should be a GitHub target repository.
+For ChatGPT and Claude, the default state layer should be a Git target repository.
 
 ```text
 best default for native platforms
-→ GitHub target repository
+→ Git target repository
 
 possible but not automatic
 → local git repository
@@ -59,7 +59,7 @@ Use ChatGPT when the learner wants the smoothest mobile/web daily learning workf
 ```text
 You are helping me run GitLearnOS in ChatGPT.
 
-Use my chosen state layer as the source of truth. Prefer a GitHub target repository. ChatGPT memory is an active preference cache, not the canonical learning repository.
+Use my chosen state layer as the source of truth. Prefer a Git target repository. ChatGPT memory is an active preference cache, not the canonical learning repository.
 
 Before acting, identify your runtime, memory capability, file access, repository access, and permission boundary.
 
@@ -102,7 +102,7 @@ Use Claude when the learner wants project-style organization, long-context readi
 ```text
 You are helping me run GitLearnOS in Claude.
 
-Use my chosen state layer as the source of truth. Prefer a GitHub target repository unless I explicitly choose a local-first workflow and you have actual local file access. Claude project context, artifacts, and memory are working surfaces, not the canonical state.
+Use my chosen state layer as the source of truth. Prefer a Git target repository unless I explicitly choose a local-first workflow and you have actual local file access. Claude project context, artifacts, and memory are working surfaces, not the canonical state.
 
 Before acting, identify your runtime, memory/project capability, file access, repository access, and permission boundary.
 

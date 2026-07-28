@@ -54,16 +54,16 @@
 
 | 缺口 | 处理状态 | 掌握状态 | 最近证据 | 下次动作 | 链接 |
 |---|---|---|---|---|---|
-| 相似三角形对应顺序 | verified | demonstrated | 2026-07-08 独立完成三题 | 2026-07-15 延迟检验 | [缺口](subjects/math/knowledge-gaps/similarity-correspondence-gap.md) |
+| 相似三角形对应顺序 | resolved | demonstrated | 2026-07-08 独立完成三题 | 2026-07-15 延迟检验 | [缺口](subjects/math/knowledge-gaps/similarity-correspondence-gap.md) |
 
 ## 最近学习事件
 
 | 日期 | 渠道 | 发生了什么 | 证据类型 | 状态变化 | 链接 |
 |---|---|---|---|---|---|
-| 2026-07-03 | AI | 诊断对应顺序错误，关键提示后正确 | demonstrated | 建立 active gap，分数 1 | [记录](subjects/math/sessions/2026-07-03_similarity-session.md) |
+| 2026-07-03 | AI | 诊断对应顺序错误，关键提示后正确 | demonstrated | 建立 active gap，分数 1 | [记录](subjects/math/events/2026-07-03_similarity-session.md) |
 | 2026-07-04 | teacher handoff | 自动整理成老师问题包 | not-assessed | awaiting-feedback | [问题包](subjects/math/handoffs/2026-07-04_similarity-teacher-pack.md) |
-| 2026-07-05 | teacher | 同步老师反馈，不重复 AI 教学 | source-supported | resolved-externally，生成验证题 | [来源](subjects/math/sources/2026-07-05_teacher-feedback.md) |
-| 2026-07-08 | self | 独立完成三道迁移题 | demonstrated | verified，分数 3 | [复习](subjects/math/reviews/2026-07-08_teacher-feedback-check.md) |
+| 2026-07-05 | teacher | 同步老师反馈，不重复 AI 教学 | source-supported | resolved，生成验证题 | [来源](subjects/math/sources/2026-07-05_teacher-feedback.md) |
+| 2026-07-08 | self | 独立完成三道迁移题 | demonstrated | resolved，分数 3 | [复习](subjects/math/reviews/2026-07-08_teacher-feedback-check.md) |
 
 ## Agent 接手
 

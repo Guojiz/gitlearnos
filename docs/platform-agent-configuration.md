@@ -27,7 +27,7 @@ one target repository and learning-policy
 ## ChatGPT Work example
 
 ```text
-state: private GitHub target repository
+state: private Git target repository
 behavior: GitLearnOS router or AGENTS.md
 sources: connected files/apps only when authorized
 memory: stable preference cache only

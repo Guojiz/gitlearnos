@@ -1,10 +1,10 @@
 # 客户明确性检查清单
 
-从第一次使用者的角度检查 Repo as Review OS。
+从第一次使用者的角度检查 GitLearnOS。
 
 ## 新用户应该能看懂
 
-- Repo as Review OS 是什么；
+- GitLearnOS 是什么；
 - 为什么使用 GitHub；
 - 模板仓库和目标仓库有什么区别；
 - 什么内容放进 GitHub；
@@ -63,7 +63,7 @@
 新增文档时，要检查它是否影响这些概念：
 
 - 模板仓库 vs 目标仓库；
-- GitHub-backed runtime vs 本地复刻；
+- hosted Git runtime vs 本地复刻；
 - 结构化记录 vs 原始来源文件；
 - AI 权限和用户手动步骤；
 - 基础部署 vs 高级自动化。

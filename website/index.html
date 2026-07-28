@@ -203,6 +203,7 @@
     <nav aria-label="Primary" data-label-zh="主导航" data-label-en="Primary">
       <a href="#principles"><span class="zh">原理</span><span class="en">Principles</span></a>
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
+      <a href="#impact"><span class="zh">影响</span><span class="en">Impact</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
       <a href="https://github.com/Guojiz/GitLearnOS">GitHub</a>
     </nav>
@@ -243,7 +244,7 @@
             <ul class="checklist">
               <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">新增 1 个知识缺口</span><span class="en">1 gap added</span></li>
               <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">生成 4 道针对题</span><span class="en">4 targeted questions</span></li>
-              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">安排周日复查</span><span class="en">Sunday review scheduled</span></li>
+              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">标记周日到期复查</span><span class="en">Sunday review marked due</span></li>
               <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">全部可查看 / 可撤销</span><span class="en">Inspectable / reversible</span></li>
             </ul>
           </div>
@@ -277,7 +278,7 @@
               <li><i class="ph ph-check-circle"></i><span class="zh">仍需练习：符号处理、步骤完整性</span><span class="en">Practice: signs and complete steps</span></li>
               <li><i class="ph ph-check-circle"></i><span class="zh">新增错因：漏写平方项、符号丢失</span><span class="en">New cause: missing square term or sign</span></li>
               <li><i class="ph ph-check-circle"></i><span class="zh">生成 4 道题，已写回、可调整</span><span class="en">4 questions, written back and adjustable</span></li>
-              <li><i class="ph ph-check-circle"></i><span class="zh">复查计划：周日 20:00</span><span class="en">Review: Sunday at 20:00</span></li>
+              <li><i class="ph ph-check-circle"></i><span class="zh">下次检查：周日；后台执行需真实调度器</span><span class="en">Next check: Sunday; background delivery needs a scheduler</span></li>
             </ul>
             <p class="file-note"><i class="ph ph-git-commit"></i> 7c2a9f1 · safe-auto</p>
           </article>
@@ -294,7 +295,23 @@
           <div class="repo-row"><code>subjects/english/</code><div><strong><span class="zh">英语学科库</span><span class="en">English</span></strong><small><span class="zh">只包含英语资料、题目与记录。</span><span class="en">Only English sources, questions, and records.</span></small></div><i class="ph ph-arrow-right"></i></div>
           <div class="repo-row"><code>subjects/coding/</code><div><strong><span class="zh">编程学科库</span><span class="en">Coding</span></strong><small><span class="zh">只包含编程资料、题目与记录。</span><span class="en">Only coding sources, questions, and records.</span></small></div><i class="ph ph-arrow-right"></i></div>
         </div>
-        <p class="repo-note"><span class="zh">只授权一个仓库；每科独立成文件夹，根目录统一保存策略、总览和跨学科安排。Agent 自动判科和写回，用户无需维护路径。</span><span class="en">Authorize one repository. Subject folders stay focused while root files hold shared policy and cross-subject planning. The agent routes and writes back automatically.</span></p>
+        <p class="repo-note"><span class="zh">ChatGPT Work 可直接使用本地 Git，大部分学习无需 GitHub。每科独立成文件夹，根目录统一保存策略、总览和跨学科安排。Agent 自动判科、提交和写回，学习者无需维护路径。</span><span class="en">ChatGPT Work can use local Git directly; most learning does not need GitHub. Subject folders stay focused while root files hold shared policy and cross-subject planning. The agent routes, commits, and writes back automatically.</span></p>
+      </div>
+    </section>
+
+    <section class="numbered wrap" id="impact">
+      <div class="number">03</div>
+      <div>
+        <h2 class="section-title"><span class="zh">为真实限制缩小交互，<br>不把限制藏起来。</span><span class="en">Shrink the interaction for real constraints.<br>Do not hide the constraints.</span></h2>
+        <div class="repo-table">
+          <div class="repo-row"><code>20 min</code><div><strong><span class="zh">一次只做最有价值的一项</span><span class="en">One high-value task at a time</span></strong><small><span class="zh">题量根据可用时间调整，不堆通用练习。</span><span class="en">Question volume adapts to available time instead of producing a generic worksheet.</span></small></div><i class="ph ph-check"></i></div>
+          <div class="repo-row"><code>text</code><div><strong><span class="zh">纯文本优先，先用已有材料</span><span class="en">Text first, existing material first</span></strong><small><span class="zh">减少流量与应用负担，支持异步交给老师。</span><span class="en">Reduce data and application overhead; support asynchronous teacher handoffs.</span></small></div><i class="ph ph-check"></i></div>
+          <div class="repo-row"><code>honest</code><div><strong><span class="zh">未运行的就明确待执行</span><span class="en">Pending work stays pending</span></strong><small><span class="zh">不虚构免费 AI、离线执行、后台提醒或已产生的学校成效。</span><span class="en">No invented free AI, offline execution, background reminders, or measured school impact.</span></small></div><i class="ph ph-check"></i></div>
+        </div>
+        <p class="repo-note"><span class="zh">AceSAT 演示使用一个共用手机、流量有限、每次学习 20 分钟的虚构学生场景。</span><span class="en">The AceSAT demo uses a fictional learner who shares a phone, limits mobile data, and studies in 20-minute blocks.</span></p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.zh-CN.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.md"><span class="zh">运行三分钟演示</span><span class="en">Run the three-minute demo</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+        </div>
       </div>
     </section>
 
@@ -307,7 +324,7 @@
   <footer class="wrap">
     <a class="wordmark" href="#top">GitLearnOS</a>
     <p><span class="zh">轻量、可检查、可撤销。老师和 AI 都只是你选择的学习协作者。</span><span class="en">Lightweight, inspectable, reversible. Teachers and AI remain collaborators you choose.</span></p>
-    <div><a href="https://guojiz.github.io/">Guojiz</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/README.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/README.zh-CN.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/README.md">README</a><a href="https://github.com/Guojiz/GitLearnOS">GitHub</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/LICENSE">MIT</a></div>
+    <div><a href="https://guojiz.github.io/">Guojiz</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/README.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/README.zh-CN.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/README.md">README</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.zh-CN.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.md"><span class="zh">文档</span><span class="en">Docs</span></a><a href="https://github.com/Guojiz/GitLearnOS">GitHub</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/LICENSE">MIT</a></div>
   </footer>
 </div>
 <script>

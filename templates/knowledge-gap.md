@@ -1,59 +1,37 @@
 # Knowledge Gap
 
-Resolution state: `candidate` / `active` / `routed` / `awaiting-feedback` / `resolved-externally` / `resolved-with-ai` / `needs-verification` / `verified` / `reopened` / `archived`  
+Resolution: `open` / `resolved` / `needs-check`
+Mastery: `unknown` / `learning` / `demonstrated`
 Subject:  
-Mastery state: `untested` / `developing` / `demonstrated` / `stable` / `uncertain`  
-Gap type: `prerequisite` / `recognition` / `method` / `execution` / `explanation` / `transfer` / `uncertain`  
-Confidence: `low` / `medium` / `high`  
 Goal link:  
 Created:  
-Last updated:
+Updated:
 
 ## Observable problem
 
-Describe what the learner cannot yet recognize, explain, do, or transfer. Do not label the learner globally.
-
-## Resolution and routing
-
-- Current channel: `learner` / `teacher` / `tutor` / `platform` / `ai` / `other`
-- Handoff pack: [link or none]
-- External feedback: [link or none]
-- Resolved:
-- Resolution summary:
+Describe what the learner cannot yet recognize, explain, do, or transfer. Do
+not label the learner globally.
 
 ## Evidence
 
-| Date | Channel | Observation or report | Evidence type | Support | Score | Link |
-|---|---|---|---|---|---:|---|
-|  |  |  | reported / source-supported / demonstrated |  |  |  |
-
-## Working diagnosis
-
-- Most likely cause:
-- Alternative:
-- Missing evidence:
-
-## Demonstrable learning objective
-
-- 
-
-## Resolution history
-
-| Date | Channel | Support or feedback | Result | State change |
+| Date | Channel | Observation or learner report | Independence or support | Link |
 |---|---|---|---|---|
 |  |  |  |  |  |
 
-## State rules
+## Current interpretation
 
-- `resolved-externally` requires a traceable learner report or external source;
-- `demonstrated` requires observable learner performance;
-- `stable` requires:
-- Transfer required? yes / no
-- Delayed check? yes / no / learner declined
+- Likely blocker:
+- Missing evidence:
+- This interpretation may be revised when:
+
+## External resolution, optional
+
+- Feedback source:
+- Resolution summary:
+- Original attempt preserved at:
 
 ## Next action
 
 - Action:
-- Channel:
 - Date or next handoff:
-- Question, model, or source:
+- Question, model, source, or handoff:

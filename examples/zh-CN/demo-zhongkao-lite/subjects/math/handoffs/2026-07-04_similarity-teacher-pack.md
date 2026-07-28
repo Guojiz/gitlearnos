@@ -45,7 +45,7 @@
 
 ## 自动同步
 
-- 缺口从 `awaiting-feedback` 更新为 `resolved-externally`；
+- 缺口从 `awaiting-feedback` 更新为 `resolved`；
 - [模型](../models/geometry-similarity-model.md)更新；
 - 生成 [三道迁移验证题](../reviews/2026-07-08_teacher-feedback-check.md)；
 - dashboard 清除“等待老师反馈”和“让 AI 重讲”；

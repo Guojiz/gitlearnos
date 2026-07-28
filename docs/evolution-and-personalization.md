@@ -1,6 +1,6 @@
 # Evolution and Personalization
 
-Repo as Review OS is not a dump of everything the user has.
+GitLearnOS is not a dump of everything the user has.
 
 It is a living personal system. The AI should break material down, extract patterns, organize it, rewrite it, and remove what no longer helps.
 
@@ -55,7 +55,7 @@ The only stable principles are:
 1. keep sources traceable;
 2. separate source, summary, model, index, and todo;
 3. keep local material protected;
-4. use GitHub as the operating layer;
+4. use the chosen Git repository as the operating layer;
 5. let the AI report what changed.
 
 ## AI behavior

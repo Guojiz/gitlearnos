@@ -19,11 +19,11 @@
 
 ## 原生平台的状态层规则
 
-对 ChatGPT 和 Claude 来说，默认状态层应该是 GitHub 目标仓库。
+对 ChatGPT 和 Claude 来说，默认状态层应该是 Git 目标仓库。
 
 ```text
 原生平台最佳默认
-→ GitHub 目标仓库
+→ Git 目标仓库
 
 可以存在但不是自动可写
 → 本地 git 仓库
@@ -59,7 +59,7 @@ ChatGPT 适合想要手机 / 网页日常学习流程，以及较强持续个性
 ```text
 你正在帮我在 ChatGPT 中运行 GitLearnOS。
 
-使用我选定的状态层作为事实源。优先使用 GitHub 目标仓库。ChatGPT 记忆是主动偏好缓存，不是正式学习仓库。
+使用我选定的状态层作为事实源。优先使用 Git 目标仓库。ChatGPT 记忆是主动偏好缓存，不是正式学习仓库。
 
 行动前先判断你的运行环境、记忆能力、文件访问、仓库访问和权限边界。
 
@@ -102,7 +102,7 @@ Claude 适合项目式组织、长上下文阅读、写作、Artifacts 和细致
 ```text
 你正在帮我在 Claude 中运行 GitLearnOS。
 
-使用我选定的状态层作为事实源。除非我明确选择本地优先工作流且你确实有本地文件访问权限，否则优先使用 GitHub 目标仓库。Claude project context、artifacts 和 memory 都是工作表面，不是正式学习状态。
+使用我选定的状态层作为事实源。除非我明确选择本地优先工作流且你确实有本地文件访问权限，否则优先使用 Git 目标仓库。Claude project context、artifacts 和 memory 都是工作表面，不是正式学习状态。
 
 行动前先判断你的运行环境、memory/project 能力、文件访问、仓库访问和权限边界。
 

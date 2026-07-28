@@ -24,6 +24,15 @@
 - Deadlines or teacher constraints:
 - Self-study time to preserve:
 
+## Access and delivery
+
+- Primary device:
+- Connectivity or data limit:
+- Available study blocks:
+- Preferred language or assistive format:
+- Maximum questions per interaction:
+- Prefer existing local material before network access: yes / no
+
 ## Privacy
 
 - Real learning repository should be private: yes

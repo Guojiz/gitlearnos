@@ -27,6 +27,7 @@ clear.
 - [Write back an independent answer](scenarios/05-answer-writeback.md)
 - [Avoid fabrication and duplicates](scenarios/06-no-fabrication.md)
 - [Run without GitHub](scenarios/07-local-git.md)
+- [Adapt to constrained-access SAT study](scenarios/08-constrained-access-sat.md)
 
 These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
 index, and a particular Git host are not required.

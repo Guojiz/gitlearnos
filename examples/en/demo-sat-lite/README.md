@@ -1,12 +1,21 @@
 # Demo: SAT Prep Lite
 
-This is a fictional English demo for GitLearnOS.
+This is a runnable fictional English demo for GitLearnOS and the AceSAT
+Education AI-Agent: Build for Impact challenge.
 
 It shows how a student preparing for the SAT can use one Git repository and one
 AI tool to turn practice results into models, review sets, delayed checks, and
 a dashboard.
 
 No real College Board material, private score report, or copyrighted question text is included.
+
+The fictional learner has limited mobile data, uses a shared phone, studies in
+20-minute blocks, and does not have continuous paid tutoring. These constraints
+are stored in `learning-policy.md` and change what the agent delivers: existing
+material first, plain text, and one question at a time.
+
+To run the interaction rather than only inspect the completed state, use the
+repository-level [live demo](../../../LIVE-DEMO.md).
 
 ## Main goal
 
@@ -25,10 +34,11 @@ Improve SAT Reading and Writing accuracy in 6 weeks by turning repeated mistakes
 
 ```text
 practice result
+→ preserved learning event
 → source record
-→ mistake pattern
+→ evidence-linked knowledge gap
 → reusable model
-→ review prompt
+→ one accessible review prompt
 → next review date
 → dashboard update
 ```
@@ -41,7 +51,9 @@ AGENTS.md
 learning-policy.md
 learner-profile.md
 subjects/english/goals/main-goal.md
+subjects/english/events/2026-07-03_practice-result.md
 subjects/english/sources/practice-source-record.md
+subjects/english/knowledge-gaps/vocabulary-in-context.md
 subjects/english/models/vocabulary-in-context-model.md
 subjects/english/reviews/2026-07-03_review-set.md
 dashboard.md
@@ -52,5 +64,9 @@ dashboard.md
 GitLearnOS can support standardized test preparation without storing copyrighted test questions.
 
 It records source status, extracts reusable patterns, marks the next review
-date, and generates practice prompts from cleaned mistake models. No background
-scheduler is implied.
+date, and generates practice prompts from cleaned mistake models. The agent
+takes bounded action instead of only answering a question: it selects the next
+task, writes durable state, and decides what requires later evidence.
+
+No background scheduler, measured school impact, free AI access, or fully
+offline AI execution is implied.

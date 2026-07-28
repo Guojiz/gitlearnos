@@ -44,9 +44,31 @@ rechecking—not merely a tidy collection of notes.
 Live AI tutoring is optional. A learner may work mainly with a human teacher
 and use GitLearnOS for continuity, questions, and review.
 
+## Build for impact
+
+The [AceSAT working demo](LIVE-DEMO.md) follows a fictional public-school
+student with limited data, a shared phone, short study periods, and no paid
+tutoring continuity. The agent uses an existing practice summary, chooses one
+high-value SAT question, preserves the answer, updates the next check, and
+prepares evidence that a teacher can inspect.
+
+The demo is deliberately text-first and local-Git compatible. It does not
+require a custom app, always-on server, database, large download, or background
+scheduler. It still requires access to a capable AI runtime; GitLearnOS reduces
+overhead but does not pretend that devices, connectivity, or AI access are
+universally available.
+
+- [Run the three-minute demo](LIVE-DEMO.md)
+- [Read the one-page impact statement](docs/acesat-build-for-impact.md)
+- [Inspect the completed SAT fixture](examples/en/demo-sat-lite/)
+
 ## What you need
 
 One main AI agent that can read and write a Git repository.
+
+In ChatGPT Work and other environments with built-in file and Git operations,
+a persistent local worktree is enough for most learning workflows. The
+learner does not need a GitHub account or remote repository.
 
 The target may be:
 
@@ -56,6 +78,11 @@ The target may be:
 
 GitHub is a convenient path, not a core dependency. A database, vector store,
 server, custom app, multi-agent runtime, and OpenSpace are also optional.
+
+This project is published on GitHub because the challenge requires a GitHub
+submission. That submission requirement is separate from how a learner uses
+GitLearnOS. Add a remote only for chosen backup, cross-device sync,
+collaboration, or publishing.
 
 ## Start with one subject
 

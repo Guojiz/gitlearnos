@@ -11,6 +11,11 @@
 The agent may initialize a new local Git repository when its environment
 supports that operation. A GitHub account is not required.
 
+ChatGPT Work already provides file and Git operations. For most use, point it
+at a persistent local worktree and keep GitHub out of the learning loop. A
+remote is only needed when the learner chooses sync, collaboration, backup, or
+publishing.
+
 ## Send one request
 
 ```text

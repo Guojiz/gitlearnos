@@ -110,6 +110,25 @@ Infer the subject from the learner's wording, the material, linked goals, and
 existing paths. Ask one short question only when ambiguity would cause a wrong
 write. A learner correction overrides inference.
 
+## Access constraints
+
+Treat device, bandwidth, connectivity, available study time, language, and
+assistive needs as learning constraints, not as reasons to exclude a learner.
+When constraints are known:
+
+- prefer short plain-text interactions and small targeted question sets;
+- read and write only the minimum relevant files;
+- reuse already available materials before requesting downloads or searches;
+- support asynchronous teacher or tutor handoffs instead of requiring a live
+  AI session;
+- keep the repository usable locally and defer network-dependent work
+  honestly.
+
+GitLearnOS can reduce application and data overhead, but it does not make an AI
+runtime, device, connectivity, or human support free or universally available.
+Without a capable runtime, record exact pending work instead of claiming an
+offline or background agent acted.
+
 ## Core operations
 
 ### Organize

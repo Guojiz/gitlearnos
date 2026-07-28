@@ -15,8 +15,10 @@ workflow.
 2. detect actual read, write, Git, source, and scheduler capability;
 3. read target `learning-policy.md`, dashboard, active subject goal, and only
    directly related evidence;
-4. infer the subject and ask only when a wrong write would otherwise occur;
-5. load one primary Skill and a helper only when necessary.
+4. honor device, bandwidth, time, language, and delivery constraints with the
+   smallest useful interaction;
+5. infer the subject and ask only when a wrong write would otherwise occur;
+6. load one primary Skill and a helper only when necessary.
 
 ## Route by intent
 

@@ -5,6 +5,8 @@ description: Route work in a learner-owned Git repository to the smallest GitLea
 
 # GitLearnOS Router
 
+[中文](../../zh-CN/skills/gitlearnos/SKILL.md)
+
 Read `GITLEARNOS.md` before acting. That protocol owns evidence, repository,
 permission, automation, and Git behavior; this Skill only selects the smallest
 workflow.

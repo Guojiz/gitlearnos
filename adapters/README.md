@@ -1,6 +1,6 @@
 # Adapters
 
-[中文](README.zh-CN.md)
+[中文](../zh-CN/adapters/README.md)
 
 Adapters connect the platform-neutral [GitLearnOS protocol](../GITLEARNOS.md)
 to an environment. They may change *how* work runs, never *what counts as

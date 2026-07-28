@@ -5,6 +5,8 @@ description: Record and reconcile learning provenance from teachers, class, tuto
 
 # GitLearnOS Source Handling
 
+[中文](../../zh-CN/skills/gitlearnos-source/SKILL.md)
+
 Follow `GITLEARNOS.md`. Original evidence is preserved; a correction becomes a
 new linked record rather than a silent rewrite.
 

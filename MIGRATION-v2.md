@@ -1,6 +1,6 @@
 # Migrating to GitLearnOS v2
 
-[中文](MIGRATION-v2.zh-CN.md)
+[中文](zh-CN/MIGRATION-v2.md)
 
 GitLearnOS v2 is a gradual migration, not a destructive rewrite. New work
 should follow [GITLEARNOS.md](GITLEARNOS.md); existing learner evidence may

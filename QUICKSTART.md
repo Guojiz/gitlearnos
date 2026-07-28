@@ -1,6 +1,6 @@
 # Quickstart
 
-[中文](QUICKSTART.zh-CN.md)
+[中文](zh-CN/QUICKSTART.md)
 
 ## You need
 

@@ -1,6 +1,6 @@
 # Git Adapter
 
-[中文](README.zh-CN.md)
+[中文](../../zh-CN/adapters/git/README.md)
 
 GitLearnOS uses Git semantics, not one hosting API.
 

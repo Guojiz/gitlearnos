@@ -1,6 +1,6 @@
 # Agent Adapter
 
-[中文](README.zh-CN.md)
+[中文](../../zh-CN/adapters/agents/README.md)
 
 The user needs one main agent with repository tools. Product-specific files
 only help the agent discover the same protocol.

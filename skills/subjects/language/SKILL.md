@@ -5,6 +5,8 @@ description: Refine GitLearnOS language-learning and writing tasks through compr
 
 # Language and Writing
 
+[中文](../../../zh-CN/skills/subjects/language/SKILL.md)
+
 Follow `GITLEARNOS.md` and the active core Skill.
 
 - separate recognition from independent production;

@@ -5,6 +5,8 @@ description: Administer, evaluate, schedule, and write back an existing GitLearn
 
 # GitLearnOS Review
 
+[中文](../../zh-CN/skills/gitlearnos-review/SKILL.md)
+
 Follow `GITLEARNOS.md`. Use `gitlearnos-question` to create a new set; use this
 Skill after a planned question is due or the learner answers.
 

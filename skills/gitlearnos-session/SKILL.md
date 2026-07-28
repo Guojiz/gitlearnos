@@ -5,6 +5,8 @@ description: Run optional live AI explanation, guided practice, testing, or diag
 
 # GitLearnOS Live Tutoring
 
+[中文](../../zh-CN/skills/gitlearnos-session/SKILL.md)
+
 Follow `GITLEARNOS.md`. Live tutoring is optional and does not replace the
 organization and review loop.
 

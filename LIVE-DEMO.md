@@ -1,6 +1,6 @@
 # Three-Minute Working Demo
 
-[中文](LIVE-DEMO.zh-CN.md)
+[中文](zh-CN/LIVE-DEMO.md)
 
 This demo shows an AI agent taking useful action for a fictional SAT learner
 with constrained access. It uses plain Markdown and local Git; no custom app,

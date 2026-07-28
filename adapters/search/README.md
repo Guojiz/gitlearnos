@@ -1,6 +1,6 @@
 # Optional Search Adapter
 
-[中文](README.zh-CN.md)
+[中文](../../zh-CN/adapters/search/README.md)
 
 Core GitLearnOS reads linked Markdown directly. Search is optional when a
 repository becomes too large for path and link navigation.

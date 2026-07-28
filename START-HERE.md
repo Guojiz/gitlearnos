@@ -1,6 +1,6 @@
 # Start Here
 
-[中文](START-HERE.zh-CN.md)
+[中文](zh-CN/START-HERE.md)
 
 GitLearnOS runs through an existing AI agent with Git repository access.
 

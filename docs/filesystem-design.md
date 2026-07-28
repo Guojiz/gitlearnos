@@ -1,6 +1,6 @@
 # Filesystem Design
 
-[中文](zh-CN/filesystem-design.md)
+[中文](../zh-CN/docs/filesystem-design.md)
 
 The canonical location rules are in [GITLEARNOS.md](../GITLEARNOS.md). This
 page explains the design without defining a second structure.

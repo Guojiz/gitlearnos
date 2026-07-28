@@ -1,6 +1,6 @@
 # Automation Adapter
 
-[中文](README.zh-CN.md)
+[中文](../../zh-CN/adapters/automation/README.md)
 
 GitLearnOS stores portable intent. A scheduler or capable agent performs it.
 [`tasks.example.yml`](tasks.example.yml) is the minimal portable definition.

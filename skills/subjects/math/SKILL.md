@@ -5,6 +5,8 @@ description: Refine GitLearnOS mathematics and science questions, feedback, and 
 
 # Mathematics and Science
 
+[中文](../../../zh-CN/skills/subjects/math/SKILL.md)
+
 Follow `GITLEARNOS.md` and the active core Skill.
 
 - preserve the learner's full working, not only the final answer;

@@ -5,6 +5,8 @@ description: Create or migrate the minimum learner-owned GitLearnOS state while 
 
 # GitLearnOS Setup
 
+[中文](../../zh-CN/skills/gitlearnos-setup/SKILL.md)
+
 Follow `GITLEARNOS.md`. GitHub is one possible location for the public template
 or a target remote; the learner repository may also be any remote or local Git
 checkout.

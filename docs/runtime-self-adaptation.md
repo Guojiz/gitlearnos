@@ -11,26 +11,48 @@ authorized source access?
 file-based skills or repository rules?
 atomic write or version-history access?
 native memory?
+project instructions or automatically discovered repository guidance?
 real scheduler?
 steps the learner truly must perform?
 ```
 
 Test safe capabilities. A product name does not prove permission.
 
-## Tool-capable Work path
+## ChatGPT Chat and Work paths
 
-For a connected workspace such as ChatGPT Work:
+Use either Chat or Work when the current ChatGPT project/session actually has
+the required repository tools.
+
+| Surface | Best use | Activation when Skills are unavailable |
+|---|---|---|
+| Chat | everyday questions, answers, photographed notes, short feedback | project instructions, discovered `AGENTS.md`, native memory, and event recognition |
+| Work | setup, large imports, multi-file organization, maintenance, and substantial review | the same durable layers plus Skills when exposed |
+| Codex | technical repository setup, validation, migrations, and visible Git review | discovered `AGENTS.md`, Skills, and repository state |
+
+Some plans account for Chat and Work usage differently. Treat the current
+account and workspace UI as authoritative; do not promise that Chat is always
+free or that a specific action consumes no credits. When ordinary Chat preserves
+limited Work allowance and still has repository access, prefer Chat for small
+daily learning events.
 
 ```text
 verify target and policy
 → inspect current state
+→ recognize an implicit learning event
 → classify the learner event
 → organize or generate targeted questions
 → write safe changes directly
 → verify and return a receipt
 ```
 
-Do not ask the learner to paste repository content, recreate files, or perform operations the authorized workspace can complete.
+Do not ask the learner to paste repository content, recreate files, or perform
+operations the authorized workspace can complete. Do not require a Skill name:
+Skills improve execution where available, but durable instructions and memory
+must keep the daily loop usable without them.
+
+For a persistent ChatGPT Project, put large textbooks, PDFs, scans, and reference
+files in **Sources** when authorized. Keep compact state and provenance pointers
+in Git.
 
 ## Repository-agent path
 
@@ -71,6 +93,9 @@ Whenever an agent resumes, inspect:
 - obsolete tasks after resolution;
 - one current next action.
 
+Run this check when the new interaction is learning-related or a scheduled
+maintenance run begins. Do not hijack an unrelated conversation.
+
 ### Background
 
 Create only through an actual scheduler exposed by the runtime.
@@ -90,4 +115,8 @@ Repeated input should be idempotent. Prefer one event per atomic update and repo
 
 ## Rule
 
-Adapt execution, not product guarantees. Every runtime should preserve cross-channel provenance, targeted question quality, evidence honesty, automatic writeback when authorized, and learner control.
+Adapt execution, not product guarantees. Every runtime should preserve
+cross-channel provenance, implicit learning-event recognition, targeted question
+quality, evidence honesty, automatic writeback when authorized, and learner
+control. `AGENTS.md` and repository state are portable; native memory, project
+sources, Skills, and credit behavior are runtime adapters.

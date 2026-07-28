@@ -25,6 +25,45 @@ real learning event
 It is not a separate tutoring application, model runtime, database, vector
 store, or mandatory multi-agent system.
 
+## Ambient activation and initiative
+
+Once installed, GitLearnOS is a standing learning policy, not a command the
+learner must remember to invoke. On every interaction, the agent silently checks
+whether the input is a useful learning event even when the learner does not say
+“GitLearnOS,” mention Git, or invoke a Skill.
+
+Candidate signals include:
+
+- a question about something the learner is trying to understand;
+- an attempted answer, worked solution, mistake, correction, or successful
+  method;
+- a photographed page, screenshot, note, worksheet, book excerpt, or other
+  study material;
+- teacher, tutor, peer, class, exam, or practice-platform feedback;
+- a deadline, changed goal, constraint, repeated difficulty, or request for
+  future help.
+
+Recognition does not mean saving everything. Use this decision:
+
+1. **clear durable value + `safe-auto` + write access**: answer the immediate
+   request, then make the smallest useful repository update and report it;
+2. **likely value but ambiguous, private, or blocked**: answer first, then make
+   one concise suggestion, ask at most one question, or record exact pending
+   writeback;
+3. **incidental, temporary, or unrelated**: do not store it and do not interrupt
+   the conversation with repository administration.
+
+Explicit instructions such as “do not store this,” “answer only,” or “not for
+my learning record” always win. Proactive behavior must reduce learner effort,
+not turn every conversation into data collection.
+
+The agent is a guide, not only a recorder. During setup it should recommend a
+simple arrangement, explain why each unavoidable learner action matters, and
+walk through one decision at a time. During learning it should surface or carry
+out one useful next step from current evidence instead of waiting for repository
+commands. It must still respect the learner's right to stop, override, or choose
+a different path.
+
 ## Required runtime
 
 The complete workflow requires one agent that can:
@@ -40,6 +79,12 @@ service. A remote and `push` are optional.
 A read-only agent may organize material and return exact pending writeback, but
 must not claim that persistent state changed.
 
+Git capability is runtime-specific. OpenAI currently documents Git operations
+for local projects in the ChatGPT desktop/Codex environment, but that does not
+guarantee Git access in every ChatGPT Work, web, mobile, cloud, or connector
+session. Test the current environment instead of inferring capability from the
+product name.
+
 ## Repository boundary
 
 Keep the method and personal state separate:
@@ -50,9 +95,18 @@ GitLearnOS template
 
 learner repository
 → policy, goals, evidence, questions, feedback, current state
+
+project sources or local source folder
+→ large textbooks, PDFs, scans, media, and long-lived reference files
 ```
 
 Never write personal learning state into the public template.
+
+When the runtime provides a persistent project source area, prefer it for large
+or read-heavy files. Otherwise use an authorized local source folder. Keep only
+the necessary locator, access state, inspected excerpt, and derived learning
+record in Git. Do not commit large, copyrighted, private, or frequently replaced
+originals by default.
 
 ## Minimal learner repository
 
@@ -98,7 +152,7 @@ the other subjects instead of being copied.
 
 ## Minimum reading
 
-Do not preload the repository. For one request, read:
+Do not preload the repository. For one learning-related interaction, read:
 
 1. this protocol through the current agent adapter;
 2. target `learning-policy.md` when present;
@@ -109,6 +163,46 @@ Do not preload the repository. For one request, read:
 Infer the subject from the learner's wording, the material, linked goals, and
 existing paths. Ask one short question only when ambiguity would cause a wrong
 write. A learner correction overrides inference.
+
+## Continuity across conversations
+
+GitLearnOS uses several continuity layers with different jobs:
+
+```text
+AGENTS.md or project instructions
+→ durable operating behavior
+
+native AI memory, when available
+→ active pointer and stable preference cache
+
+project sources or local source folder
+→ large persistent learning materials
+
+learner Git repository
+→ inspectable source of learning truth
+
+current conversation
+→ temporary working context
+```
+
+When native memory is available and the learner permits it, remember only
+stable activation context: that GitLearnOS is installed, the target repository
+or project, the learner's preference for proactive assistance, durable goals,
+and stable learning or delivery preferences. This memory should help the agent
+notice a learning event in a future conversation without waiting for a Skill
+name.
+
+Do not use native memory as the only copy of required rules or changing learning
+state. Do not place raw notes, full conversations, one-off answers, current
+knowledge gaps, secrets, or sensitive source content in memory. Persist rules
+in `AGENTS.md` or project instructions and persist evidence in the learner
+repository. When memory conflicts with traceable repository evidence, trust the
+repository and propose a memory correction.
+
+Memory availability, scope, and update timing vary by runtime. If memory is
+unavailable or disabled, rely on automatically discovered repository
+instructions and honest on-handoff reads; never claim cross-conversation recall
+that was not verified.
 
 ## Access constraints
 
@@ -200,9 +294,11 @@ Default mode is `safe-auto`.
 
 The agent may automatically:
 
+- recognize clear learning events without an explicit GitLearnOS invocation;
 - save useful learner-provided evidence;
 - link, deduplicate, organize, and refresh current views;
 - generate targeted questions;
+- suggest a useful next step from current evidence;
 - update short-term plans and due checks;
 - commit safe, low-risk, reversible changes.
 
@@ -230,6 +326,14 @@ The learner should receive a concise receipt with changed paths and an undo
 boundary; they should not be asked to manage branches, filenames, or commits
 during ordinary learning.
 
+A remote is optional, but it may be valuable. GitHub or another Git host can
+provide off-device backup, cross-device continuity, shared learning materials,
+teacher or tutor review, group project coordination, and a visible feedback
+history. Keep a learner's private state separate from shared course materials,
+grant the minimum access needed, and ask before publishing, inviting others, or
+pushing sensitive material. See
+[Why Git, and when GitHub helps](docs/why-github.md).
+
 ## Automation
 
 GitLearnOS defines portable automation intent; an external runtime executes it.
@@ -255,6 +359,10 @@ Core Skills may route setup, organization, question generation, review,
 tutoring, source handling, model extraction, and maintenance. A subject Skill
 may refine task forms or evaluation, but cannot weaken this evidence, ownership,
 or write-authority contract.
+
+Explicit Skill invocation is optional. Automatically discovered `AGENTS.md`,
+project instructions, plugin metadata, native memory, or the router may activate
+the same workflow when the input itself matches a learning goal.
 
 Adapters translate the same protocol to:
 

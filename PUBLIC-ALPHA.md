@@ -9,7 +9,7 @@ The repository was renamed from `Repo-as-Review-OS` to `GitLearnOS`.
 
 ## Ready to test
 
-- direct one-main-agent paths for ChatGPT Work and repository agents;
+- direct one-main-agent paths for capable ChatGPT Chat or Work sessions and repository agents;
 - one repository with automatic routing to `subjects/<subject>/` folders;
 - cross-channel input from teachers, class, paper, platforms, and AI;
 - automatic organization, linking, deduplication, and external-feedback reconciliation;

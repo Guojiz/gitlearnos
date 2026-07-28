@@ -18,7 +18,7 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 
 因此，判断一个中文文件对应哪个英文文件时，只需去掉开头的 `zh-CN/`。
 
-## 必须同步的人类入口
+## 必须同步的人类入口与运行规则
 
 | 内容 | 英文正式版本 | 中文版本 |
 |---|---|---|
@@ -29,7 +29,9 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 | 运行演示 | [Live demo](../LIVE-DEMO.md) | [三分钟演示](LIVE-DEMO.md) |
 | AceSAT 说明 | [Impact statement](../docs/acesat-build-for-impact.md) | [影响说明](docs/acesat-build-for-impact.md) |
 
-这些入口发生实质变化时，中英文必须在同一次改动中更新。中文不要求逐字翻译，但目标、必需条件、限制、链接和下一步必须一致。
+这些入口发生实质变化时，中英文必须在同一次改动中更新。核心运行、记忆、来源、Git、Agent 适配、教学协作和验收场景同样属于强制镜像，具体列表由 [`scripts/check-language-alignment.mjs`](../scripts/check-language-alignment.mjs) 执行检查。
+
+中文不要求逐字翻译，但目标、必需条件、限制、链接和下一步必须一致。尤其不得出现英文已要求“无需显式调用即可主动识别”，中文仍要求用户点名 Skill 的分叉。
 
 ## Skills 必须同步
 
@@ -43,8 +45,7 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 
 ## 可以只保留英文的内容
 
-机器执行契约、评测实现和高级技术说明可以只保留英文。已有中文翻译可以继续
-维护，但不能覆盖英文正式版本，也不能阻塞英文机器文件更新。
+纯机器执行契约、评测实现和非核心高级技术说明可以只保留英文。面向 Agent 的核心运行说明与所有 Skills 必须有中文阅读版。已有中文翻译不能覆盖英文正式版本，也不能阻塞英文机器文件更新。
 
 ## 本地化内容
 
@@ -54,7 +55,7 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 
 1. 中文文件只能出现在 `zh-CN/` 下；
 2. 翻译文件尽量与英文使用相同的相对路径和文件名；
-3. 六个人类入口的核心含义保持一致；
+3. 所有强制人类入口与核心运行规则的含义保持一致；
 4. 每份 Skill 都有同路径中文版本，YAML `name` 与标题结构对齐；
 5. 所有相对链接、图片和官网中文链接可以打开；
 6. 学习者仓库仍使用 `AGENTS.md`，不会把模板的语言目录复制进去。

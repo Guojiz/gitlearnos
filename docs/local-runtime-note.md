@@ -22,8 +22,10 @@ push. A dated task file does not prove scheduler execution.
 ## Other state surfaces
 
 AI memory, project files, artifacts, Obsidian, and local source folders may
-support the workflow. They are working or source surfaces, not hidden
-replacements for the canonical learner repository.
+support the workflow. Put large textbooks, PDFs, scans, media, and long-lived
+references in a persistent project source area or authorized local folder when
+available. They are working or source surfaces, not hidden replacements for the
+canonical learner repository.
 
 When a source remains outside Git, keep an accurate locator and access status.
 When native memory conflicts with traceable repository evidence, use the

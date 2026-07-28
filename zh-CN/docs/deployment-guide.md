@@ -5,13 +5,15 @@
 ## 工具型快速路径
 
 ```text
-1. 确认目标仓库、学科与当前目标或输入
-2. 验证读、写、来源和调度能力
-3. 检查已有状态
-4. 读 `AGENTS.md`、`zh-CN/START-HERE.md` 和 `learning-policy.md`
-5. 只创建缺少的最小状态
-6. 整理第一份真实输入或生成第一组针对性问题
-7. 验证写回并返回回执
+1. 一次引导一个必要设置选择
+2. 选择项目 Sources 与目标 Git 仓库
+3. 确认学科与当前目标或输入
+4. 验证记忆、指令、Skills、读、写、来源和调度能力
+5. 检查已有状态，并读 `AGENTS.md`、`zh-CN/START-HERE.md` 和 `learning-policy.md`
+6. 只创建缺少的最小状态，并配置持久触发
+7. 整理第一份真实输入或生成第一组针对性问题
+8. 用一个不点名 GitLearnOS 的普通学习事件测试
+9. 验证写回并返回回执
 ```
 
 最小状态：
@@ -38,12 +40,12 @@ subjects/<subject>/goals/main-goal.md
 
 | 能力 | 路径 |
 |---|---|
-| 已连接目标仓读写与来源工具 | Work 直接路径 |
+| 已连接目标仓读写与来源工具 | Chat 或 Work 直接路径 |
 | 本地或云端 checkout | 仓库 Agent 路径 |
 | 有上下文但不能写 | 只读待写回路径 |
 | 只有粘贴摘录 | 聚焦回退 |
 
-ChatGPT Work 是标准直接路径。Codex、Claude、Cursor或其他有能力的Agent也可以成为唯一主Runtime。当前产品不需要拆分Agent。
+当前 Project 具备已验证仓库权限时，ChatGPT Chat 或 Work 是直接路径。Codex、Claude、Cursor 或其他有能力的 Agent 也可以成为唯一主 Runtime。Skills 是可选项。当前产品不需要拆分 Agent。
 
 ## 成功检验
 
@@ -52,7 +54,9 @@ ChatGPT Work 是标准直接路径。Codex、Claude、Cursor或其他有能力�
 - 自动整理与关联；
 - 无需用户逐层指定路径即可判定并使用正确学科文件夹；
 - 按请求或政策生成有用问题；
+- 后续有价值的学习事件无需 Skill 名也能被识别；
 - 无需用户指定路径就完成安全写回；
+- 大型原件保存在项目 Sources 或获授权的本地文件夹；
 - 汇报真实自动化与所有改动；
 - 尊重预览、只记录、不复习和撤销边界。
 

@@ -24,5 +24,7 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [避免编造与重复](scenarios/06-no-fabrication.md)
 - [不依赖 GitHub 运行](scenarios/07-local-git.md)
 - [适应使用条件受限的 SAT 学习](scenarios/08-constrained-access-sat.md)
+- [识别隐式学习事件](scenarios/09-implicit-learning-event.md)
+- [用 GitHub 支持教学协作](scenarios/10-github-teaching-collaboration.md)
 
 这些场景就是 v2 的发布验收条件。OpenSpace、数据库、向量索引和特定 Git 托管平台都不是必需项。

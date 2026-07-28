@@ -16,6 +16,8 @@ Stable principles:
 - report changes;
 - protect local material;
 - use the chosen Git repository as the durable operating layer;
+- use a persistent project/source workspace for large learning materials when
+  available;
 - keep learner state inspectable;
 - record knowledge gaps when they appear;
 - adapt to the actual AI environment instead of pretending every tool has the same abilities.
@@ -29,6 +31,8 @@ Adjustable strategies:
 - how often to review an item;
 - which automation should run first;
 - whether to use native memory, project instructions, or only the current context;
+- whether the input should trigger GitLearnOS without an explicit invocation;
+- whether Chat, Work, or another capable surface is the lightest useful path;
 - whether to write back directly to GitHub or produce a handoff card.
 
 ## Runtime self-awareness
@@ -40,10 +44,13 @@ What am I?
 → ChatGPT / Claude / Zhipu / Codex / Claude Code / local agent / single-context agent / unknown
 
 What can I access?
-→ GitHub writeback / GitHub read-only / pasted excerpts / local files / project files / no files
+→ local Git / hosted Git writeback / hosted Git read-only / pasted excerpts / local files / project sources / no files
 
 What memory do I have?
 → native memory / project instructions / skill memory / external memory / no stable memory
+
+What can activate me in a future conversation?
+→ AGENTS.md / project instructions / native memory / Skill / explicit prompt only
 
 What should I avoid claiming?
 → repository updates, local-file reading, long-term memory, or completed automation if unavailable
@@ -55,7 +62,10 @@ The system should adapt to the answer.
 
 Memory is important, but not every platform provides it.
 
-Use `learner-profile.md` as the repository-level memory anchor. Native AI memory can summarize stable parts of it, but the repository remains the source of truth.
+Use `learner-profile.md` as the repository-level memory anchor. Native AI memory
+can summarize stable parts of it and actively remind the agent that GitLearnOS
+should notice implicit learning events, but the repository remains the source
+of truth.
 
 ### If the AI has native memory
 
@@ -69,6 +79,9 @@ The AI may store:
 - durable constraints;
 - repeated mistake patterns;
 - repository operating preferences.
+- that GitLearnOS is installed and should consider questions, answers, notes,
+  images, feedback, and results without waiting for an invocation;
+- the target project or repository pointer.
 
 The AI should not store:
 
@@ -122,6 +135,11 @@ Current chat = temporary workspace
 
 If native memory and GitHub conflict, trust GitHub first, then suggest updating memory.
 
+Native memory is especially important on a Chat surface that has repository
+tools but does not expose Skills. It activates the habit; automatically
+discovered `AGENTS.md` and project instructions supply mandatory rules; Git
+supplies current evidence.
+
 ## Keywords for adaptive routing
 
 These keywords help an AI decide how to run the workflow.
@@ -129,7 +147,8 @@ These keywords help an AI decide how to run the workflow.
 ```text
 runtime: ChatGPT / Claude / Zhipu / Codex / Claude Code / local-agent / single-context
 memory: native-memory / project-instructions / external-memory / none
-access: writeback / read-only / pasted-excerpt / local-only / no-file-access
+activation: agents-md / project-instructions / native-memory / skill / explicit-only
+access: writeback / read-only / project-sources / pasted-excerpt / local-only / no-file-access
 mode: setup / organize / critique / revise / practice / explain / visualize / write / handoff
 stage: sprint / building / maintenance
 source: complete / excerpt-only / local-only / missing / uncertain

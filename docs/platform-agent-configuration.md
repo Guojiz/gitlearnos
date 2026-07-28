@@ -8,6 +8,7 @@ The one active main agent should follow:
 
 ```text
 one target repository and learning-policy
+→ notice implicit learning events
 → organize any learning channel
 → generate targeted questions
 → automate safe writeback
@@ -24,17 +25,21 @@ one target repository and learning-policy
 | native memory but no write access | organize or teach; return pending writeback |
 | no stable memory or files | one focused task from pasted state |
 
-## ChatGPT Work example
+## ChatGPT example
 
 ```text
 state: private Git target repository
-behavior: GitLearnOS router or AGENTS.md
-sources: connected files/apps only when authorized
-memory: stable preference cache only
+behavior: AGENTS.md or project instructions; router Skill when available
+sources: large files in Project Sources; connected files/apps only when authorized
+memory: activation pointer and stable preference cache only
 writeback: canonical target files
 ```
 
-The agent should use available tools directly and should not ask the learner to reproduce operations it can safely perform.
+Use Chat for routine questions, answers, note photos, and feedback when it has
+repository access, even if Skills are unavailable. Use Work for guided setup,
+large imports, multi-file organization, and maintenance. The agent should use
+available tools directly and should not ask the learner to reproduce operations
+it can safely perform.
 
 ## Repository-agent example
 
@@ -42,12 +47,16 @@ Codex, Claude Code, Cursor, or a similar agent can run GitLearnOS directly when 
 
 ## One-main-agent standard
 
-ChatGPT Work and comparable tool-capable runtimes can organize, generate questions, teach when needed, write, and verify in one workspace. Do not decompose these responsibilities into agents. A real scheduler may extend background execution, but canonical state remains in the target.
+ChatGPT Chat, Work, and comparable tool-capable runtimes can organize, generate
+questions, teach when needed, write, and verify in one workspace when their
+actual tools permit it. Do not decompose these responsibilities into agents. A
+real scheduler may extend background execution, but canonical state remains in
+the target.
 
 ## Memory instruction
 
 ```text
-Use the target repository as canonical GitLearnOS state. Use native memory only for stable preferences and durable patterns. When memory and repository evidence conflict, inspect timestamps and update the stale layer explicitly.
+Use the target repository as canonical GitLearnOS state. Use native memory for the GitLearnOS activation pointer, target, stable preferences, and durable patterns. Notice useful learning events without waiting for an explicit Skill invocation. When memory and repository evidence conflict, inspect timestamps and update the stale layer explicitly.
 ```
 
 ## Honest reporting

@@ -1,6 +1,6 @@
 ---
 name: gitlearnos-review
-description: 使用可观察的学习者证据执行、评估、安排并写回已有 GitLearnOS 题集，而不强制采用一种通用评分体系。
+description: 识别并写回学习者的答案或解题尝试，再依据可观察证据执行、评估和安排已有 GitLearnOS 题集。即使学习者在之后的另一个对话中只发来答案，没有提到复习或调用 GitLearnOS，也应使用本 Skill。
 ---
 
 # GitLearnOS 复习
@@ -8,6 +8,10 @@ description: 使用可观察的学习者证据执行、评估、安排并写回�
 遵循根目录英文 [`GITLEARNOS.md`](../../../GITLEARNOS.md)；它是唯一正式协议。用 `gitlearnos-question` 创建新题集；已计划问题到期或学习者作答后，使用本 Skill。
 
 [English source](../../../skills/gitlearnos-review/SKILL.md)
+
+## 隐式识别答案
+
+答案可能在另一个对话中以文字、图片、计算过程、代码或一句简短说明出现，并且没有复习命令。利用记忆或仓库链接找出最可能对应的待答问题，但绝不能强行匹配。只有一个明确待答项时，按策略评分并写回；有多个可能项时，只问一个简短问题；没有匹配项时，把它当成新的学习事件，不要编造来源。
 
 ## 读取
 

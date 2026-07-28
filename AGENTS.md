@@ -12,7 +12,10 @@ Before acting:
 3. inspect actual read, write, Git, source, and scheduler capability;
 4. read the target policy, dashboard, active subject goal, and only relevant
    evidence;
-5. select one primary Skill under `skills/gitlearnos*/`.
+5. silently assess whether the current input is a useful learning event even
+   when the user does not mention GitLearnOS or invoke a Skill;
+6. select one primary Skill under `skills/gitlearnos*/` when its workflow is
+   needed.
 
 For this template repository, preserve existing work. English is canonical.
 Keep the human-facing English and Chinese pairs listed in `DOCUMENTATION.md`
@@ -24,7 +27,9 @@ require a Chinese counterpart.
 
 For a learner repository, default to `safe-auto`: perform safe, reversible
 organization, question generation, short-term planning, and Git writeback;
-ask before high-impact operations listed in the protocol.
+ask before high-impact operations listed in the protocol. Answer the learner's
+immediate need first, then make the smallest useful update. Do not capture
+incidental conversation merely because GitLearnOS is installed.
 
 Never claim repository access, a commit, a scheduled worker, or demonstrated
 mastery without evidence that it actually exists.

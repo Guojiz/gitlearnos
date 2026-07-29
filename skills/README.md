@@ -2,21 +2,30 @@
 
 [中文](../zh-CN/skills/README.md)
 
-One main agent reads `GITLEARNOS.md`, loads the router, and then loads only the
-smallest relevant Skill.
+GitLearnOS ships one self-contained installable Skill folder:
 
 ```text
-gitlearnos              intent router
-gitlearnos-setup        bootstrap or migration
-gitlearnos-organize     capture, organize, deduplicate, external-feedback sync
-gitlearnos-question     learner questions and external question packs
-gitlearnos-session      optional live AI tutoring
-gitlearnos-source       provenance, availability, privacy
-gitlearnos-model        reusable understanding
-gitlearnos-review       administer, evaluate, schedule, write back
-gitlearnos-maintenance  consistency, automation health, safe undo
+skills/gitlearnos/
+├── SKILL.md             one discoverable Router
+├── agents/openai.yaml   optional OpenAI interface metadata
+└── references/          operations, core contract, and subject methods
 ```
 
-The core product capabilities are organization, question generation, and
-automated writeback. Live tutoring is optional. Responsibilities do not imply
-separate agents.
+Only the Router's `name + description` enters the initial Skill list. It loads
+one operation reference and, when useful, one subject reference. This preserves
+progressive disclosure without making nine Skills compete for the same
+learning event.
+
+`skills/gitlearnos/` is the distributable source folder, not proof of
+installation. Setup copies the whole folder to the active main agent's native
+location and verifies discovery:
+
+| Main agent | Default project location |
+|---|---|
+| Codex | `.agents/skills/gitlearnos/` |
+| Claude Code | `.claude/skills/gitlearnos/` |
+| OpenCode | `.agents/skills/gitlearnos/` |
+
+See the [Agent adapter](../adapters/agents/README.md). Core product capabilities
+remain organization, question generation, and automated writeback. Live
+tutoring is optional.

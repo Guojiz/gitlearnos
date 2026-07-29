@@ -14,9 +14,11 @@ const requiredHumanPairs = [
   "LIVE-DEMO.md",
   "GITLEARNOS.md",
   "AGENTS.md",
+  "CLAUDE.md",
   "AGENT-RUNTIME.md",
   "START-HERE.md",
   "templates/AGENTS.md",
+  "templates/CLAUDE.md",
   "templates/project-instructions.md",
   "templates/native-memory-pointer.md",
   "templates/learning-policy.md",
@@ -41,6 +43,7 @@ const requiredHumanPairs = [
   "evals/scenarios/09-implicit-learning-event.md",
   "evals/scenarios/10-github-teaching-collaboration.md",
   "evals/scenarios/11-no-skill-continuity.md",
+  "evals/scenarios/12-cross-agent-skill-install.md",
   "website/public-page-copy.md",
 ];
 const localizedOnly = [
@@ -224,6 +227,79 @@ for (const english of englishSkills) {
 for (const chinese of chineseSkills) {
   const english = chinese.slice("zh-CN/".length);
   if (!exists(english)) fail(`Chinese Skill has no English source: ${chinese}`);
+}
+
+const skillEntrypoints = files.filter(
+  (file) => file.startsWith("skills/") && file.endsWith("/SKILL.md"),
+);
+if (
+  JSON.stringify(skillEntrypoints) !==
+  JSON.stringify(["skills/gitlearnos/SKILL.md"])
+) {
+  fail(
+    `Expected one installable Skill entrypoint, found: ${skillEntrypoints.join(", ")}`,
+  );
+}
+
+const requiredSkillBundleFiles = [
+  "skills/gitlearnos/SKILL.md",
+  "skills/gitlearnos/agents/openai.yaml",
+  "skills/gitlearnos/references/core-contract.md",
+  "skills/gitlearnos/references/setup.md",
+  "skills/gitlearnos/references/organize.md",
+  "skills/gitlearnos/references/question.md",
+  "skills/gitlearnos/references/review.md",
+  "skills/gitlearnos/references/session.md",
+  "skills/gitlearnos/references/source.md",
+  "skills/gitlearnos/references/model.md",
+  "skills/gitlearnos/references/maintenance.md",
+  "skills/gitlearnos/references/subjects/README.md",
+  "skills/gitlearnos/references/subjects/math.md",
+  "skills/gitlearnos/references/subjects/language.md",
+  "skills/gitlearnos/references/subjects/programming.md",
+];
+for (const file of requiredSkillBundleFiles) {
+  if (!exists(file)) fail(`Incomplete installable Skill bundle: ${file}`);
+}
+
+const skillBundleRoot = path.resolve(root, "skills/gitlearnos");
+for (const file of files.filter(
+  (item) => item.startsWith("skills/gitlearnos/") && item.endsWith(".md"),
+)) {
+  for (const rawTarget of markdownTargets(read(file))) {
+    const target = rawTarget.split("#", 1)[0].split("?", 1)[0];
+    if (
+      !target ||
+      target.startsWith("#") ||
+      /^[a-z][a-z0-9+.-]*:/i.test(target)
+    ) {
+      continue;
+    }
+    const resolved = path.resolve(root, path.dirname(file), target);
+    if (
+      resolved !== skillBundleRoot &&
+      !resolved.startsWith(`${skillBundleRoot}${path.sep}`)
+    ) {
+      fail(`Installable Skill link escapes its bundle in ${file}: ${rawTarget}`);
+    }
+  }
+}
+
+const agentAdapter = read("adapters/agents/README.md");
+for (const requiredPath of [
+  ".agents/skills/gitlearnos/",
+  ".claude/skills/gitlearnos/",
+  ".opencode/skills/gitlearnos/",
+]) {
+  if (!agentAdapter.includes(requiredPath)) {
+    fail(`Agent adapter omits documented Skill location: ${requiredPath}`);
+  }
+}
+
+for (const claudeEntry of ["CLAUDE.md", "templates/CLAUDE.md"]) {
+  if (!read(claudeEntry).includes("@AGENTS.md")) {
+    fail(`Claude Code entry does not import AGENTS.md: ${claudeEntry}`);
+  }
 }
 
 for (const chinese of files.filter((file) => file.startsWith("zh-CN/"))) {

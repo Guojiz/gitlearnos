@@ -31,6 +31,7 @@ clear.
 - [Recognize an implicit learning event](scenarios/09-implicit-learning-event.md)
 - [Use GitHub for teaching collaboration](scenarios/10-github-teaching-collaboration.md)
 - [Continue without Skills](scenarios/11-no-skill-continuity.md)
+- [Verify cross-agent Skill installation](scenarios/12-cross-agent-skill-install.md)
 
 These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
 index, and a particular Git host are not required.

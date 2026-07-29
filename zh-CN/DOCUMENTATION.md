@@ -33,11 +33,14 @@ flowchart LR
 AGENTS.md
 → GITLEARNOS.md
 → skills/gitlearnos/SKILL.md
-→ 一个聚焦的操作 Skill
+→ 一个聚焦的参考文件
 → 学习者仓库
 ```
 
-`GITLEARNOS.md` 是唯一正式行为契约。`AGENTS.md`、`skills/`、`evals/`、适配器和机器模板以英文维护。已有中文翻译可以帮助人类检查系统，但机器文件不要求全部提供中文，且中文永远不能覆盖英文原文。
+`skills/gitlearnos/` 是一个可安装包：只有 Router 可被发现，操作和学科方法从
+`references/` 按需加载。`GITLEARNOS.md` 是唯一正式行为契约。`AGENTS.md`、
+`skills/`、`evals/`、适配器和机器模板以英文维护。已有中文翻译可以帮助人类
+检查系统，但机器文件不要求全部提供中文，且中文永远不能覆盖英文原文。
 
 ## 深入文档
 
@@ -52,9 +55,10 @@ docs/architecture.md
 ↔ zh-CN/docs/architecture.md
 ```
 
-`skills/` 下每份 Markdown 文件都必须在 `zh-CN/skills/` 下有同路径中文
-阅读版。Skill 名称、路径、状态值和输出字段保持英文，说明文字翻译为中文。
-根目录英文 `GITLEARNOS.md` 始终是唯一正式协议。
+可安装 `skills/gitlearnos/` 包内每份 Markdown 文件都必须在
+`zh-CN/skills/gitlearnos/` 下有同路径中文阅读版。Skill 名称、路径、状态值和
+输出字段保持英文，说明文字翻译为中文。根目录英文 `GITLEARNOS.md` 始终是
+唯一正式协议。
 
 中文中考示例属于独立本地化场景，不是某个英文示例的逐字翻译，因此不要求同路径英文副本。完整要求见[中英文对齐规则](ALIGNMENT.md)。
 

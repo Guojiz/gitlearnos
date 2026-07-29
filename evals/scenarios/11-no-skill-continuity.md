@@ -67,10 +67,13 @@ The agent must not:
 - the immediate explanation is present;
 - a no-Skill route is visible in the receipt;
 - the receipt names the event and operation, target and subject, changed or
-  pending paths, evidence, memory, actual automation, commit and push, next
-  action, undo boundary, and anything incomplete or unverified;
+  pending paths, evidence, memory, actual automation, commit and push, Skill
+  installation status, next action, undo boundary, and anything incomplete or
+  unverified;
 - any write follows the configured authority;
 - the repository contains traceable evidence and a single event commit, or the
   output contains exact pending writeback;
 - memory status is one of `saved`, `suggested`, `unavailable`, or `unknown`;
+- Skill installation is `unavailable` on this surface rather than falsely
+  reported as installed;
 - no explicit GitLearnOS or Skill command was needed.

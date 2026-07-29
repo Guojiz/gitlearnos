@@ -34,6 +34,11 @@ GitLearnOS 协议。
 无法发现本文件，就在项目指令或自定义指令中使用对应的
 `templates/project-instructions.md` 内容。
 
+安装了原生项目 Skill 时，只使用一个被发现的 `gitlearnos` Router，再由它
+按需读取操作参考文件。Codex 与 OpenCode 通常发现
+`.agents/skills/gitlearnos/`；Claude Code 通过配套 `CLAUDE.md` 发现
+`.claude/skills/gitlearnos/`。只有文件存在不能证明已经安装。
+
 不要保存普通聊天，不要编造无法访问的证据，也不要在未经验证时声称完成远程
 push、后台调度、跨对话记忆或证明掌握。输入只是临时、含糊或无关内容时，
 不能仅因本仓库存在就保存。

@@ -48,7 +48,7 @@
 保留原始作答、笔记、来源与外部反馈。重要结论必须链接证据。只有间隔后的独立
 作答能证明掌握；若目标要求迁移，证据还必须证明学习者能迁移到足够新的任务。
 在此之前保持 `unknown` 或 `learning`。没有验证时，不得声称已经读取或写入
-仓库、提交、push、访问来源、更新记忆、运行定时任务或证明掌握。
+仓库、提交、push、访问来源、更新记忆、安装 Skill、运行定时任务或证明掌握。
 
 ## 必须提供的回执
 
@@ -60,6 +60,7 @@ Target and subject:
 Changed paths, proposed change, or pending writeback:
 Evidence:
 Memory: saved / suggested / unavailable / unknown
+Skill installation: installed / source-only / unavailable / unknown
 Actual automation:
 Commit and push:
 Next action:

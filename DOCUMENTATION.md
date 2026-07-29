@@ -37,10 +37,12 @@ The executable reading order is:
 AGENTS.md
 → GITLEARNOS.md
 → skills/gitlearnos/SKILL.md
-→ one focused operation Skill
+→ one focused reference
 → learner repository
 ```
 
+`skills/gitlearnos/` is one installable bundle: only its Router is discoverable,
+while operations and subject methods load from `references/` on demand.
 `GITLEARNOS.md` is the canonical behavior contract. `AGENTS.md`, `skills/`,
 `evals/`, adapters, and machine templates are maintained in English. Existing
 Chinese translations may help a human inspect the system, but they are not
@@ -63,10 +65,11 @@ docs/architecture.md
 ↔ zh-CN/docs/architecture.md
 ```
 
-Every Markdown file under `skills/` has a required same-path Chinese reading
-version under `zh-CN/skills/`. Stable names, paths, status values, and output
-fields remain in English; explanatory prose is translated. The root English
-`GITLEARNOS.md` remains the sole canonical protocol.
+Every Markdown file in the installable `skills/gitlearnos/` bundle has a
+required same-path Chinese reading version under `zh-CN/skills/gitlearnos/`.
+Stable names, paths, status values, and output fields remain in English;
+explanatory prose is translated. The root English `GITLEARNOS.md` remains the
+sole canonical protocol.
 
 The Chinese Zhongkao example is localized content rather than a line-by-line
 translation, so it intentionally has no exact English mirror. See the

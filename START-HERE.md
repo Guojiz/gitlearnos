@@ -16,8 +16,9 @@ GitLearnOS runs through an existing AI agent with Git repository access.
    Skill name.
 6. Read the target policy, dashboard, active subject goal, and only related
    evidence.
-7. Route through [the GitLearnOS Skill](skills/gitlearnos/SKILL.md)
-   when Skills are supported.
+7. When Skills are supported, install the complete
+   [`skills/gitlearnos/`](skills/gitlearnos/) folder in the main agent's native
+   location, verify discovery, and route through its single Router.
 8. Perform safe work, commit one meaningful learning event, and return the
    required receipt.
 
@@ -26,8 +27,8 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 - Personal state belongs only in the learner repository.
 - GitHub is one optional Git host, not a core requirement.
 - Chat and Work may both be valid; actual tools and limits must be checked.
-- Skills are optional; `AGENTS.md`, project instructions, and memory preserve
-  activation across conversations.
+- Skills are optional; `AGENTS.md`, Claude Code's thin `CLAUDE.md` adapter,
+  project instructions, and memory preserve activation across conversations.
 - Large originals belong in Project Sources or an authorized local source
   folder by default.
 - Ordinary conversation is not a learning record.

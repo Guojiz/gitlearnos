@@ -22,13 +22,27 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 设置 Agent 应配置当前可用的每一层，不能把 Skill 本身当成全部安装：
 
 1. 把 [`templates/AGENTS.md`](../templates/AGENTS.md) 放入学习者仓库；
-2. 适配
+2. 主 Agent 是 Claude Code 时，还要适配
+   [`templates/CLAUDE.md`](../templates/CLAUDE.md)；
+3. 把完整 [`skills/gitlearnos/`](../skills/gitlearnos/) 文件夹安装到主 Agent
+   正式记录的原生项目位置，并验证运行环境确实列出 `gitlearnos`；
+4. 适配
    [`templates/project-instructions.md`](../templates/project-instructions.md)，
    并安装到 AI Project 指令或等价的自定义指令字段；
-3. 取得允许后，适配
+5. 取得允许后，适配
    [`templates/native-memory-pointer.md`](../templates/native-memory-pointer.md)，
-   请求更新记忆，并验证实际保留的内容；
-4. 支持时暴露 Router Skill。
+   请求更新记忆，并验证实际保留的内容。
+
+默认原生路径：
+
+| 主 Agent | 项目路径 |
+|---|---|
+| Codex | `.agents/skills/gitlearnos/` |
+| Claude Code | `.claude/skills/gitlearnos/` |
+| OpenCode | `.agents/skills/gitlearnos/` |
+
+只为选定主 Agent 使用一份原生副本。见
+[跨 Agent 安装表](adapters/agents/README.md#不同-agent-如何发现-skill)。
 
 项目或自定义指令包含最小的整理、出题、复测、辅导、来源、模型和维护路由，
 因此不提供 Skills 的日常界面仍能工作。记忆只负责唤醒行为并指向目标；Git
@@ -44,15 +58,17 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 当前材料或学习事件：<内容>
 
 先阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。环境支持 Skills 时使用
-zh-CN/skills/gitlearnos/SKILL.md，但不要依赖显式 Skill 调用。一次只引导我完成
-一个必要设置步骤。大型学习文件使用项目 Sources 或获授权的本地文件夹。配置
-持久项目或仓库指令，并在可用时配置原生记忆，使未来的问题、作答尝试、拍摄
-页面、笔记、反馈和结果即使没有提到 GitLearnOS，也会被识别为候选学习事件。
-检查真实的仓库、Git、记忆、来源和调度能力。使用 safe-auto：先处理我的眼前
-需要，再整理有价值的证据，在服务目标时建议或生成针对性问题，并提交安全、
-可撤销的写回。保留原始作答、笔记和外部反馈；不要保存完整聊天，也不能在没有
-间隔后独立作答证据时声称已经掌握。最后报告触发层、改动文件、实际完成的
-自动化、下一步和撤销边界。
+完整 skills/gitlearnos/ 文件夹。检查主 Agent，把该文件夹安装到其正式记录的
+原生项目位置，并验证 Skill 清单确实出现 gitlearnos；复制源文件本身不能证明
+安装成功。不要依赖显式 Skill 调用。一次只引导我完成一个必要设置步骤。大型
+学习文件使用项目 Sources 或获授权的本地文件夹。配置持久项目或仓库指令，并在
+可用时配置原生记忆，使未来的问题、作答尝试、拍摄页面、笔记、反馈和结果即使
+没有提到 GitLearnOS，也会被识别为候选学习事件。检查真实的仓库、Git、记忆、
+来源和调度能力。使用 safe-auto：先处理我的眼前需要，再整理有价值的证据，在
+服务目标时建议或生成针对性问题，并提交安全、可撤销的写回。保留原始作答、
+笔记和外部反馈；不要保存完整聊天，也不能在没有间隔后独立作答证据时声称已经
+掌握。最后报告触发层、已验证 Skill 状态、改动文件、实际完成的自动化、下一步
+和撤销边界。
 ```
 
 Agent 能完成时，不要手工建立 GitLearnOS 文件夹。
@@ -70,6 +86,9 @@ subjects/<subject>/goals/main-goal.md
 
 只创建当前学科和真实需要的文件。来源、模型、薄弱点、问题包、复测和事件在第一次使用时出现。
 
+主 Agent 还可以添加一份原生 Skill 文件夹。Claude Code 另外添加精简
+`CLAUDE.md` 入口。这些是运行文件，不是学习者状态。
+
 设置 Agent 还应报告：
 
 ```text
@@ -79,7 +98,7 @@ Repository:
 Automatic instructions:
 Project/custom instructions:
 Memory: saved / suggested / unavailable / unknown
-Skills:
+Skills: installed / source-only / unavailable / unknown
 Remote backup or collaboration:
 ```
 

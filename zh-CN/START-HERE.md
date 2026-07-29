@@ -12,7 +12,8 @@ GitLearnOS 通过一个具备 Git 仓库权限的现有 AI Agent 运行。
 4. 检查真实的 Chat、Work 或其他 Agent 界面，以及记忆、指令、Skills、读取、写入、提交、推送、来源和调度能力。
 5. 配置持久触发，使未来学习事件无需说出 Skill 名。
 6. 读取目标策略、Dashboard、当前学科目标和最低限度的相关证据。
-7. 环境支持 Skills 时，使用 [GitLearnOS 中文 Skill](skills/gitlearnos/SKILL.md)。
+7. 环境支持 Skills 时，把完整 [`skills/gitlearnos/`](../skills/gitlearnos/)
+   文件夹安装到主 Agent 的原生位置，验证发现后通过唯一 Router 路由。
 8. 完成安全操作，把一次有意义的学习事件提交为一次改动，并返回规定回执。
 
 ## 重要边界
@@ -20,7 +21,8 @@ GitLearnOS 通过一个具备 Git 仓库权限的现有 AI Agent 运行。
 - 个人状态只能写入学习者仓库。
 - GitHub 只是可选 Git 托管平台，不是核心依赖。
 - Chat 与 Work 都可能可用；必须检查实际工具和限制。
-- Skills 是可选项；`AGENTS.md`、项目指令和记忆负责跨对话触发。
+- Skills 是可选项；`AGENTS.md`、Claude Code 的精简 `CLAUDE.md` 入口、项目
+  指令和记忆负责跨对话触发。
 - 大型原件默认放入 Project Sources 或获授权的本地来源文件夹。
 - 普通聊天不是学习记录。
 - 原始作答、笔记和外部反馈必须保留。

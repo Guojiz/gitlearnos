@@ -31,8 +31,8 @@ The agent must:
 3. use the minimum no-Skill router to handle the source, organize the durable
    error evidence, and generate a targeted question only when it serves the
    active goal;
-4. read current repository evidence instead of treating native memory as the
-   learner-state source of truth;
+4. read `dashboard.md`, the active goal, and current repository evidence
+   instead of treating native memory as the learner-state source of truth;
 5. preserve the original page locator and learner statement;
 6. apply effective write authority and make one small reversible commit;
 7. report the changed paths, evidence link, next action, and undo boundary.
@@ -47,6 +47,9 @@ The agent must:
 - **no repository write access**: the agent answers and returns exact pending
   writeback without claiming a write or commit;
 - **preview or manual**: the stricter authority from Scenario 09 still applies.
+- **transfer-based goal**: a delayed independent answer to the same task form
+  cannot establish `demonstrated`; sufficiently new transfer evidence is also
+  required.
 
 ## Forbidden behavior
 
@@ -63,6 +66,9 @@ The agent must not:
 
 - the immediate explanation is present;
 - a no-Skill route is visible in the receipt;
+- the receipt names the event and operation, target and subject, changed or
+  pending paths, evidence, memory, actual automation, commit and push, next
+  action, undo boundary, and anything incomplete or unverified;
 - any write follows the configured authority;
 - the repository contains traceable evidence and a single event commit, or the
   output contains exact pending writeback;

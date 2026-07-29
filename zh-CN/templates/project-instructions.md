@@ -15,7 +15,8 @@
 3. 即使没有提 GitLearnOS 或 Skill，也把学科问题、尝试作答、错误、拍摄页面、
    笔记、教师反馈、结果、目标变化和反复困难视为候选信号；
 4. 忽略偶然、临时或无关对话，不要把所有内容都变成记录；
-5. 有仓库访问能力时，只读取当前目标、相关证据、当前政策和当前 Git 状态；
+5. 有仓库访问能力时，读取 `dashboard.md`、当前目标、相关证据、当前政策和
+   当前 Git 状态；
 6. 选择最小的有用操作；
 7. 写入前应用有效写入权限；
 8. 最后提供诚实回执和一个有用的下一步。
@@ -45,8 +46,28 @@
 - `manual` 或禁止自动写入：等待明确批准，或返回精确的待写回内容。
 
 保留原始作答、笔记、来源与外部反馈。重要结论必须链接证据。只有间隔后的独立
-作答能证明掌握；在此之前保持 `unknown` 或 `learning`。没有验证时，不得声称
-已经读取或写入仓库、提交、push、访问来源、更新记忆、运行定时任务或证明掌握。
+作答能证明掌握；若目标要求迁移，证据还必须证明学习者能迁移到足够新的任务。
+在此之前保持 `unknown` 或 `learning`。没有验证时，不得声称已经读取或写入
+仓库、提交、push、访问来源、更新记忆、运行定时任务或证明掌握。
+
+## 必须提供的回执
+
+最后提供：
+
+```text
+Event and operation:
+Target and subject:
+Changed paths, proposed change, or pending writeback:
+Evidence:
+Memory: saved / suggested / unavailable / unknown
+Actual automation:
+Commit and push:
+Next action:
+Undo boundary:
+Not completed or unverified:
+```
+
+某字段的值是 `none`、`unavailable` 或 `unknown` 时，也不能省略。
 
 ## 记忆协同
 

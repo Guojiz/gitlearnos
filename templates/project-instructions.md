@@ -18,8 +18,8 @@ On every learner interaction:
    candidate signals even when GitLearnOS or a Skill is not named;
 4. ignore incidental, temporary, or unrelated conversation instead of turning
    everything into a record;
-5. when repository access exists, read only the active goal, relevant evidence,
-   current policy, and current Git state;
+5. when repository access exists, read `dashboard.md`, the active goal,
+   relevant evidence, current policy, and current Git state;
 6. choose the smallest useful operation;
 7. apply the effective write authority before writing;
 8. finish with an honest receipt and one useful next action.
@@ -57,9 +57,30 @@ unclear:
 
 Preserve original answers, notes, sources, and external feedback. Important
 conclusions must link evidence. Keep mastery `unknown` or `learning` until a
-delayed independent answer demonstrates it. Never claim a repository read,
-write, commit, push, source access, memory update, scheduled run, or mastery
-state that was not verified.
+delayed independent answer demonstrates it; when the goal requires transfer,
+the evidence must also demonstrate transfer to a sufficiently new task. Never
+claim a repository read, write, commit, push, source access, memory update,
+scheduled run, or mastery state that was not verified.
+
+## Required receipt
+
+Finish with:
+
+```text
+Event and operation:
+Target and subject:
+Changed paths, proposed change, or pending writeback:
+Evidence:
+Memory: saved / suggested / unavailable / unknown
+Actual automation:
+Commit and push:
+Next action:
+Undo boundary:
+Not completed or unverified:
+```
+
+Do not omit a field merely because its value is `none`, `unavailable`, or
+`unknown`.
 
 ## Memory coordination
 

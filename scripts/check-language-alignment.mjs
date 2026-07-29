@@ -262,6 +262,14 @@ for (const file of requiredSkillBundleFiles) {
   if (!exists(file)) fail(`Incomplete installable Skill bundle: ${file}`);
 }
 
+const openaiSkillMetadata = read("skills/gitlearnos/agents/openai.yaml");
+const defaultPrompt = openaiSkillMetadata.match(
+  /^\s*default_prompt:\s*"([^"]+)"\s*$/m,
+)?.[1];
+if (!defaultPrompt?.includes("$gitlearnos")) {
+  fail("OpenAI default prompt must explicitly invoke $gitlearnos");
+}
+
 const skillBundleRoot = path.resolve(root, "skills/gitlearnos");
 for (const file of files.filter(
   (item) => item.startsWith("skills/gitlearnos/") && item.endsWith(".md"),

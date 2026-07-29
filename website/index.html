@@ -188,6 +188,20 @@
     .subject-files code{font-family:var(--mono);font-size:.7rem;padding:.35rem .6rem;border:1px solid var(--line);border-radius:8px;color:var(--muted)}
     .repo-note{max-width:46em;margin:1.8rem 0 0;color:var(--muted);line-height:1.8;font-size:.93rem}
 
+    /* ---------- 参赛演示视频 ---------- */
+    .demo-sec{background:var(--deep);color:var(--on-dark)}
+    .demo-sec .number{color:var(--orange)}
+    .demo-layout{display:grid;grid-template-columns:minmax(250px,.62fr) minmax(560px,1.38fr);gap:clamp(2.5rem,5vw,5rem);align-items:center}
+    .demo-copy h2{margin:0;color:var(--on-dark);font-size:clamp(2.1rem,4.4vw,3.9rem);font-weight:800;line-height:1.12;letter-spacing:-.04em}
+    .demo-copy p{margin:1.4rem 0 0;color:var(--on-dark-muted);font-size:.95rem;line-height:1.8}
+    .demo-copy .actions{margin-top:1.7rem}
+    .demo-copy .button.ghost{color:var(--on-dark);border-color:rgba(234,244,238,.55)}
+    .demo-copy .button.ghost:hover{background:rgba(234,244,238,.08);color:#fff}
+    .video-shell{overflow:hidden;background:#000;border:1px solid var(--line-dark);border-radius:8px;box-shadow:var(--shadow-dark)}
+    .video-shell video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+    .video-meta{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;background:var(--deep-inset);border-top:1px solid var(--line-dark);font-family:var(--mono);font-size:.7rem;color:var(--on-dark-muted)}
+    .video-meta strong{color:var(--on-dark);font-weight:650}
+
     /* ---------- 最终 CTA ---------- */
     .final{border-top:1px solid var(--line);padding:clamp(80px,9vw,130px) 0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,5vw,6rem);align-items:center}
     .final h2{margin:0;color:var(--deep);font-size:clamp(2.2rem,4.6vw,4.2rem);font-weight:800;letter-spacing:-.045em;line-height:1.08}
@@ -247,6 +261,7 @@
       .loop-grid{grid-template-columns:1fr}
       .loop-step{min-height:0}
       .repo{grid-template-columns:1fr}
+      .demo-layout{grid-template-columns:1fr}
       .final{grid-template-columns:1fr}
       .footer-in{grid-template-columns:1fr;gap:1.2rem}
       footer p{text-align:left}
@@ -294,6 +309,7 @@
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
       <a href="#loop"><span class="zh">学习闭环</span><span class="en">The loop</span></a>
       <a href="#subjects"><span class="zh">学科仓库</span><span class="en">Subjects</span></a>
+      <a href="#demo"><span class="zh">参赛演示</span><span class="en">Demo</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
     </nav>
     <div class="header-tools">
@@ -453,6 +469,31 @@
         </div>
       </div>
       <p class="repo-note reveal d1"><span class="zh">只授权一个仓库；每科独立成文件夹，根目录统一保存策略、总览和跨学科安排。大教材、PDF 与扫描件放在 Project Sources 或授权的本地文件夹，Git 只保存紧凑状态、出处指针与历史。</span><span class="en">Authorize one repository. Subject folders stay focused while root files hold shared policy and cross-subject planning. Large textbooks, PDFs and scans live in Project Sources or an authorized local folder — Git stores compact state, provenance pointers, and history.</span></p>
+    </div>
+  </section>
+
+  <!-- ================= 04 AceSAT 参赛演示 ================= -->
+  <section class="demo-sec" id="demo">
+    <div class="wrap numbered">
+      <div class="number reveal">04</div>
+      <div class="demo-layout">
+        <div class="demo-copy reveal">
+          <p class="kicker"><span class="zh">AceSAT AI Agent Hackathon · 英文演示</span><span class="en">AceSAT AI Agent Hackathon · Product demo</span></p>
+          <h2><span class="zh">看 Agent 如何把一次练习，变成可持续的学习状态。</span><span class="en">Watch one practice session become durable learning state.</span></h2>
+          <p><span class="zh">2 分 23 秒真实产品演示：读取学习者约束、定位证据缺口、提出一个精准问题、写回结果，并安排延迟复查。兼容 ChatGPT、Claude、Codex、OpenCode，也可完全离线使用。</span><span class="en">A 2:23 product demo: read learner constraints, locate an evidence gap, ask one precise question, write the result back, and schedule a delayed recheck. Works with ChatGPT, Claude, Codex, OpenCode — or fully offline.</span></p>
+          <div class="actions">
+            <a class="button ghost" href="media/gitlearnos-acesat.en.srt" download><span class="zh">下载英文字幕</span><span class="en">Download captions</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-d"/></svg></a>
+          </div>
+        </div>
+        <div class="video-shell reveal d1">
+          <video controls playsinline preload="metadata" poster="media/gitlearnos-acesat-poster.jpg" aria-label="GitLearnOS AceSAT product demo">
+            <source src="media/gitlearnos-acesat.mp4" type="video/mp4">
+            <track kind="captions" srclang="en" label="English" src="media/gitlearnos-acesat.en.vtt">
+            <span class="zh">浏览器不支持视频播放。请下载 MP4 后观看。</span><span class="en">Your browser does not support embedded video. Download the MP4 to watch.</span>
+          </video>
+          <div class="video-meta"><strong>GitLearnOS × AceSAT</strong><span>02:23 · 1080p · English CC</span></div>
+        </div>
+      </div>
     </div>
   </section>
 

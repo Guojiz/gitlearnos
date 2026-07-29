@@ -1,0 +1,144 @@
+﻿1
+00:00:00,824 --> 00:00:01,801
+A shared phone.
+
+2
+00:00:01,858 --> 00:00:03,892
+Twenty minutes, three days a week.
+
+3
+00:00:03,949 --> 00:00:06,344
+No tutor, no reliable internet.
+
+4
+00:00:06,413 --> 00:00:08,989
+This is Maya — and there are millions like her.
+
+5
+00:00:14,648 --> 00:00:16,375
+Bright students in underserved schools
+
+6
+00:00:16,415 --> 00:00:19,339
+don't lack free material — they lack follow-through.
+
+7
+00:00:19,408 --> 00:00:22,861
+Practice results, class notes, occasional tutoring:
+
+8
+00:00:22,893 --> 00:00:26,178
+all fragmented. Every session starts from zero.
+
+9
+00:00:30,536 --> 00:00:32,282
+A chatbot answers questions.
+
+10
+00:00:32,339 --> 00:00:33,713
+An agent takes action.
+
+11
+00:00:33,769 --> 00:00:38,465
+GitLearnOS turns one learner-owned Git repository into durable state —
+
+12
+00:00:38,505 --> 00:00:41,770
+so any AI agent becomes a tutor that never forgets,
+
+13
+00:00:41,810 --> 00:00:43,148
+and never locks you in.
+
+14
+00:00:48,436 --> 00:00:51,048
+Real practice becomes an evidence-linked gap.
+
+15
+00:00:51,104 --> 00:00:54,305
+The agent picks the smallest useful next question —
+
+16
+00:00:54,338 --> 00:00:55,555
+not another worksheet.
+
+17
+00:00:55,612 --> 00:00:57,290
+Every answer is preserved,
+
+18
+00:00:57,330 --> 00:00:59,858
+every step is a reversible Git commit.
+
+19
+00:00:59,914 --> 00:01:02,478
+Auditable. Undoable. Yours.
+
+20
+00:01:07,736 --> 00:01:08,629
+Watch it work.
+
+21
+00:01:08,686 --> 00:01:10,949
+Maya gives the agent her constraints.
+
+22
+00:01:11,005 --> 00:01:14,050
+It reads her durable state — not the open web —
+
+23
+00:01:14,094 --> 00:01:16,526
+and asks exactly one fresh question.
+
+24
+00:01:16,594 --> 00:01:18,365
+She answers in her own words.
+
+25
+00:01:18,433 --> 00:01:20,845
+The agent writes it all back, commits,
+
+26
+00:01:20,885 --> 00:01:22,571
+and schedules the next check.
+
+27
+00:01:22,628 --> 00:01:24,403
+And it refuses to claim mastery
+
+28
+00:01:24,443 --> 00:01:26,153
+without delayed evidence.
+
+29
+00:01:26,222 --> 00:01:28,389
+That's discipline a chatbot doesn't have.
+
+30
+00:01:53,236 --> 00:01:57,603
+Text-first. No database, no server, nothing always-on.
+
+31
+00:01:57,659 --> 00:02:00,547
+It works with the free materials schools already have,
+
+32
+00:02:00,580 --> 00:02:02,836
+and with any agent the student can reach —
+
+33
+00:02:02,876 --> 00:02:07,362
+ChatGPT, Claude, Codex, OpenCode — or none at all.
+
+34
+00:02:07,419 --> 00:02:09,393
+The learner owns every byte.
+
+35
+00:02:15,836 --> 00:02:16,981
+GitLearnOS.
+
+36
+00:02:17,038 --> 00:02:20,118
+Learning happens anywhere — the state belongs to you.
+

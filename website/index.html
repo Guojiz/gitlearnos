@@ -1,265 +1,368 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" data-zh="GitLearnOS：让 AI 主动识别学习、引导下一步，并把有价值的结果写回学习者自己的 Git 仓库。" data-en="GitLearnOS helps AI notice learning, guide the next step, and write useful results to a learner-owned Git repository." content="GitLearnOS helps AI notice learning, guide the next step, and write useful results to a learner-owned Git repository.">
-  <title data-zh="GitLearnOS — 学习发生在任何地方，状态属于你" data-en="GitLearnOS — Learn anywhere. Keep the state.">GitLearnOS — Learn anywhere. Keep the state.</title>
-  <link rel="preconnect" href="https://unpkg.com">
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <meta name="color-scheme" content="light">
+  <meta name="description" data-zh="GitLearnOS：一个学习仓库，分科学科文件夹。自动整理、针对性出题、透明写回。" data-en="GitLearnOS: one learner-owned repository with subject folders, automatic organization, targeted questions, and traceable writeback." content="GitLearnOS：一个学习仓库，分科学科文件夹。自动整理、针对性出题、透明写回。">
+  <title data-zh="GitLearnOS — 学习发生在任何地方，状态属于你" data-en="GitLearnOS — Learn anywhere. Keep the state.">GitLearnOS — 学习发生在任何地方，状态属于你</title>
+  <script>
+    /* 首帧前恢复语言偏好，避免闪烁 */
+    (function(){try{if(localStorage.getItem('guojiz.lang')==='en'){document.documentElement.classList.add('lang-en');document.documentElement.lang='en';}}catch(e){}})();
+  </script>
   <style>
-    :root {
-      --paper: #fbfcfa;
-      --ink: #063b2c;
-      --deep: #022b20;
-      --muted: #60756d;
-      --line: #c7d8d1;
-      --soft: #eef5f1;
-      --orange: #ff5a16;
-      --orange-dark: #d94309;
-      --focus: #1f73ff;
+    :root{
+      --paper:#FBFCFA; --soft:#F1F6F3;
+      --ink:#063B2C; --deep:#022B20; --deep-raised:#063B2C; --deep-inset:#01241B;
+      --muted:#5B7067; --on-dark:#EAF4EE; --on-dark-muted:#9FBCAF;
+      --orange:#FF5A16; --action:#D94309; --action-hover:#B73508; --orange-soft:#FFE9DD;
+      --line:#C9DAD2; --line-dark:rgba(234,244,238,.16);
+      --success:#2E9E6B; --focus:#1F73FF;
+      --ease:cubic-bezier(.22,.61,.21,1);
+      --shadow:0 1px 2px rgba(2,43,32,.06),0 12px 32px -12px rgba(2,43,32,.18);
+      --shadow-dark:0 1px 2px rgba(0,0,0,.3),0 16px 40px -16px rgba(0,0,0,.5);
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
     }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+    button,a{-webkit-tap-highlight-color:transparent}
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+    ::selection{background:var(--orange-soft);color:var(--deep)}
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-      text-rendering: optimizeLegibility;
-    }
-    a { color: inherit; text-decoration: none; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
-    .zh, .en { display: none; }
-    body:not(.lang-en) .zh,
-    body.lang-en .en { display: inline; }
-    body:not(.lang-en) .block.zh,
-    body.lang-en .block.en,
-    body:not(.lang-en) h1 > .zh,
-    body:not(.lang-en) .section-title > .zh,
-    body.lang-en h1 > .en,
-    body.lang-en .section-title > .en { display: block; }
-    .shell { overflow: hidden; min-height: 100vh; }
-    .wrap { width: min(1320px, calc(100% - 72px)); margin-inline: auto; }
+    /* ---------- 双语切换 ---------- */
+    .zh,.en{display:none}
+    html:not(.lang-en) .zh,html.lang-en .en{display:inline}
+    html:not(.lang-en) .zh.b,html.lang-en .en.b{display:block}
 
-    header {
-      min-height: 86px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      border-bottom: 1px solid var(--line);
-    }
-    .wordmark {
-      width: max-content;
-      color: var(--deep);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 1.85rem;
-      font-weight: 760;
-      letter-spacing: -.08em;
-    }
-    nav { display: flex; gap: clamp(1.8rem, 4vw, 4.5rem); font-size: .92rem; font-weight: 650; }
-    nav a, footer a { border-bottom: 1px solid transparent; }
-    nav a:hover, footer a:hover { border-bottom-color: currentColor; }
-    .lang-toggle {
-      justify-self: end;
-      min-height: 44px;
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      cursor: pointer;
-    }
-    .lang-toggle .active { color: var(--ink); font-weight: 750; }
+    .skip{position:fixed;top:-60px;left:16px;z-index:99;padding:.7rem 1.1rem;background:var(--deep);color:var(--on-dark);font-size:.85rem;border-radius:8px;transition:top .2s var(--ease)}
+    .skip:focus-visible{top:12px}
 
-    .hero {
-      min-height: 700px;
-      padding: 96px 0 88px;
-      display: grid;
-      grid-template-columns: minmax(310px, .8fr) minmax(620px, 1.35fr);
-      align-items: center;
-      gap: clamp(3rem, 6vw, 7rem);
-    }
-    .kicker { margin: 0 0 2rem; font-size: 1rem; font-weight: 620; }
-    h1 {
-      margin: 0;
-      color: var(--deep);
-      font-size: clamp(4.7rem, 7.7vw, 8.7rem);
-      font-weight: 800;
-      letter-spacing: -.08em;
-      line-height: .88;
-    }
-    .intro { max-width: 570px; margin: 2.35rem 0 0; color: var(--muted); line-height: 1.85; }
-    .actions { margin-top: 2.4rem; display: flex; align-items: center; flex-wrap: wrap; gap: 1.6rem; }
-    .button {
-      min-height: 54px;
-      display: inline-flex;
-      align-items: center;
-      gap: .65rem;
-      padding: .9rem 1.5rem;
-      background: var(--orange);
-      color: white;
-      font-weight: 750;
-      transition: transform .18s ease, background .18s ease;
-    }
-    .button:hover { background: var(--orange-dark); transform: translateY(-2px); }
-    .text-link { display: inline-flex; gap: .55rem; align-items: center; font-weight: 700; }
+    .wrap{width:min(1320px,calc(100% - 72px));margin-inline:auto}
+    .icon{width:1.15em;height:1.15em;flex:none;vertical-align:-.22em}
 
-    .flow-labels, .flow-grid {
-      display: grid;
-      grid-template-columns: minmax(210px, 1fr) 112px minmax(220px, 1.05fr);
-      gap: 1.5rem;
+    /* ---------- Header ---------- */
+    header.site{position:sticky;top:0;z-index:50;background:rgba(251,252,250,.0);border-bottom:1px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease),backdrop-filter .25s}
+    header.site.scrolled{background:rgba(251,252,250,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--line)}
+    .header-in{min-height:80px;display:flex;align-items:center;gap:2rem}
+    .wordmark{font-family:var(--mono);font-size:1.5rem;font-weight:750;letter-spacing:-.06em;color:var(--deep)}
+    .wordmark em{font-style:normal;color:var(--orange)}
+    nav.primary{display:flex;gap:clamp(1.4rem,3vw,3rem);margin-inline:auto;font-size:.88rem;font-weight:650}
+    nav.primary a,footer a{border-bottom:1px solid transparent;padding:.35rem 0}
+    nav.primary a:hover,footer a:hover{border-bottom-color:currentColor}
+    .header-tools{display:flex;align-items:center;gap:1.1rem;margin-left:auto}
+    .gh-link{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;color:var(--ink)}
+    .gh-link:hover{background:var(--soft)}
+    .gh-link .icon{width:22px;height:22px}
+    .lang-toggle{min-height:44px;padding:.5rem .8rem;color:var(--muted);font-size:.85rem;font-weight:650;border:1px solid var(--line);border-radius:999px}
+    .lang-toggle:hover{border-color:var(--ink)}
+    .lang-toggle .active{color:var(--ink);font-weight:800}
+
+    /* ---------- Hero ---------- */
+    .hero{padding:clamp(64px,8vw,110px) 0 clamp(56px,7vw,96px);display:grid;grid-template-columns:minmax(320px,.85fr) minmax(600px,1.15fr);align-items:center;gap:clamp(3rem,5vw,6rem)}
+    .kicker{display:flex;align-items:center;gap:.6rem;margin:0 0 1.8rem;font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--muted)}
+    .kicker::before{content:"";width:26px;height:2px;background:var(--orange)}
+    h1{margin:0;color:var(--deep);font-size:clamp(3.4rem,7.4vw,7rem);font-weight:800;letter-spacing:-.055em;line-height:1.02}
+    html.lang-en h1{font-size:clamp(3rem,5.8vw,5.4rem);letter-spacing:-.045em}
+    h1 .hl{background-image:linear-gradient(var(--orange),var(--orange));background-size:100% .13em;background-repeat:no-repeat;background-position:0 94%;padding-bottom:.05em}
+    .intro{max-width:34em;margin:1.9rem 0 0;color:var(--muted);line-height:1.8;font-size:1.02rem}
+    .actions{margin-top:2.2rem;display:flex;align-items:center;flex-wrap:wrap;gap:1rem 1.6rem}
+    .button{min-height:54px;display:inline-flex;align-items:center;gap:.6rem;padding:.95rem 1.6rem;background:var(--action);color:#fff;font-weight:750;font-size:.98rem;border-radius:12px;transition:transform .18s var(--ease),background .18s var(--ease)}
+    .button:hover{background:var(--action-hover);transform:translateY(-2px)}
+    .button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+    .button.ghost:hover{background:var(--soft);color:var(--deep)}
+    .text-link{display:inline-flex;gap:.5rem;align-items:center;font-weight:700;font-size:.95rem;border-bottom:1px solid transparent}
+    .text-link:hover{border-bottom-color:currentColor}
+
+    /* Hero 流水线 → commit 流 */
+    .pipe{padding:1.6rem;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#fff, var(--soft));box-shadow:var(--shadow)}
+    .pipe-lanes{display:grid;grid-template-columns:minmax(200px,1fr) 96px minmax(240px,1.15fr);gap:1.2rem;margin-bottom:1.1rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;color:var(--muted);text-align:center}
+    .pipe-grid{display:grid;grid-template-columns:minmax(200px,1fr) 96px minmax(240px,1.15fr);gap:1.2rem;align-items:stretch}
+    .sources{display:grid;gap:.7rem;align-content:space-between}
+    .source{display:flex;align-items:center;gap:.7rem;padding:.8rem .9rem;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:.85rem}
+    .source .icon{width:1.5rem;height:1.5rem;color:var(--deep)}
+    .source strong{display:block;font-size:.86rem}
+    .source small{display:block;margin-top:.15rem;color:var(--muted);font-size:.72rem}
+    .source .tail{margin-left:auto;color:var(--line);width:1rem;height:1rem}
+    .steps{position:relative;display:grid;align-content:space-between;justify-items:center;padding:.4rem 0}
+    .steps::before{content:"";position:absolute;top:14px;bottom:14px;left:50%;width:0;border-left:2px dashed var(--line);transform:translateX(-50%)}
+    .pipe-live.armed .steps::before{transform:translateX(-50%) scaleY(0);transform-origin:top;transition:transform 1.2s var(--ease) .2s}
+    .pipe-live.armed.in .steps::before{transform:translateX(-50%) scaleY(1)}
+    .step{position:relative;z-index:1;display:grid;justify-items:center;gap:.2rem;padding:.45rem .5rem;background:var(--paper);border:1px solid var(--line);border-radius:10px;font-size:.8rem;font-weight:750;min-width:74px;text-align:center}
+    .step small{font-weight:600;color:var(--muted);font-size:.62rem;font-family:var(--mono)}
+    .pipe-live.armed .step{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    .pipe-live.armed.in .step{opacity:1;transform:none}
+    .pipe-live.armed.in .step:nth-child(1){transition-delay:.15s}
+    .pipe-live.armed.in .step:nth-child(2){transition-delay:.45s}
+    .pipe-live.armed.in .step:nth-child(3){transition-delay:.75s}
+    .pipe-live.armed.in .step:nth-child(4){transition-delay:1.05s}
+    .commits{display:flex;flex-direction:column;background:var(--deep);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-dark)}
+    .commits-head{display:flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-bottom:1px solid var(--line-dark);color:var(--on-dark-muted);font-family:var(--mono);font-size:.68rem}
+    .commits-head .dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+    .commits-head .path{margin-left:auto;color:var(--on-dark)}
+    .commits-body{position:relative;flex:1;display:grid;gap:.1rem;align-content:center;padding:1rem 1rem 1rem 2.1rem}
+    .commits-body::before{content:"";position:absolute;left:1.32rem;top:1.4rem;bottom:1.4rem;width:2px;background:linear-gradient(var(--success),rgba(46,158,107,.25));border-radius:2px}
+    .commit{position:relative;display:grid;gap:.15rem;padding:.5rem 0;font-size:.8rem;color:var(--on-dark)}
+    .commit::before{content:"";position:absolute;left:-.95rem;top:.85rem;width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 3px var(--deep)}
+    .commit .hash{font-family:var(--mono);font-size:.7rem;color:var(--orange);font-weight:600}
+    .commit .meta{font-size:.72rem;color:var(--on-dark-muted)}
+    .commit .tag{display:inline-block;margin-left:.4rem;padding:.08rem .45rem;border:1px solid rgba(46,158,107,.5);border-radius:999px;font-family:var(--mono);font-size:.6rem;color:#7FD6A8;vertical-align:.05em}
+    .pipe-live.armed .commit{opacity:0;transform:translateX(14px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+    .pipe-live.armed.in .commit{opacity:1;transform:none}
+    .pipe-live.armed.in .commit:nth-child(1){transition-delay:1.15s}
+    .pipe-live.armed.in .commit:nth-child(2){transition-delay:1.5s}
+    .pipe-live.armed.in .commit:nth-child(3){transition-delay:1.85s}
+    .pipe-live.armed.in .commit:nth-child(4){transition-delay:2.2s}
+
+    /* ---------- 原则条 ---------- */
+    .principles{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}
+    .principles>div{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1.3rem 1rem;font-size:.9rem;font-weight:700;text-align:center}
+    .principles>div+div{border-left:1px solid var(--line)}
+    .principles .icon{color:var(--action);width:1.3rem;height:1.3rem}
+
+    /* ---------- 编号叙事段 ---------- */
+    section[id]{scroll-margin-top:90px}
+    .numbered{padding:clamp(80px,9vw,130px) 0;display:grid;grid-template-columns:96px 1fr;gap:2rem}
+    .numbered+.numbered{border-top:1px solid var(--line)}
+    .number{font-family:var(--mono);font-size:.85rem;font-weight:750;color:var(--action)}
+    .section-title{margin:0 0 clamp(2.4rem,4vw,3.6rem);color:var(--deep);font-size:clamp(2.1rem,4.4vw,3.9rem);font-weight:800;line-height:1.12;letter-spacing:-.04em;max-width:20em}
+
+    /* gap-pack 文档卡 */
+    .handoff{display:grid;grid-template-columns:1fr 56px 1fr;align-items:center;gap:.5rem}
+    .handoff>.icon{justify-self:center;width:1.6rem;height:1.6rem;color:var(--muted)}
+    .doc{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+    .doc-bar{display:flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border-bottom:1px solid var(--line);background:var(--soft);font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+    .doc-bar .lights{display:flex;gap:5px}
+    .doc-bar .lights i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+    .doc-body{padding:1.4rem 1.3rem 1.5rem;min-height:340px;display:flex;flex-direction:column}
+    .doc-body h3{margin:0 0 1.2rem;font-size:.98rem;font-weight:750}
+    .doc dl{margin:0}
+    .doc dl div{display:grid;grid-template-columns:104px 1fr;gap:1rem;padding:.68rem 0;border-top:1px solid var(--soft)}
+    .doc dt{font-family:var(--mono);font-size:.68rem;color:var(--muted);padding-top:.15em}
+    .doc dd{margin:0;font-size:.88rem;font-weight:650;line-height:1.55}
+    .checklist{margin:0;padding:0;list-style:none;display:grid;gap:.75rem;font-size:.88rem;line-height:1.5}
+    .checklist li{display:flex;gap:.6rem;align-items:flex-start}
+    .checklist .icon{width:1.15rem;height:1.15rem;margin-top:.15rem;color:var(--success)}
+    .doc-foot{margin-top:auto;padding-top:1.2rem}
+    .hash-chip{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .7rem;border:1px solid var(--line);border-radius:999px;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+    .hash-chip .icon{color:var(--success)}
+
+    /* ---------- 学习闭环（深色段） ---------- */
+    .loop-sec{background:var(--deep);color:var(--on-dark)}
+    .loop-sec .section-title{color:var(--on-dark)}
+    .loop-sec .number{color:var(--orange)}
+    .loop-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:.8rem}
+    .loop-step{position:relative;display:grid;gap:.6rem;align-content:start;padding:1.2rem 1rem 1.3rem;background:var(--deep-raised);border:1px solid var(--line-dark);border-radius:14px;min-height:170px}
+    .loop-step .icon{width:1.5rem;height:1.5rem;color:var(--orange)}
+    .loop-step strong{font-size:.92rem;line-height:1.45}
+    .loop-step small{color:var(--on-dark-muted);font-size:.74rem;line-height:1.55}
+    .loop-step .idx{position:absolute;top:.9rem;right:1rem;font-family:var(--mono);font-size:.62rem;color:var(--on-dark-muted)}
+    .loop-return{display:flex;align-items:center;gap:.9rem;margin-top:1rem;padding:.95rem 1.2rem;border:1px dashed rgba(234,244,238,.35);border-radius:12px;font-size:.82rem;color:var(--on-dark-muted)}
+    .loop-return .icon{color:var(--orange);transform:rotate(180deg)}
+    .loop-return code{font-family:var(--mono);font-size:.72rem;color:var(--orange);background:rgba(255,90,22,.12);padding:.15rem .5rem;border-radius:6px}
+    .loop-note{max-width:44em;margin:2.6rem 0 0;color:var(--on-dark-muted);line-height:1.8;font-size:.95rem}
+    .loop-note strong{color:var(--on-dark)}
+
+    /* ---------- 学科文件树 ---------- */
+    .repo{display:grid;grid-template-columns:minmax(300px,.9fr) 1.1fr;gap:1.4rem;align-items:stretch}
+    .tree{background:var(--deep);border-radius:16px;padding:1.2rem;font-family:var(--mono);font-size:.82rem;color:var(--on-dark-muted);box-shadow:var(--shadow-dark)}
+    .tree .row{display:flex;align-items:center;gap:.55rem;padding:.42rem .5rem;border-radius:8px;white-space:nowrap}
+    .tree .row .icon{color:var(--on-dark-muted)}
+    .tree .row.file{padding-left:1.9rem}
+    .tree .row.dir-root{color:var(--on-dark);font-weight:700}
+    .tree button.row{width:100%;text-align:left;color:var(--on-dark-muted);font:inherit;border:1px solid transparent}
+    .tree button.row:hover{background:rgba(234,244,238,.06)}
+    .tree button.row[aria-selected="true"]{background:rgba(255,90,22,.14);border-color:rgba(255,90,22,.4);color:var(--on-dark)}
+    .tree button.row[aria-selected="true"] .icon{color:var(--orange)}
+    .tree .indent{padding-left:1.6rem}
+    .tree-note{margin-top:.9rem;padding:.8rem .6rem 0;border-top:1px solid var(--line-dark);font-size:.68rem;line-height:1.6}
+    .subject-detail{display:flex;flex-direction:column;gap:1rem;padding:1.8rem;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+    .subject-detail[hidden]{display:none}
+    .subject-detail h3{margin:0;font-size:1.25rem;letter-spacing:-.02em}
+    .subject-detail .path{font-family:var(--mono);font-size:.72rem;color:var(--action);background:var(--orange-soft);padding:.3rem .6rem;border-radius:8px;width:max-content;max-width:100%;overflow-wrap:anywhere}
+    .subject-detail p{margin:0;color:var(--muted);line-height:1.75;font-size:.92rem;max-width:36em}
+    .subject-files{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:auto}
+    .subject-files code{font-family:var(--mono);font-size:.7rem;padding:.35rem .6rem;border:1px solid var(--line);border-radius:8px;color:var(--muted)}
+    .repo-note{max-width:46em;margin:1.8rem 0 0;color:var(--muted);line-height:1.8;font-size:.93rem}
+
+    /* ---------- 最终 CTA ---------- */
+    .final{border-top:1px solid var(--line);padding:clamp(80px,9vw,130px) 0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,5vw,6rem);align-items:center}
+    .final h2{margin:0;color:var(--deep);font-size:clamp(2.2rem,4.6vw,4.2rem);font-weight:800;letter-spacing:-.045em;line-height:1.08}
+    .final .actions{margin-top:2rem}
+    .prompt{position:relative;background:var(--deep);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-dark)}
+    .prompt-bar{display:flex;align-items:center;gap:.6rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line-dark);color:var(--on-dark-muted);font-family:var(--mono);font-size:.7rem}
+    .prompt-bar .icon{color:var(--orange)}
+    .copy-btn{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;min-height:36px;padding:.35rem .75rem;border:1px solid var(--line-dark);border-radius:8px;color:var(--on-dark);font-size:.72rem;font-weight:650;transition:background .18s var(--ease)}
+    .copy-btn:hover{background:rgba(234,244,238,.08)}
+    .copy-btn.copied{border-color:rgba(46,158,107,.6);color:#7FD6A8}
+    .prompt pre{margin:0;padding:1.2rem 1.3rem 1.4rem;color:var(--on-dark);font-family:var(--mono);font-size:.76rem;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
+    .prompt pre .dim{color:var(--on-dark-muted)}
+
+    /* ---------- Footer ---------- */
+    footer.site{border-top:1px solid var(--line);padding:2.2rem 0;color:var(--muted);font-size:.8rem}
+    .footer-in{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:center}
+    footer p{margin:0;text-align:center;line-height:1.7}
+    .footer-links{display:flex;gap:1.5rem;justify-self:end}
+
+    /* ---------- 滚动显现 ---------- */
+    .reveal.pre{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    .reveal.pre.in{opacity:1;transform:none}
+    .reveal.pre.d1{transition-delay:.12s}.reveal.pre.d2{transition-delay:.24s}
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width:1100px){
+      .hero{grid-template-columns:1fr;gap:3.5rem}
+      .pipe{max-width:860px}
+      h1{font-size:clamp(3.2rem,11vw,6rem)}
+      html.lang-en h1{font-size:clamp(2.9rem,9.5vw,5rem)}
+      .loop-grid{grid-template-columns:repeat(3,1fr)}
     }
-    .flow-labels { margin-bottom: 1rem; color: var(--muted); font-family: ui-monospace, monospace; font-size: .72rem; text-align: center; }
-    .source-list { display: grid; gap: .75rem; }
-    .source, .pipeline, .result, .panel { border: 1px solid var(--ink); background: rgba(255,255,255,.65); }
-    .source { min-height: 78px; padding: 1rem; display: grid; grid-template-columns: 30px 1fr 18px; gap: .7rem; align-items: center; }
-    .source i { font-size: 1.7rem; }
-    .source strong, .source small { display: block; }
-    .source strong { font-size: .9rem; }
-    .source small { margin-top: .25rem; color: var(--muted); font-size: .76rem; }
-    .pipeline { display: grid; align-content: center; justify-items: center; padding: .8rem; }
-    .step { display: grid; justify-items: center; gap: .45rem; font-size: .88rem; font-weight: 700; }
-    .step i { margin: .35rem 0; font-size: 1rem; }
-    .result { padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; }
-    .result > i { font-size: 3.3rem; }
-    .result h2 { margin: 1rem 0 .25rem; font-size: 1.15rem; }
-    .path { padding-bottom: .85rem; border-bottom: 1px dashed var(--line); color: var(--muted); font-family: ui-monospace, monospace; font-size: .7rem; }
-    .checklist { margin: 1rem 0 0; padding: 0; list-style: none; display: grid; gap: .65rem; font-size: .8rem; }
-    .checklist li { display: flex; gap: .5rem; align-items: flex-start; }
-
-    .principles { padding: 1.15rem 0; border-block: 1px solid var(--line); display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font-size: .86rem; font-weight: 700; }
-    .principles span + span { border-left: 1px solid var(--line); }
-
-    .numbered { padding: 120px 0; display: grid; grid-template-columns: 90px 1fr; gap: 2rem; border-bottom: 1px solid var(--line); }
-    .number { color: var(--orange); font-family: ui-monospace, monospace; font-size: .8rem; font-weight: 750; }
-    .section-title { margin: 0 0 4rem; color: var(--deep); font-size: clamp(2.6rem, 5vw, 5.4rem); line-height: 1.02; letter-spacing: -.055em; }
-    .handoff { display: grid; grid-template-columns: 1fr 48px 1fr; align-items: center; }
-    .handoff > i { justify-self: center; font-size: 1.5rem; }
-    .panel { padding: 2rem; min-height: 390px; }
-    .panel h3 { margin: 0 0 1.6rem; font-size: 1rem; }
-    dl { margin: 0; }
-    dl div { padding: .75rem 0; display: grid; grid-template-columns: 115px 1fr; border-top: 1px solid var(--line); }
-    dt { color: var(--muted); font-size: .76rem; }
-    dd { margin: 0; font-size: .88rem; font-weight: 680; }
-    .file-note { margin: 1.5rem 0 0; color: var(--muted); font-family: ui-monospace, monospace; font-size: .7rem; }
-
-    .repo-table { border-top: 1px solid var(--ink); }
-    .repo-row { min-height: 112px; display: grid; grid-template-columns: minmax(180px,.65fr) 1fr 30px; gap: 2rem; align-items: center; border-bottom: 1px solid var(--line); }
-    .repo-row code { font-family: ui-monospace, monospace; font-size: .86rem; }
-    .repo-row strong, .repo-row small { display: block; }
-    .repo-row strong { margin-bottom: .35rem; }
-    .repo-row small { color: var(--muted); line-height: 1.6; }
-    .repo-note { max-width: 780px; margin: 2rem 0 0; color: var(--muted); line-height: 1.8; }
-
-    .final { min-height: 420px; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
-    .final h2 { margin: 0; max-width: 780px; color: var(--deep); font-size: clamp(2.8rem, 5vw, 5.6rem); letter-spacing: -.06em; line-height: 1; }
-    footer { padding: 35px 0; display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 2rem; align-items: center; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
-    footer p { margin: 0; text-align: center; line-height: 1.7; }
-    footer div { justify-self: end; display: flex; gap: 1.5rem; }
-
-    @media (max-width: 1100px) {
-      .hero { grid-template-columns: 1fr; }
-      .flow-demo { max-width: 820px; }
-      h1 { font-size: clamp(4.4rem, 12vw, 8rem); }
+    @media (max-width:760px){
+      .wrap{width:min(100% - 32px,680px)}
+      nav.primary{display:none}
+      .header-in{min-height:68px;gap:1rem}
+      .hero{padding:56px 0 64px}
+      h1{font-size:clamp(2.9rem,15vw,4.6rem)}
+      html.lang-en h1{font-size:clamp(2.6rem,12.5vw,4.2rem)}
+      .pipe{padding:1rem}
+      .pipe-lanes{display:none}
+      .pipe-grid{grid-template-columns:1fr;gap:.9rem}
+      .sources{gap:.6rem}
+      .source .tail{display:none}
+      .steps{grid-auto-flow:column;align-content:center;justify-content:space-between;padding:0}
+      .steps::before{top:50%;bottom:auto;left:14px;right:14px;width:auto;height:0;border-left:0;border-top:2px dashed var(--line);transform:translateY(-50%)}
+      .pipe-live.armed .steps::before{transform:translateY(-50%) scaleX(0);transform-origin:left}
+      .pipe-live.armed.in .steps::before{transform:translateY(-50%) scaleX(1)}
+      .step{min-width:62px;font-size:.72rem}
+      .principles{grid-template-columns:1fr}
+      .principles>div{justify-content:flex-start;text-align:left}
+      .principles>div+div{border-left:0;border-top:1px solid var(--line)}
+      .numbered{grid-template-columns:1fr;gap:.8rem}
+      .handoff{grid-template-columns:1fr;gap:1rem}
+      .handoff>.icon{transform:rotate(90deg)}
+      .doc-body{min-height:0}
+      .loop-grid{grid-template-columns:1fr}
+      .loop-step{min-height:0}
+      .repo{grid-template-columns:1fr}
+      .final{grid-template-columns:1fr}
+      .footer-in{grid-template-columns:1fr;gap:1.2rem}
+      footer p{text-align:left}
+      .footer-links{justify-self:start;flex-wrap:wrap}
     }
-    @media (max-width: 760px) {
-      .wrap { width: min(100% - 32px, 680px); }
-      header { grid-template-columns: 1fr auto; }
-      nav { display: none; }
-      .hero { padding: 72px 0; gap: 4rem; }
-      h1 { font-size: clamp(3.8rem, 18vw, 6.3rem); }
-      .flow-labels { display: none; }
-      .flow-grid { grid-template-columns: 1fr; }
-      .source i.ph-arrow-right { display: none; }
-      .pipeline { grid-auto-flow: column; min-height: 86px; }
-      .step { grid-auto-flow: column; align-items: center; }
-      .step i { transform: rotate(-90deg); margin: 0 .3rem; }
-      .principles { grid-template-columns: 1fr; gap: 0; }
-      .principles span { padding: .85rem; }
-      .principles span + span { border-left: 0; border-top: 1px solid var(--line); }
-      .numbered { padding: 85px 0; grid-template-columns: 1fr; }
-      .section-title { margin-bottom: 2.5rem; }
-      .handoff { grid-template-columns: 1fr; gap: 1rem; }
-      .handoff > i { transform: rotate(90deg); }
-      .repo-row { grid-template-columns: 1fr 30px; padding: 1.4rem 0; }
-      .repo-row code { grid-column: 1 / -1; }
-      .final { padding: 85px 0; align-items: flex-start; flex-direction: column; }
-      footer { grid-template-columns: 1fr; }
-      footer p { text-align: left; }
-      footer div { justify-self: start; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after { transition-duration: .01ms !important; }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;transition-delay:0ms !important}
     }
   </style>
 </head>
-<body class="lang-en">
-<div class="shell">
-  <header class="wrap">
-    <a class="wordmark" href="#top">GitLearnOS</a>
-    <nav aria-label="Primary" data-label-zh="主导航" data-label-en="Primary">
+<body>
+<a class="skip" href="#main"><span class="zh">跳到主内容</span><span class="en">Skip to content</span></a>
+
+<!-- 内联 SVG 图标库（零外部依赖） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h8.5L19 7v14.5H6z"/><path d="M14 2.5V7h5"/><path d="M9 12h6M9 15.5h6"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.6a8 8 0 0 1-8 7.9H4.5l2-2.8a8 8 0 1 1 14.5-5.1z"/><path d="M8.5 10.5h7M8.5 13.5h4.5"/></symbol>
+    <symbol id="i-checks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h11M10 12h11M10 18h11"/><path d="M3 6l1.4 1.4L7 4.8"/><path d="M3 12l1.4 1.4L7 10.8"/><path d="M3 18l1.4 1.4L7 16.8"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2C10.6 4.8 8.2 4.2 5 4.2v14.6c3.2 0 5.6.6 7 1.9 1.4-1.3 3.8-1.9 7-1.9V4.2c-3.2 0-5.6.6-7 2z"/><path d="M12 6.2v14.5"/></symbol>
+    <symbol id="i-arrow-r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13.5 6.5l5.5 5.5-5.5 5.5"/></symbol>
+    <symbol id="i-arrow-d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15"/><path d="M6.5 13.5l5.5 5.5 5.5-5.5"/></symbol>
+    <symbol id="i-check-c" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M8.2 12.4l2.6 2.6 5-5.4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.6l5 5L19.5 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4.2l2 2.2H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.5h8L18.5 7v13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2v-15a2 2 0 0 1 1.5-2z"/><path d="M13.5 2.5V7H18"/></symbol>
+    <symbol id="i-commit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.4"/><path d="M1.5 12h7.1M15.4 12h7.1"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 4.8-9 4.8-9-4.8z"/><path d="M3.5 13.2l8.5 4.5 8.5-4.5"/></symbol>
+    <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M9.4 9.4a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.3 1-1.3 1.9"/><circle cx="12" cy="16.8" r=".4" fill="currentColor"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4.2L16.6 4.2a2.05 2.05 0 0 1 2.9 2.9L7.9 18.7z"/><path d="M14.6 6.2l2.9 2.9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.2V12l3.4 2"/></symbol>
+    <symbol id="i-loop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M21 3.5V8h-4.5"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+  </defs>
+</svg>
+
+<header class="site" id="siteHeader">
+  <div class="wrap header-in">
+    <a class="wordmark" href="#top">GitLearn<em>OS</em></a>
+    <nav class="primary" aria-label="主导航" data-label-zh="主导航" data-label-en="Primary">
       <a href="#principles"><span class="zh">原理</span><span class="en">Principles</span></a>
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
-      <a href="#impact"><span class="zh">影响</span><span class="en">Impact</span></a>
+      <a href="#loop"><span class="zh">学习闭环</span><span class="en">The loop</span></a>
+      <a href="#subjects"><span class="zh">学科仓库</span><span class="en">Subjects</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
-      <a href="https://github.com/Guojiz/GitLearnOS">GitHub</a>
     </nav>
-    <button class="lang-toggle" type="button" aria-label="切换到中文"><span id="zhMark">中</span> · <span id="enMark" class="active">EN</span></button>
-  </header>
+    <div class="header-tools">
+      <a class="gh-link" href="https://github.com/Guojiz/GitLearnOS" aria-label="GitHub repository"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg></a>
+      <button class="lang-toggle" type="button" aria-label="Switch to English"><span id="zhMark" class="active">中</span> · <span id="enMark">EN</span></button>
+    </div>
+  </div>
+</header>
 
-  <main id="top">
-    <section class="hero wrap">
-      <div>
-        <p class="kicker"><span class="zh">学习发生在任何地方。状态属于你。</span><span class="en">Learning happens anywhere. The state stays yours.</span></p>
-        <h1><span class="zh">你去学。<br>它收尾。</span><span class="en">You learn.<br>It closes the loop.</span></h1>
-        <p class="intro"><span class="zh">直接问一道题、拍一页笔记，或说出老师的反馈。无需每次调用 Skill，GitLearnOS 会识别有价值的学习事件、引导下一步，并把结果安全写回。</span><span class="en">Ask a question, photograph a page, or share teacher feedback. Without requiring a Skill command, GitLearnOS notices useful learning events, guides the next step, and writes back safely.</span></p>
-        <div class="actions">
-          <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">从一科开始</span><span class="en">Start with one subject</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
-          <a class="text-link" href="#principles"><span class="zh">查看 90 秒工作流</span><span class="en">See the 90-second flow</span><i class="ph ph-arrow-down" aria-hidden="true"></i></a>
+<main id="main">
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap" id="top">
+    <div>
+      <p class="kicker"><span class="zh">学习发生在任何地方。状态属于你。</span><span class="en">Learning happens anywhere. The state stays yours.</span></p>
+      <h1><span class="zh b">你去学。<br><span class="hl">它收尾。</span></span><span class="en b">You learn.<br><span class="hl">It closes the loop.</span></span></h1>
+      <p class="intro"><span class="zh">把课堂笔记、老师反馈、错题和自学成果交进来一次。GitLearnOS 自动整理，按真正的薄弱点出题，再把结果写回这一科的文件夹。</span><span class="en">Drop in class notes, teacher feedback, mistakes, or self-study results once. GitLearnOS organizes them, generates targeted questions, and writes verified changes back to that subject folder.</span></p>
+      <div class="actions">
+        <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">从一科开始</span><span class="en">Start with one subject</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+        <a class="text-link" href="#start"><span class="zh">复制开场指令</span><span class="en">Copy the starter prompt</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-d"/></svg></a>
+      </div>
+    </div>
+
+    <div class="pipe pipe-live" id="pipeLive" role="group" aria-label="自动整理与写回示例">
+      <div class="pipe-lanes">
+        <span class="zh">来自学习现场</span><span class="zh">自动流水线</span><span class="zh">写回 Git 提交</span>
+        <span class="en">From real learning</span><span class="en">Automatic flow</span><span class="en">Back as Git commits</span>
+      </div>
+      <div class="pipe-grid">
+        <div class="sources">
+          <div class="source"><svg class="icon" aria-hidden="true"><use href="#i-note"/></svg><span><strong><span class="zh">课堂笔记</span><span class="en">Class note</span></strong><small><span class="zh">二次函数</span><span class="en">Quadratics</span></small></span><svg class="icon tail" aria-hidden="true"><use href="#i-arrow-r"/></svg></div>
+          <div class="source"><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span><strong><span class="zh">老师反馈</span><span class="en">Teacher feedback</span></strong><small><span class="zh">配方法步骤</span><span class="en">Completing the square</span></small></span><svg class="icon tail" aria-hidden="true"><use href="#i-arrow-r"/></svg></div>
+          <div class="source"><svg class="icon" aria-hidden="true"><use href="#i-checks"/></svg><span><strong><span class="zh">题库错题</span><span class="en">Practice errors</span></strong><small><span class="zh">2 道</span><span class="en">2 questions</span></small></span><svg class="icon tail" aria-hidden="true"><use href="#i-arrow-r"/></svg></div>
+          <div class="source"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg><span><strong><span class="zh">自学记录</span><span class="en">Self-study note</span></strong><small><span class="zh">图像平移</span><span class="en">Graph shifts</span></small></span><svg class="icon tail" aria-hidden="true"><use href="#i-arrow-r"/></svg></div>
+        </div>
+        <div class="steps" aria-hidden="true">
+          <div class="step"><span class="zh">识别</span><span class="en">Detect</span><small>01</small></div>
+          <div class="step"><span class="zh">关联</span><span class="en">Connect</span><small>02</small></div>
+          <div class="step"><span class="zh">出题</span><span class="en">Question</span><small>03</small></div>
+          <div class="step"><span class="zh">写回</span><span class="en">Write back</span><small>04</small></div>
+        </div>
+        <div class="commits" role="img" aria-label="学习事件被整理为四次可撤销的 Git 提交">
+          <div class="commits-head"><span class="dot"></span><span>git log --oneline</span><span class="path">subjects/math/</span></div>
+          <div class="commits-body">
+            <div class="commit"><span class="hash">7c2a9f1</span><span><span class="zh">新增 1 个知识缺口 · 配方法</span><span class="en">1 gap added · completing the square</span></span></div>
+            <div class="commit"><span class="hash">5b8e03d</span><span><span class="zh">生成 4 道针对题</span><span class="en">4 targeted questions generated</span></span></div>
+            <div class="commit"><span class="hash">a91c77e</span><span><span class="zh">复查已安排 · 周日 20:00</span><span class="en">Review scheduled · Sun 20:00</span></span></div>
+            <div class="commit"><span class="hash">3f44b2c</span><span><span class="zh">合并老师反馈</span><span class="en">Teacher feedback merged</span><span class="tag">safe-auto</span></span></div>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="flow-demo" role="group" aria-label="自动整理与写回示例">
-        <div class="flow-labels"><span class="zh">来自学习现场</span><span class="zh">GitLearnOS 自动流水线</span><span class="zh">写回这一科的文件夹</span><span class="en">From real learning</span><span class="en">Automatic flow</span><span class="en">Back to one subject</span></div>
-        <div class="flow-grid">
-          <div class="source-list">
-            <div class="source"><i class="ph ph-notebook" aria-hidden="true"></i><span><strong><span class="zh">课堂笔记</span><span class="en">Class note</span></strong><small>· <span class="zh">二次函数</span><span class="en">Quadratics</span></small></span><i class="ph ph-arrow-right" aria-hidden="true"></i></div>
-            <div class="source"><i class="ph ph-chat-circle-text" aria-hidden="true"></i><span><strong><span class="zh">老师反馈</span><span class="en">Teacher feedback</span></strong><small>· <span class="zh">配方法步骤</span><span class="en">Completing the square</span></small></span><i class="ph ph-arrow-right" aria-hidden="true"></i></div>
-            <div class="source"><i class="ph ph-list-checks" aria-hidden="true"></i><span><strong><span class="zh">题库错题</span><span class="en">Practice errors</span></strong><small>· <span class="zh">2 道</span><span class="en">2 questions</span></small></span><i class="ph ph-arrow-right" aria-hidden="true"></i></div>
-            <div class="source"><i class="ph ph-book-open-text" aria-hidden="true"></i><span><strong><span class="zh">自学记录</span><span class="en">Self-study note</span></strong><small>· <span class="zh">图像平移</span><span class="en">Graph shifts</span></small></span><i class="ph ph-arrow-right" aria-hidden="true"></i></div>
-          </div>
-          <div class="pipeline">
-            <div class="step"><span class="zh">识别</span><span class="en">Detect</span><i class="ph ph-arrow-down" aria-hidden="true"></i></div>
-            <div class="step"><span class="zh">关联</span><span class="en">Connect</span><i class="ph ph-arrow-down" aria-hidden="true"></i></div>
-            <div class="step"><span class="zh">出题</span><span class="en">Question</span><i class="ph ph-arrow-down" aria-hidden="true"></i></div>
-            <div class="step"><span class="zh">写回</span><span class="en">Write back</span></div>
-          </div>
-          <div class="result">
-            <i class="ph ph-folder" aria-hidden="true"></i>
-            <h2><span class="zh">数学学科库</span><span class="en">Mathematics</span></h2>
-            <code class="path">subjects/math/</code>
-            <ul class="checklist">
-              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">新增 1 个知识缺口</span><span class="en">1 gap added</span></li>
-              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">生成 4 道针对题</span><span class="en">4 targeted questions</span></li>
-              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">标记周日到期复查</span><span class="en">Sunday review marked due</span></li>
-              <li><i class="ph ph-check-circle" aria-hidden="true"></i><span class="zh">全部可查看 / 可撤销</span><span class="en">Inspectable / reversible</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
+  <!-- ================= 原则条 ================= -->
+  <section class="principles wrap" id="principles">
+    <div><svg class="icon" aria-hidden="true"><use href="#i-commit"/></svg><span><span class="zh">只连接一个仓库</span><span class="en">Connect one repository</span></span></div>
+    <div><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span><span class="zh">分科学科文件夹</span><span class="en">Subject folders</span></span></div>
+    <div><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">每次写回可追溯</span><span class="en">Traceable writeback</span></span></div>
+  </section>
 
-    <section class="principles wrap" id="principles"><span><span class="zh">只连接一个仓库</span><span class="en">Connect one repository</span></span><span><span class="zh">分科学科文件夹</span><span class="en">Subject folders</span></span><span><span class="zh">每次写回可追溯</span><span class="en">Traceable writeback</span></span></section>
-
-    <section class="numbered wrap" id="example">
-      <div class="number">01</div>
-      <div>
-        <h2 class="section-title"><span class="zh">老师解决的，就记录；<br>还没掌握的，才出题。</span><span class="en">If a teacher resolved it, record it.<br>Only question what remains unclear.</span></h2>
-        <div class="handoff">
-          <article class="panel">
+  <!-- ================= 01 老师反馈 ================= -->
+  <section class="numbered wrap" id="example">
+    <div class="number reveal">01</div>
+    <div>
+      <h2 class="section-title reveal"><span class="zh">老师解决的，就记录；<br>还没掌握的，才出题。</span><span class="en">If a teacher resolved it, record it.<br>Only question what remains unclear.</span></h2>
+      <div class="handoff">
+        <article class="doc reveal">
+          <div class="doc-bar"><span class="lights"><i></i><i></i><i></i></span><span>week-28-gap-pack.md</span></div>
+          <div class="doc-body">
             <h3><span class="zh">发送给老师：本周薄弱点小包</span><span class="en">For the teacher: this week's gap pack</span></h3>
             <dl>
               <div><dt><span class="zh">来自</span><span class="en">From</span></dt><dd><span class="zh">数学学科库</span><span class="en">Mathematics</span></dd></div>
@@ -268,106 +371,269 @@
               <div><dt><span class="zh">待确认</span><span class="en">Check</span></dt><dd><span class="zh">符号处理、步骤完整性</span><span class="en">Signs and step completeness</span></dd></div>
               <div><dt><span class="zh">建议题</span><span class="en">Suggested</span></dt><dd><span class="zh">4 道（基础 → 进阶）</span><span class="en">4, basic → transfer</span></dd></div>
             </dl>
-            <p class="file-note">week-28-gap-pack.md</p>
-          </article>
-          <i class="ph ph-arrow-right" aria-hidden="true"></i>
-          <article class="panel">
+          </div>
+        </article>
+        <svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg>
+        <article class="doc reveal d1">
+          <div class="doc-bar"><span class="lights"><i></i><i></i><i></i></span><span><span class="zh">数学学科库 · 已合并</span><span class="en">Mathematics · reconciled</span></span></div>
+          <div class="doc-body">
             <h3><span class="zh">老师反馈后：合并回数学学科库</span><span class="en">After feedback: reconciled into Mathematics</span></h3>
             <ul class="checklist">
-              <li><i class="ph ph-check-circle"></i><span class="zh">已掌握：概念理解、公式变形</span><span class="en">Known: concept and transformation</span></li>
-              <li><i class="ph ph-check-circle"></i><span class="zh">仍需练习：符号处理、步骤完整性</span><span class="en">Practice: signs and complete steps</span></li>
-              <li><i class="ph ph-check-circle"></i><span class="zh">新增错因：漏写平方项、符号丢失</span><span class="en">New cause: missing square term or sign</span></li>
-              <li><i class="ph ph-check-circle"></i><span class="zh">生成 4 道题，已写回、可调整</span><span class="en">4 questions, written back and adjustable</span></li>
-              <li><i class="ph ph-check-circle"></i><span class="zh">下次检查：周日；后台执行需真实调度器</span><span class="en">Next check: Sunday; background delivery needs a scheduler</span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">已掌握：概念理解、公式变形</span><span class="en">Known: concept and transformation</span></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">仍需练习：符号处理、步骤完整性</span><span class="en">Practice: signs and complete steps</span></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">新增错因：漏写平方项、符号丢失</span><span class="en">New cause: missing square term or sign</span></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">生成 4 道题，已写回、可调整</span><span class="en">4 questions, written back and adjustable</span></span></li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">复查计划：周日 20:00</span><span class="en">Review: Sunday at 20:00</span></span></li>
             </ul>
-            <p class="file-note"><i class="ph ph-git-commit"></i> 7c2a9f1 · safe-auto</p>
-          </article>
-        </div>
+            <div class="doc-foot"><span class="hash-chip"><svg class="icon" aria-hidden="true"><use href="#i-commit"/></svg>7c2a9f1 · safe-auto</span></div>
+          </div>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="numbered wrap">
-      <div class="number">02</div>
+  <!-- ================= 02 学习闭环（深色） ================= -->
+  <section class="loop-sec" id="loop">
+    <div class="wrap numbered">
+      <div class="number reveal">02</div>
       <div>
-        <h2 class="section-title"><span class="zh">一个仓库，分科学科文件夹。<br>上下文更小，管理更简单。</span><span class="en">One repository, one folder per subject.<br>Less context, simpler control.</span></h2>
-        <div class="repo-table">
-          <div class="repo-row"><code>subjects/math/</code><div><strong><span class="zh">数学学科库</span><span class="en">Mathematics</span></strong><small><span class="zh">只包含数学资料、题目与记录。</span><span class="en">Only mathematics sources, questions, and records.</span></small></div><i class="ph ph-arrow-right"></i></div>
-          <div class="repo-row"><code>subjects/english/</code><div><strong><span class="zh">英语学科库</span><span class="en">English</span></strong><small><span class="zh">只包含英语资料、题目与记录。</span><span class="en">Only English sources, questions, and records.</span></small></div><i class="ph ph-arrow-right"></i></div>
-          <div class="repo-row"><code>subjects/coding/</code><div><strong><span class="zh">编程学科库</span><span class="en">Coding</span></strong><small><span class="zh">只包含编程资料、题目与记录。</span><span class="en">Only coding sources, questions, and records.</span></small></div><i class="ph ph-arrow-right"></i></div>
+        <h2 class="section-title reveal"><span class="zh">一个闭环，<br>每周都在变准。</span><span class="en">One loop that gets<br>sharper every week.</span></h2>
+        <div class="loop-grid reveal">
+          <div class="loop-step"><span class="idx">1</span><svg class="icon" aria-hidden="true"><use href="#i-target"/></svg><strong><span class="zh">目标与真实输入</span><span class="en">Goal + real input</span></strong><small><span class="zh">课堂、作业、错题、自学记录</span><span class="en">Class, homework, errors, self-study</span></small></div>
+          <div class="loop-step"><span class="idx">2</span><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg><strong><span class="zh">自动整理</span><span class="en">Auto-organize</span></strong><small><span class="zh">证据可溯源，链接到原记录</span><span class="en">Traceable evidence, linked to sources</span></small></div>
+          <div class="loop-step"><span class="idx">3</span><svg class="icon" aria-hidden="true"><use href="#i-question"/></svg><strong><span class="zh">按缺口出题</span><span class="en">Targeted questions</span></strong><small><span class="zh">来自当前薄弱点，而非随机题量</span><span class="en">From the current gap, not random volume</span></small></div>
+          <div class="loop-step"><span class="idx">4</span><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg><strong><span class="zh">作答或反馈</span><span class="en">Answer / feedback</span></strong><small><span class="zh">保留原始作答与老师批改</span><span class="en">Original answers and grading preserved</span></small></div>
+          <div class="loop-step"><span class="idx">5</span><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg><strong><span class="zh">延迟复查</span><span class="en">Delayed recheck</span></strong><small><span class="zh">独立重做，不凭印象判掌握</span><span class="en">Independent retry, no assumed mastery</span></small></div>
+          <div class="loop-step"><span class="idx">6</span><svg class="icon" aria-hidden="true"><use href="#i-commit"/></svg><strong><span class="zh">状态 + 提交</span><span class="en">State + commit</span></strong><small><span class="zh">一次可检查、可撤销的写回</span><span class="en">One inspectable, reversible writeback</span></small></div>
         </div>
-        <p class="repo-note"><span class="zh">Chat 或 Work 在当前项目具备仓库权限时都能使用 Git；Skills 不是必需入口。大教材和 PDF 放在 Project Sources，精简学习状态放进 Git。GitHub 可选，用于备份、跨设备、老师评阅与共同学习。</span><span class="en">Chat or Work can use Git when the current project has repository access; Skills are not the only entry. Keep large books and PDFs in Project Sources and compact learning state in Git. GitHub is optional for backup, cross-device use, teacher review, and shared learning.</span></p>
+        <div class="loop-return reveal d1">
+          <svg class="icon" aria-hidden="true"><use href="#i-loop"/></svg>
+          <span><span class="zh">到期自动触发</span><span class="en">Due items trigger</span> <code>due-review</code><span class="zh">，回到第 3 步，只问还没掌握的。</span><span class="en">, looping back to step 3 — asking only what is still unclear.</span></span>
+        </div>
+        <p class="loop-note reveal d2"><span class="zh">主要成功条件是<strong>可观察的进步</strong>——通过作答与延迟复查验证，而不是一叠整齐的笔记。原始作答、笔记与外部反馈永远保留；更正以新记录链接，不做静默改写。</span><span class="en">The primary success condition is <strong>observable improvement</strong> — verified through answering and delayed rechecking, not a tidy pile of notes. Original answers, notes and external feedback are always preserved; corrections become new linked records, never silent rewrites.</span></p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="numbered wrap" id="impact">
-      <div class="number">03</div>
-      <div>
-        <h2 class="section-title"><span class="zh">为真实限制缩小交互，<br>不把限制藏起来。</span><span class="en">Shrink the interaction for real constraints.<br>Do not hide the constraints.</span></h2>
-        <div class="repo-table">
-          <div class="repo-row"><code>20 min</code><div><strong><span class="zh">一次只做最有价值的一项</span><span class="en">One high-value task at a time</span></strong><small><span class="zh">题量根据可用时间调整，不堆通用练习。</span><span class="en">Question volume adapts to available time instead of producing a generic worksheet.</span></small></div><i class="ph ph-check"></i></div>
-          <div class="repo-row"><code>text</code><div><strong><span class="zh">纯文本优先，先用已有材料</span><span class="en">Text first, existing material first</span></strong><small><span class="zh">减少流量与应用负担，支持异步交给老师。</span><span class="en">Reduce data and application overhead; support asynchronous teacher handoffs.</span></small></div><i class="ph ph-check"></i></div>
-          <div class="repo-row"><code>honest</code><div><strong><span class="zh">未运行的就明确待执行</span><span class="en">Pending work stays pending</span></strong><small><span class="zh">不虚构免费 AI、离线执行、后台提醒或已产生的学校成效。</span><span class="en">No invented free AI, offline execution, background reminders, or measured school impact.</span></small></div><i class="ph ph-check"></i></div>
+  <!-- ================= 03 学科文件树 ================= -->
+  <section class="numbered wrap" id="subjects">
+    <div class="number reveal">03</div>
+    <div>
+      <h2 class="section-title reveal"><span class="zh">一个仓库，分科学科文件夹。<br>上下文更小，管理更简单。</span><span class="en">One repository, one folder per subject.<br>Less context, simpler control.</span></h2>
+      <div class="repo reveal">
+        <div class="tree" role="tablist" aria-label="学科文件夹">
+          <div class="row file"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>gitlearnos.yml</div>
+          <div class="row file"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>dashboard.md</div>
+          <div class="row file"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>learner-profile.md</div>
+          <div class="row dir-root"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>subjects/</div>
+          <button class="row indent" role="tab" id="tab-math" aria-selected="true" aria-controls="panel-math" data-subject="math"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>math/</button>
+          <button class="row indent" role="tab" id="tab-english" aria-selected="false" aria-controls="panel-english" data-subject="english" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>english/</button>
+          <button class="row indent" role="tab" id="tab-coding" aria-selected="false" aria-controls="panel-coding" data-subject="coding" tabindex="-1"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>coding/</button>
+          <div class="tree-note"><span class="zh">根目录保存共享政策、总览与跨学科安排；每个学科文件夹只保存本科状态。</span><span class="en">Root files hold shared policy and cross-subject planning; each subject folder stays focused.</span></div>
         </div>
-        <p class="repo-note"><span class="zh">AceSAT 演示使用一个共用手机、流量有限、每次学习 20 分钟的虚构学生场景。</span><span class="en">The AceSAT demo uses a fictional learner who shares a phone, limits mobile data, and studies in 20-minute blocks.</span></p>
-        <div class="actions">
-          <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/LIVE-DEMO.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/LIVE-DEMO.md"><span class="zh">运行三分钟演示</span><span class="en">Run the three-minute demo</span><i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+        <div>
+          <div class="subject-detail" role="tabpanel" id="panel-math" aria-labelledby="tab-math">
+            <span class="path">subjects/math/</span>
+            <h3><span class="zh">数学学科库</span><span class="en">Mathematics</span></h3>
+            <p><span class="zh">只包含数学资料、题目与记录。Agent 自动判科和写回，用户无需维护路径。</span><span class="en">Only mathematics sources, questions, and records. The agent routes and writes back automatically.</span></p>
+            <div class="subject-files"><code>goals/</code><code>sources/</code><code>knowledge-gaps/</code><code>reviews/</code><code>events/</code></div>
+          </div>
+          <div class="subject-detail" role="tabpanel" id="panel-english" aria-labelledby="tab-english" hidden>
+            <span class="path">subjects/english/</span>
+            <h3><span class="zh">英语学科库</span><span class="en">English</span></h3>
+            <p><span class="zh">只包含英语资料、题目与记录。Agent 自动判科和写回，用户无需维护路径。</span><span class="en">Only English sources, questions, and records. The agent routes and writes back automatically.</span></p>
+            <div class="subject-files"><code>goals/</code><code>sources/</code><code>knowledge-gaps/</code><code>reviews/</code><code>events/</code></div>
+          </div>
+          <div class="subject-detail" role="tabpanel" id="panel-coding" aria-labelledby="tab-coding" hidden>
+            <span class="path">subjects/coding/</span>
+            <h3><span class="zh">编程学科库</span><span class="en">Coding</span></h3>
+            <p><span class="zh">只包含编程资料、题目与记录。Agent 自动判科和写回，用户无需维护路径。</span><span class="en">Only coding sources, questions, and records. The agent routes and writes back automatically.</span></p>
+            <div class="subject-files"><code>goals/</code><code>sources/</code><code>knowledge-gaps/</code><code>reviews/</code><code>events/</code></div>
+          </div>
         </div>
       </div>
-    </section>
+      <p class="repo-note reveal d1"><span class="zh">只授权一个仓库；每科独立成文件夹，根目录统一保存策略、总览和跨学科安排。大教材、PDF 与扫描件放在 Project Sources 或授权的本地文件夹，Git 只保存紧凑状态、出处指针与历史。</span><span class="en">Authorize one repository. Subject folders stay focused while root files hold shared policy and cross-subject planning. Large textbooks, PDFs and scans live in Project Sources or an authorized local folder — Git stores compact state, provenance pointers, and history.</span></p>
+    </div>
+  </section>
 
-    <section class="final wrap" id="start">
-      <h2><span class="zh">先让一个学科文件夹自动整理。</span><span class="en">Let one subject folder organize itself first.</span></h2>
-      <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">建立我的学习仓库</span><span class="en">Create my learning repository</span><i class="ph ph-arrow-right"></i></a>
-    </section>
-  </main>
+  <!-- ================= 最终 CTA ================= -->
+  <section class="final wrap" id="start">
+    <div>
+      <h2 class="reveal"><span class="zh">先让一个学科文件夹<br>自动整理。</span><span class="en">Let one subject folder<br>organize itself first.</span></h2>
+      <div class="actions reveal d1">
+        <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">建立我的学习仓库</span><span class="en">Create my learning repository</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+      </div>
+    </div>
+    <div class="prompt reveal d1">
+      <div class="prompt-bar">
+        <svg class="icon" aria-hidden="true"><use href="#i-commit"/></svg>
+        <span><span class="zh">把这段发给有仓库写权限的 Agent</span><span class="en">Send this to a write-capable agent</span></span>
+        <button class="copy-btn" type="button" id="copyBtn">
+          <svg class="icon" aria-hidden="true" id="copyIcon"><use href="#i-copy"/></svg>
+          <span id="copyLabel"><span class="zh">复制</span><span class="en">Copy</span></span>
+        </button>
+      </div>
+      <pre class="zh b" id="promptZh">使用 https://github.com/Guojiz/GitLearnOS 作为 GitLearnOS 模板。
+我的学习仓库：<span class="dim">&lt;本地路径或远程仓库&gt;</span>
+学科：数学
+目标：<span class="dim">&lt;本学期目标&gt;</span>
 
-  <footer class="wrap">
-    <a class="wordmark" href="#top">GitLearnOS</a>
+先读 GITLEARNOS.md 与 START-HERE.md，带我完成设置。
+之后的提问、作答、笔记照片与反馈都自动纳入；
+使用 safe-auto：先回答，再整理证据，提交可撤销写回。</pre>
+      <pre class="en b" id="promptEn">Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
+My learning repository: <span class="dim">&lt;local path or remote repo&gt;</span>
+Subject: Math
+Goal: <span class="dim">&lt;this term's goal&gt;</span>
+
+Read GITLEARNOS.md and START-HERE.md first, then guide my setup.
+Treat future questions, answers, note photos and feedback automatically;
+use safe-auto: answer first, organize evidence, commit reversible writeback.</pre>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap footer-in">
+    <a class="wordmark" href="#top">GitLearn<em>OS</em></a>
     <p><span class="zh">轻量、可检查、可撤销。老师和 AI 都只是你选择的学习协作者。</span><span class="en">Lightweight, inspectable, reversible. Teachers and AI remain collaborators you choose.</span></p>
-    <div><a href="https://guojiz.github.io/">Guojiz</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/README.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/README.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/README.md">README</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/DOCUMENTATION.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/DOCUMENTATION.md"><span class="zh">文档</span><span class="en">Docs</span></a><a href="https://github.com/Guojiz/GitLearnOS">GitHub</a><a href="https://github.com/Guojiz/GitLearnOS/blob/main/LICENSE">MIT</a></div>
-  </footer>
-</div>
+    <div class="footer-links">
+      <a href="https://guojiz.github.io/">Guojiz</a>
+      <a href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/README.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/README.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/README.md">README</a>
+      <a href="https://github.com/Guojiz/GitLearnOS">GitHub</a>
+      <a href="https://github.com/Guojiz/GitLearnOS/blob/main/LICENSE">MIT</a>
+    </div>
+  </div>
+</footer>
+
+<span id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></span>
+
 <script>
-  (() => {
-    const STORAGE_KEY = 'guojiz.lang';
-    const DEFAULT_LANG = 'en';
-    const toggle = document.querySelector('.lang-toggle');
-    const zhMark = document.querySelector('#zhMark');
-    const enMark = document.querySelector('#enMark');
-    const title = document.querySelector('title');
-    const description = document.querySelector('meta[name="description"]');
-    const navigation = document.querySelector('nav[data-label-en]');
+(function(){
+  "use strict";
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function applyLang(lang) {
-      const safeLang = lang === 'zh' ? 'zh' : 'en';
-      const english = safeLang === 'en';
-      document.body.classList.toggle('lang-en', english);
-      document.documentElement.lang = english ? 'en' : 'zh-CN';
-      zhMark.classList.toggle('active', !english);
-      enMark.classList.toggle('active', english);
-      toggle.setAttribute('aria-label', english ? '切换到中文' : 'Switch to English');
-      title.textContent = title.dataset[safeLang];
-      description.setAttribute('content', description.dataset[safeLang]);
-      navigation.setAttribute('aria-label', english ? navigation.dataset.labelEn : navigation.dataset.labelZh);
-      document.querySelectorAll('[data-href-en]').forEach((link) => {
-        link.href = english ? link.dataset.hrefEn : link.dataset.hrefZh;
-      });
-    }
+  /* ---------- 语言切换 ---------- */
+  var STORAGE_KEY = 'guojiz.lang';
+  var toggle = document.querySelector('.lang-toggle');
+  var zhMark = document.getElementById('zhMark');
+  var enMark = document.getElementById('enMark');
+  var titleEl = document.querySelector('title');
+  var descEl = document.querySelector('meta[name="description"]');
+  var navEl = document.querySelector('nav.primary');
 
-    let lang = DEFAULT_LANG;
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === 'en' || stored === 'zh') lang = stored;
-    } catch (error) {}
-
-    applyLang(lang);
-
-    toggle.addEventListener('click', () => {
-      const next = document.body.classList.contains('lang-en') ? 'zh' : 'en';
-      applyLang(next);
-      try { localStorage.setItem(STORAGE_KEY, next); } catch (error) {}
+  function applyLang(lang){
+    var english = lang === 'en';
+    document.documentElement.classList.toggle('lang-en', english);
+    document.documentElement.lang = english ? 'en' : 'zh-CN';
+    zhMark.classList.toggle('active', !english);
+    enMark.classList.toggle('active', english);
+    toggle.setAttribute('aria-label', english ? '切换到中文' : 'Switch to English');
+    titleEl.textContent = titleEl.dataset[english ? 'en' : 'zh'];
+    descEl.setAttribute('content', descEl.dataset[english ? 'en' : 'zh']);
+    navEl.setAttribute('aria-label', english ? navEl.dataset.labelEn : navEl.dataset.labelZh);
+    document.querySelectorAll('[data-href-en]').forEach(function(link){
+      link.href = english ? link.dataset.hrefEn : link.dataset.hrefZh;
     });
-  })();
+  }
+  applyLang(document.documentElement.classList.contains('lang-en') ? 'en' : 'zh');
+  toggle.addEventListener('click', function(){
+    var next = document.documentElement.classList.contains('lang-en') ? 'zh' : 'en';
+    applyLang(next);
+    try{ localStorage.setItem(STORAGE_KEY, next); }catch(e){}
+  });
+
+  /* ---------- Header 滚动态 ---------- */
+  var header = document.getElementById('siteHeader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 10); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- 滚动显现（JS 失败时内容保持可见） ---------- */
+  if(!reduced && 'IntersectionObserver' in window){
+    var revealIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); revealIO.unobserve(en.target); }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){
+      el.classList.add('pre');
+      revealIO.observe(el);
+    });
+    var pipe = document.getElementById('pipeLive');
+    pipe.classList.add('armed');
+    var pipeIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ pipe.classList.add('in'); pipeIO.disconnect(); }
+      });
+    }, {threshold:.3});
+    pipeIO.observe(pipe);
+  }
+
+  /* ---------- 学科文件树 tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tree [role="tab"]'));
+  function selectTab(tab){
+    tabs.forEach(function(t){
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById('panel-' + t.dataset.subject).hidden = !on;
+    });
+  }
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){ selectTab(tab); });
+    tab.addEventListener('keydown', function(ev){
+      var next = null;
+      if(ev.key === 'ArrowDown' || ev.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if(ev.key === 'ArrowUp' || ev.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if(next){ ev.preventDefault(); next.focus(); selectTab(next); }
+    });
+  });
+
+  /* ---------- 复制开场指令 ---------- */
+  var copyBtn = document.getElementById('copyBtn');
+  var copyLabel = document.getElementById('copyLabel');
+  var copyIcon = document.getElementById('copyIcon');
+  var live = document.getElementById('live');
+  var copyTimer = null;
+  function promptText(){
+    var id = document.documentElement.classList.contains('lang-en') ? 'promptEn' : 'promptZh';
+    return document.getElementById(id).textContent.replace(/\n{3,}/g, '\n\n').trim();
+  }
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+  }
+  copyBtn.addEventListener('click', function(){
+    var text = promptText();
+    var done = function(){
+      var english = document.documentElement.classList.contains('lang-en');
+      copyBtn.classList.add('copied');
+      copyIcon.innerHTML = '<use href="#i-check"/>';
+      copyLabel.textContent = english ? 'Copied' : '已复制';
+      live.textContent = english ? 'Prompt copied to clipboard' : '开场指令已复制到剪贴板';
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(function(){
+        copyBtn.classList.remove('copied');
+        copyIcon.innerHTML = '<use href="#i-copy"/>';
+        copyLabel.innerHTML = '<span class="zh">复制</span><span class="en">Copy</span>';
+      }, 1800);
+    };
+    var settled = false;
+    var finish = function(){ if(settled){ return; } settled = true; done(); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(finish, function(){ fallbackCopy(text); finish(); });
+      setTimeout(function(){ if(!settled){ fallbackCopy(text); finish(); } }, 700);
+    }else{
+      fallbackCopy(text); finish();
+    }
+  });
+})();
 </script>
 </body>
 </html>

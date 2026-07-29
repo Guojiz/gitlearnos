@@ -17,6 +17,23 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 
 把大型教材、PDF、扫描件集合、媒体和长期参考文件放入 ChatGPT Project **Sources**，或其他持久项目或本地来源文件夹。Git 保存紧凑学习状态和来源定位。只有用户主动需要同步、协作、备份或公开发布时才需要远程仓库。
 
+## 一次配置持久行为
+
+设置 Agent 应配置当前可用的每一层，不能把 Skill 本身当成全部安装：
+
+1. 把 [`templates/AGENTS.md`](../templates/AGENTS.md) 放入学习者仓库；
+2. 适配
+   [`templates/project-instructions.md`](../templates/project-instructions.md)，
+   并安装到 AI Project 指令或等价的自定义指令字段；
+3. 取得允许后，适配
+   [`templates/native-memory-pointer.md`](../templates/native-memory-pointer.md)，
+   请求更新记忆，并验证实际保留的内容；
+4. 支持时暴露 Router Skill。
+
+项目或自定义指令包含最小的整理、出题、复测、辅导、来源、模型和维护路由，
+因此不提供 Skills 的日常界面仍能工作。记忆只负责唤醒行为并指向目标；Git
+仍是事实来源。
+
 ## 发送一段话
 
 ```text
@@ -60,7 +77,8 @@ Daily surface: Chat / Work / other
 Project or source workspace:
 Repository:
 Automatic instructions:
-Memory:
+Project/custom instructions:
+Memory: saved / suggested / unavailable / unknown
 Skills:
 Remote backup or collaboration:
 ```

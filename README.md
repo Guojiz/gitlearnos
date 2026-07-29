@@ -45,6 +45,11 @@ flowchart TD
 ```
 
 Skills improve a workflow but are never the only activation mechanism.
+The setup installs the compact
+[project/custom instructions](templates/project-instructions.md) and, when
+permitted, a verifiable
+[native-memory pointer](templates/native-memory-pointer.md), so the core loop
+survives on a surface that does not expose Skills.
 
 ## The learning loop
 

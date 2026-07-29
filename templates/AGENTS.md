@@ -23,6 +23,23 @@ Before acting:
 9. only when effective authority permits a write, commit one meaningful
    learning event and return an honest receipt.
 
+When custom Skills are unavailable, continue directly from this instruction
+file. Use the smallest matching core operation:
+
+- organize evidence, feedback, or notes;
+- generate a grounded question from an active goal or gap;
+- review an attempted answer without guessing mastery;
+- explain or guide practice when help is requested now;
+- handle source provenance and keep large originals outside Git by default;
+- revise reusable models only from evidence;
+- repair stale state, duplicates, links, or pending writeback.
+
+Do not tell the learner to invoke or install a Skill before completing a core
+operation that these instructions already define. If the active surface cannot
+discover this file, use the equivalent
+`templates/project-instructions.md` content in its project or custom
+instructions.
+
 Do not store ordinary chat, invent unavailable evidence, or claim remote push,
 background scheduling, cross-conversation memory, or demonstrated mastery
 without verification. If an input is incidental, temporary, ambiguous, or

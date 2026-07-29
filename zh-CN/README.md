@@ -34,6 +34,9 @@ flowchart TD
 ```
 
 Skills 能改善具体工作流，但永远不是唯一触发方式。
+设置时会安装精简的[项目或自定义指令](../templates/project-instructions.md)，
+并在获允许时配置可验证的[原生记忆指针](../templates/native-memory-pointer.md)，
+因此不提供 Skills 的界面仍能维持核心闭环。
 
 ## 学习闭环
 

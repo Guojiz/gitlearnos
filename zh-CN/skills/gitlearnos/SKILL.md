@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: 持续识别有价值的学习事件，并把学习者自有 Git 仓库中的任务路由到最小的 GitLearnOS 设置、整理、出题、复测、辅导、来源、模型或维护工作流。学习者提出学科问题、尝试作答、发来一页材料或笔记、报告反馈或结果，或者显露学习需要时，即使没有提到 GitLearnOS 或调用 Skill，也应考虑使用本 Skill。
+description: 在每次学习者交互中识别有价值的学习事件，并把学习者自有 Git 仓库中的任务路由到最小的 GitLearnOS 设置、整理、出题、复测、辅导、来源、模型或维护工作流。学习者提出学科问题、尝试作答、发来一页材料或笔记、报告反馈或结果，或者显露学习需要时，即使没有提到 GitLearnOS 或调用 Skill，也应考虑使用本 Skill。
 ---
 
 # GitLearnOS Router
@@ -17,7 +17,10 @@ description: 持续识别有价值的学习事件，并把学习者自有 Git �
 - 可能有价值但不确定：先回答，再给一个简短建议或只问一个必要问题；
 - 偶然或无关输入：不要加载更多 Skills、扫描仓库或提起记录。
 
-Skills 是可选的执行指南。在不提供 Skills 的界面中，`AGENTS.md`、项目指令、原生记忆或输入本身都可以触发本路由。
+Skills 是可选的执行指南。在不提供 Skills 的界面中，`AGENTS.md`、项目指令、
+原生记忆或输入本身都可以触发本路由。`templates/project-instructions.md`
+提供精简的无 Skill 路由，`templates/native-memory-pointer.md` 提供跨对话
+激活指针。
 
 ## 读取最少上下文
 

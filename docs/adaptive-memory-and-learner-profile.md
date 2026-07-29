@@ -79,6 +79,14 @@ This activation role matters most when a capable everyday Chat surface does not
 expose Skills. Memory wakes up the behavior; `AGENTS.md` or project instructions
 define it; the repository supplies current evidence.
 
+Use the ready-to-adapt
+[`templates/native-memory-pointer.md`](../templates/native-memory-pointer.md)
+entry. It includes the implicit-event signals, answer-first boundary, real
+target, policy preference, and source-of-truth rule. Do not copy full Skill
+procedures into memory. Put the compact no-Skill operation router in
+[`templates/project-instructions.md`](../templates/project-instructions.md)
+instead.
+
 ## What belongs in project sources
 
 Use a persistent project source area or authorized local folder for:
@@ -189,8 +197,14 @@ When meaningful learning state changes:
 2. update `learner-profile.md` if the change is durable;
 3. update or suggest native memory only for the activation pointer, stable
    preferences, or repeated patterns;
-4. if an external memory tool exists, let it index or recall supporting history;
-5. report what changed and what was not changed.
+4. verify the retained activation pointer and target when the runtime permits;
+5. report memory as `saved`, `suggested`, `unavailable`, or `unknown`;
+6. if an external memory tool exists, let it index or recall supporting history;
+7. report what changed and what was not changed.
+
+Never turn a proposed memory sentence into a success claim. Memory updates and
+future recall may be delayed. A later ordinary subject question that does not
+name GitLearnOS or a Skill is the meaningful continuity check.
 
 ## Prompt pattern
 

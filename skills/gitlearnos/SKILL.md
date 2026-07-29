@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: Continuously recognize useful learning events and route them in a learner-owned Git repository to the smallest GitLearnOS setup, organization, question, review, tutoring, source, model, or maintenance workflow. Consider this Skill when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, or reveals a learning need—even without naming GitLearnOS or invoking a Skill.
+description: On each learner interaction, recognize useful learning events and route them in a learner-owned Git repository to the smallest GitLearnOS setup, organization, question, review, tutoring, source, model, or maintenance workflow. Consider this Skill when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, or reveals a learning need—even without naming GitLearnOS or invoking a Skill.
 ---
 
 # GitLearnOS Router
@@ -26,7 +26,9 @@ event. Answer the learner's immediate request before repository administration.
 
 Skills are optional execution guides. `AGENTS.md`, project instructions, native
 memory, or the input itself may activate this router on a surface where Skills
-are unavailable.
+are unavailable. `templates/project-instructions.md` carries the compact
+no-Skill router, and `templates/native-memory-pointer.md` carries the
+cross-conversation activation pointer.
 
 ## Read minimum context
 

@@ -50,10 +50,13 @@ Install the behavior on the smallest durable surfaces the runtime actually
 supports:
 
 1. always place the learner `AGENTS.md` in the target repository;
-2. use project instructions when they apply across the learner's chats;
-3. when native memory is enabled and permitted, store only that GitLearnOS is
-   active, the target repository or project, proactive-assistance preference,
-   and stable learner preferences;
+2. when the surface supports project or custom instructions, install an adapted
+   `templates/project-instructions.md` there; do not merely link to the file
+   when that surface cannot read the repository;
+3. when native memory is enabled and permitted, adapt
+   `templates/native-memory-pointer.md`, store only the activation pointer,
+   target, proactive-assistance preference, and stable learner preferences, and
+   verify what the runtime actually retained;
 4. install or expose the router Skill when supported, but never make explicit
    Skill invocation the only activation path.
 
@@ -61,6 +64,14 @@ Explain the result to the learner. In particular, tell them which future
 surfaces can notice questions, answers, photographed material, notes, feedback,
 and results automatically. If memory, Skills, Git, or remote sync are
 unavailable, say so and preserve the behavior through the remaining surfaces.
+Report a drafted but unverified memory entry as `suggested` or `unknown`, never
+as saved.
+
+Project or custom instructions must carry the minimum operation router:
+organize, question, review, teach, source, model, and maintenance. This compact
+fallback is intentional duplication of core behavior so a no-Skill surface can
+still act. Keep detailed procedures in Skills and keep changing learner state
+in Git.
 
 Guide setup one unavoidable step at a time. Do not dump a long platform
 checklist or ask the learner to create files the agent can create. Recommend a
@@ -111,7 +122,9 @@ Do not add empty scaffolding.
    `templates/AGENTS.md` entry, and establish
    `learning-policy.md` with `safe-auto` unless the learner requests
    preview/manual;
-4. configure and report the durable activation surfaces;
+4. install or provide the adapted project/custom instructions, configure the
+   native-memory pointer when permitted, and report each surface as verified,
+   suggested, unavailable, or unknown;
 5. create minimal profile and dashboard with one next action;
 6. organize the first real input or gap;
 7. generate questions only when useful;
@@ -140,7 +153,8 @@ Capabilities:
 Policy:
 Project or source workspace:
 Activation surfaces:
-Memory:
+Project/custom instructions:
+Memory: saved / suggested / unavailable / unknown
 Changed files:
 First organized path:
 Questions prepared:

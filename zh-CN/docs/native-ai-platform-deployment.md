@@ -75,38 +75,18 @@ OpenAI 当前文档说明本地 Project 可以进行 Git 操作，相关对话�
 
 ### 设置指令
 
-```text
-你正在帮我在 ChatGPT 中运行 GitLearnOS。
-
-使用我选定的状态层作为事实源。优先使用 Git 目标仓库。ChatGPT 记忆是主动偏好缓存，不是正式学习仓库。
-
-一次只引导我完成一个必要设置步骤。大型教材、PDF、扫描件和参考文件使用本 Project 的 Sources。默认不要把大型原件放入 Git。
-
-行动前先判断当前是 Chat、Work 还是 Codex 界面，以及记忆能力、项目指令、Skills、文件访问、仓库访问和权限边界。
-
-以后的对话中，即使我没有提到 GitLearnOS 或调用 Skill，也要把我的学科问题、作答尝试、拍摄页面、笔记、教师反馈和结果视为候选学习事件。先处理我的眼前需要。在 safe-auto 下，价值和隐私明确时做最小且有用的写回；否则简短建议，或只问一个必要问题。
-
-遵守这个闭环：
-来源 → 模型 → 知识缺口 → 个性化题目 → 复习结果 → learner-profile.md → 下次复习。
-
-不要编造缺失来源。除非你能说出具体改了哪些文件，否则不要声称已经编辑文件或仓库。
-
-如果你不能写入状态层，就给出我可以手动应用的精确文件内容或补丁。
-```
+适配并把完整的
+[`templates/project-instructions.md`](../../templates/project-instructions.md)
+内容粘贴到 ChatGPT Project 指令。不能只粘贴文件链接：日常 Chat 在需要回退时
+可能没有仓库或 Skill 访问。填写真实目标、政策、大型来源位置，以及稳定的
+学习者限制。
 
 ### 记忆规则
 
-只保存稳定偏好：
-
-```text
-用户使用 GitLearnOS 做 AI 辅助学习。
-无需等待显式调用，也要注意有价值的学习事件。
-当前 ChatGPT Project 和学习者 Git 仓库是：<目标>。
-选定状态层是事实源。
-learner-profile.md 保存可检查学习画像。
-练习应该来自近期模型和活跃知识缺口。
-当记忆和状态层冲突时，优先相信状态层，并建议更新记忆。
-```
+适配
+[`templates/native-memory-pointer.md`](../../templates/native-memory-pointer.md)，
+取得学习者允许后请求更新，并验证实际保留的激活指针和目标。报告
+`saved`、`suggested`、`unavailable` 或 `unknown`。
 
 不要把临时任务、原始私人笔记、过期知识缺口或一次性练习结果保存成长期记忆。
 

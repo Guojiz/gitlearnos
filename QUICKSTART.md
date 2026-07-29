@@ -27,6 +27,25 @@ source folder. Keep compact learning state and source locators in Git. A remote
 is only needed when the learner chooses sync, collaboration, backup, or
 publishing.
 
+## Install durable behavior once
+
+The setup agent should configure every available layer instead of treating a
+Skill as the installation:
+
+1. place [`templates/AGENTS.md`](templates/AGENTS.md) in the learner repository;
+2. adapt and install
+   [`templates/project-instructions.md`](templates/project-instructions.md) in
+   the AI project's instructions or equivalent custom-instruction field;
+3. with permission, adapt
+   [`templates/native-memory-pointer.md`](templates/native-memory-pointer.md),
+   request the memory update, and verify what was retained;
+4. expose the router Skill when supported.
+
+The project/custom instructions include the minimum organize, question, review,
+teach, source, model, and maintenance router, so everyday learning still works
+when Skills are not exposed. Memory only wakes this behavior and points to the
+target; Git remains the source of truth.
+
 ## Send one request
 
 ```text
@@ -75,7 +94,8 @@ Daily surface: Chat / Work / other
 Project or source workspace:
 Repository:
 Automatic instructions:
-Memory:
+Project/custom instructions:
+Memory: saved / suggested / unavailable / unknown
 Skills:
 Remote backup or collaboration:
 ```

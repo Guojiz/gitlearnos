@@ -192,6 +192,14 @@ and stable learning or delivery preferences. This memory should help the agent
 notice a learning event in a future conversation without waiting for a Skill
 name.
 
+Use `templates/native-memory-pointer.md` as the compact setup pattern and
+verify what the runtime actually retained. A drafted pointer is `suggested` or
+`unknown`, not a successful memory update. If the active surface cannot discover
+`AGENTS.md` or use Skills, install an adapted
+`templates/project-instructions.md` in its project or custom instructions. That
+fallback carries the minimum operation router; detailed procedures remain in
+Skills.
+
 Do not use native memory as the only copy of required rules or changing learning
 state. Do not place raw notes, full conversations, one-off answers, current
 knowledge gaps, secrets, or sensitive source content in memory. Persist rules

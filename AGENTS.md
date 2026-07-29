@@ -35,5 +35,14 @@ wait for explicit approval or return exact pending writeback. Always answer the
 learner's immediate need first. Do not capture incidental conversation merely
 because GitLearnOS is installed.
 
+Skills refine execution but are not a prerequisite. If the current surface
+cannot use them, route directly from these instructions: organize durable
+evidence, generate grounded questions, review attempted answers, teach when
+asked, preserve source provenance, revise models from evidence, or maintain
+state. A surface that cannot discover `AGENTS.md` should receive
+`templates/project-instructions.md` as project or custom instructions. Native
+memory may carry the compact activation pointer in
+`templates/native-memory-pointer.md`, but not the changing learner state.
+
 Never claim repository access, a commit, a scheduled worker, or demonstrated
 mastery without evidence that it actually exists.

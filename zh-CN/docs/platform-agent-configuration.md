@@ -24,6 +24,7 @@
 | 仓库 checkout 与文件工具 | 遵守本地指令并保护工作区 |
 | 有原生记忆但不能写入 | 整理或教学，返回待写回区块 |
 | 没有稳定记忆或文件 | 使用粘贴状态完成一个聚焦任务 |
+| 没有自定义 Skills | 从项目指令或自定义指令运行最小路由 |
 
 ## ChatGPT 示例
 
@@ -34,6 +35,11 @@
 记忆：只保存激活指针与稳定偏好
 写回：目标仓库唯一状态文件
 ```
+
+把经过适配的
+[`templates/project-instructions.md`](../../templates/project-instructions.md)
+放入 ChatGPT Project 指令或等价的自定义指令界面。它是日常无 Skill 执行约定；
+当前对话无法打开仓库文件时，不能只依赖一个链接。
 
 Chat 具备仓库权限时，即使没有 Skills，也用于日常问题、答案、笔记照片和反馈。Work 用于引导式设置、大型导入、多文件整理和维护。Agent 应直接使用现有工具，自己能安全完成的操作不能再要求学习者重复。
 
@@ -47,9 +53,14 @@ ChatGPT Chat、Work 和类似工具型 Runtime 在真实工具允许时，都能
 
 ## 记忆指令
 
-```text
-将目标仓库作为 GitLearnOS 唯一状态。原生记忆保存 GitLearnOS 激活指针、目标、稳定偏好与长期模式。无需等待显式 Skill 调用，也要注意有价值的学习事件。原生记忆与仓库证据冲突时，检查时间并明确更新过时的一层。
-```
+用真实目标与政策适配
+[`templates/native-memory-pointer.md`](../../templates/native-memory-pointer.md)。
+只有记忆已启用且学习者允许时才请求更新。验证实际保留内容，然后报告
+`saved`、`suggested`、`unavailable` 或 `unknown`。
+
+记忆指针应说明 GitLearnOS 已启用、提供可访问的目标、列出隐式学习事件信号、
+保留先回答行为，并把工作流细节和变化中的状态交给项目指令与 Git。不要把完整
+Skills 复制进原生记忆。
 
 ## 诚实汇报
 

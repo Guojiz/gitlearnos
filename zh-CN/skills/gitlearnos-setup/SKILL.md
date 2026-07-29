@@ -40,11 +40,19 @@ description: 创建或迁移最小的学习者自有 GitLearnOS 状态，同时�
 把行为安装到当前运行环境真正支持的最小持久层：
 
 1. 始终把学习者 `AGENTS.md` 放入目标仓库；
-2. 当项目指令能覆盖学习者的多次对话时使用它；
-3. 原生记忆已启用且获允许时，只记住 GitLearnOS 已启用、目标仓库或项目、主动协助偏好，以及稳定的学习偏好；
+2. 当前界面支持项目指令或自定义指令时，把经过适配的
+   `templates/project-instructions.md` 安装到那里；若该界面无法读取仓库，
+   不能只给文件链接；
+3. 原生记忆已启用且获允许时，适配 `templates/native-memory-pointer.md`，
+   只保存激活指针、目标、主动协助偏好和稳定学习偏好，并验证运行环境实际保留了什么；
 4. 支持时安装或暴露路由 Skill，但绝不能把显式调用 Skill 作为唯一触发方式。
 
 向学习者说明设置结果，尤其要说明以后哪些界面能自动注意到问题、作答、拍摄材料、笔记、反馈和结果。若记忆、Skills、Git 或远程同步不可用，应实话说明，并用剩余持久层保留行为。
+仅起草但没有验证的记忆条目必须报告为 `suggested` 或 `unknown`，不能说已经保存。
+
+项目指令或自定义指令必须带有最小操作路由：整理、出题、复测、辅导、来源、
+模型和维护。这是核心行为的有意精简重复，使没有 Skill 的界面仍能行动。详细
+步骤留在 Skills 中，变化中的学习者状态留在 Git 中。
 
 一次只引导一个不可避免的步骤。不要倾倒长篇平台检查清单，也不要让学习者创建智能体本可创建的文件。推荐一个默认选择，简要解释取舍，完成安全工作，验证后再继续。
 
@@ -83,7 +91,8 @@ archive/
 1. 捕获第一个目标或输入，并推断或确认其学科；
 2. 建立持久的项目或来源区域；可用且获授权时，把大型学习文件放入或链接到那里；
 3. 从示例创建 `gitlearnos.yml`，复制适当的轻量 `templates/AGENTS.md` 入口，并以 `safe-auto` 建立 `learning-policy.md`，除非学习者要求预览或手动模式；
-4. 配置并报告持久触发层；
+4. 安装或提供经过适配的项目或自定义指令；获允许时配置原生记忆指针；并把每个
+   层报告为已验证、建议设置、不可用或未知；
 5. 创建最小画像和仪表盘，并给出一个下一步；
 6. 整理第一个真实输入或缺口；
 7. 只在有用时出题；
@@ -109,7 +118,8 @@ Capabilities:
 Policy:
 Project or source workspace:
 Activation surfaces:
-Memory:
+Project/custom instructions:
+Memory: saved / suggested / unavailable / unknown
 Changed files:
 First organized path:
 Questions prepared:

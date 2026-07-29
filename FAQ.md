@@ -36,6 +36,11 @@ the agent should notice useful questions, answers, photographed pages, notes,
 feedback, and results automatically. Skills are optional workflow guides. The
 agent should not save incidental conversation.
 
+Use the ready
+[project/custom instructions](templates/project-instructions.md) and
+[native-memory pointer](templates/native-memory-pointer.md); setup should verify
+each available layer instead of assuming that a drafted memory was saved.
+
 ## Should I use Chat or Work?
 
 Use Chat for everyday learning when the current project/session has verified

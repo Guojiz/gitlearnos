@@ -76,6 +76,12 @@ Git 仓库仍是事实来源。
 
 当日常 Chat 界面能力足够但不提供 Skills 时，这个激活作用尤其重要。记忆唤醒行为，`AGENTS.md` 或项目指令定义行为，仓库提供当前证据。
 
+使用可直接适配的
+[`templates/native-memory-pointer.md`](../../templates/native-memory-pointer.md)
+条目。它包含隐式事件信号、先回答边界、真实目标、政策偏好和事实来源规则。
+不要把完整 Skill 步骤复制进记忆；把精简的无 Skill 操作路由放入
+[`templates/project-instructions.md`](../../templates/project-instructions.md)。
+
 ## 什么应进入 Project Sources
 
 持久项目来源区或获授权的本地文件夹适合：
@@ -181,8 +187,14 @@ learner-profile.md
 1. 更新相关仓库文件；
 2. 变化持久时更新 `learner-profile.md`；
 3. 只有激活指针、稳定偏好或重复模式变化时，才更新或建议更新原生记忆；
-4. 存在外部记忆工具时，可让它索引或找回辅助历史；
-5. 报告哪些内容已更改、哪些没有更改。
+4. 运行环境允许时，验证实际保留的激活指针和目标；
+5. 把记忆报告为 `saved`、`suggested`、`unavailable` 或 `unknown`；
+6. 存在外部记忆工具时，可让它索引或找回辅助历史；
+7. 报告哪些内容已更改、哪些没有更改。
+
+绝不能把一段拟议记忆文字说成更新成功。记忆更新和后续回忆可能延迟。在后续
+对话中，用一个不提 GitLearnOS 或 Skill 的普通学科问题进行测试，才是有意义的
+连续性检查。
 
 ## 提示词模式
 

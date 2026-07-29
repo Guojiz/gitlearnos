@@ -17,6 +17,8 @@ const requiredHumanPairs = [
   "AGENT-RUNTIME.md",
   "START-HERE.md",
   "templates/AGENTS.md",
+  "templates/project-instructions.md",
+  "templates/native-memory-pointer.md",
   "templates/learning-policy.md",
   "adapters/agents/README.md",
   "adapters/git/README.md",
@@ -38,6 +40,7 @@ const requiredHumanPairs = [
   "evals/README.md",
   "evals/scenarios/09-implicit-learning-event.md",
   "evals/scenarios/10-github-teaching-collaboration.md",
+  "evals/scenarios/11-no-skill-continuity.md",
   "website/public-page-copy.md",
 ];
 const localizedOnly = [

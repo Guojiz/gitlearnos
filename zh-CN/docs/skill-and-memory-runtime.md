@@ -46,7 +46,21 @@ Skills 是可选项。当前 Chat 界面不提供 Skills 时，`AGENTS.md`、项
 
 ## 仓库指令路径
 
-如果不支持自定义 Skills，使用 `AGENTS.md` 与 `zh-CN/START-HERE.md` 作为可执行约定。不要用“读取全部文档”来补偿。
+如果不支持自定义 Skills，使用 `AGENTS.md` 作为仓库约定。当前界面无法发现
+仓库指令时，把经过适配的
+[`templates/project-instructions.md`](../../templates/project-instructions.md)
+放入项目指令或自定义指令。不要用“读取全部文档”来补偿。
+
+这份精简指令必须在没有 Skill 时独立保留：
+
+- 常驻识别与先回答行为；
+- 整理、出题、复测、辅导、来源、模型和维护路由；
+- `safe-auto`、`preview` 与 `manual` 的有效权限；
+- 保留原始证据，并只用间隔后的独立作答证明掌握；
+- 工具缺失时提供诚实回执与待写回内容。
+
+这是有意的核心重复，不是第二套协议。`GITLEARNOS.md` 仍是正式协议；Skills
+保存详细步骤；项目指令保存最小、常驻的行为。
 
 ## 原生记忆
 
@@ -68,6 +82,15 @@ Skills 是可选项。当前 Chat 界面不提供 Skills 时，`AGENTS.md`、项
 - 不完整来源；
 - 未验证假设；
 - 完整复习历史。
+
+使用精简的
+[`templates/native-memory-pointer.md`](../../templates/native-memory-pointer.md)
+条目，不要让记忆保存完整 Skills。这个指针应在后续对话中唤醒项目指令或仓库
+读取。
+
+请求更新记忆后，把结果分为 `saved`、`suggested`、`unavailable` 或
+`unknown`。只有运行环境提供了足够证据，能够验证保留的指针与目标时，才能
+使用 `saved`。记忆生成或回忆可能延迟，因此起草条目不等于已经保存。
 
 ## 冲突规则
 

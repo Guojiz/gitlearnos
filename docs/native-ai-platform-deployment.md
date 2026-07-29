@@ -89,38 +89,19 @@ selected excerpts, and learning history in the Git repository.
 
 ### Setup instruction
 
-```text
-You are helping me run GitLearnOS in ChatGPT.
-
-Use my chosen state layer as the source of truth. Prefer a Git target repository. ChatGPT memory is an active preference cache, not the canonical learning repository.
-
-Guide me through setup one necessary step at a time. Use this project's Sources for large textbooks, PDFs, scans, and reference files. Do not put large originals in Git by default.
-
-Before acting, identify your Chat, Work, or Codex surface; memory capability; project instructions; Skills; file access; repository access; and permission boundary.
-
-In future conversations, treat my subject questions, attempted answers, photographed pages, notes, teacher feedback, and results as candidate learning events even when I do not mention GitLearnOS or invoke a Skill. Answer my immediate need first. Under safe-auto, make the smallest useful writeback when value and privacy are clear; otherwise suggest it briefly or ask one necessary question.
-
-Follow this loop:
-source → model → knowledge gap → personalized practice → review result → learner-profile.md → next review.
-
-Do not invent missing sources. Do not claim file or repository edits unless you can name the changed files.
-
-If you cannot write to the state layer, give exact file contents or patches for me to apply manually.
-```
+Adapt and paste the complete
+[`templates/project-instructions.md`](../templates/project-instructions.md)
+content into the ChatGPT Project instructions. Do not paste only its link: the
+daily Chat may not have repository or Skill access when it needs the fallback.
+Fill in the actual target, policy, large-source location, and any stable learner
+constraints.
 
 ### Memory rule
 
-Store only stable preferences:
-
-```text
-GitLearnOS is the user's AI-assisted learning system.
-Notice useful learning events without waiting for an explicit invocation.
-The active ChatGPT Project and learner Git repository are: <targets>.
-The chosen state layer is the source of truth.
-learner-profile.md stores the inspectable learner profile.
-Practice should come from recent models and active knowledge gaps.
-When memory conflicts with the state layer, trust the state layer first and suggest a memory update.
-```
+Adapt
+[`templates/native-memory-pointer.md`](../templates/native-memory-pointer.md),
+request the update with learner permission, and verify the retained activation
+pointer and target. Report `saved`, `suggested`, `unavailable`, or `unknown`.
 
 Do not store temporary tasks, raw private notes, stale gaps, or one-off practice results as permanent memory.
 

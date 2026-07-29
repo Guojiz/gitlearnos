@@ -50,7 +50,23 @@ the same behavior.
 
 ## Repository-instruction path
 
-If custom skills are unavailable, use `START-HERE.md` and `AGENTS.md` as the executable contract. Do not compensate by loading every documentation file.
+If custom Skills are unavailable, use `AGENTS.md` as the repository contract.
+If the surface cannot discover repository instructions, put an adapted copy of
+[`templates/project-instructions.md`](../templates/project-instructions.md) in
+its project or custom instructions. Do not compensate by loading every
+documentation file.
+
+That compact instruction must work without a Skill and retain:
+
+- ambient recognition plus answer-first behavior;
+- the organize, question, review, teach, source, model, and maintenance routes;
+- effective `safe-auto` / `preview` / `manual` authority;
+- preservation of original evidence and delayed independent mastery;
+- honest receipts and pending writeback when tools are missing.
+
+This is deliberate core duplication, not a second protocol.
+`GITLEARNOS.md` remains canonical; Skills contain detailed procedures; project
+instructions contain the minimum always-available behavior.
 
 ## Native memory
 
@@ -72,6 +88,16 @@ Keep out by default:
 - incomplete sources;
 - unverified hypotheses;
 - full review history.
+
+Use the compact
+[`templates/native-memory-pointer.md`](../templates/native-memory-pointer.md)
+entry instead of asking memory to retain complete Skills. The pointer should
+wake the project instructions or repository read in a later conversation.
+
+After requesting a memory update, classify the result as `saved`, `suggested`,
+`unavailable`, or `unknown`. Only use `saved` when the runtime exposes enough
+evidence to verify the retained pointer and target. Memory generation or recall
+may be delayed, so a drafted entry is not proof of storage.
 
 ## Conflict rule
 

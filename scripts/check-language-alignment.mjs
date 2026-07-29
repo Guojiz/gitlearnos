@@ -266,8 +266,8 @@ const openaiSkillMetadata = read("skills/gitlearnos/agents/openai.yaml");
 const defaultPrompt = openaiSkillMetadata.match(
   /^\s*default_prompt:\s*"([^"]+)"\s*$/m,
 )?.[1];
-if (!defaultPrompt?.includes("$gitlearnos")) {
-  fail("OpenAI default prompt must explicitly invoke $gitlearnos");
+if (!defaultPrompt?.startsWith("Use $gitlearnos ")) {
+  fail("OpenAI default prompt must start with the exact $gitlearnos token");
 }
 
 const skillBundleRoot = path.resolve(root, "skills/gitlearnos");

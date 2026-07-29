@@ -40,6 +40,12 @@ discover this file, use the equivalent
 `templates/project-instructions.md` content in its project or custom
 instructions.
 
+When a native project Skill is installed, use exactly one discovered
+`gitlearnos` Router and let it load operation references on demand. Codex and
+OpenCode normally discover `.agents/skills/gitlearnos/`; Claude Code discovers
+`.claude/skills/gitlearnos/` through the companion `CLAUDE.md`. File presence
+alone is not verified installation.
+
 Do not store ordinary chat, invent unavailable evidence, or claim remote push,
 background scheduling, cross-conversation memory, or demonstrated mastery
 without verification. If an input is incidental, temporary, ambiguous, or

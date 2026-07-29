@@ -54,7 +54,7 @@ Agent 不只是回答。它在用户授权的策略范围内整理证据、选�
 ## 技术实现
 
 - 唯一 Agent 契约：`GITLEARNOS.md`；
-- 可复用路由与操作 Skills：`skills/gitlearnos*/`；
+- 一个可复用 Router Skill 与按需操作参考文件：`skills/gitlearnos/`；
 - 学习状态：纯 Markdown 与少量 YAML；
 - 版本和撤销：本地或托管 Git；
 - 可选调度：`due-review` 与 `maintenance`，只能由真实授权的运行环境执行；

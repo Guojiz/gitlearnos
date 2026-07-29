@@ -1,0 +1,7 @@
+interface:
+  display_name: "GitLearnOS"
+  short_description: "Turn real learning events into traceable Git progress"
+  default_prompt: "Use GitLearnOS to handle this learning event and make only authorized, evidence-grounded writeback."
+
+policy:
+  allow_implicit_invocation: true

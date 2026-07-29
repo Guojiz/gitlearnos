@@ -82,7 +82,8 @@ offline situation is reported as pending work, never as completed automation.
 ## Technical implementation
 
 - canonical agent contract: `GITLEARNOS.md`;
-- reusable routing and action Skills: `skills/gitlearnos*/`;
+- one reusable Router Skill with on-demand operation references:
+  `skills/gitlearnos/`;
 - learner state: plain Markdown plus minimal YAML;
 - versioning and undo: local or hosted Git;
 - optional scheduling: `due-review` and `maintenance`, executed only by a real

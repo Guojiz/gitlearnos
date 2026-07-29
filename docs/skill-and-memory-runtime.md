@@ -34,13 +34,20 @@ Do not make native memory the only copy of learner state. Do not make the user m
 
 ## Skill path
 
-Start with:
+Install the complete folder, not only the entry file:
 
 ```text
-skills/gitlearnos/SKILL.md
+skills/gitlearnos/
 ```
 
-Then load one focused subskill. Skills store behavior, not changing personal state.
+Use `.agents/skills/gitlearnos/` for Codex and OpenCode by default, or
+`.claude/skills/gitlearnos/` for Claude Code. The runtime first sees the single
+Router metadata, then loads one operation reference and at most one subject
+reference. Skills store behavior, not changing personal state.
+
+The source folder is only `source-only` until the current runtime lists
+`gitlearnos` and can open its bundled references. See the
+[Agent adapter](../adapters/agents/README.md#skill-discovery-by-agent).
 
 Use one main agent. Loading different skills does not imply separate agents.
 
@@ -65,8 +72,9 @@ That compact instruction must work without a Skill and retain:
 - honest receipts and pending writeback when tools are missing.
 
 This is deliberate core duplication, not a second protocol.
-`GITLEARNOS.md` remains canonical; Skills contain detailed procedures; project
-instructions contain the minimum always-available behavior.
+`GITLEARNOS.md` remains canonical; the single Skill bundle contains detailed
+on-demand references; project instructions contain the minimum
+always-available behavior.
 
 ## Native memory
 

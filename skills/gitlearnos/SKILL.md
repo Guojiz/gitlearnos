@@ -5,11 +5,10 @@ description: On each learner interaction, recognize useful learning events and r
 
 # GitLearnOS Router
 
-[中文](../../zh-CN/skills/gitlearnos/SKILL.md)
-
-Read `GITLEARNOS.md` before acting. That protocol owns evidence, repository,
-permission, automation, and Git behavior; this Skill only selects the smallest
-workflow.
+When the template repository is accessible, read its root `GITLEARNOS.md`.
+Otherwise read [`references/core-contract.md`](references/core-contract.md).
+The protocol owns evidence, repository, permission, automation, and Git
+behavior; this Skill selects the smallest workflow.
 
 ## Activate from the event, not a command
 
@@ -24,11 +23,9 @@ event. Answer the learner's immediate request before repository administration.
 - incidental or unrelated input: do not load more Skills, scan the repository,
   or mention capture.
 
-Skills are optional execution guides. `AGENTS.md`, project instructions, native
-memory, or the input itself may activate this router on a surface where Skills
-are unavailable. `templates/project-instructions.md` carries the compact
-no-Skill router, and `templates/native-memory-pointer.md` carries the
-cross-conversation activation pointer.
+Skills are optional execution guides. Repository instructions, project
+instructions, native memory, or the input itself may activate the same behavior
+on a surface where Skills are unavailable.
 
 ## Read minimum context
 
@@ -39,25 +36,29 @@ cross-conversation activation pointer.
 4. honor device, bandwidth, time, language, and delivery constraints with the
    smallest useful interaction;
 5. infer the subject and ask only when a wrong write would otherwise occur;
-6. load one primary Skill and a helper only when necessary.
+6. load one operation reference and one subject reference only when necessary.
 
 ## Route by intent or evidence
 
-| Intent | Skill |
+| Intent | Load |
 |---|---|
-| create or migrate minimum state | `skills/gitlearnos-setup/SKILL.md` |
-| record, organize, deduplicate, or reconcile feedback | `skills/gitlearnos-organize/SKILL.md` |
-| generate learner questions or an external handoff | `skills/gitlearnos-question/SKILL.md` |
-| administer an existing question and write back evidence | `skills/gitlearnos-review/SKILL.md` |
-| live AI explanation or guided practice requested now | `skills/gitlearnos-session/SKILL.md` |
-| source access, provenance, privacy, or completeness | `skills/gitlearnos-source/SKILL.md` |
-| extract reusable understanding | `skills/gitlearnos-model/SKILL.md` |
-| repair state, links, duplicates, or undo scope | `skills/gitlearnos-maintenance/SKILL.md` |
+| create or migrate minimum state | [`references/setup.md`](references/setup.md) |
+| record, organize, deduplicate, or reconcile feedback | [`references/organize.md`](references/organize.md) |
+| generate learner questions or an external handoff | [`references/question.md`](references/question.md) |
+| administer an existing question and write back evidence | [`references/review.md`](references/review.md) |
+| live AI explanation or guided practice requested now | [`references/session.md`](references/session.md) |
+| source access, provenance, privacy, or completeness | [`references/source.md`](references/source.md) |
+| extract reusable understanding | [`references/model.md`](references/model.md) |
+| repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |
 
 Do not turn note capture, teacher feedback, or preparation for human help into
 an AI tutoring session.
 
+When subject-specific form matters, load only one reference from
+[`references/subjects/`](references/subjects/README.md).
+
 ## Finish
 
-Return the receipt required by `GITLEARNOS.md`. Do not claim a write, commit,
-scheduled run, source access, or demonstrated mastery that was not observed.
+Return the receipt required by the core contract. Do not claim a write, commit,
+scheduled run, source access, Skill installation, or demonstrated mastery that
+was not observed.

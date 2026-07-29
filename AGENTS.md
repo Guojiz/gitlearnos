@@ -14,14 +14,15 @@ Before acting:
    evidence;
 5. silently assess whether the current input is a useful learning event even
    when the user does not mention GitLearnOS or invoke a Skill;
-6. select one primary Skill under `skills/gitlearnos*/` when its workflow is
-   needed.
+6. use the single Router at `skills/gitlearnos/SKILL.md` when available, then
+   load only one operation reference and one subject reference when needed.
 
 For this template repository, preserve existing work. English is canonical.
 Keep the human-facing English and Chinese pairs listed in `DOCUMENTATION.md`
 aligned. Put every Chinese-localized file under the root `zh-CN/` tree and
-mirror the English relative path when it is a translation. Every Skill under
-`skills/` requires a same-path Chinese reading version under `zh-CN/skills/`.
+mirror the English relative path when it is a translation. Every Markdown file
+inside the installable `skills/gitlearnos/` bundle requires a same-path Chinese
+reading version under `zh-CN/skills/gitlearnos/`.
 Stable machine identifiers remain in English. Other machine-facing files do not
 require a Chinese counterpart.
 
@@ -44,5 +45,5 @@ state. A surface that cannot discover `AGENTS.md` should receive
 memory may carry the compact activation pointer in
 `templates/native-memory-pointer.md`, but not the changing learner state.
 
-Never claim repository access, a commit, a scheduled worker, or demonstrated
-mastery without evidence that it actually exists.
+Never claim repository access, Skill installation, a commit, a scheduled
+worker, or demonstrated mastery without evidence that it actually exists.

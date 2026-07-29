@@ -36,6 +36,16 @@ GitHub 适合私有备份、跨设备连续性、教师或导师审阅、共享�
 [原生记忆指针](../templates/native-memory-pointer.md)；设置流程应验证每个
 可用层，不能因为起草了记忆文字就假定已经保存。
 
+## 看见 `SKILL.md` 就代表 GitLearnOS 已安装吗？
+
+不是。完整 [`skills/gitlearnos/`](../skills/gitlearnos/) 文件夹只是源包。Codex
+和 OpenCode 通常需要把它放在 `.agents/skills/gitlearnos/`；Claude Code
+需要 `.claude/skills/gitlearnos/`。只有当前运行环境确实列出 `gitlearnos`、
+间接学习输入能够选择它，并且打包参考文件可以加载，才能验证为已安装；否则
+报告 `source-only`、`unavailable` 或 `unknown`。
+
+见[跨 Agent 安装表](adapters/agents/README.md#不同-agent-如何发现-skill)。
+
 ## 应该使用 Chat 还是 Work？
 
 当前项目或会话具备已验证仓库权限时，用 Chat 处理日常学习。设置、大型导入、多文件整理、维护或较大复习使用 Work。能力、Skills 可用性和额度处理会随套餐和界面变化，因此应检查当前账号，不能想当然。
@@ -77,11 +87,14 @@ subjects/
 ```
 
 其他学科目录只在第一次有真实内容时创建。
+Claude Code 还会得到一个精简 `CLAUDE.md`；支持 Skills 的主 Agent 会得到一份
+原生 `gitlearnos` Skill 文件夹。
 
 ## 如何判断 Agent 是否实事求是？
 
 查看固定回执：模式、学科、整理的证据、问题、改动路径、实际完成的自动化、
-下一步和撤销边界。访问、写入、push、调度和掌握结论都必须有可验证依据。
+Skill 安装、下一步和撤销边界。访问、写入、push、调度、Skill 和掌握结论都
+必须有可验证依据。
 
 ## 如何迁移旧仓库？
 

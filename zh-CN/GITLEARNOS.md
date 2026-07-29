@@ -310,10 +310,24 @@ GitLearnOS 保存可移植的自动化意图，由外部运行环境执行。基
 
 ## Skills 与适配器
 
-核心 Skills 可以负责初始化、整理、出题、复测、辅导、来源处理、模型提炼和维护。学科 Skill 可以细化题型和评价方法，但不能削弱本协议对证据、所有权和写入权限的要求。
+GitLearnOS 只分发一个自包含 Router Skill。初始 Skill 清单中只应出现它的
+`name` 与 `description`。被选择后，Router 为初始化、整理、出题、复测、
+辅导、来源处理、模型提炼或维护加载一个操作参考文件，确有必要时最多再加载
+一个学科参考文件。任何参考文件都不能削弱本协议对证据、所有权和写入权限的
+要求。
 
-不要求用户明确调用 Skill。自动发现的 `AGENTS.md`、项目指令、插件元数据、
-原生记忆或输入本身，都可以在符合学习目标时触发同一工作流。
+顶层 `skills/gitlearnos/` 是源包，不代表已经安装。设置时把完整文件夹复制到
+主 Agent 正式记录的原生位置，并验证运行环境确实列出 `gitlearnos` 且能读取
+参考文件。Codex 与 OpenCode 默认使用 `.agents/skills/gitlearnos/`，Claude
+Code 使用 `.claude/skills/gitlearnos/`。安装状态必须报告为 `installed`、
+`source-only`、`unavailable` 或 `unknown`。
+
+只为选定主 Agent 安装一份原生副本。不要仅为了理论兼容制造多份 Agent 专用
+副本；其他不支持 Skill 的界面由项目指令维持核心行为。
+
+不要求用户明确调用 Skill。自动发现的 `AGENTS.md`、Claude Code 的精简
+`CLAUDE.md` 入口、项目指令、原生记忆或输入本身，都可以在符合学习目标时触发
+同一工作流。
 
 适配器把同一协议转换到：
 
@@ -336,6 +350,7 @@ GitLearnOS 保存可移植的自动化意图，由外部运行环境执行。基
 改动文件：
 证据：
 真实完成的自动化：
+Skill 安装：
 下一步：
 撤销：
 ```

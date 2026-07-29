@@ -154,16 +154,19 @@ Goal: <goal>
 Current material or learning event: <input>
 
 Read GITLEARNOS.md and START-HERE.md first. Use
-skills/gitlearnos/SKILL.md when Skills are supported, but do not depend on
-explicit Skill invocation. Guide me through setup, put large source files in the
-project/source workspace, and configure durable instructions plus native memory
-when available. Future questions, answers, photographed pages, notes, feedback,
-and results should be considered automatically. Detect actual repository, Git,
-memory, source, and scheduling capability. Use safe-auto: answer first,
-organize useful evidence, guide the next step, and commit safe reversible
-writeback. Preserve original answers, notes, and external feedback. Do not store
-the full conversation or claim mastery without delayed independent evidence.
-Finish with activation surfaces, changed files, actual automation, the next
+the complete skills/gitlearnos/ folder when Skills are supported. Detect whether
+the main agent is Codex, Claude Code, OpenCode, ChatGPT, or another runtime;
+install the folder in that agent's documented native location and verify it
+appears in the Skill list. Do not depend on explicit Skill invocation. Guide me
+through setup, put large source files in the project/source workspace, and
+configure durable instructions plus native memory when available. Future
+questions, answers, photographed pages, notes, feedback, and results should be
+considered automatically. Detect actual repository, Git, memory, source, and
+scheduling capability. Use safe-auto: answer first, organize useful evidence,
+guide the next step, and commit safe reversible writeback. Preserve original
+answers, notes, and external feedback. Do not store the full conversation or
+claim mastery without delayed independent evidence. Finish with activation
+surfaces, verified Skill status, changed files, actual automation, the next
 action, and the undo boundary.
 ```
 
@@ -219,21 +222,26 @@ See [Automation adapters](adapters/automation/README.md).
 
 ## Skills and subject methods
 
-Start with [skills/gitlearnos/SKILL.md](skills/gitlearnos/SKILL.md). The core
-Skills route setup, organization, question generation, review, source handling,
-models, optional tutoring, and maintenance.
+Install the complete [GitLearnOS Skill folder](skills/gitlearnos/), not only its
+`SKILL.md`. One discoverable Router loads setup, organization, question,
+review, source, model, optional tutoring, maintenance, and subject references
+only when needed.
 
-Optional subject Skills refine mathematics, language, or programming task forms
-without changing the evidence and ownership contract. OpenSpace may later
-evaluate generic Skills through an [optional integration](integrations/openspace/README.md);
-it is not required.
+Codex and OpenCode default to `.agents/skills/gitlearnos/`; Claude Code uses
+`.claude/skills/gitlearnos/`. A source file in this template is not an
+installation—the active runtime must list `gitlearnos`. See the
+[cross-agent installation map](adapters/agents/README.md#skill-discovery-by-agent).
+
+OpenSpace may later evaluate this generic Skill through an
+[optional integration](integrations/openspace/README.md); it is not required.
 
 ## Evaluation
 
 GitLearnOS uses documented end-to-end scenarios rather than exact AI text
 matching. The v2 acceptance cases cover bootstrap, implicit learning-event
 recognition, note organization, teacher feedback, due questions, answer
-writeback, non-fabrication, idempotency, and a complete local-Git workflow.
+writeback, non-fabrication, idempotency, cross-agent Skill discovery, and a
+complete local-Git workflow.
 
 See [Evaluation](evals/README.md).
 

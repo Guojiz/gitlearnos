@@ -13,7 +13,7 @@ README.md                         ↔ zh-CN/README.md
 docs/architecture.md             ↔ zh-CN/docs/architecture.md
 templates/learning-policy.md     ↔ zh-CN/templates/learning-policy.md
 evals/scenarios/01-bootstrap.md  ↔ zh-CN/evals/scenarios/01-bootstrap.md
-skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
+skills/gitlearnos/references/review.md ↔ zh-CN/skills/gitlearnos/references/review.md
 ```
 
 因此，判断一个中文文件对应哪个英文文件时，只需去掉开头的 `zh-CN/`。
@@ -35,8 +35,9 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 
 ## Skills 必须同步
 
-`skills/` 下每一份 Markdown 文件都必须在 `zh-CN/skills/` 下有同路径中文
-阅读版。修改 Skill 时，两种语言必须在同一个改动中更新。
+可安装 `skills/gitlearnos/` 包内每一份 Markdown 文件都必须在
+`zh-CN/skills/gitlearnos/` 下有同路径中文阅读版。修改 Skill 包时，两种语言
+必须在同一个改动中更新。
 
 翻译不得改变机器接口：YAML `name`、状态值、枚举、路径和输出字段保持英文；
 说明、边界和操作步骤翻译为清楚的中文。每份中文 Skill 都链接英文原文，并
@@ -56,6 +57,7 @@ skills/gitlearnos-review/SKILL.md ↔ zh-CN/skills/gitlearnos-review/SKILL.md
 1. 中文文件只能出现在 `zh-CN/` 下；
 2. 翻译文件尽量与英文使用相同的相对路径和文件名；
 3. 所有强制人类入口与核心运行规则的含义保持一致；
-4. 每份 Skill 都有同路径中文版本，YAML `name` 与标题结构对齐；
+4. 唯一 `SKILL.md` 与每份参考文件都有同路径中文版本，YAML `name` 与标题
+   结构对齐；
 5. 所有相对链接、图片和官网中文链接可以打开；
 6. 学习者仓库仍使用 `AGENTS.md`，不会把模板的语言目录复制进去。

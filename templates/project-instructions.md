@@ -60,7 +60,7 @@ conclusions must link evidence. Keep mastery `unknown` or `learning` until a
 delayed independent answer demonstrates it; when the goal requires transfer,
 the evidence must also demonstrate transfer to a sufficiently new task. Never
 claim a repository read, write, commit, push, source access, memory update,
-scheduled run, or mastery state that was not verified.
+Skill installation, scheduled run, or mastery state that was not verified.
 
 ## Required receipt
 
@@ -72,6 +72,7 @@ Target and subject:
 Changed paths, proposed change, or pending writeback:
 Evidence:
 Memory: saved / suggested / unavailable / unknown
+Skill installation: installed / source-only / unavailable / unknown
 Actual automation:
 Commit and push:
 Next action:

@@ -29,7 +29,8 @@ move only when links and history can be preserved safely.
    corrections instead of replacing them.
 6. Move useful records from `sessions/` to `events/`; leave chat transcripts
    out of the durable state.
-7. Replace Skill references with `skills/gitlearnos*/`; old Skill names are not
+7. Replace old Skill references with the single installable
+   `skills/gitlearnos/` bundle and its `references/`; old Skill names are not
    part of v2.
 8. Run the relevant scenarios in `evals/` before calling the migration
    complete.

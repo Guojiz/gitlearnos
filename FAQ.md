@@ -41,6 +41,18 @@ Use the ready
 [native-memory pointer](templates/native-memory-pointer.md); setup should verify
 each available layer instead of assuming that a drafted memory was saved.
 
+## Does seeing `SKILL.md` mean GitLearnOS is installed?
+
+No. The complete [`skills/gitlearnos/`](skills/gitlearnos/) folder is the
+source package. Codex and OpenCode normally need it under
+`.agents/skills/gitlearnos/`; Claude Code needs it under
+`.claude/skills/gitlearnos/`. Installation is verified only when the active
+runtime lists `gitlearnos`, an indirect learning input can select it, and its
+bundled references load. Otherwise report `source-only`, `unavailable`, or
+`unknown`.
+
+See the [cross-agent installation map](adapters/agents/README.md#skill-discovery-by-agent).
+
 ## Should I use Chat or Work?
 
 Use Chat for everyday learning when the current project/session has verified
@@ -92,13 +104,15 @@ subjects/
 ```
 
 Other subject folders appear only when real content needs them.
+Claude Code also receives a thin `CLAUDE.md`; a supported main agent receives
+one native `gitlearnos` Skill folder.
 
 ## How can I trust an agent's claims?
 
 Ask for the required receipt: mode, subject, organized evidence, questions,
-changed paths, automation actually completed, next action, and undo boundary.
-No access, write, push, scheduling, or mastery claim should appear without
-verifiable evidence.
+changed paths, automation actually completed, Skill installation, next action,
+and undo boundary. No access, write, push, scheduling, Skill, or mastery claim
+should appear without verifiable evidence.
 
 ## How do I migrate an older repository?
 

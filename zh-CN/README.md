@@ -110,13 +110,16 @@ GitHub 特别适合私有异地备份、跨设备连续性、教师或导师审�
 当前材料或学习事件：<内容>
 
 先阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。环境支持 Skills 时使用
-zh-CN/skills/gitlearnos/SKILL.md，但不要依赖显式 Skill 调用。引导我完成设置，
-把大型来源文件放在项目或来源工作区中，并在可用时配置持久指令和原生记忆。
-以后即使我不提 GitLearnOS，也要自动考虑我的问题、作答、拍摄页面、笔记、反馈
-和结果。检查真实的仓库、Git、记忆、来源与调度能力。使用 safe-auto：先解决我
-眼前的需要，再整理有价值的证据，引导下一步，并提交安全、可撤销的写回。保留
-原始作答、笔记和外部反馈；不要保存完整聊天，也不能在没有间隔后独立作答证据
-时声称已经掌握。最后报告触发层、改动文件、实际完成的自动化、下一步和撤销边界。
+完整 skills/gitlearnos/ 文件夹。检查主 Agent 是 Codex、Claude Code、
+OpenCode、ChatGPT 还是其他运行环境；把该文件夹安装到正式记录的原生位置，
+并验证 Skill 清单确实出现它。不要依赖显式 Skill 调用。引导我完成设置，把大型
+来源文件放在项目或来源工作区中，并在可用时配置持久指令和原生记忆。以后即使
+我不提 GitLearnOS，也要自动考虑我的问题、作答、拍摄页面、笔记、反馈和结果。
+检查真实的仓库、Git、记忆、来源与调度能力。使用 safe-auto：先解决我眼前的
+需要，再整理有价值的证据，引导下一步，并提交安全、可撤销的写回。保留原始
+作答、笔记和外部反馈；不要保存完整聊天，也不能在没有间隔后独立作答证据时
+声称已经掌握。最后报告触发层、已验证 Skill 状态、改动文件、实际完成的自动化、
+下一步和撤销边界。
 ```
 
 Agent 只初始化当前学科与当前真正需要的文件。完整说明见[快速开始](QUICKSTART.md)。
@@ -166,13 +169,23 @@ Dashboard 只是当前视图，不是第二套事实。
 
 ## Skills 与学科方法
 
-从 [中文 GitLearnOS Skill](skills/gitlearnos/SKILL.md) 开始。核心 Skills 负责初始化、整理、出题、复测、来源处理、模型、可选辅导与维护。
+安装完整的 [GitLearnOS Skill 文件夹](../skills/gitlearnos/)，不能只安装其中的
+`SKILL.md`。一个可发现 Router 只在需要时加载设置、整理、出题、复测、来源、
+模型、可选辅导、维护与学科参考文件。
 
-可选学科 Skills 可以细化数学、语言或编程任务，但不能改变证据与所有权规则。OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评测通用 Skills；运行 GitLearnOS 不需要它。
+Codex 与 OpenCode 默认使用 `.agents/skills/gitlearnos/`；Claude Code 使用
+`.claude/skills/gitlearnos/`。模板里存在源文件不等于已经安装；当前运行环境
+必须真正列出 `gitlearnos`。见
+[跨 Agent 安装表](adapters/agents/README.md#不同-agent-如何发现-skill)。
+
+OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评测这个
+通用 Skill；运行 GitLearnOS 不需要它。
 
 ## 评测
 
-GitLearnOS 使用完整场景评测，不逐字比较 AI 输出。v2 验收覆盖初始化、隐式学习事件识别、整理笔记、老师反馈、到期出题、作答写回、不编造、去重以及完整的本地 Git 工作流。
+GitLearnOS 使用完整场景评测，不逐字比较 AI 输出。v2 验收覆盖初始化、隐式学习
+事件识别、整理笔记、老师反馈、到期出题、作答写回、不编造、去重、跨 Agent
+Skill 发现以及完整的本地 Git 工作流。
 
 见[评测](evals/README.md)。
 

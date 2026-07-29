@@ -33,13 +33,28 @@ The setup agent should configure every available layer instead of treating a
 Skill as the installation:
 
 1. place [`templates/AGENTS.md`](templates/AGENTS.md) in the learner repository;
-2. adapt and install
+2. when Claude Code is the main agent, also adapt
+   [`templates/CLAUDE.md`](templates/CLAUDE.md);
+3. install the complete [`skills/gitlearnos/`](skills/gitlearnos/) folder in
+   the main agent's documented native project location and verify that the
+   runtime lists `gitlearnos`;
+4. adapt and install
    [`templates/project-instructions.md`](templates/project-instructions.md) in
    the AI project's instructions or equivalent custom-instruction field;
-3. with permission, adapt
+5. with permission, adapt
    [`templates/native-memory-pointer.md`](templates/native-memory-pointer.md),
-   request the memory update, and verify what was retained;
-4. expose the router Skill when supported.
+   request the memory update, and verify what was retained.
+
+Default native paths are:
+
+| Main agent | Project path |
+|---|---|
+| Codex | `.agents/skills/gitlearnos/` |
+| Claude Code | `.claude/skills/gitlearnos/` |
+| OpenCode | `.agents/skills/gitlearnos/` |
+
+Use one native copy for the chosen main agent. See the
+[cross-agent installation map](adapters/agents/README.md#skill-discovery-by-agent).
 
 The project/custom instructions include the minimum organize, question, review,
 teach, source, model, and maintenance router, so everyday learning still works
@@ -56,19 +71,22 @@ Goal: <goal>
 Current material or learning event: <input>
 
 Read GITLEARNOS.md and START-HERE.md first. Use
-skills/gitlearnos/SKILL.md when Skills are supported, but do not depend on
-explicit Skill invocation. Guide me through setup one necessary step at a time.
-Use project Sources or an authorized local folder for large learning files.
-Configure durable project/repository instructions and, when available, native
-memory so future questions, attempted answers, photographed pages, notes,
-feedback, and results are recognized as candidate learning events without me
-naming GitLearnOS. Detect actual repository, Git, memory, source, and scheduling
-capability. Use safe-auto: answer my immediate need, organize useful evidence,
-suggest or generate targeted questions when they serve the goal, and commit safe
-reversible writeback. Preserve original answers, notes, and external feedback.
-Do not store the full conversation or claim mastery without delayed independent
-evidence. Finish with activation surfaces, changed files, actual automation,
-the next action, and the undo boundary.
+the complete skills/gitlearnos/ folder when Skills are supported. Detect the
+main agent, install the folder in its documented native project location, and
+verify that its Skill list exposes gitlearnos; a copied source file is not
+proof. Do not depend on explicit Skill invocation. Guide me through setup one
+necessary step at a time. Use project Sources or an authorized local folder for
+large learning files. Configure durable project/repository instructions and,
+when available, native memory so future questions, attempted answers,
+photographed pages, notes, feedback, and results are recognized as candidate
+learning events without me naming GitLearnOS. Detect actual repository, Git,
+memory, source, and scheduling capability. Use safe-auto: answer my immediate
+need, organize useful evidence, suggest or generate targeted questions when
+they serve the goal, and commit safe reversible writeback. Preserve original
+answers, notes, and external feedback. Do not store the full conversation or
+claim mastery without delayed independent evidence. Finish with activation
+surfaces, verified Skill status, changed files, actual automation, the next
+action, and the undo boundary.
 ```
 
 Do not manually create the GitLearnOS folder tree when the agent can do it.
@@ -87,6 +105,9 @@ subjects/<subject>/goals/main-goal.md
 Only the current subject and real files should exist. Sources, models, gaps,
 handoffs, reviews, and events appear on first use.
 
+The main agent may also add one native Skill folder. Claude Code additionally
+adds the thin `CLAUDE.md` adapter. These are runtime files, not learner state.
+
 The setup agent should also report:
 
 ```text
@@ -96,7 +117,7 @@ Repository:
 Automatic instructions:
 Project/custom instructions:
 Memory: saved / suggested / unavailable / unknown
-Skills:
+Skills: installed / source-only / unavailable / unknown
 Remote backup or collaboration:
 ```
 

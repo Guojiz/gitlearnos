@@ -370,14 +370,29 @@ real worker, record pending work or provide a handoff without claiming success.
 
 ## Skills and adapters
 
-Core Skills may route setup, organization, question generation, review,
-tutoring, source handling, model extraction, and maintenance. A subject Skill
-may refine task forms or evaluation, but cannot weaken this evidence, ownership,
-or write-authority contract.
+GitLearnOS distributes one self-contained Router Skill. Its `name` and
+`description` are the only GitLearnOS metadata that should enter the initial
+Skill list. After selection, the Router loads one operation reference for
+setup, organization, question generation, review, tutoring, source handling,
+model extraction, or maintenance, plus at most one subject reference when
+useful. A reference cannot weaken this evidence, ownership, or write-authority
+contract.
+
+The top-level `skills/gitlearnos/` directory is a source package, not proof of
+installation. Setup copies the complete folder to the main agent's documented
+native location and verifies that the runtime lists `gitlearnos` and can load
+its references. Use `.agents/skills/gitlearnos/` for Codex and OpenCode by
+default, and `.claude/skills/gitlearnos/` for Claude Code. Report installation
+as `installed`, `source-only`, `unavailable`, or `unknown`.
+
+Install one native copy for the chosen main agent. Do not create duplicate
+agent-specific copies merely for theoretical compatibility; project
+instructions preserve core behavior on secondary no-Skill surfaces.
 
 Explicit Skill invocation is optional. Automatically discovered `AGENTS.md`,
-project instructions, plugin metadata, native memory, or the router may activate
-the same workflow when the input itself matches a learning goal.
+Claude Code's thin `CLAUDE.md` adapter, project instructions, native memory, or
+the router may activate the same workflow when the input itself matches a
+learning goal.
 
 Adapters translate the same protocol to:
 
@@ -400,6 +415,7 @@ Questions:
 Changed files:
 Evidence:
 Automation actually completed:
+Skill installation:
 Next action:
 Undo:
 ```

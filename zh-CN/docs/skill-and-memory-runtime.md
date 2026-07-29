@@ -32,13 +32,20 @@ AI 原生记忆
 
 ## Skill 路径
 
-从这里开始：
+安装完整文件夹，不能只安装入口文件：
 
 ```text
-skills/gitlearnos/SKILL.md
+skills/gitlearnos/
 ```
 
-然后只加载一个具体子 Skill。Skill 保存行为，不保存持续变化的个人状态。
+Codex 与 OpenCode 默认使用 `.agents/skills/gitlearnos/`；Claude Code 使用
+`.claude/skills/gitlearnos/`。运行环境先看到唯一 Router 元数据，再加载一个
+操作参考文件，确有必要时最多再加载一个学科参考文件。Skill 保存行为，不保存
+持续变化的个人状态。
+
+当前运行环境真正列出 `gitlearnos` 且能打开打包参考文件前，源文件夹只能算
+`source-only`。见
+[Agent 适配器](../adapters/agents/README.md#不同-agent-如何发现-skill)。
 
 使用一个主 Agent。加载不同 Skill 不代表拆分 Agent。
 
@@ -59,8 +66,8 @@ Skills 是可选项。当前 Chat 界面不提供 Skills 时，`AGENTS.md`、项
 - 保留原始证据，并只用间隔后的独立作答证明掌握；
 - 工具缺失时提供诚实回执与待写回内容。
 
-这是有意的核心重复，不是第二套协议。`GITLEARNOS.md` 仍是正式协议；Skills
-保存详细步骤；项目指令保存最小、常驻的行为。
+这是有意的核心重复，不是第二套协议。`GITLEARNOS.md` 仍是正式协议；单一
+Skill 包保存按需加载的详细参考文件；项目指令保存最小、常驻的行为。
 
 ## 原生记忆
 

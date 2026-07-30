@@ -79,74 +79,78 @@ Auditable. Undoable. Yours.
 Here is a real SAT workflow.
 
 21
-00:01:09,900 --> 00:01:13,845
-Maya imports feedback from Bluebook Reading and Writing Module One:
+00:01:09,900 --> 00:01:13,401
+Maya imports feedback from Bluebook Math Module One:
 
 22
-00:01:13,974 --> 00:01:17,800
-two Words in Context misses, both chosen by topic match.
+00:01:13,505 --> 00:01:18,040
+two percent problems missed by multiplying the final value by zero point eight.
 
 23
-00:01:17,856 --> 00:01:21,802
+00:01:18,097 --> 00:01:22,042
 The agent preserves that evidence without inventing a score trend.
 
 24
-00:01:21,859 --> 00:01:23,970
-It asks for the meaning before the choices,
+00:01:22,099 --> 00:01:24,819
+It asks what quantity the multiplier belongs to,
 
 25
-00:01:24,010 --> 00:01:26,826
-then gives one original SAT-style item.
+00:01:24,864 --> 00:01:27,716
+then gives one original SAT-style problem.
 
 26
-00:01:26,883 --> 00:01:30,143
-Maya explains her reasoning and answers without a hint.
+00:01:27,784 --> 00:01:30,785
+Maya models zero point eight p equals seventy-two
 
 27
-00:01:30,200 --> 00:01:33,833
-GitLearnOS saves the reasoning, not just the letter,
+00:01:30,825 --> 00:01:33,605
+and solves p equals ninety without a hint.
 
 28
-00:01:33,842 --> 00:01:35,937
-turns it into a reusable rule,
+00:01:33,662 --> 00:01:38,040
+GitLearnOS saves the equation and reasoning, not just ninety,
 
 29
-00:01:35,993 --> 00:01:39,014
-and queues a new passage for forty-eight hours later.
+00:01:38,049 --> 00:01:40,576
+turns the error into a reusable rule,
 
 30
-00:01:39,082 --> 00:01:41,297
-One immediate success stays learning.
+00:01:40,633 --> 00:01:43,545
+and queues a new context for forty-eight hours later.
 
 31
-00:01:41,354 --> 00:01:43,052
-Transfer is the evidence.
+00:01:43,614 --> 00:01:45,829
+One immediate success stays learning.
 
 32
+00:01:45,885 --> 00:01:47,583
+Transfer is the evidence.
+
+33
 00:01:53,236 --> 00:01:57,603
 Text-first. No database, no server, nothing always-on.
 
-33
+34
 00:01:57,659 --> 00:02:00,547
 It works with the free materials schools already have,
 
-34
+35
 00:02:00,580 --> 00:02:02,836
 and with any agent the student can reach —
 
-35
+36
 00:02:02,876 --> 00:02:07,362
 ChatGPT, Claude, Codex, OpenCode — or none at all.
 
-36
+37
 00:02:07,419 --> 00:02:09,393
 The learner owns every byte.
 
-37
+38
 00:02:15,836 --> 00:02:16,981
 GitLearnOS.
 
-38
+39
 00:02:17,038 --> 00:02:20,118
 Learning happens anywhere — the state belongs to you.
 

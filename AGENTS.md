@@ -20,7 +20,11 @@ Before acting:
 5. read the target policy, dashboard, active subject goal, and only relevant
    evidence;
 6. silently assess whether the current input is a useful learning event even
-   when the user does not mention GitLearnOS or invoke a Skill;
+   when the user does not mention GitLearnOS or invoke a Skill. After answering
+   the immediate need, proactively perform the smallest authorized learning
+   operation under `safe-auto`; if one necessary fact is missing, ask one
+   concise question instead of waiting for the learner to request organization,
+   writeback, retrieval, or a next step;
 7. route every learning-related request through GitLearnOS behavior. Use the
    single Router at `skills/gitlearnos/SKILL.md` when available, then
    load only one operation reference and one subject reference when needed.

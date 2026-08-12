@@ -21,6 +21,10 @@ Before acting:
    does not mention GitLearnOS or invoke a Skill;
 6. inspect the current Git revision and preserve unrelated work;
 7. answer the learner's immediate need;
+   then proactively perform the smallest authorized GitLearnOS operation under
+   `safe-auto`; if one necessary fact is missing, ask one concise question
+   instead of waiting for the learner to request organization, writeback,
+   retrieval, or a next step;
 8. derive effective write authority from both `gitlearnos.yml` and
    `learning-policy.md`; if they conflict or are unclear, use the stricter
    authority;

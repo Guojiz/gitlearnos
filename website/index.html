@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="description" data-zh="GitLearnOS：一个学习仓库，分科学科文件夹。自动整理、针对性出题、透明写回。" data-en="GitLearnOS: one learner-owned repository with subject folders, automatic organization, targeted questions, and traceable writeback." content="GitLearnOS：一个学习仓库，分科学科文件夹。自动整理、针对性出题、透明写回。">
+  <meta name="description" data-zh="GitLearnOS：AGENTS.md 驱动主动学习，Git 保存正式状态，本地 RAG 检索教材与长期知识。" data-en="GitLearnOS: proactive learning through AGENTS.md, formal state in Git, and optional local RAG for durable knowledge." content="GitLearnOS：AGENTS.md 驱动主动学习，Git 保存正式状态，本地 RAG 检索教材与长期知识。">
   <title data-zh="GitLearnOS — 学习发生在任何地方，状态属于你" data-en="GitLearnOS — Learn anywhere. Keep the state.">GitLearnOS — 学习发生在任何地方，状态属于你</title>
   <script>
     /* 首帧前恢复语言偏好，避免闪烁 */
@@ -118,7 +118,7 @@
     .pipe-live.armed.in .commit:nth-child(4){transition-delay:2.2s}
 
     /* ---------- 原则条 ---------- */
-    .principles{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid var(--line)}
+    .principles{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--line)}
     .principles>div{display:flex;align-items:center;justify-content:center;gap:.6rem;padding:1.3rem 1rem;font-size:.9rem;font-weight:700;text-align:center}
     .principles>div+div{border-left:1px solid var(--line)}
     .principles .icon{color:var(--action);width:1.3rem;height:1.3rem}
@@ -187,6 +187,18 @@
     .subject-files{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:auto}
     .subject-files code{font-family:var(--mono);font-size:.7rem;padding:.35rem .6rem;border:1px solid var(--line);border-radius:8px;color:var(--muted)}
     .repo-note{max-width:46em;margin:1.8rem 0 0;color:var(--muted);line-height:1.8;font-size:.93rem}
+
+    /* ---------- 主动 Agent + Git/RAG 分层 ---------- */
+    .memory-map{display:grid;grid-template-columns:minmax(220px,.8fr) 56px minmax(420px,1.2fr);gap:1rem;align-items:center}
+    .agent-card,.memory-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow)}
+    .agent-card{background:var(--deep);color:var(--on-dark)}
+    .agent-card code,.memory-card code{font-family:var(--mono);font-size:.72rem;color:var(--orange)}
+    .agent-card h3,.memory-card h3{margin:.7rem 0 .6rem;font-size:1.15rem}
+    .agent-card p,.memory-card p{margin:0;line-height:1.7;font-size:.87rem;color:var(--muted)}
+    .agent-card p{color:var(--on-dark-muted)}
+    .memory-arrow{justify-self:center;color:var(--action);width:1.7rem;height:1.7rem}
+    .memory-tools{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .memory-card ul{margin:.9rem 0 0;padding-left:1.1rem;color:var(--muted);font-size:.82rem;line-height:1.7}
 
     /* ---------- 参赛演示视频 ---------- */
     .demo-sec{background:var(--deep);color:var(--on-dark)}
@@ -261,6 +273,9 @@
       .loop-grid{grid-template-columns:1fr}
       .loop-step{min-height:0}
       .repo{grid-template-columns:1fr}
+      .memory-map{grid-template-columns:1fr}
+      .memory-arrow{transform:rotate(90deg)}
+      .memory-tools{grid-template-columns:1fr}
       .demo-layout{grid-template-columns:1fr}
       .final{grid-template-columns:1fr}
       .footer-in{grid-template-columns:1fr;gap:1.2rem}
@@ -309,6 +324,7 @@
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
       <a href="#loop"><span class="zh">学习闭环</span><span class="en">The loop</span></a>
       <a href="#subjects"><span class="zh">学科仓库</span><span class="en">Subjects</span></a>
+      <a href="#memory"><span class="zh">主动记忆</span><span class="en">Agent memory</span></a>
       <a href="#demo"><span class="zh">参赛演示</span><span class="en">Demo</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
     </nav>
@@ -325,7 +341,7 @@
     <div>
       <p class="kicker"><span class="zh">学习发生在任何地方。状态属于你。</span><span class="en">Learning happens anywhere. The state stays yours.</span></p>
       <h1><span class="zh b">你去学。<br><span class="hl">它收尾。</span></span><span class="en b">You learn.<br><span class="hl">It closes the loop.</span></span></h1>
-      <p class="intro"><span class="zh">把课堂笔记、老师反馈、错题和自学成果交进来一次。GitLearnOS 自动整理，按真正的薄弱点出题，再把结果写回这一科的文件夹。</span><span class="en">Drop in class notes, teacher feedback, mistakes, or self-study results once. GitLearnOS organizes them, generates targeted questions, and writes verified changes back to that subject folder.</span></p>
+      <p class="intro"><span class="zh">不用每次点名 Skill。AGENTS.md 让主 Agent 主动识别学习事件：先解决眼前问题，再整理证据、按需查询长期知识，并把结果写回 Git。</span><span class="en">No Skill name required. AGENTS.md makes the main agent notice learning events: answer first, organize evidence, retrieve durable knowledge when needed, and write results back to Git.</span></p>
       <div class="actions">
         <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">从一科开始</span><span class="en">Start with one subject</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
         <a class="text-link" href="#start"><span class="zh">复制开场指令</span><span class="en">Copy the starter prompt</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-d"/></svg></a>
@@ -368,6 +384,7 @@
     <div><svg class="icon" aria-hidden="true"><use href="#i-commit"/></svg><span><span class="zh">只连接一个仓库</span><span class="en">Connect one repository</span></span></div>
     <div><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span><span class="zh">分科学科文件夹</span><span class="en">Subject folders</span></span></div>
     <div><svg class="icon" aria-hidden="true"><use href="#i-check-c"/></svg><span><span class="zh">每次写回可追溯</span><span class="en">Traceable writeback</span></span></div>
+    <div><svg class="icon" aria-hidden="true"><use href="#i-loop"/></svg><span><span class="zh">AGENTS.md 主动触发</span><span class="en">Proactive via AGENTS.md</span></span></div>
   </section>
 
   <!-- ================= 01 老师反馈 ================= -->
@@ -472,10 +489,39 @@
     </div>
   </section>
 
-  <!-- ================= 04 AceSAT 参赛演示 ================= -->
+  <!-- ================= 04 主动 Agent 与 Git/RAG 分层 ================= -->
+  <section class="numbered wrap" id="memory">
+    <div class="number reveal">04</div>
+    <div>
+      <h2 class="section-title reveal"><span class="zh">AGENTS.md 负责主动。<br>Git 与 RAG 各守边界。</span><span class="en">AGENTS.md drives initiative.<br>Git and RAG keep separate jobs.</span></h2>
+      <div class="memory-map reveal">
+        <article class="agent-card">
+          <code>AGENTS.md</code>
+          <h3><span class="zh">唯一主 Agent</span><span class="en">One main agent</span></h3>
+          <p><span class="zh">每次交互都判断是否与学习有关。先回答，再主动执行最小的获授权操作；只缺一个事实时，就问一个必要问题。</span><span class="en">Every interaction is checked for learning value. Answer first, then take the smallest authorized action; ask one necessary question when one fact is missing.</span></p>
+        </article>
+        <svg class="icon memory-arrow" aria-hidden="true"><use href="#i-arrow-r"/></svg>
+        <div class="memory-tools">
+          <article class="memory-card">
+            <code>Git = formal memory</code>
+            <h3><span class="zh">过程与正式记录</span><span class="en">Process + formal record</span></h3>
+            <ul><li><span class="zh">目标、状态、错误与方法</span><span class="en">Goals, state, errors, methods</span></li><li><span class="zh">可读、可追踪、可撤销</span><span class="en">Readable, traceable, reversible</span></li></ul>
+          </article>
+          <article class="memory-card">
+            <code>local RAG = retrieval</code>
+            <h3><span class="zh">教材与长期知识</span><span class="en">Sources + durable knowledge</span></h3>
+            <ul><li><span class="zh">默认建议，可拒绝</span><span class="en">Recommended, can be declined</span></li><li><span class="zh">RAG-Anything 首个支持，不锁定</span><span class="en">RAG-Anything first, not locked in</span></li></ul>
+          </article>
+        </div>
+      </div>
+      <p class="repo-note reveal d1"><span class="zh">普通一次性练习不立刻进入 RAG；反复错误和可复用方法先在 Git 正式整理，再晋升。主 Agent 已经理解的截图不重复 OCR。只有问题依赖个人教材、笔记或长期知识时才查询 RAG。</span><span class="en">One-off exercises do not enter RAG immediately. Repeated errors and reusable methods become formal Git knowledge before promotion. Screenshots already understood by the main agent are not OCR'd twice. RAG is queried only when personal sources or durable knowledge matter.</span></p>
+    </div>
+  </section>
+
+  <!-- ================= 05 AceSAT 参赛演示 ================= -->
   <section class="demo-sec" id="demo">
     <div class="wrap numbered">
-      <div class="number reveal">04</div>
+      <div class="number reveal">05</div>
       <div class="demo-layout">
         <div class="demo-copy reveal">
           <p class="kicker"><span class="zh">AceSAT AI Agent Hackathon · 英文演示</span><span class="en">AceSAT AI Agent Hackathon · Product demo</span></p>
@@ -515,20 +561,20 @@
       </div>
       <pre class="zh b" id="promptZh">使用 https://github.com/Guojiz/GitLearnOS 作为 GitLearnOS 模板。
 我的学习仓库：<span class="dim">&lt;本地路径或远程仓库&gt;</span>
-学科：数学
-目标：<span class="dim">&lt;本学期目标&gt;</span>
 
-先读 GITLEARNOS.md 与 START-HERE.md，带我完成设置。
-之后的提问、作答、笔记照片与反馈都自动纳入；
-使用 safe-auto：先回答，再整理证据，提交可撤销写回。</pre>
+完整阅读 GITLEARNOS.md 与 START-HERE.md。修改前先问我的学习目标、学科和资料，
+默认建议启用本地 RAG 知识层（RAG-Anything 是首个支持选项），等我回答再部署。
+安装 AGENTS.md；以后无需点名 Skill，也要主动识别学习事件。
+使用 safe-auto：先回答，再主动整理证据、按需检索并提交可撤销写回。</pre>
       <pre class="en b" id="promptEn">Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
 My learning repository: <span class="dim">&lt;local path or remote repo&gt;</span>
-Subject: Math
-Goal: <span class="dim">&lt;this term's goal&gt;</span>
 
-Read GITLEARNOS.md and START-HERE.md first, then guide my setup.
-Treat future questions, answers, note photos and feedback automatically;
-use safe-auto: answer first, organize evidence, commit reversible writeback.</pre>
+Read GITLEARNOS.md and START-HERE.md completely. Before changes, ask for my
+goal, subject, and materials; recommend local RAG (RAG-Anything is the first
+supported option), then wait for my answer before learner deployment.
+Install AGENTS.md so future learning works without naming a Skill.
+Use safe-auto: answer first, proactively organize, retrieve when needed, and
+commit reversible writeback.</pre>
     </div>
   </section>
 </main>

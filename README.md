@@ -194,8 +194,8 @@ My learning Git repository or local checkout is: <target>
 Before changing anything, read GITLEARNOS.md and START-HERE.md completely. Ask
 me for my learning goal, subject, and current material. Recommend that I enable
 a local RAG knowledge layer, with RAG-Anything as the first supported option.
-Wait for my answer before any learner installation,
-installation, initialization, ingestion, commit, or deployment. Then use
+Wait for my answer before any learner installation, initialization, ingestion,
+commit, or deployment. Then use
 the complete skills/gitlearnos/ folder when Skills are supported. Detect whether
 the main agent is Codex, Claude Code, OpenCode, ChatGPT, or another runtime;
 install the folder in that agent's documented native location and verify it

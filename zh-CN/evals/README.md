@@ -28,5 +28,7 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [用 GitHub 支持教学协作](scenarios/10-github-teaching-collaboration.md)
 - [没有 Skills 时保持连续性](scenarios/11-no-skill-continuity.md)
 - [验证跨 Agent Skill 安装](scenarios/12-cross-agent-skill-install.md)
+- [路由并验证可选 RAG-Anything](scenarios/13-rag-anything.md)
 
-这些场景就是 v2 的发布验收条件。OpenSpace、数据库、向量索引和特定 Git 托管平台都不是必需项。
+这些场景就是 v2 的发布验收条件。OpenSpace、数据库、向量索引、RAG-Anything
+和特定 Git 托管平台都不是必需项。

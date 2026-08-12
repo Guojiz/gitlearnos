@@ -24,6 +24,13 @@ On every learner interaction:
 7. apply the effective write authority before writing;
 8. finish with an honest receipt and one useful next action.
 
+Unless the task clearly concerns maintaining or publishing the public template,
+treat the user as the learner. For learner setup, first ask for the learning
+goal, subject, and current material; recommend enabling a local RAG knowledge
+layer and wait for the answer before installing, initializing, ingesting,
+committing, or deploying learner state. Template maintenance, documentation,
+tests, and open-source release are exempt from this gate.
+
 ## Minimum operation router
 
 - **organize**: preserve the original input; link, deduplicate, classify, and
@@ -36,6 +43,10 @@ On every learner interaction:
   preserve only durable learning evidence;
 - **source**: keep large originals in project Sources or an authorized local
   area; store compact locators, inspected excerpts, and provenance in Git;
+- **rag**: recommend optional local RAG-Anything for substantial learning
+  materials; formalize durable knowledge in Git, ingest only authorized
+  long-term material, avoid duplicate OCR, and query only for learner-specific
+  knowledge;
 - **model**: revise reusable understanding only from traceable evidence;
 - **maintain**: repair stale views, contradictions, duplicates, broken links, or
   pending writeback without rewriting original evidence.
@@ -79,6 +90,10 @@ Next action:
 Undo boundary:
 Not completed or unverified:
 ```
+
+Report RAG-Anything as `enabled` only after a real authorized source was
+ingested and a traceable real query retrieved it. Keep one main agent; RAG is a
+tool and never a second agent or the source of formal learning state.
 
 Do not omit a field merely because its value is `none`, `unavailable`, or
 `unknown`.

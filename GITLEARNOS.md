@@ -98,6 +98,9 @@ learner repository
 
 project sources or local source folder
 → large textbooks, PDFs, scans, media, and long-lived reference files
+
+optional local RAG-Anything
+→ searchable textbooks, foundational materials, notes, and promoted durable knowledge
 ```
 
 Never write personal learning state into the public template.
@@ -107,6 +110,15 @@ or read-heavy files. Otherwise use an authorized local source folder. Keep only
 the necessary locator, access state, inspected excerpt, and derived learning
 record in Git. Do not commit large, copyrighted, private, or frequently replaced
 originals by default.
+
+By default, recommend that the learner enable a local RAG knowledge layer and
+allow the learner to decline. RAG-Anything is the first explicitly supported
+and recommended implementation, not the only compatible implementation. It is useful when a learner
+has substantial material that should be rediscovered across sessions. It does
+not replace Git, project Sources, or the main agent. Git remains the formal,
+readable, versioned record; RAG remains a rebuildable retrieval layer managed
+by the same main agent. GitLearnOS must continue to work when RAG is disabled
+or unavailable.
 
 ## Minimal learner repository
 
@@ -184,6 +196,41 @@ learner Git repository
 current conversation
 → temporary working context
 ```
+
+An enabled RAG-Anything layer sits beside Git and other tools under the one
+main agent. Do not create a second RAG agent or delegate policy decisions to
+the index.
+
+## Git and RAG-Anything decision policy
+
+These rules apply to RAG-Anything and to any compatible local RAG adapter. The
+implementation may be replaced without changing GitLearnOS ownership or
+evidence rules.
+
+- Foundational textbooks, long-term course materials, reference books, and
+  learner-designated base materials normally enter RAG. Git records their
+  existence, purpose, provenance, access boundary, and retrieval identifier.
+- Notes, special teacher methods, course rules, learner summaries, and other
+  durable reusable knowledge enter Git first as formal knowledge and then RAG
+  for retrieval.
+- A one-off exercise, temporary mistake, or incidental item may enter Git when
+  useful but must not enter RAG immediately. Promote it to Git + RAG only when
+  repeated evidence establishes a stable error pattern, durable knowledge gap,
+  reusable method, or valuable long-term summary.
+- When the main agent already understands an image, screenshot, question, or
+  board, preserve a faithful Markdown or structured representation and insert
+  that representation. Do not ask RAG-Anything to repeat equivalent OCR or
+  vision analysis. Let RAG-Anything parse the original when it is a complete
+  book, long PDF, large durable collection, a document whose image/table/
+  equation relationships matter, or a source the agent has not fully read.
+- Query RAG when the answer depends on the learner's textbooks, notes, or
+  durable personal knowledge. Do not query it for every response or for an
+  ordinary general-knowledge question.
+
+Treat ingestion as an external write. Require authorization, preserve privacy,
+and never index the public GitLearnOS template, its examples, secrets, or
+unapproved files. A RAG index is not learning evidence by itself and must be
+rebuildable from authorized source locators and formal Git records.
 
 When native memory is available and the learner permits it, remember only
 stable activation context: that GitLearnOS is installed, the target repository

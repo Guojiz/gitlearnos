@@ -20,6 +20,7 @@ flowchart LR
 | 解决常见疑问 | [FAQ](../FAQ.md) | [常见问题](FAQ.md) |
 | 配置无 Skill 界面 | [Project instructions](../templates/project-instructions.md) | [项目自定义指令](templates/project-instructions.md) |
 | 配置跨对话激活 | [Memory pointer](../templates/native-memory-pointer.md) | [原生记忆指针](templates/native-memory-pointer.md) |
+| 添加可选本地知识检索 | [RAG-Anything card](../docs/rag-anything.md) | [RAG-Anything 部署卡](docs/rag-anything.md) |
 | 阅读 AceSAT 案例 | [Impact statement](../docs/acesat-build-for-impact.md) | [影响说明](docs/acesat-build-for-impact.md) |
 | 浏览可视化官网 | [Website](https://guojiz.github.io/gitlearnos/) | 在同一页面点击 `中` |
 

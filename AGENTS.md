@@ -9,13 +9,23 @@ Before acting:
 
 1. read `GITLEARNOS.md` completely;
 2. distinguish this public template from the learner's target Git repository;
-3. inspect actual read, write, Git, source, and scheduler capability;
-4. read the target policy, dashboard, active subject goal, and only relevant
+3. assume the user is the learner unless the task clearly concerns maintaining,
+   documenting, testing, or publishing the public template. For learner setup,
+   ask for the learning goal, subject, and current material, recommend enabling
+   a local RAG knowledge layer, and wait for the answer before installing,
+   initializing, ingesting, committing, or deploying learner state. This gate
+   does not block template maintenance, documentation, tests, or open-source
+   release work;
+4. inspect actual read, write, Git, source, RAG, and scheduler capability;
+5. read the target policy, dashboard, active subject goal, and only relevant
    evidence;
-5. silently assess whether the current input is a useful learning event even
+6. silently assess whether the current input is a useful learning event even
    when the user does not mention GitLearnOS or invoke a Skill;
-6. use the single Router at `skills/gitlearnos/SKILL.md` when available, then
+7. route every learning-related request through GitLearnOS behavior. Use the
+   single Router at `skills/gitlearnos/SKILL.md` when available, then
    load only one operation reference and one subject reference when needed.
+   If Skills are unavailable, execute the same minimum router from this file;
+   never make Skill availability a prerequisite for helping the learner.
 
 For this template repository, preserve existing work. English is canonical.
 Keep the human-facing English and Chinese pairs listed in `DOCUMENTATION.md`
@@ -46,4 +56,15 @@ memory may carry the compact activation pointer in
 `templates/native-memory-pointer.md`, but not the changing learner state.
 
 Never claim repository access, Skill installation, a commit, a scheduled
-worker, or demonstrated mastery without evidence that it actually exists.
+worker, RAG ingestion or retrieval, or demonstrated mastery without evidence
+that it actually exists. A local RAG knowledge layer is recommended by default
+but remains optional. RAG-Anything is the first explicitly supported and
+recommended implementation, not a mandatory or exclusive dependency. It is a tool of the one main
+agent, not another agent and not the source of formal learning state. Index
+only authorized learner material. Never index this public template or its
+examples as personal knowledge. Do not send temporary exercises directly to
+RAG; promote repeated, durable knowledge only after organizing it in Git. If
+the main agent already understood an image or excerpt, insert its faithful
+Markdown or structured representation instead of repeating OCR or vision
+parsing. Use RAG only when user-specific sources or durable knowledge are
+relevant, not on every answer.

@@ -98,18 +98,51 @@ GitHub 特别适合私有异地备份、跨设备连续性、教师或导师审�
 
 大型教材、PDF、扫描件、媒体和长期参考文件通常放在 ChatGPT Project **Sources**、其他 Agent 的项目文件区或获授权的本地文件夹中。Git 保存紧凑状态、出处指针、选定片段和历史。
 
+## 建议启用：本地 RAG 知识层
+
+学习者拥有教材、长期课程包、笔记或需要长期检索的个人知识时，默认建议启用
+本地 RAG 知识层。学习者可以拒绝，GitLearnOS 仍然工作。
+[RAG-Anything](https://github.com/HKUDS/RAG-Anything) 是首个明确支持和推荐的
+实现，不是唯一兼容选择：
+
+```text
+                    唯一主 Agent
+                 /        |        \
+               Git   RAG-Anything   其他工具
+```
+
+- **Git** 是正式记忆：目标、学习历史、错误、方法、长期知识和精简资料登记。
+- **RAG-Anything** 是检索层：获授权教材、基础资料、笔记和晋升后的长期知识。
+- **主 Agent** 负责所有决定。不要增加 RAG Agent，普通通用问题也不查询 RAG。
+
+临时练习不会自动进入 RAG。主 Agent 已经理解照片或截图时，插入忠实 Markdown
+或结构化结果，不重复 OCR。只有完整教材、长 PDF、大型长期资料，或需要保持
+图片、表格和公式关系的文档，才主要把原文件直接交给 RAG-Anything。
+
+当前上游是 Python 框架，因此 Agent 不能假设 MCP 服务或一键服务器已经存在。
+它必须先询问学习目标和资料，再根据官方 RAG-Anything 文档选择最小解析器与
+模型配置。只有一份获授权真实资料完成导入，并且一次可追溯测试查询确实检索到
+它，才能认为部署完成。详见 [RAG-Anything 部署卡](docs/rag-anything.md)。
+
 ## 从一科开始
+
+先告诉 Agent 目标仓库。Agent 默认把你当作学习者，必须再询问学习目标、学科和
+当前资料，并建议启用本地 RAG 知识层；在收到回答前，不得安装、初始化、导入、
+提交或部署。
+
+维护、编写文档、测试或发布公开 GitLearnOS 模板不属于学习者部署，不受此门槛
+阻止。
 
 把下面这段交给有写入能力的 Agent：
 
 ```text
 请把 https://github.com/Guojiz/GitLearnOS 作为 GitLearnOS 模板。
 我的学习 Git 仓库或本地工作区是：<目标>
-学科：<学科>
-目标：<目标>
-当前材料或学习事件：<内容>
-
-先阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。环境支持 Skills 时使用
+修改任何内容前，完整阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。
+询问我的学习目标、学科和当前资料，建议启用本地 RAG 知识层，并把
+RAG-Anything 作为首个支持选项。安装、初始化、导入、提交或部署学习者状态前
+必须等我回答。然后在环境
+支持 Skills 时使用
 完整 skills/gitlearnos/ 文件夹。检查主 Agent 是 Codex、Claude Code、
 OpenCode、ChatGPT 还是其他运行环境；把该文件夹安装到正式记录的原生位置，
 并验证 Skill 清单确实出现它。不要依赖显式 Skill 调用。引导我完成设置，把大型

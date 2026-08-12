@@ -16,3 +16,12 @@ but:
 
 Vector search, keyword search, and hosted retrieval systems all follow this
 boundary. None is required for v2 conformance.
+
+RAG-Anything is the recommended optional local adapter for multimodal learning
+materials. Its index may additionally contain authorized original textbooks,
+course packs, notes, and formal knowledge promoted from Git. Follow the
+[deployment card](../../docs/rag-anything.md) and the Skill's
+[`rag.md`](../../skills/gitlearnos/references/rag.md) decision rules. Do not
+index the public template, examples, unauthorized files, or temporary
+exercises. A package import or empty health check is not deployment evidence;
+verify one real authorized ingest and one traceable retrieval.

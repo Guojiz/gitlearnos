@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: 在每次学习者交互中识别有价值的学习事件，并把学习者自有 Git 仓库中的任务路由到最小的 GitLearnOS 设置、整理、出题、复测、辅导、来源、模型或维护工作流。学习者提出学科问题、尝试作答、发来一页材料或笔记、报告反馈或结果，或者显露学习需要时，即使没有提到 GitLearnOS 或调用 Skill，也应考虑使用本 Skill。
+description: 每次涉及学习的交互都通过 GitLearnOS 路由，并选择最小的学习者自有 Git 设置、整理、出题、复测、辅导、来源、可选 RAG-Anything 知识、模型或维护工作流。学习者提出学科问题、尝试作答、发来材料或笔记、报告反馈或结果、显露学习需要，或者要求设置或部署学习系统时，即使没有提到 GitLearnOS 或调用 Skill，也使用本 Skill。
 ---
 
 # GitLearnOS Router
@@ -25,11 +25,15 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 ## 读取最少上下文
 
 1. 区分公开模板与学习者仓库；
-2. 检查真实的读取、写入、Git、来源和调度能力；
-3. 读取目标 `learning-policy.md`、Dashboard、当前学科目标和直接相关的证据；
-4. 根据设备、流量、时间、语言和交付限制提供最小但有价值的交互；
-5. 判断学科；只有可能写错位置时才询问；
-6. 只加载一个操作参考文件，确有必要时再加载一个学科参考文件。
+2. 除非明显是在维护或发布公开模板，否则默认用户就是学习者。部署学习者系统时，
+   询问学习目标、学科和当前资料，建议启用本地 RAG 知识层；回答前不得安装、
+   初始化、导入、提交或部署学习者状态。模板维护、文档、测试和开源发布不适用
+   此门槛；
+3. 检查真实的读取、写入、Git、来源、RAG 和调度能力；
+4. 读取目标 `learning-policy.md`、Dashboard、当前学科目标和直接相关的证据；
+5. 根据设备、流量、时间、语言和交付限制提供最小但有价值的交互；
+6. 判断学科；只有可能写错位置时才询问；
+7. 只加载一个操作参考文件，确有必要时再加载一个学科参考文件。
 
 ## 根据意图或证据路由
 
@@ -41,6 +45,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 | 执行已有题目并写回答案证据 | [`references/review.md`](references/review.md) |
 | 用户现在要求 AI 解释或引导练习 | [`references/session.md`](references/session.md) |
 | 处理来源访问、出处、隐私或完整性 | [`references/source.md`](references/source.md) |
+| 判断、部署、导入、晋升或查询 RAG-Anything | [`references/rag.md`](references/rag.md) |
 | 提炼可复用理解 | [`references/model.md`](references/model.md) |
 | 修复状态、链接、重复或撤销范围 | [`references/maintenance.md`](references/maintenance.md) |
 

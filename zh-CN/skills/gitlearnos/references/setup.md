@@ -15,12 +15,17 @@
 
 ## 能力优先设置
 
-1. 用日常语言解释推荐的三层安排；
-2. 识别目标；
-3. 测试真实的读取、写入、Git、来源、记忆、项目指令、Skill 和调度能力；
-4. 检查现有文件；
-5. 只引导学习者完成工具无法代办的选择或操作；
-6. 保留现有工作。
+1. 能访问时完整阅读 `GITLEARNOS.md` 和 `START-HERE.md`；
+2. 除非明显是在维护或发布公开模板，否则默认用户就是学习者。识别目标，再主动
+   询问学习目标、学科和当前资料，建议启用本地 RAG 知识层，并把 RAG-Anything
+   作为首个支持选项；
+3. 等待回答。回答前不得安装、初始化、导入、提交或部署学习者状态。模板维护、
+   文档、测试和开源发布不适用此门槛；
+4. 用日常语言解释推荐层次；
+5. 测试真实的读取、写入、Git、来源、RAG、记忆、项目指令、Skill 和调度能力；
+6. 检查现有文件；
+7. 只引导学习者完成工具无法代办的选择或操作；
+8. 保留现有工作。
 
 ```text
 项目 Sources 或获授权的本地来源文件夹
@@ -31,6 +36,9 @@
 
 可用时的原生记忆
 → 激活指针与稳定偏好
+
+可选本地 RAG-Anything
+→ 获授权基础资料、笔记和晋升后的长期知识
 ```
 
 在当前平台是 ChatGPT 时，大型学习文件优先放在持久 Project 的 **Sources** 区域。该 Project 内的 Chat 和 Work 对话便可使用共享项目上下文。其他 Agent 使用等价的项目文件区或获授权的本地来源文件夹。不要仅因为已有 Git 仓库，就把大型原件塞进 Git。
@@ -119,7 +127,7 @@ archive/
 
 ## 设置顺序
 
-1. 捕获第一个目标或输入，并推断或确认其学科；
+1. 学习者回答部署门槛问题后，捕获第一个目标或输入，并推断或确认其学科；
 2. 建立持久的项目或来源区域；可用且获授权时，把大型学习文件放入或链接到那里；
 3. 从示例创建 `gitlearnos.yml`；模板可访问时复制轻量
    `templates/AGENTS.md`，否则根据 `core-contract.md` 生成等价入口；并以
@@ -132,6 +140,9 @@ archive/
 7. 只在有用时出题；
 8. 只在学习者要求时运行 AI 会话；
 9. 用一个隐式触发进行验证：无需说出 Skill 名，智能体也能识别状态、行动、写入、报告，并遵守撤销边界。
+
+启用 RAG-Anything 时，读取 [`rag.md`](rag.md)。不能把安装包、写好配置、健康
+检查或空索引当作完成部署。必须验证一次获授权真实导入和一次可追溯检索。
 
 ## 迁移
 
@@ -151,6 +162,7 @@ Subject path:
 Capabilities:
 Policy:
 Project or source workspace:
+RAG-Anything: enabled / disabled / unavailable / unknown
 Activation surfaces:
 Skill installation: installed / source-only / unavailable / unknown
 Project/custom instructions:

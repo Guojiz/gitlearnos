@@ -8,18 +8,23 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 
 1. Read [GITLEARNOS.md](GITLEARNOS.md).
 2. Identify the learner's target Git repository or local checkout.
-3. Guide the learner to a persistent project/source area for large learning
+3. Unless clearly maintaining or publishing the public template, treat the user
+   as the learner. Ask for the learning goal, subject, and current material;
+   recommend enabling a local RAG knowledge layer; stop before learner
+   installation or deployment until the learner answers. Template maintenance,
+   documentation, tests, and open-source release are exempt from this gate.
+4. Guide the learner to a persistent project/source area for large learning
    files.
-4. Detect actual Chat/Work/agent, memory, instructions, Skills, read, write,
-   commit, push, source, and scheduling capability.
-5. Configure durable activation so future learning events do not require a
+5. Detect actual Chat/Work/agent, memory, instructions, Skills, read, write,
+   commit, push, source, RAG, and scheduling capability.
+6. Configure durable activation so future learning events do not require a
    Skill name.
-6. Read the target policy, dashboard, active subject goal, and only related
+7. Read the target policy, dashboard, active subject goal, and only related
    evidence.
-7. When Skills are supported, install the complete
+8. When Skills are supported, install the complete
    [`skills/gitlearnos/`](skills/gitlearnos/) folder in the main agent's native
    location, verify discovery, and route through its single Router.
-8. Perform safe work, commit one meaningful learning event, and return the
+9. Perform safe work, commit one meaningful learning event, and return the
    required receipt.
 
 ## Important boundaries

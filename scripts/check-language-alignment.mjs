@@ -39,11 +39,13 @@ const requiredHumanPairs = [
   "docs/adaptive-memory-and-learner-profile.md",
   "docs/deployment-guide.md",
   "docs/ai-runtime-support.md",
+  "docs/rag-anything.md",
   "evals/README.md",
   "evals/scenarios/09-implicit-learning-event.md",
   "evals/scenarios/10-github-teaching-collaboration.md",
   "evals/scenarios/11-no-skill-continuity.md",
   "evals/scenarios/12-cross-agent-skill-install.md",
+  "evals/scenarios/13-rag-anything.md",
   "website/public-page-copy.md",
 ];
 const localizedOnly = [
@@ -251,6 +253,7 @@ const requiredSkillBundleFiles = [
   "skills/gitlearnos/references/review.md",
   "skills/gitlearnos/references/session.md",
   "skills/gitlearnos/references/source.md",
+  "skills/gitlearnos/references/rag.md",
   "skills/gitlearnos/references/model.md",
   "skills/gitlearnos/references/maintenance.md",
   "skills/gitlearnos/references/subjects/README.md",

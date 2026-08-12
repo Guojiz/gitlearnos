@@ -5,16 +5,22 @@ Deployment attaches GitLearnOS to one learner-owned target repository and one ma
 ## Tool-capable fast path
 
 ```text
-1. guide one necessary setup choice at a time
-2. select project sources and the target Git repository
-3. identify the subject and current goal/input
-4. verify memory/instructions/Skills/read/write/source/scheduler capability
-5. inspect existing state and read START-HERE.md, AGENTS.md, and learning-policy.md
+0. read GITLEARNOS.md and START-HERE.md completely
+1. unless maintaining the public template, assume the user is the learner; ask for
+   the learning goal, subject, and current material; recommend a local RAG layer
+2. wait for the learner's answer; do not install, initialize, ingest, commit, or deploy
+3. select project sources and the target Git repository
+4. verify memory/instructions/Skills/read/write/source/RAG/scheduler capability
+5. inspect existing state, AGENTS.md, and learning-policy.md
 6. create only missing minimum state and configure durable activation
-7. organize the first real input or generate the first targeted questions
-8. test with a normal learning event that does not name GitLearnOS
-9. verify writeback and return a receipt
+7. if RAG is enabled, apply the Git/RAG policy and verify one real ingest and query
+8. organize the first real input or generate the first targeted questions
+9. test with a normal learning event that does not name GitLearnOS
+10. verify writeback and return a receipt
 ```
+
+This learner gate does not apply to maintaining, documenting, testing, or
+publishing the public GitLearnOS template.
 
 Minimum:
 
@@ -64,3 +70,6 @@ Deployment succeeds when the learner can provide one natural-language event and 
 - honor preview, record-only, no-review, and undo boundaries.
 
 Creating folders or running a forced AI session is not the success criterion.
+Neither is installing a Python package or writing RAG configuration. RAG is
+enabled only after an authorized source is really ingested and a traceable
+query retrieves it; otherwise report `unavailable` or `unknown`.

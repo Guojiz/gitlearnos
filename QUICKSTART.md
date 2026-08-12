@@ -9,6 +9,13 @@
 - one persistent project/source area for large learning files when available;
 - one subject, goal, or current learning event.
 
+For learner deployment, the agent must read the protocol completely, assume the
+user is the learner, ask for the learning goal, subject, and current material,
+and recommend enabling a local RAG knowledge layer. It must wait for the learner's answer before
+installing, initializing, ingesting, committing, or deploying.
+This gate does not apply to maintaining, documenting, testing, or publishing
+the public template.
+
 The agent may initialize a new local Git repository when its environment
 supports that operation. A GitHub account is not required.
 
@@ -26,6 +33,11 @@ in the ChatGPT Project **Sources** area or another persistent project/local
 source folder. Keep compact learning state and source locators in Git. A remote
 is only needed when the learner chooses sync, collaboration, backup, or
 publishing.
+
+When enabled, RAG-Anything indexes authorized foundational materials, notes,
+and promoted durable knowledge. Git remains the formal source of truth. Do not
+send one-off exercises to RAG, repeat OCR the main agent already completed, add
+a separate RAG agent, or query RAG for every answer.
 
 ## Install durable behavior once
 
@@ -66,11 +78,12 @@ target; Git remains the source of truth.
 ```text
 Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
 My learning Git repository or local checkout is: <target>
-Subject: <subject>
-Goal: <goal>
-Current material or learning event: <input>
 
-Read GITLEARNOS.md and START-HERE.md first. Use
+Read GITLEARNOS.md and START-HERE.md completely. Before changing anything, ask
+me for my learning goal, subject, and current material. Recommend enabling a
+local RAG knowledge layer, using RAG-Anything as the first supported option.
+Wait for my answer before any learner
+installation, initialization, ingestion, commit, or deployment. Then use
 the complete skills/gitlearnos/ folder when Skills are supported. Detect the
 main agent, install the folder in its documented native project location, and
 verify that its Skill list exposes gitlearnos; a copied source file is not

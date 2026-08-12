@@ -17,13 +17,20 @@ repository or project instructions from this reference and
 
 ## Capability-first setup
 
-1. explain the recommended three-layer arrangement in plain language;
-2. identify the target;
-3. test actual read, write, Git, source, memory, project-instruction, Skill, and
+1. read `GITLEARNOS.md` and `START-HERE.md` completely when accessible;
+2. unless clearly maintaining or publishing the public template, assume the
+   user is the learner. Identify the target, actively ask for the learning
+   goal, subject, and current material, and recommend enabling a local RAG
+   knowledge layer, using RAG-Anything as the first supported option;
+3. wait for the answer. Do not install, initialize, ingest, commit, or deploy
+   learner state before the learner answers. Do not apply this gate to template
+   maintenance, documentation, tests, or open-source release;
+4. explain the recommended layers in plain language;
+5. test actual read, write, Git, source, RAG, memory, project-instruction, Skill, and
    scheduling capability;
-4. inspect existing files;
-5. guide the learner through only the choices or actions tools cannot complete;
-6. preserve existing work.
+6. inspect existing files;
+7. guide the learner through only the choices or actions tools cannot complete;
+8. preserve existing work.
 
 ```text
 project sources or an authorized local source folder
@@ -34,6 +41,9 @@ learner Git repository
 
 native memory when available
 → activation pointer and stable preferences
+
+optional local RAG-Anything
+→ authorized foundational materials, notes, and promoted durable knowledge
 ```
 
 Prefer a persistent ChatGPT Project's **Sources** section for large learning
@@ -149,7 +159,8 @@ Do not add empty scaffolding.
 
 ## Setup order
 
-1. capture the first goal or input and infer or confirm its subject;
+1. after the learner answers the deployment gate, capture the first goal or
+   input and infer or confirm its subject;
 2. establish the persistent project/source area and place or link large
    learning files there when available and authorized;
 3. create `gitlearnos.yml` from the example, copy the template's thin
@@ -167,6 +178,10 @@ Do not add empty scaffolding.
 8. run an AI session only when the learner requests it;
 9. verify with an implicit trigger that the agent can identify state, act,
    write, report, and honor undo boundaries without requiring a Skill name.
+
+If RAG-Anything is enabled, load [`rag.md`](rag.md). Do not treat package
+installation, configuration, a health check, or an empty index as completed
+deployment. Verify one authorized real ingestion and one traceable retrieval.
 
 ## Migration
 
@@ -188,6 +203,7 @@ Subject path:
 Capabilities:
 Policy:
 Project or source workspace:
+RAG-Anything: enabled / disabled / unavailable / unknown
 Activation surfaces:
 Skill installation: installed / source-only / unavailable / unknown
 Project/custom instructions:

@@ -1,7 +1,7 @@
 interface:
   display_name: "GitLearnOS"
-  short_description: "Turn real learning events into traceable Git progress"
-  default_prompt: "Use $gitlearnos to handle this learning event and make only authorized, evidence-grounded writeback."
+  short_description: "Route learning through Git and optional local RAG"
+  default_prompt: "Use $gitlearnos to handle this learning event through authorized Git state and optional RAG-Anything retrieval."
 
 policy:
   allow_implicit_invocation: true

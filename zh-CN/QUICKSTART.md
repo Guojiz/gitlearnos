@@ -9,6 +9,11 @@
 - 可用时，一个用于大型学习文件的持久项目或来源区域；
 - 一个学科、目标或当前学习事件。
 
+部署学习者系统前，Agent 必须完整阅读协议，默认用户就是学习者，询问学习目标、
+学科和当前资料，并建议启用本地 RAG 知识层。学习者回答前，不得安装、初始化、导入、
+提交或部署。
+此门槛不适用于维护、编写文档、测试或发布公开模板。
+
 运行环境支持时，Agent 可以自行初始化本地 Git 仓库。不要求 GitHub 账号。
 
 OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能力仍会随界面和授权变化。请测试当前 Chat、Work 或 Codex 会话。Chat 具备仓库权限时用于小型日常学习事件；Work 用于引导式设置、大型导入和多文件维护。Skills 有帮助，但不是必需项。
@@ -16,6 +21,10 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 部分账号分别计算 Chat 与有限的 Work 任务额度。以当前账号界面为准；GitLearnOS 不承诺通用的额度处理方式。
 
 把大型教材、PDF、扫描件集合、媒体和长期参考文件放入 ChatGPT Project **Sources**，或其他持久项目或本地来源文件夹。Git 保存紧凑学习状态和来源定位。只有用户主动需要同步、协作、备份或公开发布时才需要远程仓库。
+
+启用后，RAG-Anything 索引获授权的基础资料、笔记和晋升后的长期知识；Git
+仍是正式事实来源。不能把一次性练习送入 RAG，不能重复主 Agent 已完成的 OCR，
+不能增加 RAG Agent，也不能每次回答都查询 RAG。
 
 ## 一次配置持久行为
 
@@ -53,11 +62,11 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 ```text
 请把 https://github.com/Guojiz/GitLearnOS 作为 GitLearnOS 模板。
 我的学习 Git 仓库或本地工作区是：<目标>
-学科：<学科>
-目标：<目标>
-当前材料或学习事件：<内容>
 
-先阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。环境支持 Skills 时使用
+完整阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。修改任何内容前，询问
+我的学习目标、学科和当前资料，建议启用本地 RAG 知识层，并把 RAG-Anything
+作为首个支持选项。安装、初始化、导入、提交或部署学习者状态前必须等我回答。
+然后在环境支持 Skills 时使用
 完整 skills/gitlearnos/ 文件夹。检查主 Agent，把该文件夹安装到其正式记录的
 原生项目位置，并验证 Skill 清单确实出现 gitlearnos；复制源文件本身不能证明
 安装成功。不要依赖显式 Skill 调用。一次只引导我完成一个必要设置步骤。大型

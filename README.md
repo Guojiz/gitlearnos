@@ -142,18 +142,60 @@ usually live in ChatGPT Project **Sources**, another agent's project file area,
 or an authorized local folder. Git stores compact state, provenance pointers,
 selected excerpts, and history.
 
+## Recommended: a local RAG knowledge layer
+
+For textbooks, long course packs, notes, and durable personal knowledge, we
+recommend enabling a local RAG knowledge layer. The learner may decline and
+GitLearnOS still works. [RAG-Anything](https://github.com/HKUDS/RAG-Anything)
+is the first explicitly supported and recommended implementation, not the only
+compatible choice:
+
+```text
+                    one Main Agent
+                 /        |        \
+               Git   RAG-Anything   other tools
+```
+
+- **Git** is the formal memory: goals, learning history, errors, methods,
+  durable knowledge, and a compact source register.
+- **RAG-Anything** is the searchable layer: authorized textbooks, foundational
+  materials, notes, and knowledge promoted for long-term reuse.
+- **The main agent** makes every decision. Do not add a separate RAG agent and
+  do not query RAG for ordinary general questions.
+
+Temporary exercises do not enter RAG automatically. If the main agent already
+understood a photo or screenshot, it inserts the faithful Markdown or
+structured result instead of repeating OCR. Raw files go directly to
+RAG-Anything mainly for complete books, long PDFs, large durable collections,
+or documents whose images, tables, and equations must stay connected.
+
+The current upstream package is a Python framework, so an agent must not assume
+that an MCP service or one-click server already exists. It must ask about the
+learning goal and material first, then choose the smallest supported parser and
+model setup from the official RAG-Anything documentation. Deployment is not
+complete until one authorized source is really ingested and a traceable test
+query really retrieves it. See the
+[RAG-Anything deployment card](docs/rag-anything.md).
+
 ## Start with one subject
+
+First tell the agent your target repository. By default the agent treats you as
+the learner, asks for the learning goal, subject, and current material, and
+recommends enabling a local RAG knowledge layer. It must wait for your answer
+before it installs, initializes, ingests, commits, or deploys anything.
+Maintaining, documenting, testing, or publishing the public GitLearnOS template
+is not learner deployment and is not blocked by this gate.
 
 Send this to a write-capable agent:
 
 ```text
 Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
 My learning Git repository or local checkout is: <target>
-Subject: <subject>
-Goal: <goal>
-Current material or learning event: <input>
-
-Read GITLEARNOS.md and START-HERE.md first. Use
+Before changing anything, read GITLEARNOS.md and START-HERE.md completely. Ask
+me for my learning goal, subject, and current material. Recommend that I enable
+a local RAG knowledge layer, with RAG-Anything as the first supported option.
+Wait for my answer before any learner installation,
+installation, initialization, ingestion, commit, or deployment. Then use
 the complete skills/gitlearnos/ folder when Skills are supported. Detect whether
 the main agent is Codex, Claude Code, OpenCode, ChatGPT, or another runtime;
 install the folder in that agent's documented native location and verify it

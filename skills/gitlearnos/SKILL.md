@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: On each learner interaction, recognize useful learning events and route them in a learner-owned Git repository to the smallest GitLearnOS setup, organization, question, review, tutoring, source, model, or maintenance workflow. Consider this Skill when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, or reveals a learning need—even without naming GitLearnOS or invoking a Skill.
+description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, model, or maintenance workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
 ---
 
 # GitLearnOS Router
@@ -30,13 +30,19 @@ on a surface where Skills are unavailable.
 ## Read minimum context
 
 1. distinguish the public template and the learner repository;
-2. detect actual read, write, Git, source, and scheduler capability;
-3. read target `learning-policy.md`, dashboard, active subject goal, and only
+2. unless clearly maintaining or publishing the public template, treat the user
+   as the learner. For learner setup, ask for the learning goal, subject, and
+   current material, and recommend enabling a local RAG knowledge layer;
+   wait for the answer before installing, initializing, ingesting, committing,
+   or deploying learner state. Do not apply this gate to template maintenance,
+   documentation, tests, or open-source release;
+3. detect actual read, write, Git, source, RAG, and scheduler capability;
+4. read target `learning-policy.md`, dashboard, active subject goal, and only
    directly related evidence;
-4. honor device, bandwidth, time, language, and delivery constraints with the
+5. honor device, bandwidth, time, language, and delivery constraints with the
    smallest useful interaction;
-5. infer the subject and ask only when a wrong write would otherwise occur;
-6. load one operation reference and one subject reference only when necessary.
+6. infer the subject and ask only when a wrong write would otherwise occur;
+7. load one operation reference and one subject reference only when necessary.
 
 ## Route by intent or evidence
 
@@ -48,6 +54,7 @@ on a surface where Skills are unavailable.
 | administer an existing question and write back evidence | [`references/review.md`](references/review.md) |
 | live AI explanation or guided practice requested now | [`references/session.md`](references/session.md) |
 | source access, provenance, privacy, or completeness | [`references/source.md`](references/source.md) |
+| decide, deploy, ingest, promote, or query RAG-Anything | [`references/rag.md`](references/rag.md) |
 | extract reusable understanding | [`references/model.md`](references/model.md) |
 | repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |
 

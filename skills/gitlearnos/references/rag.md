@@ -40,12 +40,15 @@ promoted and link its Git path to its RAG document identifier.
 ## Avoid duplicate parsing
 
 If the main agent already faithfully understood an image, screenshot,
-question, board, or short excerpt, write a structured Markdown record and use
-RAG-Anything's direct pre-parsed content insertion path when the available
-integration supports it. Do not repeat equivalent OCR or vision processing.
+question, board, or short excerpt, insert a faithful structured record through
+RAG-Anything's `insert_content_list` path instead of re-parsing. Build the list
+with the documented content_list schema: text items, images with an absolute
+`img_path` plus caption, tables as Markdown `table_body`, equations as `latex`
+plus a text description, and custom types with raw content. Do not repeat
+equivalent OCR or vision processing.
 
-Give the original file to RAG-Anything when it is a complete textbook, long
-PDF, large durable collection, a document whose text/image/table/equation
+Give the original file to RAG-Anything's parser when it is a complete textbook,
+long PDF, large durable collection, a document whose text/image/table/equation
 relationships matter, or material the main agent has not fully inspected.
 
 ## Install the smallest official capability
@@ -65,15 +68,18 @@ Before ingestion:
 
 1. confirm the source is authorized and inside the approved boundary;
 2. create or update its compact Git source record;
-3. choose raw parsing or direct structured insertion;
-4. use a stable document identifier and record it in Git;
+3. choose raw parsing or direct content_list insertion;
+4. use a stable document identifier (`doc_id` when the integration exposes one)
+   and record it in Git so later retrieval can cite the same identifier;
 5. prevent duplicate submission and preserve parser/version metadata when it
    affects future rebuilds.
 
 Query RAG only when the request depends on learner-specific textbooks, notes,
-or durable knowledge. Treat retrieved output as a locator and grounding aid,
-not as proof of learning or correctness. Link important conclusions back to an
-authorized source or formal Git record.
+or durable knowledge; each query runs an LLM pass over graph and vector
+retrieval, so routine questions should stay direct. Treat retrieved output as a
+locator and grounding aid, not as proof of learning or correctness. Cite the
+returned `doc_id` or file reference when linking an important conclusion back
+to an authorized source or formal Git record.
 
 ## Verify deployment
 
@@ -82,7 +88,8 @@ Report RAG-Anything as `enabled` only after observing all of these:
 1. the actual package, tool, or service interface is callable;
 2. the selected parser/model dependencies are available for the chosen format;
 3. one authorized non-secret source is really ingested or inserted;
-4. a test query retrieves a source-specific fact with a traceable identifier;
+4. a test query retrieves a source-specific fact and the response cites a
+   traceable `doc_id` or file reference from the ingested material;
 5. the public template, examples, unauthorized files, and temporary exercises
    are absent from the index;
 6. the index location, rebuild inputs, and deletion/undo boundary are known.

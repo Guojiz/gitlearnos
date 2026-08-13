@@ -179,9 +179,8 @@ Do not add empty scaffolding.
 9. verify with an implicit trigger that the agent can identify state, act,
    write, report, and honor undo boundaries without requiring a Skill name.
 
-If RAG-Anything is enabled, load [`rag.md`](rag.md). Do not treat package
-installation, configuration, a health check, or an empty index as completed
-deployment. Verify one authorized real ingestion and one traceable retrieval.
+If RAG-Anything is enabled, load [`rag.md`](rag.md) and follow its deployment,
+ingestion, and verification rules.
 
 ## Migration
 

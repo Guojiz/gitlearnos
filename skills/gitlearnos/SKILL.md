@@ -61,6 +61,12 @@ on a surface where Skills are unavailable.
 Do not turn note capture, teacher feedback, or preparation for human help into
 an AI tutoring session.
 
+Operation routing applies to the action actually taken, not only the learner's
+opening words. If an organize or live-tutoring response assigns a question for
+later answer, load `question.md` before finishing and complete its persistence
+and receipt steps. A question left only in chat is not a completed assignment
+under `safe-auto` when write and Git access exist.
+
 When subject-specific form matters, load only one reference from
 [`references/subjects/`](references/subjects/README.md).
 

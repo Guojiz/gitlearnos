@@ -19,6 +19,11 @@
 6. 将结果交给 `review.md`；
 7. 只写回持久证据和状态变化。
 
+如果新题要在当前回答之后再作答，它就是持久化题集，不只是对话支持。必须加载
+`question.md`；在有效 `safe-auto` 且具备写入和 Git 能力时，结束前写入
+`planned` 复习、链接缺口、刷新仪表盘、记录真实的 `on-handoff` 或调度状态，
+并提交完整布置。如果学习者当场作答，则把答案交给 `review.md`。
+
 不要仅因尚未验证，就重新教授一个已在外部解决的问题。尊重疲劳、来源限制、目标变化与停止请求。
 
 ## 输出
@@ -30,5 +35,8 @@ Questions used:
 Observed result:
 Support:
 Files updated:
+Automation actually completed:
+Skill installation:
 Next action:
+Undo:
 ```

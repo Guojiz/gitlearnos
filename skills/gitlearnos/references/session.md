@@ -20,6 +20,14 @@ the AI to teach or test now.
 6. pass the result to `review.md`;
 7. write back only durable evidence and state changes.
 
+If the fresh item is assigned for an answer after the current response, it is
+a persisted question set, not merely conversational support. Load
+`question.md` and, under effective `safe-auto` with write and Git access,
+write the `planned` review, link the gap, refresh the dashboard, record the
+truthful on-handoff or scheduled state, and commit the complete assignment
+before finishing. If the learner answers it immediately, pass the answer to
+`review.md` instead.
+
 Do not reteach an externally resolved issue merely because it remains
 unverified. Honor fatigue, source limits, goal changes, and requests to stop.
 
@@ -32,5 +40,8 @@ Questions used:
 Observed result:
 Support:
 Files updated:
+Automation actually completed:
+Skill installation:
 Next action:
+Undo:
 ```

@@ -91,7 +91,7 @@ Ingested or promoted:
 Retrieval evidence:
 Skipped and why:
 Changed files:
-Secrets: not inspected / configuration status only
+Credentials: not inspected / configuration status only
 Undo or deletion boundary:
 Next action:
 ```

@@ -228,6 +228,14 @@ Codex 与 OpenCode 默认使用 `.agents/skills/gitlearnos/`；Claude Code 使�
 OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评测这个
 通用 Skill；运行 GitLearnOS 不需要它。
 
+## DeepSeek Harness Developer Preview
+
+GitLearnOS 现已包含可固定提交安装的 DeepSeek Harness bundle 基座。Host 提供
+诚实的状态与路由，以及一条狭窄、受政策约束的 Git 事件事务；尚不提供 RAG
+调用或已验证后台工作。DeepSeek 官方 provider 只处理文本，Harness 的会话内
+Schedule 也不能代替真正的仓库重复自动化。详见
+[安装、验证、限制与原生路线图](adapters/deepseek-harness/README.md)。
+
 ## 评测
 
 GitLearnOS 使用完整场景评测，不逐字比较 AI 输出。v2 验收覆盖初始化、隐式学习

@@ -22,10 +22,11 @@ flowchart LR
 | 配置跨对话激活 | [Memory pointer](../templates/native-memory-pointer.md) | [原生记忆指针](templates/native-memory-pointer.md) |
 | 记录已验证重复任务 | [Automation state](../templates/automation.md) | [自动化状态](templates/automation.md) |
 | 添加可选本地知识检索 | [RAG-Anything card](../docs/rag-anything.md) | [RAG-Anything 部署卡](docs/rag-anything.md) |
+| 使用 DeepSeek Harness Developer Preview | [Harness adapter](../adapters/deepseek-harness/README.md) | [Harness 适配器](adapters/deepseek-harness/README.md) |
 | 阅读 AceSAT 案例 | [Impact statement](../docs/acesat-build-for-impact.md) | [影响说明](docs/acesat-build-for-impact.md) |
 | 浏览可视化官网 | [Website](https://guojiz.github.io/gitlearnos/) | 在同一页面点击 `中` |
 
-这八个入口构成正式的人类阅读路径。学习者和评委无需阅读协议、Skills、适配器或评测夹具，也应当能理解产品并开始使用。
+这些入口构成正式的人类阅读路径。学习者和评委无需阅读协议、Skills、适配器或评测夹具，也应当能理解产品并开始使用。
 
 ## Agent 执行路径
 
@@ -43,6 +44,11 @@ AGENTS.md
 `references/` 按需加载。`GITLEARNOS.md` 是唯一正式行为契约。`AGENTS.md`、
 `skills/`、`evals/`、适配器和机器模板以英文维护。已有中文翻译可以帮助人类
 检查系统，但机器文件不要求全部提供中文，且中文永远不能覆盖英文原文。
+
+DeepSeek Harness 用户应把仓库根目录作为固定提交的 Developer Preview bundle
+安装，再验证 profile 配置。当前 Host 基座含两个只读工具与一条狭窄 Git 事件
+事务；准确的安装、卸载、验证、安全、模型、调度与路线图边界见
+[Harness 适配器说明](adapters/deepseek-harness/README.md)。
 
 ## 深入文档
 

@@ -24,10 +24,11 @@ flowchart LR
 | Configure cross-chat activation | [Memory pointer](templates/native-memory-pointer.md) | [原生记忆指针](zh-CN/templates/native-memory-pointer.md) |
 | Record verified recurring tasks | [Automation state](templates/automation.md) | [自动化状态](zh-CN/templates/automation.md) |
 | Add optional local knowledge retrieval | [RAG-Anything card](docs/rag-anything.md) | [RAG-Anything 部署卡](zh-CN/docs/rag-anything.md) |
+| Use DeepSeek Harness Developer Preview | [Harness adapter](adapters/deepseek-harness/README.md) | [Harness 适配器](zh-CN/adapters/deepseek-harness/README.md) |
 | Read the AceSAT case | [Impact statement](docs/acesat-build-for-impact.md) | [影响说明](zh-CN/docs/acesat-build-for-impact.md) |
 | Browse the visual site | [Website](https://guojiz.github.io/gitlearnos/) | Use the `中` switch on the same page |
 
-These eight entry points are the supported human path. A learner or judge should
+These entry points are the supported human path. A learner or judge should
 not need to read the protocol, Skills, adapters, or evaluation fixtures to
 understand the product.
 
@@ -49,6 +50,12 @@ while operations and subject methods load from `references/` on demand.
 `evals/`, adapters, and machine templates are maintained in English. Existing
 Chinese translations may help a human inspect the system, but they are not
 required for every machine-facing file and never override the English source.
+
+DeepSeek Harness users install the repository root as a pinned Developer
+Preview bundle, then verify its profile configuration. The current Host base
+has two read tools and one narrow Git event transaction; its exact install,
+removal, verification, safety, model, schedule, and roadmap boundaries are in
+the [Harness adapter guide](adapters/deepseek-harness/README.md).
 
 ## Deeper documentation
 

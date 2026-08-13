@@ -293,6 +293,15 @@ installation—the active runtime must list `gitlearnos`. See the
 OpenSpace may later evaluate this generic Skill through an
 [optional integration](integrations/openspace/README.md); it is not required.
 
+## DeepSeek Harness Developer Preview
+
+GitLearnOS now includes a pinned, installable DeepSeek Harness bundle base. Its
+Host adds honest status and routing plus one narrow, policy-checked Git event
+transaction; it does not yet provide RAG calls or verified background work.
+DeepSeek's official provider is text-only, and Harness's session-local Schedule
+is not a substitute for recurring repository automation. See the
+[install, verification, limits, and native roadmap](adapters/deepseek-harness/README.md).
+
 ## Evaluation
 
 GitLearnOS uses documented end-to-end scenarios rather than exact AI text

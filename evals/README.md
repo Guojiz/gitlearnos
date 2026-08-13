@@ -36,8 +36,15 @@ clear.
 - [Synthesize a repeated error into a transferable model](scenarios/14-repeated-error-synthesis.md)
 - [Verify recurring organization and questions](scenarios/15-recurring-automation.md)
 
+## Runtime adapter scenario
+
+- [Verify native DeepSeek Harness integration](scenarios/16-deepseek-harness-native.md)
+
 These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
 index, RAG-Anything, and a particular Git host are not required. A real
 repository-capable recurring scheduler is required to pass Scenario 15's
 verified-deployment variant; without one the only truthful result is
-`incomplete`.
+`incomplete`. Scenario 16 separately evaluates an optional runtime adapter and
+does not make DeepSeek Harness a v2 requirement. During its Developer Preview,
+the shipped narrow Host may earn `host-baseline-pass`; only a demonstrated
+write-capable integration may earn `full-pass`.

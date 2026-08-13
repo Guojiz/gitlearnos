@@ -224,6 +224,16 @@ evidence rules.
   vision analysis. Let RAG-Anything parse the original when it is a complete
   book, long PDF, large durable collection, a document whose image/table/
   equation relationships matter, or a source the agent has not fully read.
+- A text-only or non-multimodal model cannot see an image, screenshot, or
+  board. When the main agent cannot visually inspect the material, it has not
+  "already understood" it and must not fabricate its content, infer a gap or
+  diagnosis, promote a model, or generate questions from it. Prefer an
+  available multimodal or vision-capable helper model to transcribe it, then
+  an authorized local OCR or parser, then asking the learner to paste the
+  text, or hand the raw original to RAG-Anything's parser for authorized
+  ingestion. A low-confidence or fragmentary transcription is not inspected
+  content: record it as `needs-transcription` or `not-yet-read` and ask the
+  learner to confirm before recording gaps, models, or questions.
 - Query RAG when the answer depends on the learner's textbooks, notes, or
   durable personal knowledge. Do not query it for every response or for an
   ordinary general-knowledge question.

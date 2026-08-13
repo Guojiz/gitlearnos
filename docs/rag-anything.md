@@ -45,11 +45,25 @@ unset without exposing values.
 ## Upstream installation boundary
 
 Follow the current [official RAG-Anything repository](https://github.com/HKUDS/RAG-Anything).
-At the time this card was written, upstream documents a Python package:
+Install a version-pinned upstream package for reproducibility:
 
 ```bash
-pip install raganything
+python3.12 -m venv .rag-venv
+.rag-venv/bin/pip install "raganything==1.3.1"
 ```
+
+Resolve two compatibility risks explicitly, then verify:
+
+1. PyPI currently publishes `raganything` 1.3.1, but an older 0.0.1 release
+   also exists. Pin the intended current release and inspect the installed
+   version instead of accepting an old cached, mirrored, or constrained
+   resolution.
+2. Upstream `raganything` depends on `mineru[core]`, which has no Python 3.14
+   distribution, and newer releases pin `Requires-Python <3.14`. macOS
+   Homebrew's default `python3` is often 3.14, so use a Python 3.12 virtualenv.
+
+Verify the version and import before reporting anything available:
+`.rag-venv/bin/python -c "import importlib.metadata as m; import raganything, lightrag; print(m.version('raganything'))"`.
 
 Optional extras expand format support, while Office documents and parser
 choices can require additional system packages, models, or platform-specific

@@ -24,6 +24,12 @@ briefly or ask one necessary question. Do not store the full image or original
 file unless authorized; a faithful note, locator, and inspected excerpt may be
 enough.
 
+If the model cannot see an image, do not invent its content or a diagnosis from
+it; prefer an available multimodal or vision-capable helper model, then a local
+OCR or parser, then asking for the text, or route the original to an authorized
+parser. Record a low-confidence transcription as a locator with
+`needs-transcription`, not as inspected content.
+
 ## Read
 
 1. `learning-policy.md` when present;

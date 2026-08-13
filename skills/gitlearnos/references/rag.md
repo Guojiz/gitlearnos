@@ -58,6 +58,16 @@ Give the original file to RAG-Anything's parser when it is a complete textbook,
 long PDF, large durable collection, a document whose text/image/table/equation
 relationships matter, or material the main agent has not fully inspected.
 
+A text-only or non-multimodal main agent cannot see the image and therefore has
+not understood it; it must not synthesize or fabricate a representation,
+diagnosis, or question from it. Prefer an available multimodal or
+vision-capable helper model to transcribe it, then an authorized local OCR or
+parser, then asking the learner to paste the text, or hand the raw original to
+RAG-Anything's parser for authorized ingestion. A low-confidence or fragmentary
+transcription is still not-read; record it as `needs-transcription` or
+`not-yet-read` and ask the learner to confirm before recording gaps, models, or
+questions.
+
 ## Install the smallest official capability
 
 RAG-Anything upstream is a Python framework; do not assume an MCP server or
@@ -65,6 +75,14 @@ one-click service exists. Prefer the current official package and documentation.
 Choose only dependencies required by the learner's formats and environment.
 Complex Office formats may require external software; parser choices may need
 additional models or packages. Keep credentials outside Git and chat.
+
+Pin a current released version for reproducibility and inspect the installed
+version; PyPI currently publishes 1.3.1 but also contains an old 0.0.1 release,
+so do not accept an unexpected cached, mirrored, or constrained resolution.
+Upstream `mineru[core]` has no Python 3.14 distribution. On a machine whose
+default `python3` is 3.14, create a Python 3.12 virtualenv and verify the
+installed version plus `import raganything, lightrag` before reporting
+anything available.
 
 An integration may expose Python calls, a local service, MCP tools, or another
 adapter. Verify the actual interface instead of documenting an imagined one.

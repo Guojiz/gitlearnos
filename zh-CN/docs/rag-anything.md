@@ -38,11 +38,23 @@ Git 保存正式状态和记忆；RAG-Anything 保存可以重建的检索索引
 ## 上游安装边界
 
 遵循当前[官方 RAG-Anything 仓库](https://github.com/HKUDS/RAG-Anything)。
-本部署卡编写时，上游记录的是 Python 包：
+为保证可复现，安装固定版本的上游包：
 
 ```bash
-pip install raganything
+python3.12 -m venv .rag-venv
+.rag-venv/bin/pip install "raganything==1.3.1"
 ```
+
+必须明确处理两个兼容风险，然后验证：
+
+1. PyPI 当前发布的 `raganything` 是 1.3.1，但也存在旧的 0.0.1 版本。
+   固定所需当前版本并检查实际安装版本，不能接受缓存、镜像或约束导致的旧版解析。
+2. 上游 `raganything` 依赖 `mineru[core]`，而后者没有 Python 3.14 发行版，
+   且新版本固定 `Requires-Python <3.14`。macOS Homebrew 默认 `python3` 常为
+   3.14，因此要使用 Python 3.12 虚拟环境。
+
+安装后先验证版本与导入再声称可用：
+`.rag-venv/bin/python -c "import importlib.metadata as m; import raganything, lightrag; print(m.version('raganything'))"`。
 
 可选 extras 会扩大格式支持；Office 文档和解析器选择可能需要额外系统包、模型
 或平台特定配置。不能盲目安装全部 extras。当前集成没有真实提供并验证时，不能

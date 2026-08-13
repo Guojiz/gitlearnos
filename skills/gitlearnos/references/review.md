@@ -12,11 +12,26 @@ clear pending item exists, score and write it back under policy. If several
 items could match, ask one short question. If none match, treat it as a new
 learning event rather than inventing provenance.
 
+A text-only model that cannot see an image answer must not score or fabricate
+that answer; prefer an available multimodal or vision-capable helper model to
+transcribe it, then ask for the text or route the original to an authorized
+parser. Treat a low-confidence transcription as not-yet-scored.
+
 ## Read
 
-Resolve the subject, then read the linked goal, source or model, gap, question
-purpose, answer key or success condition, and recent attempts. Do not reveal
-answers before an attempt unless requested.
+Resolve the subject. Before creating any event, search
+`subjects/<subject>/reviews/` for `planned` question sets and compare the
+learner's answer with their question text, purpose, and dates. If exactly one
+set matches, write the answer back to that review record; do not create a new
+event as a substitute. If several sets plausibly match, ask one short
+disambiguating question. Only use the organize flow when no planned review
+matches.
+
+For the matched set, read its linked goal, source or model, gap, question
+purpose, saved answer key, rubric, test, or success condition, and recent
+attempts. Evaluate against that saved criterion rather than only the agent's
+own subject knowledge. Do not reveal answers before an attempt unless
+requested.
 
 ## Record
 
@@ -60,7 +75,9 @@ with an AI diagnosis.
 
 ## Writeback
 
-1. append the answer and feedback without replacing original evidence;
+1. append the answer and feedback to the matched review record without
+   replacing original evidence, and change `planned` only to the truthful
+   attempted or assessed state;
 2. record the judgment, outcome, support, and diagnosis confidence;
 3. link same-pattern evidence and update the linked gap;
 4. refine a model only when the promotion rule is met;
@@ -68,7 +85,9 @@ with an AI diagnosis.
 6. refresh the dashboard;
 7. update the learner profile only for repeated durable patterns;
 8. create background scheduling only through a real scheduler;
-9. commit the review as one reversible learning event.
+9. stage every file changed by this review, including root views such as
+   `dashboard.md`, and commit the complete review as one reversible learning
+   event.
 
 An unattempted generated set remains `planned`.
 
@@ -81,6 +100,8 @@ Result:
 Independence and support:
 Files updated:
 Next review or check-on-handoff:
+Automation actually completed:
+Skill installation:
 Next action:
 Undo:
 ```

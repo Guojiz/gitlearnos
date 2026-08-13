@@ -207,7 +207,12 @@ considered automatically. Detect actual repository, Git, memory, source, and
 scheduling capability. Use safe-auto: answer first, organize useful evidence,
 guide the next step, and commit safe reversible writeback. Preserve original
 answers, notes, and external feedback. Do not store the full conversation or
-claim mastery without delayed independent evidence. Finish with activation
+claim mastery without delayed independent evidence. During setup, assign an
+explicit learner-local recurring time and IANA time zone to both `maintenance`
+and `due-review`, create them in a real repository-capable scheduler, and test
+both. Use 21:30 and 07:00 respectively when I accept the defaults. If either
+job cannot be verified, mark deployment automation incomplete rather than
+substituting a reminder. Finish with activation
 surfaces, verified Skill status, changed files, actual automation, the next
 action, and the undo boundary.
 ```
@@ -221,6 +226,7 @@ See the complete [Quickstart](QUICKSTART.md).
 gitlearnos.yml
 AGENTS.md
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/
@@ -248,17 +254,27 @@ first real use.
 
 The dashboard is a current view, not a second source of truth.
 
-## Automation that acts
+## Required recurring automation that acts
 
-The portable base defines two operations:
+Every learner deployment must assign both recurring operations a learner-local
+time and an IANA time zone:
 
-- `due-review`: read due evidence and deliver concrete answerable questions;
 - `maintenance`: reconcile input, waiting feedback, stale views, and
-  contradictions.
+  contradictions; default daily at **21:30**;
+- `due-review`: read due evidence and deliver concrete answerable questions;
+  default daily at **07:00**.
 
-An interactive agent performs immediate work and checks due items when it
-resumes. Background work requires a real external scheduler with repository
-access. A reminder alone is not completed repository work.
+The learner may change either time. Deployment automation is complete only
+after a real repository-capable scheduler exposes both recurring tasks and each
+passes one observed test run. Record policy in `learning-policy.md` and observed
+runtime state in `automation.md`. A reminder, date, prompt, or on-handoff check
+does not count. If no real scheduler is available, keep interactive learning
+usable but report deployment automation as `incomplete`.
+
+Daily recurrence is a check cadence, not permission to invent work. With no new
+evidence to organize or no due review, the job silently records `skipped` in
+runtime evidence: no filler questions, learner notification, timestamp-only
+commit, or empty commit.
 
 See [Automation adapters](adapters/automation/README.md).
 

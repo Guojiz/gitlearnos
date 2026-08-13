@@ -93,7 +93,11 @@ large learning files. Configure durable project/repository instructions and,
 when available, native memory so future questions, attempted answers,
 photographed pages, notes, feedback, and results are recognized as candidate
 learning events without me naming GitLearnOS. Detect actual repository, Git,
-memory, source, and scheduling capability. Use safe-auto: answer my immediate
+memory, source, and scheduling capability. During setup, confirm or accept my
+IANA time zone and recurring local times for `maintenance` (default daily
+21:30) and `due-review` (default daily 07:00). Create both in a real
+repository-capable scheduler and test each once; if either cannot be verified,
+record the request and mark deployment automation incomplete. Use safe-auto: answer my immediate
 need, organize useful evidence, suggest or generate targeted questions when
 they serve the goal, and commit safe reversible writeback. Preserve original
 answers, notes, and external feedback. Do not store the full conversation or
@@ -110,6 +114,7 @@ Do not manually create the GitLearnOS folder tree when the agent can do it.
 AGENTS.md
 gitlearnos.yml
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -132,6 +137,10 @@ Project/custom instructions:
 Memory: saved / suggested / unavailable / unknown
 Skills: installed / source-only / unavailable / unknown
 Remote backup or collaboration:
+Time zone:
+Maintenance: requested / configured / verified / unavailable / disabled
+Due review: requested / configured / verified / unavailable / disabled
+Deployment automation: verified / incomplete
 ```
 
 ## Everyday requests
@@ -186,6 +195,8 @@ Setup is working when the agent can:
   name when configured memory or project instructions are available;
 - keep large sources in the project/source area and compact state in Git;
 - say exactly what automation and repository work actually ran;
+- expose and test both required recurring jobs, or explicitly mark deployment
+  automation incomplete;
 - complete the same loop in local Git without GitHub.
 
 Without write access, the agent should return exact pending writeback and say

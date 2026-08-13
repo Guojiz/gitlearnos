@@ -19,12 +19,15 @@ GitLearnOS runs through an existing AI agent with Git repository access.
    commit, push, source, RAG, and scheduling capability.
 6. Configure durable activation so future learning events do not require a
    Skill name.
-7. Read the target policy, dashboard, active subject goal, and only related
+7. Confirm or accept learner-local recurring times and an IANA time zone for
+   `maintenance` (default daily 21:30) and `due-review` (default daily 07:00),
+   then create and test both with a real repository-capable scheduler.
+8. Read the target policy, dashboard, active subject goal, and only related
    evidence.
-8. When Skills are supported, install the complete
+9. When Skills are supported, install the complete
    [`skills/gitlearnos/`](skills/gitlearnos/) folder in the main agent's native
    location, verify discovery, and route through its single Router.
-9. Perform safe work, commit one meaningful learning event, and return the
+10. Perform safe work, commit one meaningful learning event, and return the
    required receipt.
 
 ## Important boundaries
@@ -39,6 +42,8 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 - Ordinary conversation is not a learning record.
 - Original answers, notes, and external feedback are preserved.
 - A due automation should produce a concrete question, not only a reminder.
+- Missing or untested required recurring jobs make deployment automation
+  incomplete; on-handoff checks do not replace them.
 - Without real write or scheduling capability, return pending work honestly.
 
 For a copyable setup request, see [QUICKSTART.md](QUICKSTART.md).

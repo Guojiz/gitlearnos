@@ -137,6 +137,7 @@ Create only what the first goal or input needs:
 AGENTS.md
 gitlearnos.yml
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -157,6 +158,36 @@ archive/
 
 Do not add empty scaffolding.
 
+## Required recurring automation
+
+After the learner answers the deployment gate, establish both canonical jobs:
+
+- `maintenance`: recurring organization, default daily at 21:30 in the
+  learner's local IANA time zone;
+- `due-review`: recurring question generation, default daily at 07:00 in the
+  learner's local IANA time zone.
+
+The learner may change the times. Ask only one concise scheduling question when
+the time zone cannot be inferred safely; default quiet hours to 22:00–before
+07:00 (excluding 07:00),
+delivery to the current authorized learning channel, and each due run to at
+most three questions. Persist the requested recurrence
+and delivery preferences in `learning-policy.md`, and create `automation.md`
+from its template as the single scheduler-status record.
+
+Create each recurring task through a real repository-capable scheduler, record
+its opaque provider ID and next run as `configured`, then execute one safe test
+occurrence. Mark it `verified` only after observing both the scheduler entry and
+the worker's repository access. A no-work test may correctly return `skipped`
+without a commit.
+
+Do not report deployment automation complete until both jobs are `verified`.
+Use `requested` while provisioning is pending. If capability inspection finds
+no suitable scheduler, record both exact schedules with state `unavailable`,
+report automation `incomplete`, and identify the missing runtime capability.
+An on-handoff check or reminder does not satisfy this gate, though immediate
+learning may continue.
+
 ## Setup order
 
 1. after the learner answers the deployment gate, capture the first goal or
@@ -173,10 +204,11 @@ Do not add empty scaffolding.
    instructions, configure the native-memory pointer when permitted, and report
    every surface with a verified status;
 5. create minimal profile and dashboard with one next action;
-6. organize the first real input or gap;
-7. generate questions only when useful;
-8. run an AI session only when the learner requests it;
-9. verify with an implicit trigger that the agent can identify state, act,
+6. create, test, and record both recurring automation jobs;
+7. organize the first real input or gap;
+8. generate questions only when useful;
+9. run an AI session only when the learner requests it;
+10. verify with an implicit trigger that the agent can identify state, act,
    write, report, and honor undo boundaries without requiring a Skill name.
 
 If RAG-Anything is enabled, load [`rag.md`](rag.md) and follow its deployment,
@@ -210,6 +242,9 @@ Memory: saved / suggested / unavailable / unknown
 Changed files:
 First organized path:
 Questions prepared:
+Recurring organization:
+Recurring questions:
+Deployment automation: verified / incomplete
 Still missing:
 Next action:
 ```

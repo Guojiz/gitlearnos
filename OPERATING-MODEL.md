@@ -17,7 +17,9 @@ or records reviews, reconciles external feedback, and writes back under learner
 policy. Live AI tutoring is optional.
 
 Git supplies inspectable history, commits, sync, and rollback. A hosted service,
-scheduler, search index, database, or skill manager is an optional adapter.
+search index, database, or skill manager is optional. The scheduler provider is
+replaceable, but complete learner deployment requires verified recurring
+`maintenance` and `due-review` tasks with repository access.
 
 See:
 

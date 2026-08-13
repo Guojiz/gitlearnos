@@ -1,7 +1,7 @@
 interface:
   display_name: "GitLearnOS"
-  short_description: "Turn learning evidence into models and next checks"
-  default_prompt: "Use $gitlearnos to handle this learning event through authorized Git state, evidence-linked synthesis, and optional RAG-Anything retrieval."
+  short_description: "Turn learning evidence into models and timed checks"
+  default_prompt: "Use $gitlearnos to handle this learning event through authorized Git state, required recurring organization and question schedules, evidence-linked synthesis, and optional RAG-Anything retrieval."
 
 policy:
   allow_implicit_invocation: true

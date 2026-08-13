@@ -22,6 +22,7 @@ flowchart LR
 | Resolve common questions | [FAQ](FAQ.md) | [常见问题](zh-CN/FAQ.md) |
 | Configure a no-Skill surface | [Project instructions](templates/project-instructions.md) | [项目自定义指令](zh-CN/templates/project-instructions.md) |
 | Configure cross-chat activation | [Memory pointer](templates/native-memory-pointer.md) | [原生记忆指针](zh-CN/templates/native-memory-pointer.md) |
+| Record verified recurring tasks | [Automation state](templates/automation.md) | [自动化状态](zh-CN/templates/automation.md) |
 | Add optional local knowledge retrieval | [RAG-Anything card](docs/rag-anything.md) | [RAG-Anything 部署卡](zh-CN/docs/rag-anything.md) |
 | Read the AceSAT case | [Impact statement](docs/acesat-build-for-impact.md) | [影响说明](zh-CN/docs/acesat-build-for-impact.md) |
 | Browse the visual site | [Website](https://guojiz.github.io/gitlearnos/) | Use the `中` switch on the same page |

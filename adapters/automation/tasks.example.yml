@@ -1,10 +1,17 @@
-version: 1
+version: 2
+timezone: "Etc/UTC" # replace with the learner's actual IANA time zone
 jobs:
-  - id: due-review
-    intent: generate concrete questions from due evidence
-    default_mode: on-handoff
-    schedule: null
   - id: maintenance
     intent: reconcile pending input, feedback, views, and contradictions
-    default_mode: on-handoff
-    schedule: null
+    recurrence: daily
+    local_time: "21:30"
+    schedule: provider-managed
+    no_work: skip-silently
+    catch_up: once
+  - id: due-review
+    intent: generate concrete questions from due evidence
+    recurrence: daily
+    local_time: "07:00"
+    schedule: provider-managed
+    no_work: skip-silently
+    catch_up: once

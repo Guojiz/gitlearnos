@@ -50,8 +50,12 @@
 ## 自动化与诚实边界
 
 即时工作发生在当前交互。只有真正创建了拥有仓库权限的调度器，才存在后台工作。
-提示词、日期或提醒不能证明仓库任务已经运行。缺少必要工具或权限时，返回精确
-待写回内容。
+提示词、日期或提醒不能证明仓库任务已经运行。每次学习者部署都必须为
+`maintenance`（默认每天 21:30）和 `due-review`（默认每天 07:00）
+确定 IANA 时区与学习者本地重复时间。政策写入 `learning-policy.md`；实际任务 ID、
+下次运行与测试证据写入 `automation.md`。两者均须存在真实调度器任务并完成
+安全可观察试运行，部署自动化才是 `verified`；否则是 `incomplete`。没有变更或
+到期证据时静默跳过，不产生内容、通知或提交。缺少必要工具或权限时，返回精确待写回内容。
 
 ## 回执
 
@@ -65,6 +69,7 @@ Questions:
 Changed files:
 Evidence:
 Automation actually completed:
+Deployment automation: verified / incomplete
 Skill installation:
 Next action:
 Undo:

@@ -87,6 +87,13 @@ The system creates a usable external question pack containing the problem locato
 - repeated input is idempotent;
 - each completed write has a receipt;
 - prompts and dates are not misreported as scheduled automation;
+- learner deployment assigns an IANA time zone and explicit recurring local
+  times to both `maintenance` and `due-review`;
+- deployment automation is complete only after both real scheduler entries and
+  one observed repository-capable test run of each;
+- no-work occurrences skip silently without filler, notification, or commit;
+- scheduled writers use occurrence idempotency, a writer lock, and a checked
+  Git base revision;
 - one event is atomic and undoable when the runtime supports it.
 
 ### F. User control
@@ -133,9 +140,11 @@ The basic control layer must not require a custom server, database, vector store
 |---|---|
 | immediate | process the current event and actually write state |
 | on handoff | inspect due work, inbox, and waiting feedback when an agent resumes |
-| background | use only a real scheduler supplied by the current runtime |
+| background | require real recurring `maintenance` and `due-review` tasks with repository access, explicit local times and IANA time zone, plus verified test runs |
 
-Public alpha must reliably implement the first two. Background automation is an optional adapter.
+Interactive learning can operate at the first two levels. A learner deployment
+must nevertheless configure and verify the background level; until then its
+automation status is `incomplete`, never silently downgraded to on-handoff.
 
 ## Product quality levels
 

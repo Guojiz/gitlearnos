@@ -13,10 +13,15 @@ Deployment attaches GitLearnOS to one learner-owned target repository and one ma
 4. verify memory/instructions/Skills/read/write/source/RAG/scheduler capability
 5. inspect existing state, AGENTS.md, and learning-policy.md
 6. create only missing minimum state and configure durable activation
-7. if RAG is enabled, apply the Git/RAG policy and verify one real ingest and query
-8. organize the first real input or generate the first targeted questions
-9. test with a normal learning event that does not name GitLearnOS
-10. verify writeback and return a receipt
+7. confirm or accept the learner-local schedule and IANA time zone for both
+   required jobs: `maintenance` (default daily 21:30) and `due-review`
+   (default daily 07:00)
+8. create both jobs in a real repository-capable scheduler, record their actual
+   task IDs and next runs in `automation.md`, and run one safe test of each
+9. if RAG is enabled, apply the Git/RAG policy and verify one real ingest and query
+10. organize the first real input or generate the first targeted questions
+11. test with a normal learning event that does not name GitLearnOS
+12. verify writeback and return a receipt
 ```
 
 This learner gate does not apply to maintaining, documenting, testing, or
@@ -27,6 +32,7 @@ Minimum:
 ```text
 AGENTS.md
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -68,6 +74,14 @@ Deployment succeeds when the learner can provide one natural-language event and 
 - keep large originals in project sources or an authorized local folder;
 - report actual automation and every changed file;
 - honor preview, record-only, no-review, and undo boundaries.
+
+Deployment automation succeeds only when both recurring jobs appear in the
+actual scheduler and each has one observed repository-capable test result.
+`skipped` is a valid test result when there is no new evidence or due work, but
+it must not notify, manufacture questions, or create an empty commit. If either
+job cannot be verified, preserve its requested schedule, use `unavailable` when
+capability inspection found no suitable scheduler, and report deployment
+automation as `incomplete`; interactive GitLearnOS may still operate.
 
 Creating folders or running a forced AI session is not the success criterion.
 Neither is installing a Python package or writing RAG configuration. RAG is

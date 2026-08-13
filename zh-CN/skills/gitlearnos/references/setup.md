@@ -105,6 +105,7 @@ OpenCode 也会发现 `.claude/skills/` 和 `.opencode/skills/`，但默认使�
 AGENTS.md
 gitlearnos.yml
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -125,6 +126,28 @@ archive/
 
 不要添加空脚手架。
 
+## 必需的重复自动化
+
+学习者回答部署门槛后，建立两个正式任务：
+
+- `maintenance`：重复整理，默认学习者本地 IANA 时区每天 21:30；
+- `due-review`：重复出题，默认学习者本地 IANA 时区每天 07:00。
+
+学习者可以修改时间。无法安全推断时区时，只问一个简洁的时间问题；默认安静时段为
+22:00 至 07:00 之前（不含 07:00），交付到当前已授权学习渠道，每次到期运行最多三道题。
+把请求的重复规则与交付偏好写入
+`learning-policy.md`，并从模板创建 `automation.md`，作为唯一调度状态记录。
+
+通过真实具备仓库能力的调度器创建每个重复任务，记录不透明提供方 ID 和下次
+运行并标记为 `configured`，然后安全试运行一次。只有同时观察到调度条目与
+Worker 的仓库访问，才能标记 `verified`。没有工作时，试运行可以正确返回
+`skipped`，无需提交。
+
+两个任务都未 `verified` 时，不能报告部署自动化完整。创建尚未完成时使用
+`requested`。能力检查发现没有合适调度器时，保留两个精确时间并记录为
+`unavailable`，报告自动化 `incomplete`，并说明缺少的运行能力。接手检查或提醒不能
+满足此门槛，但即时学习仍可继续。
+
 ## 设置顺序
 
 1. 学习者回答部署门槛问题后，捕获第一个目标或输入，并推断或确认其学科；
@@ -136,10 +159,11 @@ archive/
    提供经过适配的项目或自定义指令；获允许时配置原生记忆指针；并为每个层
    报告已验证状态；
 5. 创建最小画像和仪表盘，并给出一个下一步；
-6. 整理第一个真实输入或缺口；
-7. 只在有用时出题；
-8. 只在学习者要求时运行 AI 会话；
-9. 用一个隐式触发进行验证：无需说出 Skill 名，智能体也能识别状态、行动、写入、报告，并遵守撤销边界。
+6. 创建、测试并记录两个重复自动化任务；
+7. 整理第一个真实输入或缺口；
+8. 只在有用时出题；
+9. 只在学习者要求时运行 AI 会话；
+10. 用一个隐式触发进行验证：无需说出 Skill 名，智能体也能识别状态、行动、写入、报告，并遵守撤销边界。
 
 启用 RAG-Anything 时，读取 [`rag.md`](rag.md)，并遵循其中的部署、导入与验证
 规则。
@@ -170,6 +194,9 @@ Memory: saved / suggested / unavailable / unknown
 Changed files:
 First organized path:
 Questions prepared:
+Recurring organization:
+Recurring questions:
+Deployment automation: verified / incomplete
 Still missing:
 Next action:
 ```

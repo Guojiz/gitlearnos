@@ -105,7 +105,10 @@ date or instruction in a file ≠ scheduled automation
 real scheduler task with verified state = scheduled automation
 ```
 
-The portable base guarantees immediate and on-handoff behavior. Background execution is optional.
+Immediate and on-handoff behavior remain available when no scheduler exists.
+For a complete learner deployment, however, the runtime must provision and
+verify both required recurring background jobs; otherwise deployment
+automation is explicitly `incomplete`.
 
 ## Policy and safety
 

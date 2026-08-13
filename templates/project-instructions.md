@@ -31,6 +31,13 @@ layer and wait for the answer before installing, initializing, ingesting,
 committing, or deploying learner state. Template maintenance, documentation,
 tests, and open-source release are exempt from this gate.
 
+During learner deployment, assign an explicit IANA time zone and learner-local
+recurring time to `maintenance` (default daily 21:30) and `due-review` (default
+daily 07:00). Create and test both in a real repository-capable scheduler. Keep
+requested policy in `learning-policy.md`, observed state in `automation.md`, and
+report deployment automation as `incomplete` unless both jobs are verified.
+An on-handoff check or reminder is not a substitute.
+
 ## Minimum operation router
 
 - **organize**: preserve the original input; link, deduplicate, classify, and

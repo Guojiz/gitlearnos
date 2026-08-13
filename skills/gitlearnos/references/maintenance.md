@@ -3,6 +3,11 @@
 Follow the Router's core contract. This reference may repair deterministic
 state but may not invent evidence or rewrite preserved learner records.
 
+When invoked as the required recurring `maintenance` job, use the configured
+local time and scheduler state from `learning-policy.md` and `automation.md`.
+No pending input or material change means `skipped`: do not notify, modify a
+last-run timestamp, or commit.
+
 ## Audit order
 
 1. `learning-policy.md` and actual runtime capability;
@@ -33,6 +38,9 @@ state but may not invent evidence or rewrite preserved learner records.
 - safe-auto repeatedly asks for low-risk confirmation;
 - personal raw material or identity is retained beyond policy;
 - the learner cannot tell what changed or undo an agent event.
+- required recurring organization or question generation has no explicit
+  local time, IANA time zone, provider task ID, or verification evidence;
+- two scheduler sources can deliver the same due occurrence;
 
 ## Direct repair
 
@@ -41,6 +49,12 @@ Under `safe-auto`, fix clear links, duplicate views, stale dashboard state, dete
 Ask before deletion, broad restructuring, rewriting notes, changing policy, publishing, visibility changes, sensitive identity, secrets, or license changes.
 
 For undo, identify the exact latest agent-created event or atomic commit, verify it does not include unrelated user work, then use the safest reversible mechanism available. If scope is mixed, stop and ask.
+
+For a scheduled run, derive an idempotency key from `maintenance` and the
+scheduled occurrence, acquire one writer lock or lease, and compare the Git
+base revision immediately before writing. Stop on concurrent change. Catch up
+a missed occurrence at most once. Create at most one commit and only when
+learning state materially changes.
 
 ## Output
 

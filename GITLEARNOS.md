@@ -128,6 +128,7 @@ Create only files required by the current learning event:
 gitlearnos.yml
 AGENTS.md
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/
@@ -438,12 +439,48 @@ pushing sensitive material. See
 ## Automation
 
 GitLearnOS defines portable automation intent; an external runtime executes it.
-The portable base has two recurring operations:
+Every learner deployment must assign an explicit recurring local time and IANA
+time zone to both portable operations:
 
 1. `due-review`: inspect due evidence and generate concrete questions that can
    be answered immediately;
 2. `maintenance`: reconcile unprocessed input, waiting feedback, stale views,
-   and contradictory state.
+   contradictory state, and repeated evidence waiting for synthesis.
+
+Unless the learner chooses different times, use these editable local defaults:
+
+```text
+due-review: every day at 07:00 learner local time
+maintenance: every day at 21:30 learner local time
+```
+
+Also default to quiet hours 22:00–before 07:00, at most three questions per due run,
+and the current authorized learning channel. The learner may change them.
+
+Daily recurrence is a check cadence, not a requirement to produce work. With
+no due evidence or material state change, a run must finish as `skipped`: do
+not generate filler questions, send a notification, rewrite a last-run
+timestamp, or create an empty commit. After deployment verification, keep a
+no-work skip in provider run evidence; do not update `automation.md` until a
+material learning change already justifies a commit.
+
+Record the portable schedule and learner delivery preferences in
+`learning-policy.md`. Record actual scheduler state in `automation.md` using
+`requested`, `configured`, `verified`, `unavailable`, or `disabled`, together
+with the provider, opaque task identifier, time zone, recurrence, next run, and
+last verified run. Keep provider expressions and credentials outside learner
+state. A schedule is `verified` only after the recurring task is observed in
+the scheduler and one real test run proves the worker can read the intended
+repository and safely complete or skip the operation.
+
+A complete deployment requires both recurring operations to be `verified`.
+Use `requested` while an approved task is awaiting provisioning; use
+`unavailable` after capability inspection proves that no repository-capable
+scheduler exists. In either case preserve the exact requested schedules,
+continue immediate learning safely, and report deployment automation as
+`incomplete`; an on-handoff check or reminder does not satisfy this
+requirement. An explicitly learner-disabled required job also leaves deployment
+automation incomplete.
 
 Distinguish:
 
@@ -451,8 +488,20 @@ Distinguish:
 - **on-handoff**: checked whenever a capable agent resumes;
 - **background**: created through a real scheduler with repository access.
 
-A date, prompt, or reminder is not proof that repository work ran. Without a
-real worker, record pending work or provide a handoff without claiming success.
+A scheduled run must use an idempotency key derived from job and scheduled
+occurrence, acquire one writer lock or lease, inspect the current Git revision,
+and create at most one commit only when learning state changes. If another
+writer changed the base revision, stop and report the conflict; never silently
+rebase, force-push, or overwrite learner work. A missed run may catch up once
+at the next capable execution and must not deliver the same due item twice.
+Question delivery excludes answer keys and respects quiet hours, maximum
+question count, privacy, and channel boundaries. Unattended push requires
+separate explicit authorization for the intended private remote.
+
+A date, prompt, scheduler entry, or reminder is not proof that repository work
+ran. Credentials and tokens stay outside Git and run logs. Without a real
+worker, record exact pending setup without claiming successful deployment or
+background execution.
 
 ## Skills and adapters
 

@@ -30,6 +30,8 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [验证跨 Agent Skill 安装](scenarios/12-cross-agent-skill-install.md)
 - [路由并验证可选 RAG-Anything](scenarios/13-rag-anything.md)
 - [把重复错误归纳为可迁移模型](scenarios/14-repeated-error-synthesis.md)
+- [验证重复整理与出题](scenarios/15-recurring-automation.md)
 
 这些场景就是 v2 的发布验收条件。OpenSpace、数据库、向量索引、RAG-Anything
-和特定 Git 托管平台都不是必需项。
+和特定 Git 托管平台都不是必需项。通过场景 15 的已验证部署变体需要真正拥有
+仓库能力的重复调度器；没有这种调度器时，唯一诚实结果是 `incomplete`。

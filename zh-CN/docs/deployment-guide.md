@@ -12,10 +12,14 @@
 4. 验证记忆、指令、Skills、读、写、来源、RAG 和调度能力
 5. 检查已有状态、`AGENTS.md` 和 `learning-policy.md`
 6. 只创建缺少的最小状态，并配置持久触发
-7. 启用 RAG 时，应用 Git/RAG 规则并验证一次真实导入和查询
-8. 整理第一份真实输入或生成第一组针对性问题
-9. 用一个不点名 GitLearnOS 的普通学习事件测试
-10. 验证写回并返回回执
+7. 确认或接受两个必需任务的学习者本地时间与 IANA 时区：
+   `maintenance`（默认每天 21:30）和 `due-review`（默认每天 07:00）
+8. 在真正拥有仓库能力的调度器中创建两项任务，把实际任务 ID 和
+   下次运行时间写入 `automation.md`，并分别安全试运行一次
+9. 启用 RAG 时，应用 Git/RAG 规则并验证一次真实导入和查询
+10. 整理第一份真实输入或生成第一组针对性问题
+11. 用一个不点名 GitLearnOS 的普通学习事件测试
+12. 验证写回并返回回执
 ```
 
 此学习者门槛不适用于维护、编写文档、测试或发布公开 GitLearnOS 模板。
@@ -25,6 +29,7 @@
 ```text
 AGENTS.md
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -63,6 +68,12 @@ subjects/<subject>/goals/main-goal.md
 - 大型原件保存在项目 Sources 或获授权的本地文件夹；
 - 汇报真实自动化与所有改动；
 - 尊重预览、只记录、不复习和撤销边界。
+
+只有两个重复任务都存在于真实调度器中，且各自有一次可观察的仓库能力
+试运行结果，部署自动化才算成功。没有新证据或到期内容时，`skipped` 是合法的
+测试结果，但不能通知、制造题目或创建空提交。任一任务无法验证时，保留其
+请求时间；能力检查发现没有合适调度器时使用 `unavailable`，并报告部署自动化
+`incomplete`；交互式 GitLearnOS 仍可继续使用。
 
 只创建文件夹或强制运行一次AI教学会话不算成功。
 只安装 Python 包或写入 RAG 配置也不算。只有一份获授权资料真实导入，并由一次

@@ -85,9 +85,12 @@ when the goal calls for it.
 
 ## Does it require a scheduler, server, database, or vector store?
 
-No. These are optional adapters. A scheduler is needed only for true background
-execution. Without one, the agent may check due work when it next runs, but it
-must not claim that a background task was created or completed.
+A server, database, and vector store remain optional. The scheduling provider
+is replaceable, but a real repository-capable recurring scheduler is required
+for a **complete learner deployment**: both `maintenance` and `due-review` need
+explicit learner-local times, an IANA time zone, real task IDs, and tested runs.
+Without one, interactive use continues and the agent may check due work when it
+next runs, but deployment automation is `incomplete`.
 
 ## What should the first repository contain?
 
@@ -95,6 +98,7 @@ must not claim that a background task was created or completed.
 gitlearnos.yml
 AGENTS.md
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/

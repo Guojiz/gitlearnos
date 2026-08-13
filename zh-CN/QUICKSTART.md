@@ -73,7 +73,10 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 学习文件使用项目 Sources 或获授权的本地文件夹。配置持久项目或仓库指令，并在
 可用时配置原生记忆，使未来的问题、作答尝试、拍摄页面、笔记、反馈和结果即使
 没有提到 GitLearnOS，也会被识别为候选学习事件。检查真实的仓库、Git、记忆、
-来源和调度能力。使用 safe-auto：先处理我的眼前需要，再整理有价值的证据，在
+来源和调度能力。设置时，确认或接受我的 IANA 时区，以及 `maintenance`
+（默认每天 21:30）和 `due-review`（默认每天 07:00）的重复本地时间。
+在真正拥有仓库能力的调度器中创建两项任务并各试运行一次；任一无法验证
+时，记录请求并把部署自动化标记为未完成。使用 safe-auto：先处理我的眼前需要，再整理有价值的证据，在
 服务目标时建议或生成针对性问题，并提交安全、可撤销的写回。保留原始作答、
 笔记和外部反馈；不要保存完整聊天，也不能在没有间隔后独立作答证据时声称已经
 掌握。最后报告触发层、已验证 Skill 状态、改动文件、实际完成的自动化、下一步
@@ -88,6 +91,7 @@ Agent 能完成时，不要手工建立 GitLearnOS 文件夹。
 AGENTS.md
 gitlearnos.yml
 learning-policy.md
+automation.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md
@@ -109,6 +113,10 @@ Project/custom instructions:
 Memory: saved / suggested / unavailable / unknown
 Skills: installed / source-only / unavailable / unknown
 Remote backup or collaboration:
+Time zone:
+Maintenance: requested / configured / verified / unavailable / disabled
+Due review: requested / configured / verified / unavailable / disabled
+Deployment automation: verified / incomplete
 ```
 
 ## 日常使用
@@ -158,6 +166,7 @@ Agent 先回答，再安静地判断是否值得做一个小型持久更新。�
 - 配置的记忆或项目指令可用时，在之后的对话中无需 Skill 名也能识别有价值的学习事件；
 - 大型来源保存在项目或来源区域，紧凑状态保存在 Git；
 - 清楚说明实际运行了哪些自动化和仓库操作；
+- 展示并测试两个必需重复任务，否则明确标记部署自动化未完成；
 - 没有 GitHub 时仍可在本地 Git 完成同一闭环。
 
 没有写入权限时，Agent 应返回精确的待写回内容，并明确说明仓库没有改变。

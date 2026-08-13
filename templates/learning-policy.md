@@ -33,6 +33,20 @@
 - Without a real scheduler: check on next handoff / do not schedule
 - Hide answers before an attempt: yes / no
 
+## Required recurring automation
+
+- Learner IANA time zone:
+- `maintenance` recurrence: daily
+- `maintenance` local time: 21:30
+- `due-review` recurrence: daily
+- `due-review` local time: 07:00
+- Quiet hours: 22:00–before 07:00 (07:00 excluded)
+- Missed-run policy: catch up once / skip
+- No-work policy: skip silently without notification or commit
+- Delivery channel for questions: current authorized learning channel
+- Maximum questions per recurring due run: 3
+- Unattended push to an authorized private remote: yes / no
+
 ## School and self-study
 
 - Current priority rule:

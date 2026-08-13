@@ -22,6 +22,7 @@ const requiredHumanPairs = [
   "templates/project-instructions.md",
   "templates/native-memory-pointer.md",
   "templates/learning-policy.md",
+  "templates/automation.md",
   "adapters/agents/README.md",
   "adapters/git/README.md",
   "docs/acesat-build-for-impact.md",
@@ -38,6 +39,8 @@ const requiredHumanPairs = [
   "docs/local-runtime-note.md",
   "docs/adaptive-memory-and-learner-profile.md",
   "docs/deployment-guide.md",
+  "docs/automation-model.md",
+  "docs/automation-runtime-matrix.md",
   "docs/ai-runtime-support.md",
   "docs/rag-anything.md",
   "evals/README.md",
@@ -46,6 +49,7 @@ const requiredHumanPairs = [
   "evals/scenarios/11-no-skill-continuity.md",
   "evals/scenarios/12-cross-agent-skill-install.md",
   "evals/scenarios/13-rag-anything.md",
+  "evals/scenarios/15-recurring-automation.md",
   "website/public-page-copy.md",
 ];
 const localizedOnly = [

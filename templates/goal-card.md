@@ -39,10 +39,11 @@ What reusable models should be extracted?
 
 ## Automations
 
-What should run on a schedule?
+These canonical recurring jobs must have explicit times in the learner policy
+and verified status in `automation.md`:
 
-- repository organizer:
-- practice generator:
+- `maintenance` — recurring organization:
+- `due-review` — recurring question generation:
 
 ## Next action
 

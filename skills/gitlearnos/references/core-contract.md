@@ -57,8 +57,15 @@ exists and authorization is verified.
 
 Immediate work happens in the current interaction. Background work exists only
 when a real scheduler with repository access was created. A prompt, date, or
-reminder is not proof that repository work ran. Return exact pending writeback
-when a required tool or permission is missing.
+reminder is not proof that repository work ran. Every learner deployment must
+assign an IANA time zone and learner-local recurring time to `maintenance`
+(default daily 21:30) and `due-review` (default daily 07:00). Record policy in
+`learning-policy.md` and observed task IDs, next runs, and test evidence in
+`automation.md`. Both require real scheduler entries and safe observed test
+runs before deployment automation is `verified`; otherwise it is `incomplete`.
+With no changed or due evidence, skip silently without content, notification,
+or commit. Return exact pending writeback when a required tool or permission is
+missing.
 
 ## Receipt
 
@@ -72,6 +79,7 @@ Questions:
 Changed files:
 Evidence:
 Automation actually completed:
+Deployment automation: verified / incomplete
 Skill installation:
 Next action:
 Undo:

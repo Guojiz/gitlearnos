@@ -10,6 +10,12 @@ Generate the next useful questions, not generic volume. Support two first-class 
 1. questions for the learner to answer;
 2. questions the learner can take to an external helper.
 
+When invoked as the required recurring `due-review` job, use the configured
+local time, time zone, quiet hours, channel, and maximum count from
+`learning-policy.md` and the verified scheduler state from `automation.md`.
+No due evidence means `skipped`: do not create filler questions, notify, or
+commit.
+
 ## Implicit triggers
 
 A learner's subject question is both an immediate request and possible evidence.
@@ -136,6 +142,11 @@ practice narrow enough to remain productive; interleaving is not a reason to
 overwhelm a learner who cannot yet execute the base method.
 
 Question generation does not itself prove learning. Leave unattempted sets `planned`.
+For scheduled delivery, send only the question text and rationale; keep the
+answer key or rubric in authorized repository state for later scoring. Use an
+idempotency key for the scheduled occurrence and due evidence so catch-up and
+on-handoff execution cannot deliver the same set twice. Stop on a concurrent
+Git change rather than rebasing or overwriting.
 
 ## Output
 

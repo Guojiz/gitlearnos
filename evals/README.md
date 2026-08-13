@@ -34,6 +34,10 @@ clear.
 - [Verify cross-agent Skill installation](scenarios/12-cross-agent-skill-install.md)
 - [Route and verify optional RAG-Anything](scenarios/13-rag-anything.md)
 - [Synthesize a repeated error into a transferable model](scenarios/14-repeated-error-synthesis.md)
+- [Verify recurring organization and questions](scenarios/15-recurring-automation.md)
 
 These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
-index, RAG-Anything, and a particular Git host are not required.
+index, RAG-Anything, and a particular Git host are not required. A real
+repository-capable recurring scheduler is required to pass Scenario 15's
+verified-deployment variant; without one the only truthful result is
+`incomplete`.

@@ -42,7 +42,7 @@ and subject-specific state under subjects/<subject>/.
 - long-term accuracy of deduplication and state linking;
 - the best default verification after external feedback;
 - whether 0–3 intervals fit every learning goal;
-- optional adapters for real schedulers;
+- provider-neutral adapters for the two required recurring jobs;
 - longer-term portability evidence.
 
 ## Product boundary

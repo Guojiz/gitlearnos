@@ -56,6 +56,11 @@ python3.12 -m venv .rag-venv
 安装后先验证版本与导入再声称可用：
 `.rag-venv/bin/python -c "import importlib.metadata as m; import raganything, lightrag; print(m.version('raganything'))"`。
 
+1.3.1 直接插入结构化内容时，文本块必须使用
+`{"type": "text", "text": "...", "page_idx": 0}`。不能把文本块的 `text`
+字段替换成泛化的 `content`：调用可能成功退出，却实际索引零字符、零 chunk。
+只有验证非零索引内容与可追踪的教材特定检索后，才能报告 RAG 为 `enabled`。
+
 可选 extras 会扩大格式支持；Office 文档和解析器选择可能需要额外系统包、模型
 或平台特定配置。不能盲目安装全部 extras。当前集成没有真实提供并验证时，不能
 假设已经存在 MCP 服务器、Docker 服务或 Web API。

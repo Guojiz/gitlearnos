@@ -65,6 +65,12 @@ Resolve two compatibility risks explicitly, then verify:
 Verify the version and import before reporting anything available:
 `.rag-venv/bin/python -c "import importlib.metadata as m; import raganything, lightrag; print(m.version('raganything'))"`.
 
+For direct structured insertion in 1.3.1, a text block uses
+`{"type": "text", "text": "...", "page_idx": 0}`. Do not substitute a
+generic `content` field for a text block: the call may exit successfully while
+indexing zero characters and zero chunks. Verify nonzero indexed content and a
+traceable source-specific retrieval before reporting RAG as `enabled`.
+
 Optional extras expand format support, while Office documents and parser
 choices can require additional system packages, models, or platform-specific
 setup. Do not blindly install every extra. Do not assume an MCP server, Docker

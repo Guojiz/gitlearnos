@@ -49,10 +49,17 @@ retrievable while the learner is still `learning`.
 If the main agent already faithfully understood an image, screenshot,
 question, board, or short excerpt, insert a faithful structured record through
 RAG-Anything's `insert_content_list` path instead of re-parsing. Build the list
-with the documented content_list schema: text items, images with an absolute
-`img_path` plus caption, tables as Markdown `table_body`, equations as `latex`
-plus a text description, and custom types with raw content. Do not repeat
-equivalent OCR or vision processing.
+with the documented content_list schema: text items use
+`{"type": "text", "text": "...", "page_idx": 0}` (the field is `text`, not
+`content`); images use an absolute `img_path` plus caption; tables use Markdown
+`table_body`; equations use `latex` plus a text description; custom types may
+use raw `content`. Do not repeat equivalent OCR or vision processing.
+
+Treat a successful process exit as insufficient ingestion evidence. Confirm
+that the insertion reports nonzero text length or multimodal items, the index
+contains nonzero chunks or equivalent records, and a source-specific query
+returns traceable content. A `processed` document with zero content and zero
+chunks is an empty ingestion failure, not `enabled`.
 
 Give the original file to RAG-Anything's parser when it is a complete textbook,
 long PDF, large durable collection, a document whose text/image/table/equation

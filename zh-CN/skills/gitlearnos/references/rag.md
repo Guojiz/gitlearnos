@@ -43,10 +43,15 @@ Git 保存正式、可读、版本化的学习记录；RAG 保存可以重建的
 
 主 Agent 已经忠实理解图片、截图、题目、板书或短片段时，通过
 RAG-Anything 的 `insert_content_list` 路径直接插入忠实结构化记录，而不是
-重新解析。按文档化 content_list schema 组装条目：文本条目、带绝对
-`img_path` 和说明的图片、以 Markdown `table_body` 表示的表格、以 `latex`
-加文字描述表示的公式，以及带原始内容的自定义类型。不能重复同等 OCR 或
-视觉处理。
+重新解析。按文档化 content_list schema 组装条目：文本必须使用
+`{"type": "text", "text": "...", "page_idx": 0}`（字段是 `text`，不是
+`content`）；图片使用绝对 `img_path` 加说明；表格使用 Markdown
+`table_body`；公式使用 `latex` 加文字描述；自定义类型才可使用原始
+`content`。不能重复同等 OCR 或视觉处理。
+
+进程成功退出不足以证明导入成功。必须确认插入报告非零文本长度或多模态条目、
+索引含非零 chunk 或等价记录，并且教材特定查询返回可追踪内容。文档状态即使为
+`processed`，只要内容与 chunk 都为零，就是空导入失败，不能报告 `enabled`。
 
 完整教材、长 PDF、大型长期资料、需要保持文本／图片／表格／公式关系的文档，
 或主 Agent 尚未完整检查的资料，才把原文件交给 RAG-Anything。

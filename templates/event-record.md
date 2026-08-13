@@ -19,6 +19,16 @@ Goal link:
 - Existing source, gap, model, handoff, or review:
 - Deduplication result:
 
+## Problem-solving evidence, when useful
+
+- Situation fingerprint:
+- Learner's original judgment or work:
+- Outcome and support used:
+- Diagnosis status:
+- Missing information, reasoning break, or execution error:
+- Recognition cues:
+- Same-pattern links:
+
 ## State change
 
 - What changed:

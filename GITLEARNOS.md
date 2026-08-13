@@ -319,6 +319,43 @@ The minimum mastery states are:
 Numerical scores, rubrics, tests, and milestones are optional subject-level
 methods, not universal GitLearnOS requirements.
 
+### Diagnose and synthesize repeated problem-solving evidence
+
+For mathematics, science, and other tasks where problem patterns matter, a
+mistake record is not a copied problem and solution. Preserve the learner's
+actual judgment or work, then separate observable evidence from a revisable
+diagnosis:
+
+```text
+learner judgment and outcome
+→ missing information, broken reasoning link, or execution failure
+→ recognition cues and same-pattern links
+→ reusable model, answer structure, or derived conclusion
+→ fresh delayed transfer check
+→ revise the diagnosis and model from the result
+```
+
+A diagnosis is an evidence-linked hypothesis, not a fact about the learner.
+Do not infer a hidden cause when the work is incomplete; ask one focused
+question or leave it `unknown`. Invite the learner to explain their original
+decision when that answer is necessary to distinguish missing knowledge from
+a broken reasoning chain. Do not replace this productive reflection with an
+AI-written explanation.
+
+Keep a one-off exercise lightweight. Link repeated situations by subject,
+recognition cues, target concept, and error mechanism instead of copying whole
+questions. Promote a durable model only when at least two linked observations
+support the repeated structure, or when a learner, teacher, or authoritative
+source explicitly contributes a reusable method. A promoted model may include
+recognition cues, a shortest reliable answer structure, derived conclusions,
+limits, traps, and evidence links. Its creation does not change mastery.
+
+Close the loop with a sufficiently fresh question that changes values,
+representation, context, or the required decision. A summary is useful only
+when it changes a later action and remains open to correction. Delayed,
+independent transfer evidence—not model completeness, repetition count, or an
+AI's confidence—determines `demonstrated`.
+
 ### Reconcile external learning
 
 Teachers, class, tutoring, books, paper, platforms, peers, and other AI systems
@@ -359,6 +396,8 @@ The agent may automatically:
 - recognize clear learning events without an explicit GitLearnOS invocation;
 - save useful learner-provided evidence;
 - link, deduplicate, organize, and refresh current views;
+- record evidence-linked diagnostic hypotheses and synthesize repeated
+  problem patterns into draft or durable models;
 - generate targeted questions;
 - suggest a useful next step from current evidence;
 - update short-term plans and due checks;

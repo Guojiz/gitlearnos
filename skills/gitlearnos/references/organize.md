@@ -55,6 +55,27 @@ privacy:
 next_action:
 ```
 
+For a problem-solving event, add only the fields that the available work can
+support:
+
+```yaml
+situation_fingerprint:
+learner_judgment:
+outcome: incorrect | partial | correct | not-assessed
+support_used:
+diagnosis_status: unknown | learner-reported | agent-hypothesis | source-supported
+missing_information:
+reasoning_break:
+execution_error:
+recognition_cues:
+same_pattern_as:
+```
+
+Keep the learner's judgment and outcome as evidence. Treat
+`missing_information`, `reasoning_break`, and `execution_error` as revisable
+diagnoses. When the learner's original decision is unavailable, do not infer
+why they made it.
+
 Use a concise activity record only when the event materially changes state. Do not store full transcripts or hidden reasoning.
 
 ## Organize
@@ -66,9 +87,22 @@ identify provenance
 → deduplicate
 → link rather than copy
 → update resolution and next action
-→ extract a model only when reusable
+→ link repeated situations by cue, concept, and error mechanism
+→ extract or refine a model only when reusable evidence supports it
 → refresh dashboard
 ```
+
+One exercise does not automatically need its own permanent event, gap, or
+model. Keep a useful one-off mistake as a compact event or review record. When
+another distinct observation matches the same situation fingerprint, link it
+to the existing gap and update the evidence count instead of creating a second
+gap. Use a stable semantic fingerprint, not the exact problem wording or
+numbers.
+
+Promote a model when at least two linked observations support the same
+structure, or when the learner, a teacher, or an authoritative source explicitly
+provides a reusable method. Record the promotion basis and conflicting
+evidence. Model creation never upgrades mastery and never requires RAG.
 
 Use:
 
@@ -122,7 +156,10 @@ If the learner says “no review,” record no verification and stop.
 
 Under `safe-auto`, perform low-risk writes directly and return one receipt. Ask only when input is ambiguous enough to change the wrong goal/gap, or when an action crosses deletion, privacy, visibility, broad-rewrite, or policy boundaries.
 
-Make repeated input idempotent by matching date, channel, source locator, linked item, and normalized summary.
+Make repeated input idempotent by matching date, channel, source locator,
+linked item, and normalized summary. For repeated problem patterns, also match
+subject, target concept, recognition cues, and error mechanism. A maintenance
+rerun with no new evidence should create no file and no empty commit.
 
 ## Output
 

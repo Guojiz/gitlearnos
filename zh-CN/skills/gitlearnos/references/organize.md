@@ -49,6 +49,24 @@ privacy:
 next_action:
 ```
 
+解题事件只有在现有过程能够支持时，才添加以下字段：
+
+```yaml
+situation_fingerprint:
+learner_judgment:
+outcome: incorrect | partial | correct | not-assessed
+support_used:
+diagnosis_status: unknown | learner-reported | agent-hypothesis | source-supported
+missing_information:
+reasoning_break:
+execution_error:
+recognition_cues:
+same_pattern_as:
+```
+
+学习者判断与结果属于证据；`missing_information`、`reasoning_break` 和
+`execution_error` 是可修订诊断。没有学习者原判断时，不得猜测他们为什么这样做。
+
 只有事件实质改变状态时才创建简洁的活动记录。不要保存完整聊天记录或隐藏推理。
 
 ## 整理
@@ -60,9 +78,19 @@ next_action:
 → 去重
 → 链接而非复制
 → 更新解决状态和下一步
-→ 仅在可复用时提取模型
+→ 根据识别信号、概念和错误机制链接重复情境
+→ 只有可复用证据支持时才提取或修订模型
 → 刷新仪表盘
 ```
+
+一道练习不会自动需要独立永久事件、缺口或模型。有价值的一次性错误可保留为
+精简事件或复测记录。另一条独立观察命中同一个情境指纹时，应链接现有缺口并
+更新证据数量，而不是再建一个缺口。指纹应基于稳定语义，不能使用原题措辞或
+具体数字。
+
+至少两条已链接观察支持同一结构，或学习者、教师、权威来源明确提供可复用方法
+时，才晋升模型。记录晋升依据与冲突证据。创建模型不会升级掌握状态，也不要求
+必须有 RAG。
 
 使用：
 
@@ -115,6 +143,8 @@ verified / archived                         → resolved
 在 `safe-auto` 下，直接执行低风险写入，并一次性返回回执。只有输入含糊到可能更改错误目标或缺口，或操作触及删除、隐私、可见性、广泛改写或策略边界时才询问。
 
 通过匹配日期、渠道、来源定位、已链接事项和规范化摘要，使重复输入保持幂等。
+对于重复题型，还应匹配学科、目标概念、识别信号和错误机制。没有新证据的维护
+重跑不应创建文件或空提交。
 
 ## 输出
 

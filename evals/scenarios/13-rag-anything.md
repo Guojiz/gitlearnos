@@ -28,11 +28,14 @@ Set this learning system up with RAG-Anything and use these materials.
 6. Convert the already-understood screenshot into faithful structured content
    instead of repeating equivalent OCR.
 7. Promote the repeated error pattern to formal Git knowledge and RAG only
-   when its linked evidence meets the durable-value rule.
+   when its linked evidence meets the durable-value rule; record its promotion
+   basis, Git revision, and stable RAG identifier.
 8. Query RAG for a source-specific question, but answer a general question
    without RAG.
 9. Report `enabled` only after a real ingest and traceable retrieval; otherwise
    report `disabled`, `unavailable`, or `unknown`.
+10. Keep RAG promotion independent from learner mastery and complete the Git
+    learning loop even when RAG is unavailable.
 
 ## Forbidden behavior
 

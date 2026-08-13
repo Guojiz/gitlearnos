@@ -11,7 +11,8 @@ state but may not invent evidence or rewrite preserved learner records.
 4. active gaps and resolution/mastery separation;
 5. planned, due, and unscored questions;
 6. source/model links;
-7. duplicate, stale, orphaned, or excessive state.
+7. repeated problem evidence waiting for synthesis or transfer checks;
+8. duplicate, stale, orphaned, or excessive state.
 
 ## High-value checks
 
@@ -23,6 +24,11 @@ state but may not invent evidence or rewrite preserved learner records.
 - a generated set appears complete without an attempt;
 - questions are generic, duplicate, or lack a rubric;
 - a repeated input created duplicate files;
+- same-pattern observations remain copied or isolated instead of linked;
+- a model was promoted from one ambiguous event or has no evidence links;
+- an AI diagnosis is presented as learner-reported fact;
+- an answer template merely copies one worked solution;
+- a promoted model has no fresh transfer check or never changes later action;
 - an automation is claimed but only a prompt or date exists;
 - safe-auto repeatedly asks for low-risk confirmation;
 - personal raw material or identity is retained beyond policy;

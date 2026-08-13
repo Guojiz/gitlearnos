@@ -37,6 +37,13 @@ Do not infer promotion from one occurrence. Require repeated evidence, explicit
 learner instruction, or clear durable reuse value. Record why the item was
 promoted and link its Git path to its RAG document identifier.
 
+For a synthesized problem model, insert only the formal Git version whose
+promotion basis and evidence links are recorded. A plausible one-off diagnosis
+stays out of RAG. Store the Git revision and stable RAG identifier so later
+refinement updates the same knowledge instead of creating a duplicate. RAG
+promotion and learner mastery remain independent: useful knowledge may be
+retrievable while the learner is still `learning`.
+
 ## Avoid duplicate parsing
 
 If the main agent already faithfully understood an image, screenshot,

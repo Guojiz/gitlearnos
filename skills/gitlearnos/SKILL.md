@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, model, or maintenance workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports feedback or results, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
+description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, evidence-linked error diagnosis, repeated-pattern model synthesis, or maintenance workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports a mistake, feedback, or result, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
 ---
 
 # GitLearnOS Router

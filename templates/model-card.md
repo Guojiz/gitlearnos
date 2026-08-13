@@ -8,6 +8,13 @@ Linked knowledge gap:
 Created:  
 Last refined:
 
+## Promotion basis
+
+- Status reason:
+- Evidence links:
+- Conflicting or missing evidence:
+- Synthesis source: `learner` / `teacher` / `source` / `agent-hypothesis`
+
 ## Model in one sentence
 
 - 
@@ -23,6 +30,23 @@ What should make the learner think of this model?
 1. 
 2. 
 3. 
+
+## Answer structure
+
+Describe the decisions and checkpoints that transfer across problems. Do not
+copy one worked answer.
+
+1.
+2.
+3.
+
+## Derived conclusions
+
+State each conclusion with its conditions and evidence link.
+
+| Conclusion | Conditions or limits | Evidence |
+|---|---|---|
+|  |  |  |
 
 ## Why it works
 
@@ -48,6 +72,12 @@ When I see ..., I will ...
 
 - Fresh task:
 - What success would demonstrate:
+
+## Optional RAG promotion
+
+- Status: `not-needed` / `pending-authorization` / `unavailable` / `inserted`
+- Retrieval identifier:
+- Git version inserted:
 
 ## Learner evidence
 

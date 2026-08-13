@@ -40,6 +40,18 @@ Preserve the original response or a faithful record.
 - Transfer result, when required:
 - Optional subject score, test, rubric, or milestone:
 
+## Feedback diagnosis, when useful
+
+- Learner's original judgment or classification:
+- Judgment outcome:
+- Diagnosis status: `unknown` / `learner-reported` / `agent-hypothesis` / `source-supported`
+- Missing information:
+- First broken reasoning link:
+- Confused distinction:
+- Execution error:
+- Same-pattern evidence link:
+- Model revision, if promotion criteria are met:
+
 ## Writeback
 
 - Gap or mastery change:

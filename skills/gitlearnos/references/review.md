@@ -32,6 +32,24 @@ At minimum preserve:
 Use an existing subject rubric, test, milestone, or 0–3 scale when it helps.
 Otherwise use plain `incorrect`, `partial`, `correct`, or `not-assessed`.
 
+## Feedback diagnosis
+
+For a meaningful mathematics, science, or other problem-solving attempt, use
+the learner's visible work and, when necessary, ask one focused question:
+
+1. What judgment or choice did the learner actually make, and was its outcome
+   correct?
+2. If it failed, what observable missing information, broken reasoning link,
+   confused distinction, or execution error best explains the failure?
+3. Does this evidence match an existing situation and revise its recognition
+   cue, answer structure, limit, or trap?
+
+The third item is a GitLearnOS synthesis check, not a quotation attributed to
+an external learning-method source. Label an unconfirmed cause as
+`agent-hypothesis`; keep it `unknown` when the answer cannot be observed. Give
+the learner an opportunity to state their own reasoning before replacing it
+with an AI diagnosis.
+
 ## Mastery
 
 - exposure or completion does not prove mastery;
@@ -43,11 +61,14 @@ Otherwise use plain `incorrect`, `partial`, `correct`, or `not-assessed`.
 ## Writeback
 
 1. append the answer and feedback without replacing original evidence;
-2. update the linked gap from the observable result;
-3. refresh the dashboard;
-4. update the learner profile only for repeated durable patterns;
-5. create background scheduling only through a real scheduler;
-6. commit the review as one reversible learning event.
+2. record the judgment, outcome, support, and diagnosis confidence;
+3. link same-pattern evidence and update the linked gap;
+4. refine a model only when the promotion rule is met;
+5. generate or link a fresh check when it serves the goal;
+6. refresh the dashboard;
+7. update the learner profile only for repeated durable patterns;
+8. create background scheduling only through a real scheduler;
+9. commit the review as one reversible learning event.
 
 An unattempted generated set remains `planned`.
 

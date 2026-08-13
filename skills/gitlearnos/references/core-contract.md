@@ -35,6 +35,10 @@ sending, secrets, or sensitive identity.
 - `demonstrated` requires delayed independent success and transfer when the
   goal requires it. Reading, completion, immediate imitation, external
   resolution, and supported success remain `learning` or unassessed.
+- Explanation, summary, model creation, and RAG retrieval never establish
+  mastery. Preserve the learner's actual judgment and result. Treat a proposed
+  missing fact or broken reasoning link as a revisable diagnosis, link repeated
+  patterns, and verify a reusable model with a fresh later task.
 
 ## Minimum read and write
 

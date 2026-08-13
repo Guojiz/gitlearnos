@@ -43,6 +43,15 @@ New notes, mistakes, feedback, and platform results are classified, linked, dedu
 
 Fail if organization means copying everything into new files or producing a pretty summary disconnected from state.
 
+For repeated mathematics or science errors, automatic organization must
+preserve the learner's original judgment, distinguish evidence from diagnostic
+hypothesis, link same-pattern observations, and promote a reusable model only
+from sufficient evidence. The promoted model must contain recognition cues,
+an answer structure, limits or traps, and a fresh transfer check.
+
+Fail if the system merely copies a problem and answer, invents a cause, creates
+a model from one ambiguous occurrence, or treats model creation as mastery.
+
 ### B1. Subject routing
 
 The agent infers the subject, writes subject-specific state under `subjects/<subject>/`, keeps shared policy at the root, and asks only when an incorrect write is plausible. A learner correction immediately overrides the inference.

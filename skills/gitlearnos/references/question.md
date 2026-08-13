@@ -90,7 +90,8 @@ Rules:
 ### Need and subject adaptation
 
 - factual learning: retrieval, discrimination, explanation, delayed recall;
-- mathematics and science: derivation, problem solving, proof, representation, transfer;
+- mathematics and science: derivation, problem solving, proof, representation,
+  transfer, and discrimination among plausibly confusable problem types;
 - language: comprehension, production, correction, conversation, style;
 - programming: implementation, tests, debugging, review, explanation;
 - reading and research: claim extraction, evidence comparison, critique, synthesis, open questions;
@@ -126,6 +127,13 @@ Refresh the dashboard without copying handoff progress into a second gap state.
 - independent success: use delayed retrieval or broader transfer;
 - external resolution without demonstrated mastery: generate an optional short check, not a full reteaching set;
 - repeated success: reduce frequency and avoid redundant items.
+
+When a model was synthesized from repeated problems, test recognition as well
+as execution. Change structure, representation, or context—not only numbers—so
+the learner must choose the relevant model. Mix a confusable neighboring type
+when the evidence shows that choosing the correct approach is the gap. Keep
+practice narrow enough to remain productive; interleaving is not a reason to
+overwhelm a learner who cannot yet execute the base method.
 
 Question generation does not itself prove learning. Leave unattempted sets `planned`.
 

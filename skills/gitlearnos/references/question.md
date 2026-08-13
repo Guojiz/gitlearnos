@@ -87,6 +87,24 @@ Rules:
 - keep answers hidden until an attempt unless requested;
 - persist assigned, attempted, or reusable sets only.
 
+When the question is actually delivered or assigned in the current response,
+it is not a transient draft. Under effective `safe-auto` with write and Git
+access, before finishing the response:
+
+1. write the complete set under `subjects/<subject>/reviews/` with status
+   `planned`, keeping the answer key or rubric in the file but out of the
+   learner-facing question;
+2. link it from the target gap and update repeated-evidence counts when the
+   learner's current statement is a new observation of an existing pattern;
+3. refresh `dashboard.md` and record a truthful due or on-handoff check when no
+   scheduler exists;
+4. stage every changed file and commit the complete assignment as one
+   reversible learning event.
+
+Do not leave an assigned question only in chat when these capabilities exist.
+Under `preview` or `manual`, return the exact pending writeback instead of
+claiming persistence.
+
 ### Track adaptation
 
 - `school`: match taught scope, teacher method, required notation, and assessment format; label any advanced shortcut that differs from the current requirement;
@@ -159,5 +177,8 @@ Target:
 Difficulty and time:
 Files updated:
 Status: planned / handoff-ready
+Automation actually completed:
+Skill installation:
 Next action:
+Undo:
 ```

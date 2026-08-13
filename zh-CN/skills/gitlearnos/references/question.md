@@ -78,6 +78,19 @@ status: planned
 - 除非学习者要求，否则作答前隐藏答案；
 - 只持久化已布置、已作答或可复用的题集。
 
+当前回答中已经交付或布置的问题不是临时草稿。在有效 `safe-auto` 且具备写入和
+Git 能力时，结束回答前必须：
+
+1. 把完整题集写入 `subjects/<subject>/reviews/`，状态为 `planned`；答案键或
+   评分标准保存在文件中，但不能出现在给学习者看的问题里；
+2. 从目标缺口链接题集；若学习者当前陈述是已有模式的新观察，还要更新重复证据
+   数量；
+3. 刷新 `dashboard.md`；没有调度器时，忠实记录到期或 `on-handoff` 检查；
+4. 暂存全部改动文件，把完整出题任务作为一个可逆学习事件提交。
+
+具备这些能力时，不能只在聊天中留下已布置问题。处于 `preview` 或 `manual` 时，
+返回精确待写内容，不能声称已经持久化。
+
 ### 学习轨道适配
 
 - `school`：匹配已授范围、教师方法、必需记号与评估格式；与当前要求不同的高级捷径必须标明；
@@ -145,5 +158,8 @@ Target:
 Difficulty and time:
 Files updated:
 Status: planned / handoff-ready
+Automation actually completed:
+Skill installation:
 Next action:
+Undo:
 ```

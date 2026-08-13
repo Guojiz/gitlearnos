@@ -162,6 +162,14 @@ If the learner says “no review,” record no verification and stop.
 
 Under `safe-auto`, perform low-risk writes directly and return one receipt. Ask only when input is ambiguous enough to change the wrong goal/gap, or when an action crosses deletion, privacy, visibility, broad-rewrite, or policy boundaries.
 
+When the learner reports that the same mistake happened again, treat that
+statement as a new observation when its date or interaction is distinct: append
+or link the evidence, update the existing gap's linked-observation count, and
+avoid creating a duplicate gap. If you also deliver a question, follow
+`question.md` and persist the assigned `planned` review, dashboard change, and
+complete commit; an in-chat question alone does not finish the organization
+operation under `safe-auto`.
+
 Make repeated input idempotent by matching date, channel, source locator,
 linked item, and normalized summary. For repeated problem patterns, also match
 subject, target concept, recognition cues, and error mechanism. A maintenance

@@ -104,6 +104,13 @@ File presence is not successful installation. Verify all of the following:
    reference;
 4. report the result as `installed`, `source-only`, `unavailable`, or `unknown`.
 
+For a scheduled OpenCode worker, explicitly select the learner-approved model
+instead of inheriting OpenCode's interactive default. Verify the model shown in
+the worker log. If the worker must read an authorized source outside the learner
+repository, grant that exact directory to the non-interactive runtime before
+verification; an auto-rejected `external_directory` request leaves source
+access unverified even when the worker exits successfully.
+
 Explain the result to the learner. In particular, tell them which future
 surfaces can notice questions, answers, photographed material, notes, feedback,
 and results automatically. If memory, Skills, Git, or remote sync are

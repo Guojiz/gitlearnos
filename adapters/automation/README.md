@@ -27,7 +27,9 @@ At run time:
 2. read the active goal, linked evidence, and recent questions;
 3. generate a small set of fresh, answerable questions;
 4. deliver the questions in the current channel;
-5. write back only after an answer or material state change;
+5. under effective `safe-auto`, persist an actually assigned set as `planned`,
+   link it from the gap and dashboard, and commit that assignment; write the
+   assessment only after an answer;
 6. report what actually ran.
 
 The output is not merely “remember to review.”
@@ -56,6 +58,13 @@ For each job:
 4. run one real test occurrence against the intended repository;
 5. record `verified` only when the worker safely completes or skips and the
    scheduler still shows the recurrence.
+
+Pin the scheduled worker to the learner-approved provider and model instead of
+silently inheriting an interactive default. For example, an OpenCode worker
+should pass its verified `--model provider/model` explicitly. Before verifying
+a source-dependent run, grant the worker access to every authorized external
+source directory it must read; an auto-rejected `external_directory` request
+means that source access remains unverified even if the process exits zero.
 
 Both jobs must be `verified` for deployment automation to be complete. A
 prompt-only reminder or on-handoff check leaves the requested schedule visible

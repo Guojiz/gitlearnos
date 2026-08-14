@@ -83,6 +83,24 @@ dsh --profile web --dump-config
 观察，不是调度器：不写入、不运行 Git、不请求外部系统，也不会从无法解析或
 缺失的标记中臆造到期日期。日期按 UTC 比较，接近午夜的边界仅供参考。
 
+## 客户端学习面板
+
+bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-harness/client.js`），
+在会话输入坞中挂载一条居中、默认收起的 `GitLearnOS ▸`。点开它，展开一个平铺、
+有序的 `知识点（动作）` 列表——顺序是 Agent 的判断，绝非 Host 硬编码。
+
+面板严格只读：
+
+- 它通过一个 **仅限 loopback** 的逻辑 RPC 通道（`/gitlearnos`）拉取列表，该通道
+  由 Host 通过 `ctx.connection.rpc.handle` 注册；远程浏览器会被拒绝，面板绝不
+  写入学习者状态，也不重排队列；
+- 它原样读取 Agent 维护的「接下来」列表；对于尚未维护队列的学习者仓库，回退到
+  目标 / 缺口 / 模型 / 复习的只读投影；对于非学习者工作区，则显示明确标注的示例。
+
+客户端入口以已构建的 `window.__ModuleLoader__.load` 模块格式随包发布，因此没有
+构建步骤。`dsh.client`（platform 为 `web` 及其 `inject` 列表）、`exports["./client"]`
+与 `@deepseek-ai/dsh-*` peer 依赖都声明在 `package.json` 中。
+
 ## 当前限制
 
 - Host 使用当前进程工作目录，或部署时显式配置的 `root`。只有
@@ -108,9 +126,11 @@ dsh --profile web --dump-config
 未来原生 Harness 扩展明确包括以下方向，避免把计划误当成已经交付：
 
 - 带来源追踪的可替换 RAG provider，支持导入与检索；
-- 由长期 Git 证据支撑的 Web 学习 Cockpit；
+- Web 学习 Cockpit（已随包发布的只读队列视图只是第一步，
+  更完整的、由长期 Git 证据支撑的 Cockpit 尚未构建）；
 - 生成、审阅并延迟复测可组合模型的迁移掌握工作流；
 - 能在冷会话中运行的已验证外部重复 worker 桥接。
 
-当前 Host 基座尚未实现以上四项。代码与端到端证据出现前，应继续使用常规
-GitLearnOS Agent 工作流和其他文档所列、真正拥有仓库能力的自动化适配器。
+其余三项当前 Host 基座尚未实现；Cockpit 目前仅以「客户端学习面板」一节的
+只读队列视图存在。在每一项的代码与端到端证据出现前，应继续使用常规 GitLearnOS
+Agent 工作流和其他文档所列、真正拥有仓库能力的自动化适配器。

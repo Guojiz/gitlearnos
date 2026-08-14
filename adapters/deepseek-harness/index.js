@@ -267,6 +267,82 @@ function parseQueue(dashboard) {
   return queue
 }
 
+function fileTitle(text) {
+  if (!text) return null
+  const match = text.match(/^#\s+(.+)$/m)
+  if (!match) return null
+  let title = match[1].trim()
+  const colon = title.indexOf(':')
+  if (colon >= 0) title = title.slice(colon + 1).trim()
+  title = title.replace(/^\d{4}-\d{2}-\d{2}\s+/, '')
+  return title
+}
+
+// Auto-collected fallback topics for a learner repo whose Next up queue is not
+// yet maintained by the agent. This is a read-only projection of existing Git
+// files (goals, gaps, models, reviews); it never writes and never implies mastery.
+async function collectTopics(root) {
+  const topics = []
+  const seen = new Set()
+  const add = (name, verb) => {
+    if (!name || seen.has(name)) return
+    seen.add(name)
+    topics.push({ name, verb })
+  }
+  for (const path of await goalPaths(root)) add(fileTitle(await safeRead(root, path)), '预习')
+  for (const path of await subjectFiles(root, 'knowledge-gaps')) add(fileTitle(await safeRead(root, path)), '跟进')
+  for (const path of await subjectFiles(root, 'models')) add(fileTitle(await safeRead(root, path)), '复习')
+  for (const path of await subjectFiles(root, 'reviews')) add(fileTitle(await safeRead(root, path)), '复习')
+  return topics
+}
+
+// Demo payload for a workspace that is not a learner repository, so the panel
+// still previews its shape. It is explicitly flagged isSample and never claimed
+// as real learner state.
+const PANEL_SAMPLE = Object.freeze({
+  isLearnerRepo: false,
+  isSample: true,
+  queueMaintained: true,
+  topics: Object.freeze([
+    Object.freeze({ name: '化学平衡移动', verb: '跟进' }),
+    Object.freeze({ name: '二次函数求最值', verb: '复习' }),
+    Object.freeze({ name: '相似三角形对应关系', verb: '跟进' }),
+    Object.freeze({ name: '词汇在语境中的含义', verb: '复习' }),
+    Object.freeze({ name: '长难句分析', verb: '预习' }),
+    Object.freeze({ name: '牛顿第二定律', verb: '复习' }),
+    Object.freeze({ name: '三角恒等式速查', verb: '看笔记' }),
+  ]),
+})
+
+// Panel projection: the agent-maintained queue read verbatim, then collected
+// topics for a learner repo, then the flagged sample for anything else.
+export async function panelStatus(root = process.cwd()) {
+  const yml = await safeRead(root, 'gitlearnos.yml')
+  const dashboard = await safeRead(root, 'dashboard.md')
+  const queue = parseQueue(dashboard)
+  if (queue.length > 0) {
+    return { isLearnerRepo: yml !== null, isSample: false, queueMaintained: true, topics: queue }
+  }
+  if (yml !== null) {
+    return { isLearnerRepo: true, isSample: false, queueMaintained: false, topics: await collectTopics(root) }
+  }
+  return PANEL_SAMPLE
+}
+
+// Host handler for the /gitlearnos logical RPC channel the client panel calls.
+function panelRpcHandler(root) {
+  return async endpoint => {
+    if (endpoint !== 'status') {
+      return { ok: false, error: { code: 'internal', message: `gitlearnos: unknown panel endpoint "${endpoint}"`, details: {} } }
+    }
+    try {
+      return { ok: true, value: await panelStatus(root) }
+    } catch (error) {
+      return { ok: false, error: { code: 'internal', message: String(error?.message ?? error), details: {} } }
+    }
+  }
+}
+
 function evidenceLines(text, pattern, cap = 8) {
   if (!text) return []
   return text.split(/\r?\n/).filter(line => pattern.test(line)).slice(0, cap).map(line => line.trim().slice(0, 240))
@@ -562,4 +638,11 @@ export function apply(ctx, config = {}) {
     async args => recordLearningEvent(root, args),
     { concurrencySafe: false, kind: 'write' },
   ))
+  // Web-only: expose the panel queue over the generic logical RPC channel.
+  // Loopback-only so the panel can never be reached from a remote browser.
+  if (typeof ctx.inject === 'function') {
+    ctx.inject(['connection'], scope => {
+      scope.effect(() => scope.connection.rpc.handle('/gitlearnos', panelRpcHandler(root), { authority: 'loopback' }), 'gitlearnos: /gitlearnos rpc channel')
+    })
+  }
 }

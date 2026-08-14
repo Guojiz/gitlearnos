@@ -23,6 +23,15 @@ resume without re-deriving the decisions. It is state, not a feature spec.
    `templates/dashboard.md` documents the convention and the system prompt
    tells the agent to maintain it. The agent owns the order; the tool only
    reads it, never writes it.
+5. **Learning panel baked into the bundle** — the client half
+   (`adapters/deepseek-harness/client.js`) registers the `GitLearnOS ▸` dock
+   entry (collapsed bar → flat `name (action)` list → one-tap action menu).
+   It only reads the queue over a **loopback-only** `/gitlearnos` logical RPC
+   channel exposed by the Host half (`ctx.connection.rpc.handle`). No tsdown
+   build: the client entry ships in the already-built
+   `window.__ModuleLoader__.load` module format. `exports["./client"]`,
+   `dsh.client`, and peer dependencies are declared in `package.json`.
+   Tests now pass 22/22.
 
 ## Product direction (aligned via /grill-me)
 
@@ -36,29 +45,27 @@ The Harness-native surface is a "brainless learning" panel:
 - the axis is **"learner asks → AI teaches"**: before = agent ranks the queue;
   during = learner asks, AI teaches; after = one-tap multiple-choice close.
 
-## Temporary prototype (not committed, dies on restart)
+## Temporary prototype (superseded)
 
-A dynamic Cordis plugin `glearn-1` previews this panel in the current session.
-It is NOT part of the bundle and disappears on process restart.
+The dynamic Cordis plugin `glearn-1` previewed this panel before it was baked.
+It is no longer the source of truth; the bundle client half now owns the panel.
+Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
 ## Deliberately deferred
 
-- Baking the client UI into the bundle (needs tsdown build + ~6
-  `@deepseek-ai/dsh-*` peerDependencies + `ctx.remote` typed RPC; costly and
-  upstream-breakage-prone during Developer Preview).
-- The client UI itself (the panel) is still only the temporary `glearn-1`
-  dynamic plugin; the queue data layer is baked, the panel is not.
 - Diagnostic multiple-choice as its own UI (now documented in the references;
   no UI yet).
+- The bundle client half is committed locally but NOT pushed; it reaches real
+  sessions only after push + reinstall (see "Next decision").
 
 ## Commit / rollback
 
-- One local commit on `main`, NOT pushed. See `git log -1` for the SHA.
+- Two local commits on `main`, NOT pushed. See `git log -1` for the SHA.
 - Rollback: `git revert HEAD` (keeps history) or `git reset --hard HEAD~1`
   (discards the commit). Learner Git state is untouched by this round.
 
 ## Next decision
 
-1. Bake the panel client UI into the bundle (costly) or keep it as a separate
-   deliverable.
+1. Push and reinstall (`dsh plugin add github:Guojiz/gitlearnos#<sha>`) so the
+   baked panel reaches real sessions — this needs your authority.
 2. Keep or stop the `glearn-1` prototype.

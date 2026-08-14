@@ -19,6 +19,13 @@
 4. **Agent 维护的学习队列**——`learning_status` 返回 `queue`（`dashboard.md`
    的「接下来」列表，原样、按 Agent 写的顺序）；`templates/dashboard.md`
    记录了这个约定，系统提示要求 Agent 维护它。顺序归 Agent，工具只读、不写。
+5. **学习面板已烘焙进 bundle**——客户端半部
+   （`adapters/deepseek-harness/client.js`）注册 `GitLearnOS ▸` 输入坞条目
+   （收起条 → 平铺 `知识点（动作）` 列表 → 一键动作菜单）。它只通过一个
+   **仅限 loopback** 的 `/gitlearnos` 逻辑 RPC 通道读取队列（由 Host 半部
+   `ctx.connection.rpc.handle` 暴露）。无需 tsdown 构建：客户端入口以已构建的
+   `window.__ModuleLoader__.load` 模块格式随包发布。`exports["./client"]`、
+   `dsh.client` 与 peer 依赖已写入 `package.json`。测试通过 22/22。
 
 ## 产品方向（通过 /grill-me 对齐）
 
@@ -31,27 +38,26 @@ Harness 原生界面是一个「无脑学习」面板：
 - 主轴是 **「学习者问 → AI 教」**：问之前 = Agent 排好队列；问之中 = 学习者问、
   AI 教；问之后 = 一句多选收尾。
 
-## 临时原型（未提交，重启即失效）
+## 临时原型（已被替代）
 
-动态 Cordis 插件 `glearn-1` 在当前会话预览该面板。它不是 bundle 的一部分，
-进程重启后会消失。
+动态 Cordis 插件 `glearn-1` 在烘焙前预览过该面板。它已不再是事实来源；面板
+现由 bundle 客户端半部负责。方便时即可停掉 `glearn-1`——它只存在于运行时，
+重启即失效。
 
 ## 刻意延后
 
-- 把客户端 UI 烘焙进 bundle（需 tsdown 构建 + 约 6 个 `@deepseek-ai/dsh-*`
-  peerDependencies + `ctx.remote` 类型化 RPC；Developer Preview 期间成本高、
-  上游易破坏）。
-- 客户端 UI（面板）本身仍是临时动态插件 `glearn-1`；队列数据层已烘焙，面板
-  尚未烘焙。
 - 诊断式多选作为独立 UI（协议参考已写清楚，尚无 UI）。
+- bundle 客户端半部已本地提交但未 push；只有 push + 重装后才进入真实会话
+  （见「下一步决策」）。
 
 ## 提交 / 回滚
 
-- `main` 上有一个本地提交，未 push。SHA 见 `git log -1`。
+- `main` 上有两个本地提交，未 push。SHA 见 `git log -1`。
 - 回滚：`git revert HEAD`（保留历史）或 `git reset --hard HEAD~1`（丢弃该提交）。
   本轮未触碰学习者 Git 状态。
 
 ## 下一步决策
 
-1. 把面板客户端 UI 烘焙进 bundle（成本高），或作为独立交付物保留。
+1. push 并重装（`dsh plugin add github:Guojiz/gitlearnos#<sha>`），让已烘焙的
+   面板进入真实会话——这需要你的授权。
 2. 保留或停掉 `glearn-1` 原型。

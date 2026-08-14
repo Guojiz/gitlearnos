@@ -13,10 +13,20 @@ if (manifest.main !== './adapters/deepseek-harness/index.js') {
 if (manifest.dsh?.bundle?.patch !== expectedPatch) {
   throw new Error(`dsh.bundle.patch must be ${expectedPatch}`)
 }
+if (manifest.dsh?.client?.platform !== 'web') {
+  throw new Error('dsh.client.platform must be "web" for the learning panel client half')
+}
+if (!Array.isArray(manifest.dsh?.client?.inject) || manifest.dsh.client.inject.length === 0) {
+  throw new Error('dsh.client.inject must name the client bundles the panel depends on')
+}
+const clientEntry = manifest.exports?.['./client']
+if (typeof clientEntry !== 'string') {
+  throw new Error('exports["./client"] must point at the built client half')
+}
 if (manifest.scripts?.prepare !== undefined || manifest.scripts?.postinstall !== undefined) {
   throw new Error('GitLearnOS DSH installs must not execute prepare or postinstall scripts')
 }
-for (const path of [manifest.main, manifest.dsh.bundle.patch]) {
+for (const path of [manifest.main, manifest.dsh.bundle.patch, clientEntry]) {
   await readFile(resolve(root, path))
 }
 

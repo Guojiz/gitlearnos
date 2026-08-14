@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
 import { promisify } from 'node:util'
-import { apply, inspectWorkspace, recordLearningEvent, routeLearningEvent } from '../index.js'
+import { apply, inspectWorkspace, panelStatus, recordLearningEvent, routeLearningEvent } from '../index.js'
 
 const exec = promisify(execFile)
 
@@ -75,6 +75,32 @@ test('apply registers one prompt section, read tools, and a serialized write tra
   assert.deepEqual(tools.map(tool => tool.name), ['learning_status', 'learning_route', 'learning_record'])
   assert.equal(tools.find(tool => tool.name === 'learning_record').isConcurrencySafe(), false)
   assert.match(sections[0].text, /Never claim a file write, Git commit, RAG ingestion/)
+})
+
+test('apply registers the loopback-only panel RPC channel when connection is available', async () => {
+  const registered = []
+  apply({
+    systemPrompt: { section() {} },
+    tools: { register() {} },
+    inject(keys, callback) {
+      if (keys.includes('connection')) {
+        const scope = {
+          connection: { rpc: { handle: (channel, handler, options) => { registered.push({ channel, handler, options }); return () => Promise.resolve() } } },
+          effect(fn) { fn() },
+        }
+        callback(scope)
+      }
+    },
+  }, { root: process.cwd() })
+  assert.equal(registered.length, 1)
+  assert.equal(registered[0].channel, '/gitlearnos')
+  assert.equal(registered[0].options.authority, 'loopback')
+  const unknown = await registered[0].handler('bogus', undefined, undefined)
+  assert.equal(unknown.ok, false)
+  assert.equal(unknown.error.code, 'internal')
+  const status = await registered[0].handler('status', undefined, undefined)
+  assert.equal(status.ok, true)
+  assert.ok(Array.isArray(status.value.topics))
 })
 
 test('safe-auto records and commits only one controlled event while preserving unrelated dirty state', async () => {
@@ -302,4 +328,38 @@ test('queue reads the agent-maintained Next up list verbatim, in order', async (
   await writeFile(join(emptyRoot, 'dashboard.md'), '# Dashboard\n## Do now\n- one\n')
   const empty = await inspectWorkspace(emptyRoot)
   assert.deepEqual(empty.queue, [])
+})
+
+test('panelStatus returns the agent-maintained queue verbatim and never writes', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-'))
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n')
+  const status = await panelStatus(root)
+  assert.equal(status.isSample, false)
+  assert.equal(status.queueMaintained, true)
+  assert.deepEqual(status.topics, [
+    { name: '化学平衡移动', verb: '跟进' },
+    { name: '二次函数求最值', verb: '复习' },
+  ])
+})
+
+test('panelStatus falls back to collected topics for a learner repo with no queue', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-collect-'))
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
+  await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
+  await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'quadratic.md'), '# Gap: 二次函数求最值\n')
+  const status = await panelStatus(root)
+  assert.equal(status.isLearnerRepo, true)
+  assert.equal(status.isSample, false)
+  assert.equal(status.queueMaintained, false)
+  assert.deepEqual(status.topics, [{ name: '二次函数求最值', verb: '跟进' }])
+})
+
+test('panelStatus flags a non-learner workspace as sample data, never as real state', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-sample-'))
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
+  const status = await panelStatus(root)
+  assert.equal(status.isSample, true)
+  assert.ok(status.topics.length > 0)
 })

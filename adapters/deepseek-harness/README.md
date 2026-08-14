@@ -98,6 +98,28 @@ write, no Git operation, and no external-system request, and it never
 fabricates a due date from an unparseable or absent marker. Dates are compared
 in UTC, so near-midnight boundaries are advisory.
 
+## Client learning panel
+
+The bundle also ships a browser client half (`adapters/deepseek-harness/client.js`)
+that mounts a centered, collapsed-by-default `GitLearnOS ▸` entry in the
+conversation input dock. Tapping it expands a flat, ordered `name (action)`
+list — the order is the agent's judgment, never hard-coded by the Host.
+
+The panel is strictly read-only:
+
+- it fetches its list over a **loopback-only** logical RPC channel (`/gitlearnos`)
+  that the Host registers through `ctx.connection.rpc.handle`; remote browsers
+  are rejected, and the panel never writes learner state or reorders the queue;
+- it reads the agent-maintained `Next up` list verbatim; for a learner repo
+  without a maintained queue it falls back to a read-only projection of goals,
+  gaps, models, and reviews, and for a non-learner workspace it shows an
+  explicitly flagged sample.
+
+The client entry ships in the already-built `window.__ModuleLoader__.load`
+module format, so there is no build step. `dsh.client` (platform `web` and its
+`inject` list) plus `exports["./client"]` and the `@deepseek-ai/dsh-*` peer
+dependencies are declared in `package.json`.
+
 ## Limits
 
 - The Host uses the active process working directory, or an explicit deployment
@@ -130,11 +152,13 @@ The intended native Harness expansion is deliberately explicit so a future
 feature is never mistaken for a shipped one:
 
 - a replaceable RAG provider with provenance-bearing ingestion and retrieval;
-- a Web learning Cockpit backed by durable Git evidence;
+- a Web learning Cockpit (the shipped panel is a read-only queue view;
+  the fuller durable-Git-backed cockpit is not yet built);
 - a transfer-mastery workflow that generates, reviews, and later rechecks
   composable models;
 - a verified external recurring-worker bridge for cold-session automation.
 
-None of these four items is implemented by the current Host base. Until its
-code and end-to-end evidence exist, use the normal GitLearnOS agent workflow
-and the repository-capable automation adapters documented elsewhere.
+The other three items are not implemented by the current Host base; the
+Cockpit exists only as the read-only queue panel described above. Until each
+item's code and end-to-end evidence exist, use the normal GitLearnOS agent
+workflow and the repository-capable automation adapters documented elsewhere.

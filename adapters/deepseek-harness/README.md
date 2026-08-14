@@ -14,6 +14,10 @@ DeepSeek Harness **Developer Preview**. It mounts a Host plugin that adds a
 DeepSeek Harness and this adapter are both early integration surfaces. Expect
 breaking upstream changes and review the pinned revisions before installing.
 
+An agent taking ownership of further Harness development should begin with the
+[development handoff card](DEVELOPMENT-HANDOFF.md). It defines intent,
+authority, invariants, and evidence requirements without prescribing features.
+
 ## Install
 
 Pin both DeepSeek Harness and this bundle to reviewed commits during the

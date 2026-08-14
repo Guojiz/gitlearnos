@@ -14,6 +14,9 @@
 DeepSeek Harness 和本适配器都仍是早期接入面。上游可能发生破坏性变化，安装前
 必须审阅并固定版本。
 
+接手后续 Harness 开发的 Agent 应先阅读[开发交接卡](DEVELOPMENT-HANDOFF.md)。
+它只规定产品意图、权限、不可破坏原则与证据要求，不预设功能清单。
+
 ## 安装
 
 Developer Preview 期间，应把 DeepSeek Harness 与本 bundle 都固定在已审阅的

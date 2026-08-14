@@ -27,7 +27,7 @@ const DUE_MARKER = /next\s*review|next\s*check|review\s*date|review\s+on|due\s*r
 
 const SYSTEM_PROMPT = `## GitLearnOS
 
-Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence.`
+Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence. After each learning event, update the dashboard Next up queue with your own ordering over difficulty, importance, mastery, and retention — one line per item as 1. <knowledge point> (<action>) — the learning panel only reads it, never writes it.`
 
 function objectSchema(properties, required = []) {
   return { type: 'object', additionalProperties: false, properties, required }
@@ -46,6 +46,11 @@ const actionItemSchema = objectSchema({
   dueOn: { oneOf: [{ type: 'string' }, { type: 'null' }] },
 }, ['kind', 'path', 'dueOn'])
 
+const queueItemSchema = objectSchema({
+  name: { type: 'string' },
+  verb: { type: 'string' },
+}, ['name', 'verb'])
+
 const statusOutputSchema = objectSchema({
   workspace: { type: 'string' },
   gitRevision: { oneOf: [{ type: 'string' }, { type: 'null' }] },
@@ -62,10 +67,11 @@ const statusOutputSchema = objectSchema({
   reviewFiles: { type: 'array', items: { type: 'string' } },
   knowledgeGaps: { type: 'array', items: { type: 'string' } },
   actions: { type: 'array', items: actionItemSchema },
+  queue: { type: 'array', items: queueItemSchema },
   rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   limitations: { type: 'array', items: { type: 'string' } },
-}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'actions', 'rag', 'automation', 'limitations'])
+}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'actions', 'queue', 'rag', 'automation', 'limitations'])
 
 const routeOutputSchema = objectSchema({
   operation: { type: 'string' },
@@ -249,6 +255,18 @@ async function dueReviewState(root, now) {
   return { due, upcoming, noSignal, reviewFiles }
 }
 
+function parseQueue(dashboard) {
+  if (!dashboard) return []
+  const match = dashboard.match(/##\s*(?:Next up|接下来)[^\n]*\n([\s\S]*?)(?=\n##\s|$)/)
+  if (!match) return []
+  const queue = []
+  for (const line of match[1].split(/\r?\n/)) {
+    const item = line.match(/^\s*(?:\d+[.、]|[-*])\s*(.+?)\s*[（(]([^）)]+)[）)]\s*$/)
+    if (item) queue.push({ name: item[1].trim(), verb: item[2].trim() })
+  }
+  return queue
+}
+
 function evidenceLines(text, pattern, cap = 8) {
   if (!text) return []
   return text.split(/\r?\n/).filter(line => pattern.test(line)).slice(0, cap).map(line => line.trim().slice(0, 240))
@@ -271,6 +289,7 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
     ...orderedDue.map(item => ({ kind: 'review', path: item.path, dueOn: item.dueOn })),
     ...gapFiles.slice().sort().map(path => ({ kind: 'gap', path, dueOn: null })),
   ]
+  const queue = parseQueue(contents['dashboard.md'])
   const configuredMode = parseSetting(contents['gitlearnos.yml'], 'mode')
   const effectiveMode = effectiveWriteMode(configuredMode, contents['learning-policy.md'])
   const protocol = parseSetting(contents['gitlearnos.yml'], 'protocol')
@@ -297,6 +316,7 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
     reviewFiles: dueState.reviewFiles,
     knowledgeGaps: gapFiles.slice().sort(),
     actions,
+    queue,
     rag: {
       state: verifiedRag ? 'reported-with-evidence-markers' : ragEvidence.length ? 'mentioned-not-verified' : 'unknown',
       evidence: ragEvidence,
@@ -311,6 +331,7 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
       `Files over ${MAX_FILE_BYTES} bytes, symlink escapes, and directory entries beyond ${MAX_DIRECTORY_ENTRIES} are ignored.`,
       'dueReview is derived from explicit next-review/next-check dates in review and model files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
       'actions is an ordered learning queue projected from Git (due reviews first by next-check date, then knowledge gaps); it never implies any action already ran.',
+      'queue is the agent-maintained dashboard Next up list read verbatim in order; it is empty until the agent maintains it, and this tool never writes it.',
     ],
   }
 }

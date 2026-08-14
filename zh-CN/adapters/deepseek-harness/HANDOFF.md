@@ -14,8 +14,11 @@
 2. **协议参考加入「一句收尾」**——讲完一个点后，用一道多选收尾，干扰项是
    最可能的误解；选错某个干扰项就点明具体混淆。见
    `skills/gitlearnos/references/{session,question,review}.md`（中英同步）。
-3. 文档与场景 16 已更新。`npm run test:dsh` 通过 17/17；`npm run check:dsh`
+3. 文档与场景 16 已更新。`npm run test:dsh` 通过 18/18；`npm run check:dsh`
    通过。
+4. **Agent 维护的学习队列**——`learning_status` 返回 `queue`（`dashboard.md`
+   的「接下来」列表，原样、按 Agent 写的顺序）；`templates/dashboard.md`
+   记录了这个约定，系统提示要求 Agent 维护它。顺序归 Agent，工具只读、不写。
 
 ## 产品方向（通过 /grill-me 对齐）
 
@@ -38,8 +41,8 @@ Harness 原生界面是一个「无脑学习」面板：
 - 把客户端 UI 烘焙进 bundle（需 tsdown 构建 + 约 6 个 `@deepseek-ai/dsh-*`
   peerDependencies + `ctx.remote` 类型化 RPC；Developer Preview 期间成本高、
   上游易破坏）。
-- 「Agent 在 Git 维护队列文件 → 面板只读」的完整闭环。当前原型展示的是内置
-  多学科示例，不是真实的 Agent 维护队列。
+- 客户端 UI（面板）本身仍是临时动态插件 `glearn-1`；队列数据层已烘焙，面板
+  尚未烘焙。
 - 诊断式多选作为独立 UI（协议参考已写清楚，尚无 UI）。
 
 ## 提交 / 回滚
@@ -50,7 +53,5 @@ Harness 原生界面是一个「无脑学习」面板：
 
 ## 下一步决策
 
-1. 把面板数据层烘焙进 `learning_status`（`topics`）——安全、零构建、可测试；
-   或烘焙整个客户端 UI（成本高）。
-2. 实现真正的「Agent 维护队列文件 → 面板只读」闭环。
-3. 保留或停掉 `glearn-1` 原型。
+1. 把面板客户端 UI 烘焙进 bundle（成本高），或作为独立交付物保留。
+2. 保留或停掉 `glearn-1` 原型。

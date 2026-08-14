@@ -20,6 +20,15 @@ Automation policy: [link to learning-policy.md]
 - Horizon:
 - Current success criterion:
 
+## Next up
+
+> Agent-maintained ordered queue, projected read-only by the learning panel.
+> Order = the agent's judgment over difficulty, importance, mastery, and
+> retention. One item per line: `1. <knowledge point> (<action>)`.
+
+1. Chemical equilibrium shift (follow up)
+2. Quadratic extrema (review)
+
 ## Do now
 
 - One next action:

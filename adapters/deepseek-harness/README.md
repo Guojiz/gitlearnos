@@ -87,11 +87,16 @@ date on the same line:
 It also lists `reviewFiles` and `knowledgeGaps` so the agent can notice existing
 review sets and active gaps without manual archaeology, and it returns an
 ordered `actions` queue (due reviews first, by next-check date, then gaps) as a
-projection — never a claim that any action ran. This is a heuristic over
-repository text, not a scheduler: it performs no write, no Git operation, and no
-external-system request, and it never fabricates a due date from an unparseable
-or absent marker. Dates are compared in UTC, so near-midnight boundaries are
-advisory.
+projection — never a claim that any action ran.
+
+Separately, `queue` returns the learner's **agent-maintained `Next up` list**
+from `dashboard.md` verbatim, in the order the agent wrote it. The agent owns
+that order (it weighs difficulty, importance, mastery, and retention); this
+tool only reads it, never writes it, and it is empty until the agent maintains
+it. This is a heuristic over repository text, not a scheduler: it performs no
+write, no Git operation, and no external-system request, and it never
+fabricates a due date from an unparseable or absent marker. Dates are compared
+in UTC, so near-midnight boundaries are advisory.
 
 ## Limits
 

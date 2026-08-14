@@ -16,8 +16,13 @@ resume without re-deriving the decisions. It is state, not a feature spec.
    point, close with ONE multiple-choice item whose distractors are the likely
    misconceptions; a wrong distractor names the exact confusion. See
    `skills/gitlearnos/references/{session,question,review}.md` (EN + zh-CN).
-3. Docs and eval scenario 16 updated. `npm run test:dsh` passes 17/17;
+3. Docs and eval scenario 16 updated. `npm run test:dsh` passes 18/18;
    `npm run check:dsh` passes.
+4. **Agent-maintained learning queue** — `learning_status` returns `queue`
+   (the `Next up` list from `dashboard.md`, verbatim, in the agent's order);
+   `templates/dashboard.md` documents the convention and the system prompt
+   tells the agent to maintain it. The agent owns the order; the tool only
+   reads it, never writes it.
 
 ## Product direction (aligned via /grill-me)
 
@@ -41,9 +46,8 @@ It is NOT part of the bundle and disappears on process restart.
 - Baking the client UI into the bundle (needs tsdown build + ~6
   `@deepseek-ai/dsh-*` peerDependencies + `ctx.remote` typed RPC; costly and
   upstream-breakage-prone during Developer Preview).
-- The full "agent maintains the queue file in Git → panel only reads" loop.
-  The prototype currently shows a built-in multi-subject sample, not a real
-  agent-maintained queue.
+- The client UI itself (the panel) is still only the temporary `glearn-1`
+  dynamic plugin; the queue data layer is baked, the panel is not.
 - Diagnostic multiple-choice as its own UI (now documented in the references;
   no UI yet).
 
@@ -55,7 +59,6 @@ It is NOT part of the bundle and disappears on process restart.
 
 ## Next decision
 
-1. Bake the panel data layer into `learning_status` (`topics`) — safe,
-   zero-build, testable — OR bake the whole client UI (costly).
-2. Implement the real "agent maintains queue file → panel only reads" loop.
-3. Keep or stop the `glearn-1` prototype.
+1. Bake the panel client UI into the bundle (costly) or keep it as a separate
+   deliverable.
+2. Keep or stop the `glearn-1` prototype.

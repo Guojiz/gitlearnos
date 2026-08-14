@@ -286,3 +286,20 @@ test('actions projects an ordered learning queue: due reviews first, then knowle
     ],
   )
 })
+
+test('queue reads the agent-maintained Next up list verbatim, in order', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-nextup-'))
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n## Do now\n- one\n')
+  const status = await inspectWorkspace(root)
+  assert.deepEqual(status.queue, [
+    { name: '化学平衡移动', verb: '跟进' },
+    { name: '二次函数求最值', verb: '复习' },
+  ])
+
+  const emptyRoot = await mkdtemp(join(tmpdir(), 'gitlearnos-noqueue-'))
+  await writeFile(join(emptyRoot, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(emptyRoot, 'dashboard.md'), '# Dashboard\n## Do now\n- one\n')
+  const empty = await inspectWorkspace(emptyRoot)
+  assert.deepEqual(empty.queue, [])
+})

@@ -23,8 +23,11 @@ Automation policy: [link to learning-policy.md]
 ## Next up
 
 > Agent-maintained ordered queue, projected read-only by the learning panel.
-> Order = the agent's judgment over difficulty, importance, mastery, and
-> retention. One item per line: `1. <knowledge point> (<action>)`.
+> Order (排兵布阵, measured in `scripts/ordering-experiment.mjs`): prerequisites
+> before dependents; among buildable items blend urgency (overdue/today review →
+> due-soon review → upcoming review → gap → new), leverage (importance ×
+> weakness), and gentleness (easier first for a warm start and quick win); break
+> ties by subject variety. One item per line: `1. <knowledge point> (<action>)`.
 
 1. Chemical equilibrium shift (follow up)
 2. Quadratic extrema (review)

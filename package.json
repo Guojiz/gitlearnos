@@ -22,7 +22,8 @@
   },
   "scripts": {
     "check:dsh": "node scripts/check-dsh-bundle.mjs && node --check adapters/deepseek-harness/index.js",
-    "test:dsh": "node --test adapters/deepseek-harness/test/bundle.test.js"
+    "test:dsh": "node --test adapters/deepseek-harness/test/bundle.test.js",
+    "experiment:ordering": "node scripts/ordering-experiment.mjs"
   },
   "dsh": {
     "bundle": {

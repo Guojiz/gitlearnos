@@ -5,7 +5,8 @@ DeepSeek Harness **Developer Preview**. It mounts a Host plugin that adds a
 `gitlearnos` system-prompt section and three bounded tools:
 
 - `learning_status` reports GitLearnOS coordination files, active goal paths,
-  effective write mode, and repository-reported RAG and automation markers;
+  effective write mode, repository-reported RAG and automation markers, and a
+  read-only due-review observation (see [Revisit-ready read](#revisit-ready-read));
 - `learning_route` selects the relevant GitLearnOS operation and an
   authority-aware next action without performing or claiming writeback.
 - `learning_record` writes one new learning-event file through a serialized,
@@ -72,6 +73,26 @@ This is the first native write path, not arbitrary repository maintenance. The
 main GitLearnOS workflow remains responsible for deciding whether evidence is
 durable and for updating linked gaps, questions, models, reviews, and views.
 
+## Revisit-ready read
+
+`learning_status` is read-only and also reports what the learner should revisit
+next. It scans `subjects/*/reviews/*.md` and `subjects/*/models/*.md` and
+classifies each file by an explicit `next review`, `next check`, or equivalent
+date on the same line:
+
+- `due`: a parseable date that is today or earlier;
+- `upcoming`: a parseable date in the future;
+- `noSignal`: no parseable next-check date — reported as a count, never guessed.
+
+It also lists `reviewFiles` and `knowledgeGaps` so the agent can notice existing
+review sets and active gaps without manual archaeology, and it returns an
+ordered `actions` queue (due reviews first, by next-check date, then gaps) as a
+projection — never a claim that any action ran. This is a heuristic over
+repository text, not a scheduler: it performs no write, no Git operation, and no
+external-system request, and it never fabricates a due date from an unparseable
+or absent marker. Dates are compared in UTC, so near-midnight boundaries are
+advisory.
+
 ## Limits
 
 - The Host uses the active process working directory, or an explicit deployment
@@ -79,8 +100,9 @@ durable and for updating linked gaps, questions, models, reviews, and views.
   transaction described above. The Host does not invoke RAG or provision
   schedules.
 - Reads reject absolute paths, parent traversal, and symlink escapes; cap files
-  at 64 KiB and subject entries at 128; and inspect only fixed coordination
-  files plus `subjects/*/goals/main-goal.md`.
+  at 64 KiB, subject entries at 128, and the total due scan at 512 files; and
+  inspect fixed coordination files, `subjects/*/goals/main-goal.md`, plus
+  `subjects/*/reviews/*.md` and `subjects/*/models/*.md` for the due-review read.
 - RAG and automation results are repository evidence markers, not independent
   verification of external systems.
 - DeepSeek Harness Schedule is session-local. It cannot wake a cold session and

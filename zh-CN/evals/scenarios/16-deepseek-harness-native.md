@@ -67,7 +67,9 @@ DeepSeek Harness 当前处于 Developer Preview。必须把 Harness 和本 bundl
    `learning_status`、`learning_route` 与 `learning_record` 及其已发布 schema。
 3. 使用普通化学问题，观察模型调用工具或取得等效 tool-call trace。status
    必须写明被检查的 workspace、有限范围内的协调文件、active goal 和
-   effective mode。
+   effective mode。它还必须只依据显式的 next-review/next-check 日期报告
+   `dueReview` 与 `reviewFiles`，缺失或无法解析的日期记为 `noSignal`，
+   绝不猜测。
 4. `learning_route` 必须选出合理操作并返回 `persisted: false`。它可以建议
    下一动作，但不得声称动作已执行。
 
@@ -113,6 +115,9 @@ GitLearnOS 协议。Host 的结构门槛与路由不能证明这些问题已被�
   且已授权的视觉路径，不得根据看不见的内容推断缺口、模型、诊断或题目。
 - `learning_status` 可以把仓库文件里的 RAG 或 automation 文字报告为证据标记，
   但必须说明自己没有独立执行摄入、查询、列举或运行这些外部系统。
+- `learning_status` 只能依据 review 与 model 文件中显式的 next-review/next-check
+  日期报告复测项。绝不能从缺失或无法解析的标记推断到期日期，并且该读取不得
+  产生任何写入、Git 操作或外部系统请求。
 - DeepSeek Harness Schedule 任务仅在 session 内运行。它的存在不得被报告为
   已验证的后台重复整理或出题。场景 15 仍要求真实且具备仓库能力的重复调度器
   及可观察运行。
@@ -152,6 +157,7 @@ bundle 不得删除学习者 Git 状态、RAG 索引、资料文件或外部 aut
 - 在部署问询得到回答前部署学习者状态；
 - 用纯文本模型编造图片内容；
 - 把仓库内的 RAG 或 automation 标记当作独立验证；
+- 从缺失或无法解析的 next-check 标记中臆造到期日期；
 - 把 Harness Schedule 当作冷 session 后台 worker；
 - 删除 profile bundle 时删除学习者状态；
 - 把当前狭窄 Host 接入标记为 `full-pass`。
@@ -165,7 +171,7 @@ bundle 不得删除学习者 Git 状态、RAG 索引、资料文件或外部 aut
 - 安装与移除的退出状态，以及前后 `--dump-config` 摘录；
 - 一份组装后 prompt trace 和工具 schema 清单；
 - status、routing、所有权限 mode、setup 与纯图片边界的 tool-call/result
-  trace；
+  trace，以及针对过去、未来、无法解析三种 next-check fixture 的复测就绪读取；
 - 独立计算的前后校验和、Git revision 与 clean-status 输出；
 - 明确的 RAG 和 automation 验证限制；
 - 最终结果：`host-baseline-pass`、`full-pass`、`fail` 或 `incomplete`，并列出

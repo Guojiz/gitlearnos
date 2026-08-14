@@ -65,6 +65,11 @@ an external learning-method source. Label an unconfirmed cause as
 the learner an opportunity to state their own reasoning before replacing it
 with an AI diagnosis.
 
+A wrong multiple-choice distractor is already a precise diagnosis: it names the
+exact confusion ("similar vs congruent") without asking the learner to describe
+it. Record which distractor was chosen and link it to the gap's error
+mechanism.
+
 ## Mastery
 
 - exposure or completion does not prove mastery;

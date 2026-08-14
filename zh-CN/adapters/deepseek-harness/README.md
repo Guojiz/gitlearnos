@@ -4,8 +4,9 @@
 **Developer Preview**。它挂载一个 Host 插件，加入 `gitlearnos` 系统提示词
 区段和三个有界工具：
 
-- `learning_status` 报告 GitLearnOS 协调文件、当前目标路径、有效写入模式，以及
-  仓库中记录的 RAG 与自动化证据标记；
+- `learning_status` 报告 GitLearnOS 协调文件、当前目标路径、有效写入模式、
+  仓库中记录的 RAG 与自动化证据标记，以及只读的复测就绪观察（见
+  [复测就绪读取](#复测就绪读取)）；
 - `learning_route` 选择对应的 GitLearnOS 操作与符合权限的下一步，但不会执行或
   声称已经写回。
 - `learning_record` 通过串行、受政策约束的 Git 事务写入一条新学习事件，或返回
@@ -62,14 +63,32 @@ dsh --profile web --dump-config
 这是第一条原生写路径，不是任意仓库维护。主 GitLearnOS 工作流仍负责判断证据
 是否值得长期保存，并更新相关缺口、题目、模型、复测与视图。
 
+## 复测就绪读取
+
+`learning_status` 只读，并且会报告学习者接下来应复习的内容。它扫描
+`subjects/*/reviews/*.md` 与 `subjects/*/models/*.md`，按同一行上显式的
+`next review`、`next check` 或等价日期把每个文件分类：
+
+- `due`：可解析日期为今天或更早；
+- `upcoming`：可解析日期在未来；
+- `noSignal`：没有可解析的复测日期——只按数量报告，绝不猜测。
+
+它同时列出 `reviewFiles` 与 `knowledgeGaps`，让 Agent 无需手工翻找即可发现
+已有复测集合和活跃缺口，并返回有序的 `actions` 队列（到期复习在前、按复测
+日期排序，缺口在后）——这只是投影，绝不声称任何动作已经执行。这是对仓库
+文本的启发式观察，不是调度器：不写入、不运行 Git、不请求外部系统，也不会
+从无法解析或缺失的标记中臆造到期日期。日期按 UTC 比较，接近午夜的边界仅供
+参考。
+
 ## 当前限制
 
 - Host 使用当前进程工作目录，或部署时显式配置的 `root`。只有
   `learning_record` 会写入或运行 Git，且仅限上述窄事务。Host 不会调用 RAG
   或创建调度任务。
 - 读取会拒绝绝对路径、父目录穿越与符号链接逃逸；单文件上限为 64 KiB，学科
-  条目上限为 128；只检查固定协调文件与
-  `subjects/*/goals/main-goal.md`。
+  条目上限为 128，复测扫描总量上限为 512 个文件；检查固定协调文件、
+  `subjects/*/goals/main-goal.md`，以及用于复测就绪读取的
+  `subjects/*/reviews/*.md` 与 `subjects/*/models/*.md`。
 - RAG 与自动化结果只是仓库证据标记，不是对外部系统的独立验证。
 - DeepSeek Harness Schedule 只在当前会话中运行，不能唤醒已经停止的会话，单独
   使用它不满足 GitLearnOS 对 `maintenance` 和 `due-review` 的已验证、可操作

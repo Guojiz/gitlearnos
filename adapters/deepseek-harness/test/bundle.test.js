@@ -210,3 +210,79 @@ test('unclear policy falls back to manual instead of widening safe-auto', async 
   assert.equal(status.configuredMode, 'safe-auto')
   assert.equal(status.effectiveMode, 'manual')
 })
+
+test('dueReview classifies explicit next-review dates and never guesses the rest', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-due-'))
+  await mkdir(join(root, 'subjects', 'math', 'reviews'), { recursive: true })
+  await mkdir(join(root, 'subjects', 'math', 'models'), { recursive: true })
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r1.md'), '## Next check\n- Next review date: 2020-01-01.\n')
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r2.md'), '## Next check\n- Next review date: 2099-01-01.\n')
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r3.md'), '## Next check\n- Date or next handoff: not yet scheduled.\n')
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r4.md'), '# Notes\nWithout a real scheduler, record due dates and check on handoff.\n')
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r5.md'), '## Next check\n- Next review date: 2020-13-40.\n')
+  await writeFile(join(root, 'subjects', 'math', 'models', 'm1.md'), 'Next review: 2020-02-02\n')
+
+  const status = await inspectWorkspace(root, new Date('2025-01-01T00:00:00Z'))
+  const due = status.dueReview.due
+  const upcoming = status.dueReview.upcoming
+
+  assert.deepEqual(status.reviewFiles, [
+    'subjects/math/reviews/r1.md',
+    'subjects/math/reviews/r2.md',
+    'subjects/math/reviews/r3.md',
+    'subjects/math/reviews/r4.md',
+    'subjects/math/reviews/r5.md',
+  ])
+
+  assert.deepEqual(
+    due.map(item => [item.path, item.kind, item.dueOn]),
+    [
+      ['subjects/math/reviews/r1.md', 'review', '2020-01-01'],
+      ['subjects/math/models/m1.md', 'model', '2020-02-02'],
+    ],
+  )
+  assert.deepEqual(
+    upcoming.map(item => [item.path, item.kind, item.dueOn]),
+    [['subjects/math/reviews/r2.md', 'review', '2099-01-01']],
+  )
+  // r3 (marker, no date), r4 (no marker), r5 (invalid calendar date) are honest no-signal.
+  assert.equal(status.dueReview.noSignal, 3)
+  assert.match(due[0].marker, /Next review date: 2020-01-01/)
+})
+
+test('dueReview is empty and honest when a learner repo has no review or model files', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  assert.deepEqual(status.dueReview, { due: [], upcoming: [], noSignal: 0 })
+  assert.deepEqual(status.reviewFiles, [])
+})
+
+test('dueReview does not follow a symlinked review file escaping the workspace', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-due-link-'))
+  await mkdir(join(root, 'subjects', 'math', 'reviews'), { recursive: true })
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'real.md'), 'Next review: 2020-01-01\n')
+  await symlink('/etc/passwd', join(root, 'subjects', 'math', 'reviews', 'escape.md'))
+  const status = await inspectWorkspace(root, new Date('2025-01-01T00:00:00Z'))
+  assert.deepEqual(status.reviewFiles, ['subjects/math/reviews/real.md'])
+  assert.equal(status.dueReview.due.length, 1)
+  assert.equal(status.dueReview.due[0].path, 'subjects/math/reviews/real.md')
+})
+
+test('actions projects an ordered learning queue: due reviews first, then knowledge gaps', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-queue-'))
+  await mkdir(join(root, 'subjects', 'math', 'reviews'), { recursive: true })
+  await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r-later.md'), 'Next review date: 2020-02-02.\n')
+  await writeFile(join(root, 'subjects', 'math', 'reviews', 'r-earlier.md'), 'Next review date: 2020-01-01.\n')
+  await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'quadratic-sign.md'), '# Gap\n')
+  const status = await inspectWorkspace(root, new Date('2025-01-01T00:00:00Z'))
+  assert.deepEqual(status.knowledgeGaps, ['subjects/math/knowledge-gaps/quadratic-sign.md'])
+  assert.deepEqual(
+    status.actions.map(a => [a.kind, a.path, a.dueOn]),
+    [
+      ['review', 'subjects/math/reviews/r-earlier.md', '2020-01-01'],
+      ['review', 'subjects/math/reviews/r-later.md', '2020-02-02'],
+      ['gap', 'subjects/math/knowledge-gaps/quadratic-sign.md', null],
+    ],
+  )
+})

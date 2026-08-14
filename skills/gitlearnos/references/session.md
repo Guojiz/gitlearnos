@@ -16,7 +16,7 @@ the AI to teach or test now.
    full solution unless direct reference was requested;
 3. diagnose the smallest current blocker;
 4. give the minimum useful support;
-5. verify with a fresh item;
+5. close with one tap (see below);
 6. pass the result to `review.md`;
 7. write back only durable evidence and state changes.
 
@@ -30,6 +30,23 @@ before finishing. If the learner answers it immediately, pass the answer to
 
 Do not reteach an externally resolved issue merely because it remains
 unverified. Honor fatigue, source limits, goal changes, and requests to stop.
+
+## Close with one tap
+
+This is the learner's turn, not an AI quiz line: the learner asked, the AI
+taught. Close that turn with ONE multiple-choice item the learner answers by
+tapping:
+
+- stem: a concrete judgment or application, never a restatement;
+- correct option: the key idea just taught;
+- distractors: the learner's most likely misconceptions (e.g. "similar vs
+  congruent");
+- correct tap → record the result and settle this item;
+- wrong distractor → name the exact confusion ("you mixed up X and Y") and
+  patch only that one point.
+
+Use the multiple-choice popup (AskUserQuestion) and one item at a time. Do not
+ask "understand?" and do not pop this unprompted at every opportunity.
 
 ## Output
 

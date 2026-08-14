@@ -76,7 +76,10 @@ note proves.
    shipped schemas.
 3. From the ordinary chemistry prompt, observe the model call the tools or
    otherwise capture a tool-call trace. The status must name the inspected
-   workspace, bounded coordination files, active goal, and effective mode.
+   workspace, bounded coordination files, active goal, and effective mode. It
+   must also report `dueReview` and `reviewFiles` derived only from explicit
+   next-review/next-check dates, with `noSignal` (never a guess) for absent or
+   unparseable dates.
 4. `learning_route` must select a plausible operation and say `persisted:
    false`. It may recommend a next action but must not claim that action ran.
 
@@ -132,6 +135,10 @@ does not qualify for `full-pass`.
 - `learning_status` may report RAG or automation text found in repository
   files only as evidence markers. It must state that it did not independently
   ingest, query, list, or run those external systems.
+- `learning_status` may report due-review items only from explicit
+  next-review/next-check dates in review and model files. It must never infer a
+  due date from an absent or unparseable marker, and the read must perform no
+  write, Git operation, or external-system request.
 - A DeepSeek Harness Schedule task is session-local. Its presence must never be
   reported as verified background recurring organization or question
   generation. Scenario 15 still requires a real repository-capable recurring
@@ -175,6 +182,7 @@ also shows all of the following against a disposable learner repository:
 - deploying learner state before the setup answers;
 - fabricating image content through the text-only model;
 - treating repository RAG or automation markers as independent verification;
+- fabricating a due date from an absent or unparseable next-check marker;
 - treating Harness Schedule as a cold-session background worker;
 - deleting learner state when the profile bundle is removed;
 - labeling the current narrow Host integration `full-pass`.
@@ -188,7 +196,8 @@ The evaluation receipt records:
 - install and removal exit statuses plus before/after `--dump-config` excerpts;
 - one assembled-prompt trace and tool schema inventory;
 - tool-call/result traces for status, routing, all authority modes, setup, and
-  the image-only boundary;
+  the image-only boundary, plus the due-review read against past, future, and
+  unparseable next-check fixtures;
 - independent before/after checksums, Git revisions, and clean-status output;
 - explicit RAG and automation verification limits;
 - final result: `host-baseline-pass`, `full-pass`, `fail`, or `incomplete`, with

@@ -8,6 +8,7 @@ export const inject = ['systemPrompt', 'tools']
 
 const MAX_FILE_BYTES = 64 * 1024
 const MAX_DIRECTORY_ENTRIES = 128
+const MAX_SCAN_FILES = 512
 const MAX_INTENT_CHARS = 4_000
 const MAX_EVENT_BODY_CHARS = 32_000
 const execFileAsync = promisify(execFile)
@@ -19,13 +20,31 @@ const STATUS_PATHS = Object.freeze([
   'automation.md',
 ])
 
+// A review or model file is only "due" when it carries an explicit
+// next-review / next-check marker AND a parseable ISO date on the same line.
+// Bare words like "due dates" without a date never match.
+const DUE_MARKER = /next\s*review|next\s*check|review\s*date|review\s+on|due\s*review|date\s+or\s+next\s+handoff|next\s+handoff/i
+
 const SYSTEM_PROMPT = `## GitLearnOS
 
-Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence.`
+Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence.`
 
 function objectSchema(properties, required = []) {
   return { type: 'object', additionalProperties: false, properties, required }
 }
+
+const dueItemSchema = objectSchema({
+  path: { type: 'string' },
+  kind: { type: 'string' },
+  dueOn: { type: 'string' },
+  marker: { type: 'string' },
+}, ['path', 'kind', 'dueOn'])
+
+const actionItemSchema = objectSchema({
+  kind: { type: 'string' },
+  path: { type: 'string' },
+  dueOn: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+}, ['kind', 'path', 'dueOn'])
 
 const statusOutputSchema = objectSchema({
   workspace: { type: 'string' },
@@ -35,10 +54,18 @@ const statusOutputSchema = objectSchema({
   effectiveMode: { type: 'string' },
   files: objectSchema(Object.fromEntries(STATUS_PATHS.map(path => [path, { type: 'boolean' }]))),
   activeGoals: { type: 'array', items: { type: 'string' } },
+  dueReview: objectSchema({
+    due: { type: 'array', items: dueItemSchema },
+    upcoming: { type: 'array', items: dueItemSchema },
+    noSignal: { type: 'number' },
+  }, ['due', 'upcoming', 'noSignal']),
+  reviewFiles: { type: 'array', items: { type: 'string' } },
+  knowledgeGaps: { type: 'array', items: { type: 'string' } },
+  actions: { type: 'array', items: actionItemSchema },
   rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   limitations: { type: 'array', items: { type: 'string' } },
-}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'rag', 'automation', 'limitations'])
+}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'actions', 'rag', 'automation', 'limitations'])
 
 const routeOutputSchema = objectSchema({
   operation: { type: 'string' },
@@ -139,12 +166,95 @@ async function goalPaths(root) {
   return paths
 }
 
+async function subjectFiles(root, folder) {
+  const base = await workspaceRoot(root)
+  const subjectsPath = resolve(base, 'subjects')
+  let subjects
+  try {
+    subjects = await readdir(subjectsPath, { withFileTypes: true })
+  } catch (error) {
+    if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') return []
+    throw error
+  }
+  const paths = []
+  for (const subject of subjects.slice(0, MAX_DIRECTORY_ENTRIES)) {
+    if (!subject.isDirectory() || subject.name.startsWith('.')) continue
+    const folderPath = resolve(subjectsPath, subject.name, folder)
+    let entries
+    try {
+      entries = await readdir(folderPath, { withFileTypes: true })
+    } catch (error) {
+      if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') continue
+      throw error
+    }
+    for (const entry of entries.slice(0, MAX_DIRECTORY_ENTRIES)) {
+      if (paths.length >= MAX_SCAN_FILES) return paths
+      if (!entry.isFile() || entry.name.startsWith('.')) continue
+      if (!entry.name.toLowerCase().endsWith('.md')) continue
+      const rel = `subjects/${subject.name}/${folder}/${entry.name}`
+      if (await safeRead(base, rel) !== null) paths.push(rel)
+    }
+  }
+  return paths
+}
+
+function todayString(now) {
+  const date = now instanceof Date ? now : new Date(now)
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
+}
+
+function parseDateToken(line) {
+  const match = line.match(/\b(\d{4})-(\d{2})-(\d{2})\b/)
+  if (!match) return null
+  const [, year, month, day] = match
+  const value = `${year}-${month}-${day}`
+  const date = new Date(`${value}T00:00:00Z`)
+  if (Number.isNaN(date.getTime())) return null
+  if (date.getUTCFullYear() !== Number(year) || date.getUTCMonth() + 1 !== Number(month) || date.getUTCDate() !== Number(day)) return null
+  return value
+}
+
+function findDueMarker(text) {
+  if (!text) return null
+  for (const line of text.split(/\r?\n/)) {
+    if (DUE_MARKER.test(line) && /\d{4}-\d{2}-\d{2}/.test(line)) return line.trim()
+  }
+  return null
+}
+
+async function dueReviewState(root, now) {
+  const reviewFiles = await subjectFiles(root, 'reviews')
+  const modelFiles = await subjectFiles(root, 'models')
+  const targets = [
+    ...reviewFiles.map(path => ({ path, kind: 'review' })),
+    ...modelFiles.map(path => ({ path, kind: 'model' })),
+  ].slice(0, MAX_SCAN_FILES)
+  const due = []
+  const upcoming = []
+  let noSignal = 0
+  const today = todayString(now)
+  for (const target of targets) {
+    const text = await safeRead(root, target.path)
+    if (text === null) continue
+    const marker = findDueMarker(text)
+    const dueOn = marker ? parseDateToken(marker) : null
+    if (dueOn === null) {
+      noSignal += 1
+      continue
+    }
+    const item = { path: target.path, kind: target.kind, dueOn, marker: marker.slice(0, 240) }
+    if (dueOn <= today) due.push(item)
+    else upcoming.push(item)
+  }
+  return { due, upcoming, noSignal, reviewFiles }
+}
+
 function evidenceLines(text, pattern, cap = 8) {
   if (!text) return []
   return text.split(/\r?\n/).filter(line => pattern.test(line)).slice(0, cap).map(line => line.trim().slice(0, 240))
 }
 
-export async function inspectWorkspace(root = process.cwd()) {
+export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
   const canonicalRoot = await workspaceRoot(root)
   const files = {}
   const contents = {}
@@ -154,6 +264,13 @@ export async function inspectWorkspace(root = process.cwd()) {
     contents[path] = text
   }
   const activeGoals = await goalPaths(root)
+  const dueState = await dueReviewState(root, now)
+  const gapFiles = await subjectFiles(root, 'knowledge-gaps')
+  const orderedDue = [...dueState.due].sort((a, b) => (a.dueOn < b.dueOn ? -1 : a.dueOn > b.dueOn ? 1 : 0))
+  const actions = [
+    ...orderedDue.map(item => ({ kind: 'review', path: item.path, dueOn: item.dueOn })),
+    ...gapFiles.slice().sort().map(path => ({ kind: 'gap', path, dueOn: null })),
+  ]
   const configuredMode = parseSetting(contents['gitlearnos.yml'], 'mode')
   const effectiveMode = effectiveWriteMode(configuredMode, contents['learning-policy.md'])
   const protocol = parseSetting(contents['gitlearnos.yml'], 'protocol')
@@ -176,6 +293,10 @@ export async function inspectWorkspace(root = process.cwd()) {
     effectiveMode,
     files,
     activeGoals,
+    dueReview: { due: dueState.due, upcoming: dueState.upcoming, noSignal: dueState.noSignal },
+    reviewFiles: dueState.reviewFiles,
+    knowledgeGaps: gapFiles.slice().sort(),
+    actions,
     rag: {
       state: verifiedRag ? 'reported-with-evidence-markers' : ragEvidence.length ? 'mentioned-not-verified' : 'unknown',
       evidence: ragEvidence,
@@ -188,6 +309,8 @@ export async function inspectWorkspace(root = process.cwd()) {
       'Read-only scan; no file write, Git commit, RAG request, or scheduler request was performed.',
       'Reported markers are repository text, not independent verification of external systems.',
       `Files over ${MAX_FILE_BYTES} bytes, symlink escapes, and directory entries beyond ${MAX_DIRECTORY_ENTRIES} are ignored.`,
+      'dueReview is derived from explicit next-review/next-check dates in review and model files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
+      'actions is an ordered learning queue projected from Git (due reviews first by next-check date, then knowledge gaps); it never implies any action already ran.',
     ],
   }
 }

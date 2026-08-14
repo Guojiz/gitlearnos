@@ -54,6 +54,14 @@ If a required source is unavailable, ask for the minimum excerpt or label the re
 
 Do not mix purposes without stating why.
 
+## One-tap confirmation vs a full set
+
+A one-tap confirmation (see `session.md`) is the lightweight close of a live
+explanation, not a persisted question set. When a wrong distractor reveals a
+real confusion, promote that one point to a full `diagnostic` set and persist
+it; otherwise record only the tap result in the review record and do not
+manufacture extra questions.
+
 ## Generate learner questions
 
 For each persisted set, record the goal, grounding, questions, answer or

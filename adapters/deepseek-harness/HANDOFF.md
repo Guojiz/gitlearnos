@@ -56,19 +56,31 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
 - Diagnostic multiple-choice as its own UI is **not needed**: the Harness-native
   `ask_user_question` close already works end-to-end and reads well, so it stays.
-- The bundle client half is committed locally but NOT pushed; it reaches real
-  sessions only after push + reinstall (see "Next decision").
+
+## Published and installed evidence
+
+- Feature revision `fdfd3013b355efcc43c2b80d524d559eb49cca09` is on `main`.
+- The official `web` profile is pinned to that exact GitHub revision.
+- A fresh Harness process on port 3081 loaded the bundled panel without the old
+  dynamic `glearn-1` prototype. The real browser showed the collapsed bar,
+  expanded sample list, explicit sample label, and all five actions.
+- Choosing `Close with one question` placed the expected prompt in the Harness
+  composer and collapsed the panel again. The earlier `invalid client-request
+  message` failure was reproduced, traced to an omitted RPC payload, fixed with
+  an explicit empty object, and covered by a regression assertion.
+- This proves bundle loading and panel interaction. It does not claim a learner
+  write, RAG retrieval, background schedule, or mastery event.
 
 ## Commit / rollback
 
-- The development commits are local on `main` and NOT pushed. Use `git log`
-  rather than a copied count as the authoritative list; current `HEAD` includes
-  the panel, queue, one-tap close, ordering experiment, and final evidence-boundary
-  corrections.
+- The reviewed development commits are on `origin/main`. Use `git log` rather
+  than a copied count as the authoritative list; the installed revision includes
+  the panel, queue, one-tap close, ordering experiment, evidence-boundary
+  corrections, and the real-runtime RPC fix.
 - Rollback: `git revert HEAD` (keeps history) or `git reset --hard HEAD~1`
   (discards the commit). Learner Git state is untouched by this round.
 
-## Next decision
+## Next work
 
-1. Push and reinstall (`dsh plugin add github:Guojiz/gitlearnos#<sha>`) so the
-   baked panel reaches real sessions — this needs your authority.
+No release gate remains for this round. Future work should begin from a
+separate, evidence-backed learner scenario instead of extending the demo panel.

@@ -8,6 +8,12 @@ GitLearnOS
 
 You learn. It closes the loop.
 
+## DeepSeek Harness launch line
+
+Native DeepSeek Harness support. A GitLearnOS-exclusive learning panel where
+the main agent owns both the learning order and when to present it, while the
+learner keeps the final manual control.
+
 ## Short description
 
 Learning happens with teachers, school, paper, platforms, self-study, and AI.
@@ -47,6 +53,9 @@ notes, and promoted durable knowledge for retrieval.
 - keep Git and repository structure in the background for the learner.
 - adapt question volume and delivery to device, bandwidth, and study-time
   constraints while stating unmet access limits honestly.
+- run as an installable native DeepSeek Harness bundle with a Git-backed
+  learning queue, five direct learning actions, and Agent-controlled panel
+  presentation.
 
 ## AceSAT impact demo
 

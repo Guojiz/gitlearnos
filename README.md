@@ -1,5 +1,11 @@
 # GitLearnOS
 
+<p align="center">
+  <img src="website/media/gitlearnos-harness-mascot.png" width="240" alt="GitLearnOS comic book Agent wearing an orange Git-branch harness">
+</p>
+
+<p align="center"><strong>Native DeepSeek Harness support · A GitLearnOS-exclusive learning panel</strong></p>
+
 **[Quickstart: give one request to your AI →](QUICKSTART.md)**
 
 [中文](zh-CN/README.md) ·
@@ -293,7 +299,7 @@ installation—the active runtime must list `gitlearnos`. See the
 OpenSpace may later evaluate this generic Skill through an
 [optional integration](integrations/openspace/README.md); it is not required.
 
-## DeepSeek Harness Developer Preview
+## GitLearnOS-exclusive DeepSeek Harness support
 
 GitLearnOS now ships a native DeepSeek Harness learning surface. A
 `GitLearnOS ▸` bar sits beside the conversation input. The main agent can open
@@ -311,6 +317,8 @@ exposes evidence, while the main agent judges what comes next from the goal,
 difficulty, importance, mastery, retention, and current constraints. See the
 [launch note](docs/deepseek-harness-launch.md) and the
 [install, verification, limits, and native roadmap](adapters/deepseek-harness/README.md).
+
+See it on the **[GitLearnOS website](https://guojiz.github.io/gitlearnos/#harness)**.
 
 This remains a Developer Preview. It does not yet provide native RAG calls or
 verified cold-session background work. DeepSeek's official provider is

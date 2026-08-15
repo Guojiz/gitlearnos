@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="description" data-zh="GitLearnOS：AGENTS.md 驱动主动学习，Git 保存正式状态，本地 RAG 检索教材与长期知识。" data-en="GitLearnOS: proactive learning through AGENTS.md, formal state in Git, and optional local RAG for durable knowledge." content="GitLearnOS：AGENTS.md 驱动主动学习，Git 保存正式状态，本地 RAG 检索教材与长期知识。">
+  <meta name="description" data-zh="GitLearnOS：DeepSeek Harness 独家原生学习面板，Git 保存正式状态，本地 RAG 检索教材与长期知识。" data-en="GitLearnOS: an exclusive native learning panel for DeepSeek Harness, formal state in Git, and optional local RAG for durable knowledge." content="GitLearnOS：DeepSeek Harness 独家原生学习面板，Git 保存正式状态，本地 RAG 检索教材与长期知识。">
   <title data-zh="GitLearnOS — 学习发生在任何地方，状态属于你" data-en="GitLearnOS — Learn anywhere. Keep the state.">GitLearnOS — 学习发生在任何地方，状态属于你</title>
   <script>
     /* 首帧前恢复语言偏好，避免闪烁 */
@@ -48,6 +48,8 @@
     header.site{position:sticky;top:0;z-index:50;background:rgba(251,252,250,.0);border-bottom:1px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease),backdrop-filter .25s}
     header.site.scrolled{background:rgba(251,252,250,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--line)}
     .header-in{min-height:80px;display:flex;align-items:center;gap:2rem}
+    .brand-lockup{display:flex;align-items:center;gap:.65rem}
+    .brand-mark{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 5px 8px rgba(2,43,32,.14))}
     .wordmark{font-family:var(--mono);font-size:1.5rem;font-weight:750;letter-spacing:-.06em;color:var(--deep)}
     .wordmark em{font-style:normal;color:var(--orange)}
     nav.primary{display:flex;gap:clamp(1.4rem,3vw,3rem);margin-inline:auto;font-size:.88rem;font-weight:650}
@@ -200,6 +202,18 @@
     .memory-tools{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
     .memory-card ul{margin:.9rem 0 0;padding-left:1.1rem;color:var(--muted);font-size:.82rem;line-height:1.7}
 
+    /* ---------- DeepSeek Harness 原生支持 ---------- */
+    .harness-sec{background:var(--orange-soft);border-block:1px solid #F2C7B2}
+    .harness-layout{display:grid;grid-template-columns:minmax(280px,.72fr) minmax(480px,1.28fr);gap:clamp(2.5rem,6vw,6rem);align-items:center}
+    .harness-art{display:grid;place-items:center;min-height:420px;border:1px solid rgba(217,67,9,.24);border-radius:24px;background:radial-gradient(circle at 50% 42%,#fff 0 32%,rgba(255,255,255,.62) 33% 55%,transparent 56%);overflow:hidden}
+    .harness-art img{display:block;width:min(92%,500px);height:auto;filter:drop-shadow(0 22px 28px rgba(2,43,32,.18));transform:rotate(-2deg)}
+    .harness-copy h2{margin:0;color:var(--deep);font-size:clamp(2.2rem,4.4vw,4rem);font-weight:800;line-height:1.08;letter-spacing:-.045em}
+    .harness-copy>p{margin:1.35rem 0 0;color:var(--muted);font-size:.98rem;line-height:1.8;max-width:44em}
+    .harness-points{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1.8rem}
+    .harness-point{padding:1rem;background:rgba(255,255,255,.74);border:1px solid rgba(217,67,9,.2);border-radius:12px}
+    .harness-point strong{display:block;color:var(--deep);font-size:.86rem;line-height:1.45}
+    .harness-point small{display:block;margin-top:.35rem;color:var(--muted);font-size:.72rem;line-height:1.55}
+
     /* ---------- 参赛演示视频 ---------- */
     .demo-sec{background:var(--deep);color:var(--on-dark)}
     .demo-sec .number{color:var(--orange)}
@@ -239,6 +253,7 @@
     .reveal.pre.d1{transition-delay:.12s}.reveal.pre.d2{transition-delay:.24s}
 
     /* ---------- 响应式 ---------- */
+    @media (max-width:1180px){nav.primary{display:none}}
     @media (max-width:1100px){
       .hero{grid-template-columns:1fr;gap:3.5rem}
       .pipe{max-width:860px}
@@ -250,10 +265,12 @@
       .wrap{width:min(100% - 32px,680px)}
       nav.primary{display:none}
       .header-in{min-height:68px;gap:1rem}
+      .brand-mark{width:40px;height:40px}
       .hero{padding:56px 0 64px}
       h1{font-size:clamp(2.9rem,15vw,4.6rem)}
       html.lang-en h1{font-size:clamp(2.6rem,12.5vw,4.2rem)}
       .pipe{padding:1rem}
+      .harness-layout{grid-template-columns:1fr}.harness-points{grid-template-columns:1fr}.harness-art{min-height:300px}.harness-art img{width:min(88%,390px)}
       .pipe-lanes{display:none}
       .pipe-grid{grid-template-columns:1fr;gap:.9rem}
       .sources{gap:.6rem}
@@ -318,13 +335,14 @@
 
 <header class="site" id="siteHeader">
   <div class="wrap header-in">
-    <a class="wordmark" href="#top">GitLearn<em>OS</em></a>
+    <a class="brand-lockup" href="#top"><img class="brand-mark" src="media/gitlearnos-harness-mascot.png" alt=""><span class="wordmark">GitLearn<em>OS</em></span></a>
     <nav class="primary" aria-label="主导航" data-label-zh="主导航" data-label-en="Primary">
       <a href="#principles"><span class="zh">原理</span><span class="en">Principles</span></a>
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
       <a href="#loop"><span class="zh">学习闭环</span><span class="en">The loop</span></a>
       <a href="#subjects"><span class="zh">学科仓库</span><span class="en">Subjects</span></a>
       <a href="#memory"><span class="zh">主动记忆</span><span class="en">Agent memory</span></a>
+      <a href="#harness"><span class="zh">DS Harness</span><span class="en">DS Harness</span></a>
       <a href="#demo"><span class="zh">参赛演示</span><span class="en">Demo</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
     </nav>
@@ -339,9 +357,9 @@
   <!-- ================= HERO ================= -->
   <section class="hero wrap" id="top">
     <div>
-      <p class="kicker"><span class="zh">学习发生在任何地方。状态属于你。</span><span class="en">Learning happens anywhere. The state stays yours.</span></p>
+      <p class="kicker"><span class="zh">DeepSeek Harness 原生支持 · GitLearnOS 独家学习面板</span><span class="en">Native DeepSeek Harness support · A GitLearnOS-exclusive learning panel</span></p>
       <h1><span class="zh b">你去学。<br><span class="hl">它收尾。</span></span><span class="en b">You learn.<br><span class="hl">It closes the loop.</span></span></h1>
-      <p class="intro"><span class="zh">不用每次点名 Skill。AGENTS.md 让主 Agent 主动识别学习事件：先解决眼前问题，再整理证据、按需查询长期知识，并把结果写回 Git。</span><span class="en">No Skill name required. AGENTS.md makes the main agent notice learning events: answer first, organize evidence, retrieve durable knowledge when needed, and write results back to Git.</span></p>
+      <p class="intro"><span class="zh">GitLearnOS 把 DeepSeek Harness 变成真正的学习系统：主 Agent 决定学习顺序和面板何时展开，先解决眼前问题，再整理证据、按需查询长期知识，并把结果写回 Git。</span><span class="en">GitLearnOS turns DeepSeek Harness into a real learning system: the main agent decides both the learning order and when to present it, answers the immediate need, organizes evidence, retrieves durable knowledge when needed, and writes results back to Git.</span></p>
       <div class="actions">
         <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">从一科开始</span><span class="en">Start with one subject</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
         <a class="text-link" href="#start"><span class="zh">复制开场指令</span><span class="en">Copy the starter prompt</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-d"/></svg></a>
@@ -518,10 +536,36 @@
     </div>
   </section>
 
-  <!-- ================= 05 AceSAT 参赛演示 ================= -->
-  <section class="demo-sec" id="demo">
+  <!-- ================= 05 DeepSeek Harness 原生支持 ================= -->
+  <section class="harness-sec" id="harness">
     <div class="wrap numbered">
       <div class="number reveal">05</div>
+      <div class="harness-layout">
+        <div class="harness-art reveal">
+          <img src="media/gitlearnos-harness-mascot.png" loading="lazy" alt="GitLearnOS comic book Agent wearing an orange Git-branch harness">
+        </div>
+        <div class="harness-copy reveal d1">
+          <p class="kicker"><span class="zh">GitLearnOS 独家原生学习面板</span><span class="en">The native learning panel built for GitLearnOS</span></p>
+          <h2><span class="zh">不是又一个聊天框。<br>是 DeepSeek Harness 里的学习操作系统。</span><span class="en">Not another chat box.<br>A learning OS inside DeepSeek Harness.</span></h2>
+          <p><span class="zh">正式 bundle 直接进入 Harness：Agent 从学习者自己的 Git 状态判断下一步，决定面板何时展开，并提供复习、做题、收尾一道、问老师和查看笔记五个直接动作。学习者随时可以手动收起，定时刷新不会抢走控制权。</span><span class="en">The installable bundle runs directly inside Harness. The agent reads learner-owned Git state, decides what comes next and when the panel should open, then offers five plain actions: review, practise, close with one question, ask a teacher, or read notes. The learner can always fold it, and refresh never steals control.</span></p>
+          <div class="harness-points">
+            <div class="harness-point"><strong><span class="zh">顺序归 Agent</span><span class="en">Agent-owned order</span></strong><small><span class="zh">目标、先决知识、薄弱点与复习证据共同决定。</span><span class="en">Goals, prerequisites, gaps, and review evidence shape the queue.</span></small></div>
+            <div class="harness-point"><strong><span class="zh">展示也归 Agent</span><span class="en">Agent-owned timing</span></strong><small><span class="zh">新队列可展开一次；之后学习者的手动选择优先。</span><span class="en">A new queue may open once; the learner's manual choice then wins.</span></small></div>
+            <div class="harness-point"><strong><span class="zh">Git 仍是真相</span><span class="en">Git stays the truth</span></strong><small><span class="zh">面板只读顺序，不把界面状态冒充学习证据。</span><span class="en">The panel reads the order without turning UI state into learning evidence.</span></small></div>
+          </div>
+          <div class="actions">
+            <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/adapters/deepseek-harness/README.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/adapters/deepseek-harness/README.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/adapters/deepseek-harness/README.md"><span class="zh">安装到 DeepSeek Harness</span><span class="en">Install for DeepSeek Harness</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+            <a class="text-link" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/docs/deepseek-harness-launch.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/docs/deepseek-harness-launch.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/docs/deepseek-harness-launch.md"><span class="zh">阅读发布说明</span><span class="en">Read the launch note</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 AceSAT 参赛演示 ================= -->
+  <section class="demo-sec" id="demo">
+    <div class="wrap numbered">
+      <div class="number reveal">06</div>
       <div class="demo-layout">
         <div class="demo-copy reveal">
           <p class="kicker"><span class="zh">AceSAT AI Agent Hackathon · 英文演示</span><span class="en">AceSAT AI Agent Hackathon · Product demo</span></p>

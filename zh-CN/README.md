@@ -1,5 +1,11 @@
 # GitLearnOS
 
+<p align="center">
+  <img src="../website/media/gitlearnos-harness-mascot.png" width="240" alt="身穿橙色 Git 分支 Harness 的 GitLearnOS 漫画书本 Agent">
+</p>
+
+<p align="center"><strong>DeepSeek Harness 原生支持 · GitLearnOS 独家学习面板</strong></p>
+
 **[快速开始：把一段话交给你的 AI →](QUICKSTART.md)**
 
 [English](../README.md) ·
@@ -228,7 +234,7 @@ Codex 与 OpenCode 默认使用 `.agents/skills/gitlearnos/`；Claude Code 使�
 OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评测这个
 通用 Skill；运行 GitLearnOS 不需要它。
 
-## DeepSeek Harness Developer Preview
+## GitLearnOS 独家 DeepSeek Harness 支持
 
 GitLearnOS 现已提供 DeepSeek Harness 原生学习入口。会话输入框旁有一条
 `GitLearnOS ▸`；主 Agent 判断现在查看队列有帮助时可以让它展开，不宜打断时则保持
@@ -241,6 +247,8 @@ bundle 同时提供诚实的状态与路由，以及一条狭窄、受政策约�
 Host 不替学习者排顺序：它只提供证据，由主 Agent 综合目标、难度、重要性、掌握度、
 巩固度和当前限制判断下一步。参见[发布说明](docs/deepseek-harness-launch.md)以及
 [安装、验证、限制与原生路线图](adapters/deepseek-harness/README.md)。
+
+前往 **[GitLearnOS 官网](https://guojiz.github.io/gitlearnos/#harness)** 查看完整介绍。
 
 这仍是 Developer Preview：尚未提供原生 RAG 调用或经过验证的冷会话后台工作。
 DeepSeek 官方 provider 只处理文本，Harness 的会话内 Schedule 也不能代替真正的

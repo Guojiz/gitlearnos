@@ -89,6 +89,8 @@ window.__ModuleLoader__.load({
 
         function ask(text) {
           if (actions && typeof actions.setDraft === "function") actions.setDraft(text);
+          setOpen(false);
+          setActive(null);
         }
 
         if (error !== null) {

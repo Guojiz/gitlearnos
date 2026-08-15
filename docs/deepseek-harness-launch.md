@@ -9,11 +9,13 @@ learning state the learner already owns. Goals, mistakes, reviews, notes, and
 next steps stay in a readable Git repository. The main agent uses that evidence
 to decide what deserves attention next.
 
-In DeepSeek Harness, a collapsed `GitLearnOS ▸` bar opens that agent-maintained
-learning queue beside the conversation input. There are no subject tabs and no
-Host-generated ranking. The learner sees one ordered list and chooses a plain
-action: review it, practise it, ask a teacher, read their notes, or close the
-point with one question.
+In DeepSeek Harness, a `GitLearnOS ▸` bar shows that agent-maintained learning
+queue beside the conversation input. The main agent decides whether a new queue
+revision should open now or remain folded; that decision applies once, and the
+learner can still toggle it without a timer reopening it. There are no subject
+tabs and no Host-generated ranking. The learner sees one ordered list and
+chooses a plain action: review it, practise it, ask a teacher, read their notes,
+or close the point with one question.
 
 The order belongs to the agent, not the plugin. The Host exposes bounded
 evidence; the main agent weighs the learner's goal, prerequisites, urgency,
@@ -29,7 +31,8 @@ confusion; it does not pretend to prove the learner's hidden reasoning.
 ## What is real in this Developer Preview
 
 - a no-build, installable DeepSeek Harness Host + browser bundle;
-- a collapsed learning bar and flat agent-maintained queue;
+- an Agent-presented learning bar and flat agent-maintained queue, with the
+  learner's manual toggle preserved;
 - actions that place a useful request into the conversation and collapse the
   panel again;
 - bounded status, routing, due-review evidence, and one policy-checked,

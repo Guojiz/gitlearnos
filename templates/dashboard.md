@@ -28,6 +28,11 @@ Automation policy: [link to learning-policy.md]
 > due-soon review → upcoming review → gap → new), leverage (importance ×
 > weakness), and gentleness (easier first for a warm start and quick win); break
 > ties by subject variety. One item per line: `1. <knowledge point> (<action>)`.
+> `Panel: expand` lets the Agent open this queue when seeing it now is helpful;
+> `Panel: collapse` keeps it folded. A new queue/presentation revision applies
+> once, then the learner's manual toggle wins until the Agent changes it again.
+
+Panel: collapse
 
 1. Chemical equilibrium shift (follow up)
 2. Quadratic extrema (review)

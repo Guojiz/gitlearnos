@@ -295,13 +295,15 @@ OpenSpace may later evaluate this generic Skill through an
 
 ## DeepSeek Harness Developer Preview
 
-GitLearnOS now ships a native DeepSeek Harness learning surface. A collapsed
-`GitLearnOS ▸` bar sits beside the conversation input. It opens the learning
-queue that the main agent maintains in the learner's own Git repository, keeps
-the agent's order, and offers plain actions such as review, practice, ask a
-teacher, or read the learner's notes. After teaching, the agent can use one
-native multiple-choice prompt to check the point without turning the session
-into a quiz feed.
+GitLearnOS now ships a native DeepSeek Harness learning surface. A
+`GitLearnOS ▸` bar sits beside the conversation input. The main agent can open
+it when the queue is the helpful next move, or leave it folded when interruption
+would not help; the learner can always toggle it manually. It shows the queue
+that the main agent maintains in the learner's own Git repository, keeps the
+agent's order, and offers plain actions such as review, practice, ask a teacher,
+or read the learner's notes. After teaching, the agent can use one native
+multiple-choice prompt to check the point without turning the session into a
+quiz feed.
 
 The bundle also provides honest status and routing plus one narrow,
 policy-checked Git event transaction. The Host does not rank the queue: it

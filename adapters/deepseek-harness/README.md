@@ -100,8 +100,12 @@ in UTC, so near-midnight boundaries are advisory.
 ## Client learning panel
 
 The bundle also ships a browser client half (`adapters/deepseek-harness/client.js`)
-that mounts a centered, collapsed-by-default `GitLearnOS ▸` entry in the
-conversation input dock. Tapping it expands a flat, ordered `name (action)`
+that mounts a centered `GitLearnOS ▸` entry in the conversation input dock.
+The Agent writes `Panel: expand` or `Panel: collapse` beside its `Next up`
+queue, so a new queue revision can arrive open when that is useful or folded
+when it would distract. The decision applies once per revision: after that,
+the learner's manual toggle wins until the Agent changes the queue or
+presentation decision. Opening the panel shows a flat, ordered `name (action)`
 list — the order is the agent's judgment, never hard-coded by the Host.
 
 The panel is strictly read-only:
@@ -112,7 +116,9 @@ The panel is strictly read-only:
 - it reads the agent-maintained `Next up` list verbatim; for a learner repo
   without a maintained queue it stays hidden rather than inventing an order,
   while a non-learner development workspace receives an explicitly flagged
-  sample.
+  sample;
+- it reads the Agent's explicit presentation decision and a stable revision;
+  the 30-second refresh cannot repeatedly reopen a panel the learner closed.
 
 The client entry ships in the already-built `window.__ModuleLoader__.load`
 module format, so there is no build step. `dsh.client` (platform `web` and its

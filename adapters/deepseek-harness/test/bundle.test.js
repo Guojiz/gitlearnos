@@ -330,10 +330,12 @@ test('queue reads the agent-maintained Next up list verbatim, in order', async (
 test('panelStatus returns the agent-maintained queue verbatim and never writes', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-'))
   await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
-  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n')
   const status = await panelStatus(root)
   assert.equal(status.isSample, false)
   assert.equal(status.queueMaintained, true)
+  assert.equal(status.panelDirective, 'expand')
+  assert.match(status.panelRevision, /^[a-f0-9]{16}$/)
   assert.deepEqual(status.topics, [
     { name: '化学平衡移动', verb: '跟进' },
     { name: '二次函数求最值', verb: '复习' },
@@ -350,7 +352,35 @@ test('panelStatus does not invent an order for a learner repo with no agent queu
   assert.equal(status.isLearnerRepo, true)
   assert.equal(status.isSample, false)
   assert.equal(status.queueMaintained, false)
+  assert.equal(status.panelDirective, 'collapse')
   assert.deepEqual(status.topics, [])
+})
+
+test('panel presentation changes only when the agent changes its decision or queue', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-presentation-'))
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n')
+  const first = await panelStatus(root)
+  const same = await panelStatus(root)
+  assert.equal(first.panelDirective, 'expand')
+  assert.equal(same.panelRevision, first.panelRevision)
+
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n2. 牛顿第二定律（复习）\n')
+  const changedQueue = await panelStatus(root)
+  assert.notEqual(changedQueue.panelRevision, first.panelRevision)
+
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: collapse\n1. 化学平衡移动（跟进）\n2. 牛顿第二定律（复习）\n')
+  const collapsed = await panelStatus(root)
+  assert.equal(collapsed.panelDirective, 'collapse')
+  assert.notEqual(collapsed.panelRevision, changedQueue.panelRevision)
+})
+
+test('panel presentation ignores directives outside Next up and unknown values', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-scope-'))
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\nPanel: expand\n## Next up\nPanel: surprise\n1. 化学平衡移动（跟进）\n')
+  const status = await panelStatus(root)
+  assert.equal(status.panelDirective, 'collapse')
 })
 
 test('panelStatus flags a non-learner workspace as sample data, never as real state', async () => {
@@ -359,6 +389,7 @@ test('panelStatus flags a non-learner workspace as sample data, never as real st
   const status = await panelStatus(root)
   assert.equal(status.isLearnerRepo, false)
   assert.equal(status.isSample, true)
+  assert.equal(status.panelDirective, 'collapse')
   assert.ok(status.topics.length > 0)
   assert.equal(status.topics.some(item => item.name === '不应冒充真实队列'), false)
 })
@@ -369,6 +400,8 @@ test('client hides an unmaintained learner queue and collapses after every actio
   assert.doesNotMatch(client, /rpc\.call\("\/gitlearnos", "status", undefined\)/)
   assert.match(client, /if \(!data\.topics \|\| data\.topics\.length === 0\) return null/)
   assert.match(client, /setDraft\(text\)[\s\S]*setOpen\(false\)[\s\S]*setActive\(null\)/)
+  assert.match(client, /useRef\(null\)[\s\S]*appliedPresentation\.current !== next\.panelRevision/)
+  assert.match(client, /setOpen\(next\.panelDirective === "expand"\)/)
   assert.match(client, /收尾一道/)
   assert.doesNotMatch(client, /暂无内容|当前为自动收集/)
 })

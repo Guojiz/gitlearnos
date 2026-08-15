@@ -1,5 +1,6 @@
 import { lstat, mkdir, open, readFile, realpath, readdir, rm, writeFile } from 'node:fs/promises'
 import { execFile } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { isAbsolute, relative, resolve } from 'node:path'
 import { promisify } from 'node:util'
 
@@ -27,7 +28,7 @@ const DUE_MARKER = /next\s*review|next\s*check|review\s*date|review\s+on|due\s*r
 
 const SYSTEM_PROMPT = `## GitLearnOS
 
-Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence. After each learning event, maintain the dashboard Next up queue by the measured ordering (排兵布阵): prerequisites before their dependents; among buildable items blend urgency (overdue/today review, then due-soon review, then upcoming review, then gap, then new), leverage (importance × weakness), and gentleness (easier first for a warm start and quick win); break ties by subject variety. One line per item as 1. <knowledge point> (<action>). The learning panel only reads it, never writes it.`
+Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence. After each learning event, maintain the dashboard Next up queue by the measured ordering (排兵布阵): prerequisites before their dependents; among buildable items blend urgency (overdue/today review, then due-soon review, then upcoming review, then gap, then new), leverage (importance × weakness), and gentleness (easier first for a warm start and quick win); break ties by subject variety. One line per item as 1. <knowledge point> (<action>). Also write exactly one presentation line in that section: Panel: expand when showing the queue now is the helpful next move, otherwise Panel: collapse. This is the main agent's contextual judgment, never a Host ranking rule. The learning panel only reads these decisions, never writes them.`
 
 function objectSchema(properties, required = []) {
   return { type: 'object', additionalProperties: false, properties, required }
@@ -248,16 +249,29 @@ async function dueReviewState(root, now) {
   return { due, upcoming, noSignal, reviewFiles }
 }
 
-function parseQueue(dashboard) {
-  if (!dashboard) return []
+function nextUpSection(dashboard) {
+  if (!dashboard) return ''
   const match = dashboard.match(/##\s*(?:Next up|接下来)[^\n]*\n([\s\S]*?)(?=\n##\s|$)/)
-  if (!match) return []
+  return match ? match[1] : ''
+}
+
+function parseQueue(dashboard) {
   const queue = []
-  for (const line of match[1].split(/\r?\n/)) {
+  for (const line of nextUpSection(dashboard).split(/\r?\n/)) {
     const item = line.match(/^\s*(?:\d+[.、]|[-*])\s*(.+?)\s*[（(]([^）)]+)[）)]\s*$/)
     if (item) queue.push({ name: item[1].trim(), verb: item[2].trim() })
   }
   return queue
+}
+
+function panelPresentation(dashboard, topics) {
+  const match = nextUpSection(dashboard).match(/^\s*Panel:\s*(expand|collapse)\s*$/im)
+  const panelDirective = match ? match[1].toLowerCase() : 'collapse'
+  const panelRevision = createHash('sha256')
+    .update(JSON.stringify({ panelDirective, topics }))
+    .digest('hex')
+    .slice(0, 16)
+  return { panelDirective, panelRevision }
 }
 
 // Demo payload for a workspace that is not a learner repository, so the panel
@@ -267,6 +281,8 @@ const PANEL_SAMPLE = Object.freeze({
   isLearnerRepo: false,
   isSample: true,
   queueMaintained: true,
+  panelDirective: 'collapse',
+  panelRevision: 'sample-v1',
   topics: Object.freeze([
     Object.freeze({ name: '化学平衡移动', verb: '跟进' }),
     Object.freeze({ name: '二次函数求最值', verb: '复习' }),
@@ -286,7 +302,13 @@ export async function panelStatus(root = process.cwd()) {
   const dashboard = await safeRead(root, 'dashboard.md')
   const queue = parseQueue(dashboard)
   if (yml !== null) {
-    return { isLearnerRepo: true, isSample: false, queueMaintained: queue.length > 0, topics: queue }
+    return {
+      isLearnerRepo: true,
+      isSample: false,
+      queueMaintained: queue.length > 0,
+      topics: queue,
+      ...panelPresentation(dashboard, queue),
+    }
   }
   return PANEL_SAMPLE
 }

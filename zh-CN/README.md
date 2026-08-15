@@ -230,10 +230,12 @@ OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评�
 
 ## DeepSeek Harness Developer Preview
 
-GitLearnOS 现已提供 DeepSeek Harness 原生学习入口。会话输入框旁有一条默认收起的
-`GitLearnOS ▸`；点开后看到由主 Agent 在学习者自己的 Git 仓库中维护的学习队列，
-顺序完全保留，并可直接选择复习、做题、问老师或查看自己的笔记。讲完一个点后，
-Agent 还能用 Harness 自带的一道多选做轻量收尾，而不是把会话变成不断弹题的考试。
+GitLearnOS 现已提供 DeepSeek Harness 原生学习入口。会话输入框旁有一条
+`GitLearnOS ▸`；主 Agent 判断现在查看队列有帮助时可以让它展开，不宜打断时则保持
+收起，学习者始终可以手动切换。面板显示主 Agent 在学习者自己的 Git 仓库中维护的
+学习队列，顺序完全保留，并可直接选择复习、做题、问老师或查看自己的笔记。讲完
+一个点后，Agent 还能用 Harness 自带的一道多选做轻量收尾，而不是把会话变成不断
+弹题的考试。
 
 bundle 同时提供诚实的状态与路由，以及一条狭窄、受政策约束的 Git 事件事务。
 Host 不替学习者排顺序：它只提供证据，由主 Agent 综合目标、难度、重要性、掌握度、

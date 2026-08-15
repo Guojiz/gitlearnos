@@ -85,8 +85,11 @@ dsh --profile web --dump-config
 ## 客户端学习面板
 
 bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-harness/client.js`），
-在会话输入坞中挂载一条居中、默认收起的 `GitLearnOS ▸`。点开它，展开一个平铺、
-有序的 `知识点（动作）` 列表——顺序是 Agent 的判断，绝非 Host 硬编码。
+在会话输入坞中挂载一条居中的 `GitLearnOS ▸`。Agent 在「接下来」队列旁写入
+`Panel: expand` 或 `Panel: collapse`，因此新的队列版本可以在合适时主动展开，
+也可以在不宜打断时保持收起。每个新版本的决定只应用一次；之后由学习者手动控制，
+直到 Agent 再次改变队列或展示决定。展开后是一个平铺、有序的
+`知识点（动作）` 列表——顺序是 Agent 的判断，绝非 Host 硬编码。
 
 面板严格只读：
 
@@ -95,6 +98,8 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
   写入学习者状态，也不重排队列；
 - 它原样读取 Agent 维护的「接下来」列表；学习者仓库尚未维护队列时，面板保持
   隐藏而不是编造顺序；非学习者开发工作区则显示明确标注的示例。
+- 它读取 Agent 明确写下的展示决定与稳定版本；30 秒定时刷新不会反复展开学习者
+  已经手动收起的面板。
 
 客户端入口以已构建的 `window.__ModuleLoader__.load` 模块格式随包发布，因此没有
 构建步骤。`dsh.client`（platform 为 `web` 及其 `inject` 列表）、`exports["./client"]`

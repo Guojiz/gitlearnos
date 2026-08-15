@@ -62,6 +62,7 @@ window.__ModuleLoader__.load({
         const [error, setError] = react.useState(null);
         const [open, setOpen] = react.useState(false);
         const [active, setActive] = react.useState(null);
+        const appliedPresentation = react.useRef(null);
 
         react.useEffect(() => {
           let alive = true;
@@ -70,8 +71,14 @@ window.__ModuleLoader__.load({
               const result = await readStatus();
               if (!alive) return;
               if (result && result.ok) {
-                setData(result.value);
+                const next = result.value;
+                setData(next);
                 setError(null);
+                if (next && next.panelRevision && appliedPresentation.current !== next.panelRevision) {
+                  appliedPresentation.current = next.panelRevision;
+                  setOpen(next.panelDirective === "expand");
+                  setActive(null);
+                }
               } else {
                 setError((result && result.error && result.error.message) || "读取失败");
               }

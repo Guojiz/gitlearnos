@@ -16,8 +16,7 @@ resume without re-deriving the decisions. It is state, not a feature spec.
    point, close with ONE multiple-choice item whose distractors are the likely
    misconceptions; a wrong distractor names the exact confusion. See
    `skills/gitlearnos/references/{session,question,review}.md` (EN + zh-CN).
-3. Docs and eval scenario 16 updated. `npm run test:dsh` passes 18/18;
-   `npm run check:dsh` passes.
+3. Docs and eval scenario 16 updated.
 4. **Agent-maintained learning queue** — `learning_status` returns `queue`
    (the `Next up` list from `dashboard.md`, verbatim, in the agent's order);
    `templates/dashboard.md` documents the convention and the system prompt
@@ -51,16 +50,19 @@ The dynamic Cordis plugin `glearn-1` previewed this panel before it was baked.
 It is no longer the source of truth; the bundle client half now owns the panel.
 Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
-## Deliberately deferred
+## Deliberately deferred / decided
 
-- Diagnostic multiple-choice as its own UI (now documented in the references;
-  no UI yet).
+- Diagnostic multiple-choice as its own UI is **not needed**: the Harness-native
+  `ask_user_question` close already works end-to-end and reads well, so it stays.
 - The bundle client half is committed locally but NOT pushed; it reaches real
   sessions only after push + reinstall (see "Next decision").
 
 ## Commit / rollback
 
-- Two local commits on `main`, NOT pushed. See `git log -1` for the SHA.
+- Seven local commits on `main`, NOT pushed (newest first): `HEAD` (handoff
+  decision record), then `e3b56fc` (collapse after action), `afadcc6` (收尾一道
+  action), `01d976d` (ordering experiment + rubric), `d2249e8` (panel client
+  half), `7a69284` (agent-maintained queue), `f6e7a13` (richer learning_status).
 - Rollback: `git revert HEAD` (keeps history) or `git reset --hard HEAD~1`
   (discards the commit). Learner Git state is untouched by this round.
 
@@ -68,4 +70,3 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
 1. Push and reinstall (`dsh plugin add github:Guojiz/gitlearnos#<sha>`) so the
    baked panel reaches real sessions — this needs your authority.
-2. Keep or stop the `glearn-1` prototype.

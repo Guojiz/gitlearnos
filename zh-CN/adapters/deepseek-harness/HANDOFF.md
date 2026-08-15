@@ -14,8 +14,7 @@
 2. **协议参考加入「一句收尾」**——讲完一个点后，用一道多选收尾，干扰项是
    最可能的误解；选错某个干扰项就点明具体混淆。见
    `skills/gitlearnos/references/{session,question,review}.md`（中英同步）。
-3. 文档与场景 16 已更新。`npm run test:dsh` 通过 18/18；`npm run check:dsh`
-   通过。
+3. 文档与场景 16 已更新。
 4. **Agent 维护的学习队列**——`learning_status` 返回 `queue`（`dashboard.md`
    的「接下来」列表，原样、按 Agent 写的顺序）；`templates/dashboard.md`
    记录了这个约定，系统提示要求 Agent 维护它。顺序归 Agent，工具只读、不写。
@@ -44,15 +43,19 @@ Harness 原生界面是一个「无脑学习」面板：
 现由 bundle 客户端半部负责。方便时即可停掉 `glearn-1`——它只存在于运行时，
 重启即失效。
 
-## 刻意延后
+## 刻意延后 / 已决定
 
-- 诊断式多选作为独立 UI（协议参考已写清楚，尚无 UI）。
+- 诊断式多选作为独立 UI **不需要**：Harness 自带的 `ask_user_question` 收尾
+  已经端到端可用、读起来也顺，就保持现状。
 - bundle 客户端半部已本地提交但未 push；只有 push + 重装后才进入真实会话
   （见「下一步决策」）。
 
 ## 提交 / 回滚
 
-- `main` 上有两个本地提交，未 push。SHA 见 `git log -1`。
+- `main` 上有七个本地提交，未 push（新的在前）：`HEAD`（交接决策记录），
+  然后 `e3b56fc`（点完动作收起）、`afadcc6`（收尾一道动作）、
+  `01d976d`（排序实验 + 排兵布阵准则）、`d2249e8`（面板客户端半部）、
+  `7a69284`（Agent 维护队列）、`f6e7a13`（learning_status 更丰富）。
 - 回滚：`git revert HEAD`（保留历史）或 `git reset --hard HEAD~1`（丢弃该提交）。
   本轮未触碰学习者 Git 状态。
 
@@ -60,4 +63,3 @@ Harness 原生界面是一个「无脑学习」面板：
 
 1. push 并重装（`dsh plugin add github:Guojiz/gitlearnos#<sha>`），让已烘焙的
    面板进入真实会话——这需要你的授权。
-2. 保留或停掉 `glearn-1` 原型。

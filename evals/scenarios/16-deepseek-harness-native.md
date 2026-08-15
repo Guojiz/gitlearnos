@@ -28,8 +28,7 @@ prove those systems ran.
 - a reviewed GitLearnOS commit SHA contains the root Harness bundle manifest;
 - the disposable Harness profile has never installed GitLearnOS;
 - three disposable learner fixtures declare `safe-auto`, `preview`, and
-  `manual`, with one fixture containing a stricter `learning-policy.md` than
-  `gitlearnos.yml`;
+  `manual`, all declared in `gitlearnos.yml`;
 - fixture files are checksummed before the test;
 - no RAG service, repository-capable background worker, or vision provider is
   assumed.

@@ -80,7 +80,6 @@ GitHub 适合私有备份、跨设备连续性、教师或导师审阅、共享�
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md

@@ -8,66 +8,62 @@ GitLearnOS
 
 You learn. It closes the loop.
 
-## DeepSeek Harness launch line
+## Core-ready promise
 
-Native DeepSeek Harness support. A GitLearnOS-exclusive learning panel where
-the main agent owns both the learning order and when to present it, while the
-learner keeps the final manual control.
+GitLearnOS gives one capable main AI agent a learner-owned private Git memory.
+It notices useful learning events, connects evidence to a goal, guides the next
+action, and leaves an inspectable, reversible record. Learning can happen with
+teachers, books, paper, practice platforms, projects, peers, or AI.
 
-## Short description
+The core-ready setup is one private local Git repository, one write-capable
+agent, the protocol and project instructions, and one subject or real learning
+event. GitHub is optional. The learner should not operate folders, branches, or
+commits during normal learning.
 
-Learning happens with teachers, school, paper, platforms, self-study, and AI.
-GitLearnOS lets one main agent notice those events without waiting for a Skill
-command, guide the next step, generate targeted questions, and commit durable
-state to one learner-owned local or hosted Git repository with
-`subjects/<subject>/` folders.
+## Everyday learning
 
-ChatGPT Chat or Work can use Git when the current project/session has verified
-repository access. Chat is suitable for daily questions, answers, page photos,
-and feedback even when Skills are unavailable; Work is useful for guided setup
-and larger multi-file tasks. Project Sources hold large textbooks, PDFs, and
-scans. Most learning does not need GitHub, but a private remote helps with
-backup, cross-device continuity, teacher review, and shared course work.
+The agent answers first. Under `safe-auto`, it writes only safe, reversible
+state when target, evidence, goal, and privacy are clear. `preview` proposes;
+`manual` waits for approval. A question, attempted answer, note, page photo,
+teacher comment, practice result, or repeated difficulty may be recognized
+without naming GitLearnOS or a Skill. Original evidence is preserved and
+independent delayed checks remain separate from immediate feedback.
 
-`AGENTS.md` is the always-on entrypoint. It tells the main agent to notice a
-learning event, answer first, then proactively organize useful evidence,
-retrieve learner-specific knowledge when needed, write back safe state, or ask
-one necessary question. The learner should not need to remember a Skill name.
+## Harness Developer Preview line
 
-A local RAG knowledge layer is recommended by default and may be declined.
-RAG-Anything is the first supported implementation, not the only compatible
-one. Git remains the formal learning memory; RAG holds authorized textbooks,
-notes, and promoted durable knowledge for retrieval.
+GitLearnOS-exclusive native DeepSeek Harness support. The reviewed bundle proves
+bounded status and routing reads, plus `learning_apply`: a strict, `gitlearnos.yml`-authorized
+typed Git transaction that atomically commits event, gap, model, review, and
+dashboard operations. Its loopback-only read-only panel renders the main
+agent's ordered `Next up` queue, with five code-backed actions for review,
+practice, close-with-one-question, ask-a-teacher, or read-notes. RAG providers
+and cold-session workers remain separate layers, not built-in services.
+DeepSeek's official provider is text-only, so visual evidence needs verified
+multimodal or OCR/parser support. The narrow roadmap is richer visual editing,
+a RAG bridge, and an external recurring worker.
+
+## RAG and background
+
+Local RAG is recommended for substantial durable material and may be declined.
+RAG-Anything is the first supported implementation, not a lock-in. Git remains
+the formal source of truth; RAG is rebuildable retrieval for authorized sources.
+The current agent handles immediate work. `maintenance` and `due-review` need
+an external repository-capable scheduler and observed runs; a reminder or
+session schedule is not proof.
 
 ## Product promises
 
-- organize automatically;
-- recognize useful learning events without an explicit invocation;
-- use `AGENTS.md` as the durable proactive behavior entrypoint;
-- use memory as an active trigger and Git as the source of truth;
-- guide setup and the next useful learning action;
-- generate questions from real gaps and evidence;
-- reconcile teacher feedback without forced AI reteaching;
-- keep shared policy at the root and focused subject state in subject folders;
-- make every safe writeback inspectable and reversible.
-- keep Git and repository structure in the background for the learner.
-- adapt question volume and delivery to device, bandwidth, and study-time
-  constraints while stating unmet access limits honestly.
-- run as an installable native DeepSeek Harness bundle with a Git-backed
-  learning queue, five direct learning actions, and Agent-controlled panel
-  presentation.
-
-## AceSAT impact demo
-
-A fictional public-school learner shares a phone, limits mobile data, studies
-in 20-minute blocks, and cannot rely on continuous paid tutoring. GitLearnOS
-reuses existing evidence, delivers one plain-text SAT question, writes back the
-answer and next check, and does not invent background automation or measured
-impact.
+- organize useful learning events without an explicit command;
+- ask from the current gap and preserve answers or external feedback;
+- keep learner state private by default, inspectable, and reversible;
+- keep Git, RAG, and external workers in separate roles;
+- describe only code-backed Harness behavior and label roadmap capabilities.
 
 ## Primary call to action
 
-Start with one subject.
+Open the [core-ready Quickstart](../QUICKSTART.md), which contains the single
+canonical setup prompt. A website button links there; it does not create a
+repository or provision a scheduler.
 
 ## Links
 

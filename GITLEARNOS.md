@@ -6,7 +6,9 @@ Protocol version: `2.0-draft`
 
 This is the single platform-neutral behavior contract for GitLearnOS. Agent
 entry files, Skills, templates, examples, and adapters must follow this file.
-If another document conflicts with it, this file wins.
+If another document conflicts with it, this file wins. Runtime configuration
+and authorization come from the learner repository's `gitlearnos.yml`;
+`learning-policy.md` is legacy migration input only and is never active.
 
 ## Purpose
 
@@ -27,7 +29,7 @@ store, or mandatory multi-agent system.
 
 ## Ambient activation and initiative
 
-Once installed, GitLearnOS is a standing learning policy, not a command the
+Once installed, GitLearnOS is standing learning behavior, not a command the
 learner must remember to invoke. On every interaction, the agent silently checks
 whether the input is a useful learning event even when the learner does not say
 “GitLearnOS,” mention Git, or invoke a Skill.
@@ -94,7 +96,7 @@ GitLearnOS template
 → protocol, Skills, templates, adapters, evaluations, public examples
 
 learner repository
-→ policy, goals, evidence, questions, feedback, current state
+→ configuration, goals, evidence, questions, feedback, current state
 
 project sources or local source folder
 → large textbooks, PDFs, scans, media, and long-lived reference files
@@ -127,7 +129,6 @@ Create only files required by the current learning event:
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -137,16 +138,85 @@ subjects/
         └── main-goal.md
 ```
 
-`gitlearnos.yml` contains only stable protocol settings:
+`gitlearnos.yml` is the one durable configuration and deployment declaration. It
+contains stable protocol settings, authorization, privacy, source/RAG choices,
+and recurring schedule preferences. A compact starting shape is:
 
 ```yaml
 protocol: "2.0-draft"
 language: en
 mode: safe-auto
+identity:
+  repo_id: ""
+  role: learner
+  kind: learner-repository
+  template: false
+authorization:
+  automatic_writes: true
+  commits: true
+  push: false
+privacy:
+  repository: private
+  store_conversations: false
+  store_originals: authorized-only
+  store_sensitive_identity: necessary-and-authorized
+sources:
+  workspace: ""
+  large_materials: project-sources
+rag:
+  provider: rag-anything
+  choice: undecided
+  ingest:
+    enabled: false
+    scope: per-source
+    authorization: explicit
+setup:
+  answers:
+    goal: ""
+    subject: ""
+    material: ""
+    rag_choice: undecided
+  completed_at: ""
+automation:
+  time_zone: Asia/Shanghai
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 3
+  jobs:
+    maintenance: { recurrence: daily, local_time: "21:30" }
+    due-review: { recurrence: daily, local_time: "07:00" }
+  delivery_channel: current-authorized-channel
 ```
 
 Use `preview` or `manual` instead of `safe-auto` when the learner requests
-stricter write control. Learning state does not belong in this file.
+stricter write control. This file contains authorization and deployment preferences,
+not changing learning state. Actual scheduler/provider evidence belongs in
+`automation.md`; goals, evidence, questions, and mastery belong elsewhere.
+The example's `rag.choice: undecided` is an honest pre-gate default; it does
+not satisfy `knowledge-ready` until the learner explicitly chooses `enabled`
+or `declined`.
+
+### Setup gate and readiness
+
+Before changing learner state, the agent asks for one setup gate consisting of
+the learning goal, subject, current material, and the optional local RAG choice.
+It may also ask for an IANA time zone or recurring times when they cannot be
+inferred safely. A fact supplied in the user's current message or an already
+verified repository/config record is answered; do not ask for it again. Ask at
+most one concise question for the next missing fact. The gate does not apply
+to maintaining, documenting, testing, or publishing this public template.
+
+Readiness is computed from verified evidence; it is not a hand-written
+marketing flag. Report setup as one of four cumulative states:
+
+| State | Meaning |
+|---|---|
+| `core-ready` | target repository identity, `gitlearnos.yml`, entry instructions, and basic read/write/Git capability are verified |
+| `knowledge-ready` | goal, subject, material boundary, source workspace, and an explicit RAG choice (`enabled` or `declined`) are answered and recorded; `undecided` is not ready |
+| `automation-ready` | both recurring jobs are observed in a repository-capable scheduler and each has one real test run |
+| `full-ready` | `core-ready` + `knowledge-ready` + `automation-ready`, with every claimed surface independently verified |
+
+These are evidence labels, not promises. Missing capability is reported as
+`incomplete`, `unavailable`, or `unknown` and never silently promoted.
 
 Add these subject folders only on first real use:
 
@@ -168,7 +238,8 @@ the other subjects instead of being copied.
 Do not preload the repository. For one learning-related interaction, read:
 
 1. this protocol through the current agent adapter;
-2. target `learning-policy.md` when present;
+2. target `gitlearnos.yml` (and a legacy `learning-policy.md` only when
+   performing a one-time migration);
 3. root `dashboard.md`;
 4. the active subject goal;
 5. only linked evidence and state needed for the current event.
@@ -199,10 +270,10 @@ current conversation
 ```
 
 An enabled RAG-Anything layer sits beside Git and other tools under the one
-main agent. Do not create a second RAG agent or delegate policy decisions to
+main agent. Do not create a second RAG agent or delegate learning decisions to
 the index.
 
-## Git and RAG-Anything decision policy
+## Git and RAG-Anything decision rules
 
 These rules apply to RAG-Anything and to any compatible local RAG adapter. The
 implementation may be replaced without changing GitLearnOS ownership or
@@ -374,7 +445,7 @@ are first-class learning channels.
 
 An externally answered question may become resolved immediately. Resolution is
 not the same as demonstrated mastery. Record the feedback, stop redundant
-teaching, and create a later independent check only when policy permits.
+teaching, and create a later independent check only when the configuration permits.
 
 ## Truth and evidence
 
@@ -395,12 +466,17 @@ write `unknown` or `needs verification`; never fill the gap by guessing.
 
 Default mode is `safe-auto`.
 
-Effective write authority is the intersection of `gitlearnos.yml` and
-`learning-policy.md`. A default must never override an explicit stricter
-setting. If the files conflict or are unclear, use the stricter authority:
-`preview` shows the proposed change without writing, while `manual` or a policy
-that disables automatic writes requires explicit approval before any write or
-commit.
+Effective write authority comes from `gitlearnos.yml` only. A legacy
+`learning-policy.md` may be read once to propose migration, but it cannot
+expand or restrict the active configuration; after migration it should be
+archived or retained only as a clearly labelled non-effective notice.
+
+Natural-language instructions in the current interaction are one-event
+overrides of stable config (for example, “record only”, “preview first”, or
+“do not store this”). They expire at the end of that event and do not rewrite
+`gitlearnos.yml`. Explicit privacy, deletion, external-publication, secret,
+and broad-restructure boundaries still require confirmation even under
+`safe-auto`.
 
 The agent may automatically:
 
@@ -417,7 +493,7 @@ The agent may automatically:
 Ask first before:
 
 - deleting history or overwriting original notes;
-- changing a long-term goal or learner policy;
+- changing a long-term goal or `gitlearnos.yml`;
 - publishing, changing visibility, or sending data to an external service;
 - broad restructuring that may break links;
 - storing sensitive identity, secrets, or unauthorized originals.
@@ -475,7 +551,7 @@ no-work skip in provider run evidence; do not update `automation.md` until a
 material learning change already justifies a commit.
 
 Record the portable schedule and learner delivery preferences in
-`learning-policy.md`. Record actual scheduler state in `automation.md` using
+`gitlearnos.yml`. Record actual scheduler state in `automation.md` using
 `requested`, `configured`, `verified`, `unavailable`, or `disabled`, together
 with the provider, opaque task identifier, time zone, recurrence, next run, and
 last verified run. Keep provider expressions and credentials outside learner
@@ -553,12 +629,14 @@ Adapters are replaceable and never become the source of learning truth.
 After a write-capable operation, report:
 
 ```text
+Setup status: core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Mode:
 Subject:
 Organized:
 Questions:
 Changed files:
 Evidence:
+Natural-language override: none / <one-event instruction>
 Automation actually completed:
 Skill installation:
 Next action:

@@ -1,10 +1,18 @@
 # Targeted Question Set and Review
 
+ID: `review-<stable-slug>`
+Canonical path: `subjects/<subject>/reviews/<file>.md`
+Version: `1`
+Origin: `planned` / `one-tap` / `scheduled` / `handoff`
+Depends on (goal/gap/model/event IDs):
+Composes with (review IDs):
+Supersedes (review ID/version):
+Conflicts (evidence IDs):
 Status: `planned` / `attempted` / `complete` / `cancelled`
-Subject:  
-Purpose: `diagnostic` / `practice` / `variation` / `transfer` / `review` / `exam`  
-Goal link:  
-Gap link:  
+Subject:
+Purpose: `diagnostic` / `practice` / `variation` / `transfer` / `review` / `exam`
+Goal link:
+Gap link:
 Grounded in:
 Generated:
 
@@ -61,5 +69,13 @@ Preserve the original response or a faithful record.
 ## Next check
 
 - Date or next handoff:
+- Next-check reason: `new-gap` / `incorrect-supported` / `partial` / `external-resolution` / `independent-no-transfer` / `transfer`
 - Actual background scheduling created: yes / no
 - Next question type:
+
+## One-tap fallback
+
+If `Origin: one-tap` and no matching `planned` review existed, preserve the
+single tap, its options, selected option, support, and diagnostic hypothesis
+here with `Status: attempted`. Do not create a duplicate planned set or claim
+mastery; schedule a fresh delayed check using the default date strategy.

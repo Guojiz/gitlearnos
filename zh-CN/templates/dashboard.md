@@ -5,7 +5,8 @@
 更新时间：  
 更新者：  
 仓库状态：`active` / `paused` / `needs-input`  
-自动化政策：[链接到 learning-policy.md]
+配置：`gitlearnos.yml`
+队列修订：
 
 ## 学科总览
 
@@ -22,19 +23,16 @@
 
 ## 接下来
 
-> Agent 维护的有序队列，由学习面板只读投影。顺序（排兵布阵，实测见
-> `scripts/ordering-experiment.mjs`）：先决知识点在其依赖之前；其余可学条目综合
-> 「紧迫度（逾期/今日复习 → 近日复习 → 后续复习 → 缺口 → 新学）、杠杆（重要性 ×
-> 薄弱度）、温和度（先易后难，先给热身和快赢）」；同科连排时用科目多样性破平。
-> 每行一项：`1. <知识点>（<动作>）`。
-> `Panel: expand` 表示 Agent 判断现在展开队列更有帮助；`Panel: collapse`
-> 表示保持收起。新的队列或展示决定只应用一次，之后由学习者手动控制，直到
-> Agent 再次改变它。
+> Agent 维护的有序队列，由学习面板只读投影。行只能使用规范 ID 和路径
+>（`<id> — <path> — <action>`），不能复制样例或答案。只有状态实质变化时重排；
+> 按 Router 规定依次处理先修、到期 planned 复习、缺口、新任务，并用杠杆、温和度、
+> 学科多样性和稳定 ID 打破平局。`Panel: expand` 表示现在打开队列有帮助；
+> `Panel: collapse` 表示折叠。学习者手动切换优先，直到新的队列修订或紧急到期项。
 
 Panel: collapse
 
-1. 化学平衡移动（跟进）
-2. 二次函数求最值（复习）
+1. `<canonical-id> — <canonical-path> — <action>`
+2. `<canonical-id> — <canonical-path> — <action>`
 
 ## 现在做什么
 
@@ -82,7 +80,7 @@ Panel: collapse
 
 ## Agent 接手自动检查
 
-1. 读取 `learning-policy.md`；
+1. 读取 `gitlearnos.yml`；
 2. 确定当前学科，只在需要时检查它的 `inbox/`；
 3. 检查已链接学科文件夹内的到期题目；
 4. 检查已链接学科文件夹内等待老师或外部反馈的项目；

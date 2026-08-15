@@ -1,3 +1,41 @@
 protocol: "2.0-draft"
 language: en
 mode: safe-auto
+identity:
+  repo_id: "public-demo-sat-lite"
+  role: example
+  kind: public-example
+  template: true
+authorization:
+  automatic_writes: true
+  commits: true
+  push: false
+privacy:
+  repository: public-demo
+  store_conversations: false
+  store_originals: authorized-only
+sources:
+  workspace: "fixture-only"
+  large_materials: project-sources
+rag:
+  provider: rag-anything
+  choice: declined
+  ingest:
+    enabled: false
+    scope: per-source
+    authorization: explicit
+setup:
+  answers:
+    goal: "Improve SAT Reading and Writing accuracy in 6 weeks"
+    subject: english
+    material: "synthetic practice summary"
+    rag_choice: declined
+  completed_at: "2026-07-03T00:00:00Z"
+automation:
+  time_zone: America/New_York
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 1
+  delivery_channel: on-handoff
+  jobs:
+    maintenance: { recurrence: daily, local_time: "21:30" }
+    due-review: { recurrence: daily, local_time: "07:00" }

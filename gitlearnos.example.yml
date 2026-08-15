@@ -1,3 +1,61 @@
 protocol: "2.0-draft"
 language: en
 mode: safe-auto
+
+# This is the learner repository's only durable policy. Do not put changing
+# goals, answers, gaps, or review state here.
+identity:
+  repo_id: "replace-with-target-repository-id"
+  role: learner
+  kind: learner-repository
+  template: false
+
+authorization:
+  automatic_writes: true
+  commits: true
+  push: false
+  external_publish: ask
+  destructive_changes: ask
+
+privacy:
+  repository: private
+  store_conversations: false
+  store_originals: authorized-only
+  store_sensitive_identity: necessary-and-authorized
+  local_only_sources: true
+
+sources:
+  workspace: ""
+  large_materials: project-sources
+  store_in_git: locators-and-inspected-excerpts
+
+rag:
+  provider: rag-anything
+  # New setup starts undecided; knowledge-ready requires an explicit enabled
+  # or declined choice after the learner answers the setup gate.
+  choice: undecided # enabled | declined | undecided
+  ingest:
+    enabled: false
+    scope: per-source # per-source | configured-folder
+    authorization: explicit
+
+setup:
+  answers:
+    goal: ""
+    subject: ""
+    material: ""
+    rag_choice: undecided
+  completed_at: ""
+
+automation:
+  time_zone: Asia/Shanghai
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 3
+  delivery_channel: current-authorized-channel
+  jobs:
+    maintenance:
+      recurrence: daily
+      local_time: "21:30"
+    due-review:
+      recurrence: daily
+      local_time: "07:00"

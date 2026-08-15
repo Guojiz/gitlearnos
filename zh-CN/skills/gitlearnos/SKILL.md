@@ -30,7 +30,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
    初始化、导入、提交或部署学习者状态。模板维护、文档、测试和开源发布不适用
    此门槛；
 3. 检查真实的读取、写入、Git、来源、RAG 和调度能力；
-4. 读取目标 `learning-policy.md`、Dashboard、当前学科目标和直接相关的证据；
+4. 读取目标 `gitlearnos.yml`、Dashboard、当前学科目标和直接相关的证据；
 5. 根据设备、流量、时间、语言和交付限制提供最小但有价值的交互；
 6. 判断学科；只有可能写错位置时才询问；
 7. 只加载一个操作参考文件，确有必要时再加载一个学科参考文件。
@@ -47,6 +47,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 | 处理来源访问、出处、隐私或完整性 | [`references/source.md`](references/source.md) |
 | 判断、部署、导入、晋升或查询 RAG-Anything | [`references/rag.md`](references/rag.md) |
 | 提炼可复用理解 | [`references/model.md`](references/model.md) |
+| 总结已链接证据或准备精简交接 | [`references/summarize.md`](references/summarize.md) |
 | 修复状态、链接、重复或撤销范围 | [`references/maintenance.md`](references/maintenance.md) |
 
 不要把笔记记录、老师反馈或准备向真人求助的问题强行变成 AI 辅导会话。
@@ -58,6 +59,11 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 
 确实需要学科形式时，只从
 [`references/subjects/`](references/subjects/README.md) 加载一个参考文件。
+
+如果学习者说“只发题”（或同义表达），走只发题意图分支：只发送题干与目的，
+答案键/评分标准保存在规范的 `planned` 复习中，不教学、不评分、不透露答案。若
+学习者回答一句确认但不存在 `planned` 复习，则创建一条规范 `review` 记录，写入
+`origin: one-tap` 与 `status: attempted`；不能把结果只留在聊天中。
 
 ## 完成
 

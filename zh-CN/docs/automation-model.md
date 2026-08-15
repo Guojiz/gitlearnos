@@ -2,27 +2,34 @@
 
 [English](../../docs/automation-model.md)
 
-正式行为见[中文协议](../GITLEARNOS.md)，平台映射见[自动化适配器](../adapters/automation/README.md)。
+正式行为见[中文协议](../GITLEARNOS.md)。运行时意图来自 `gitlearnos.yml`；提供方
+映射和回执字段见[自动化适配器](../adapters/automation/README.md)。
 
-基础协议定义两个必需的重复任务：
+## 可移植意图
+
+两个必需的重复任务默认如下：
 
 ```text
-due-review，默认每天学习者本地时间 07:00
-→ 读取到期证据并生成可立即作答的具体题目
+maintenance，在 automation.time_zone 的每天 21:30
+→ 整理输入、等待反馈、过时视图、矛盾和模式
 
-maintenance，默认每天学习者本地时间 21:30
-→ 协调待整理输入、等待反馈、过时视图、矛盾状态与模式
+due-review，在 automation.time_zone 的每天 07:00
+→ 读取到期证据并生成可作答的具体题目
 ```
 
-学习者可以修改两个时间。在 `learning-policy.md` 保存 IANA 时区、请求的本地
-时间、安静时段、补跑选择和交付偏好；在 `automation.md` 保存观察到的调度状态。
+学习者可以在 `gitlearnos.yml` 修改 `automation.time_zone`、安静时段、交付渠道、
+题量上限、重复规则和本地时间。旧的策略文档不能覆盖它们。
 
-两个任务都为 `verified` 时，部署自动化才完整。这要求真实重复调度条目和一次
-观察到的、具备仓库能力的测试运行。提醒、日期、提示词、已配置但未测试的任务
-或接手检查都不能满足要求。
+每天只是检查节奏，不承诺每天产出。没有到期或变化证据时返回 `skipped`，不产生内容、
+通知、仅时间戳提交或重复交付。Worker 使用幂等键和写入锁，检查 Git 当前基础版本，
+发生并发变化时停止，错过的运行最多补跑一次。
 
-没有到期或变化证据时标记 `skipped`，不产生内容、通知或提交。计划 Worker 使用
-唯一幂等键和写入锁，Git 基础版本改变时停止，交付时隐藏答案键，最多补跑一次，
-并且没有独立的私有远程授权时不做无人值守 push。
+## 证据边界
 
-不要在学习状态中建立大量平台专用任务。学习意图保存在 Git 中，时间设置由适配器转换。
+只有真实提供方提供机器可读调度回执（含 provider、任务 ID、IANA `tz`、重复规则、
+run ID、occurrence key、仓库版本、结果、交付状态和消息 ID）时，外部运行才是
+`verified`。本地回执检查器只检查结构，不创建、运行或联系调度器。`automation.md`
+中的文本、日期、提示词或 Harness 面板始终是 `reported-only`。
+
+DeepSeek Harness Schedule 仅在会话内运行，不能唤醒冷会话，不能替代外部冷启动 Worker。
+准确边界和本地检查命令见适配器。

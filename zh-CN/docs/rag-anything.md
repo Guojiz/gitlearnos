@@ -2,81 +2,72 @@
 
 [English](../../docs/rag-anything.md)
 
-GitLearnOS 默认建议启用本地 RAG 知识层，同时允许学习者拒绝。RAG-Anything
-是首个明确支持和推荐的实现，不是唯一兼容实现。学习者拥有教材、长 PDF、课程
-包、笔记或需要未来检索的长期个人知识时，它会很有用。没有它时 GitLearnOS
-仍然工作。
+GitLearnOS 推荐可选的本地 RAG 层。RAG-Anything 是首个明确支持的实现，但不是
+必需的运行时，也不是第二个 Agent。Git 仍是可读、可版本化的学习记录；RAG 是由
+唯一主 Agent 管理、可以重建的索引。
 
-## 职责
+## 配置与职责
 
-```text
-                    唯一主 Agent
-                 /        |        \
-               Git   RAG-Anything   其他工具
+学习者的 `gitlearnos.yml` 是唯一运行时配置来源，相关结构如下：
+
+```yaml
+rag:
+  provider: rag-anything
+  choice: enabled       # enabled | declined | undecided
+  ingest: authorized    # authorized | ask
 ```
 
-Git 保存正式状态和记忆；RAG-Anything 保存可以重建的检索索引；主 Agent 负责
-所有路由、导入、晋升和查询决定。不能增加第二个 RAG Agent。
+旧的策略文档仅用于迁移，不是生效的 RAG 或自动化配置来源。不能从 Markdown 标记
+推断授权。绝不能索引这个公开模板、示例、秘密或未经批准的资料边界。
 
-## 先阅读、再询问、最后部署
+主 Agent 决定导入和查询内容。对获授权的教材、长期课程材料和持久知识使用 RAG；
+先把笔记正式整理到 Git；一次性练习和临时错误在变得持久前不要导入。如果 Agent
+已经理解图片，应插入忠实 Markdown／结构，而不是让 RAG 重复 OCR。
 
-部署 Agent 必须按以下顺序执行：
+## 部署门槛
 
-1. 完整阅读 `GITLEARNOS.md` 和 `START-HERE.md`；
-2. 找到学习者仓库，不能与本模板混淆；
-3. 询问学习目标、学科、当前资料及格式，以及是否启用 RAG-Anything；
-4. 回答前不得安装、初始化、导入、提交或部署；
-5. 检查本地 Python、存储、解析器、模型和提供方限制；
-6. 只安装实际需要的最小官方上游能力；
-7. 导入一份获授权真实资料，并运行一次可追溯真实查询；
-8. 报告准确状态和撤销边界。
+学习者部署时，先询问目标、学科、材料、格式及是否启用 RAG，再安装或导入。随后
+检查实际 Python、解析器、存储、模型和提供方限制。维护公开模板不受此学习者门槛
+限制。
 
-此学习者部署门槛不适用于维护、编写文档、测试或发布公开 GitLearnOS 模板。
+上游包是可选的，必须在实际环境中固定并验证版本。仅有包导入、健康检查、mock
+结果或 dry run 都不算导入。只报告配置已设置／未设置，绝不索取或打印秘密。
 
-不能在聊天中索取 API key 或秘密。只报告配置为已设置或未设置，不暴露值。
+## 机器可读的外部回执
 
-## 上游安装边界
+只有提供方发出的 JSON 回执（例如 `external/receipts/rag-<doc-id>.json`）包含下列
+所有字段时，RAG 声明才可独立检查。回执证明一次提供方操作；本地检查器只检查结构，
+不会调用或冒充提供方。
 
-遵循当前[官方 RAG-Anything 仓库](https://github.com/HKUDS/RAG-Anything)。
-为保证可复现，安装固定版本的上游包：
-
-```bash
-python3.12 -m venv .rag-venv
-.rag-venv/bin/pip install "raganything==1.3.1"
+```json
+{
+  "schema": "gitlearnos.external-receipt/v1",
+  "kind": "rag",
+  "provider": "rag-anything",
+  "doc_id": "course/algebra.pdf",
+  "source_boundary": {"root": "/authorized/materials", "allowlist": ["course/algebra.pdf"], "evidence": "allowlist inspected before ingest"},
+  "ingest": {"status": "completed", "run_id": "ing-2026-08-15T07:00Z", "evidence": "provider response and non-zero chunks"},
+  "query": {"status": "completed", "run_id": "qry-2026-08-15T07:02Z", "evidence": "source-specific hit for doc_id"},
+  "rebuild": {"status": "available", "evidence": "documented replay from source boundary"},
+  "delete": {"status": "available", "evidence": "provider delete by doc_id"},
+  "observed_at": "2026-08-15T07:02:00Z"
+}
 ```
 
-必须明确处理两个兼容风险，然后验证：
+`provider`、`doc_id`、`source_boundary` 以及 `ingest`、`query`、`rebuild`、`delete`
+各自的非空 `evidence` 都是必需的。`status` 必须明确（`completed`、`available`、
+`unavailable` 或 `failed`）。回执不授予授权，也不证明学习者掌握；必须提供
+`rebuild` 和 `delete` 路径，保证索引可撤销。
 
-1. PyPI 当前发布的 `raganything` 是 1.3.1，但也存在旧的 0.0.1 版本。
-   固定所需当前版本并检查实际安装版本，不能接受缓存、镜像或约束导致的旧版解析。
-2. 上游 `raganything` 依赖 `mineru[core]`，而后者没有 Python 3.14 发行版，
-   且新版本固定 `Requires-Python <3.14`。macOS Homebrew 默认 `python3` 常为
-   3.14，因此要使用 Python 3.12 虚拟环境。
+## 文本标记只能报告
 
-安装后先验证版本与导入再声称可用：
-`.rag-venv/bin/python -c "import importlib.metadata as m; import raganything, lightrag; print(m.version('raganything'))"`。
+`dashboard.md`、`automation.md`、Harness 面板或其他仓库文件中的 `RAG: enabled`
+及回执链接，都只是仓库提供的观察，永远不是独立验证。除非读取到有效机器回执并
+具备提供方自身证据，否则标记必须显示为 `reported-only`。不能把句子、日期、提示词
+或包导入升级为已验证状态。
 
-1.3.1 直接插入结构化内容时，文本块必须使用
-`{"type": "text", "text": "...", "page_idx": 0}`。不能把文本块的 `text`
-字段替换成泛化的 `content`：调用可能成功退出，却实际索引零字符、零 chunk。
-只有验证非零索引内容与可追踪的教材特定检索后，才能报告 RAG 为 `enabled`。
+## 验收
 
-可选 extras 会扩大格式支持；Office 文档和解析器选择可能需要额外系统包、模型
-或平台特定配置。不能盲目安装全部 extras。当前集成没有真实提供并验证时，不能
-假设已经存在 MCP 服务器、Docker 服务或 Web API。
-
-## 路由摘要
-
-- 教材和长期基础资料：在 Git 登记，获授权时导入 RAG。
-- 笔记和长期个人知识：在 Git 正式整理，再插入 RAG。
-- 一次性练习和临时错误：先处理；按需记入 Git；暂不导入。
-- 反复错误或可复用方法：晋升为 Git 正式知识，再以链接标识插入 RAG。
-- 已经理解的图片或截图：插入忠实 Markdown／结构化内容，不重复 OCR。
-- 长或关系丰富的原文档：获授权时让 RAG-Anything 解析原件。
-- 通用问题：直接回答；只有个人资料或长期知识相关时才查询 RAG。
-
-## 验收检查
-
-`enabled` 要求接口可调用、选定格式依赖可用、一次真实获授权导入、一次带可追溯
-标识的资料特定检索、检查过的索引边界，以及已知重建／删除路径。单独的包导入、
-配置、健康、mock 或 dry run 输出都不能通过。
+只有在获授权的真实导入、资料特定查询、检查过资料边界且已知重建／删除路径之后，
+才能报告 `enabled`。否则报告 `declined`、`undecided`、`unavailable` 或带缺失证据
+及撤销边界的 `reported-only`。禁用或不可用 RAG 时 GitLearnOS 仍可运行。

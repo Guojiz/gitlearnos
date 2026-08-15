@@ -4,7 +4,8 @@
 
 当当前 AI 界面无法自动发现仓库 `AGENTS.md` 或无法使用 Skills 时，把本文作为
 项目指令或自定义指令。若仓库指令可用，则同时遵守仓库指令与
-`GITLEARNOS.md`；学习者更严格的政策始终优先。
+`GITLEARNOS.md`。运行时配置与授权只读取目标仓库的 `gitlearnos.yml`；旧版
+`learning-policy.md` 仅用于迁移。
 
 ## 常驻学习循环
 
@@ -22,13 +23,14 @@
 8. 最后提供诚实回执和一个有用的下一步。
 
 除非任务明显是在维护或发布公开模板，否则默认用户就是学习者。部署学习者系统
-时，先询问学习目标、学科和当前资料，建议启用本地 RAG 知识层；回答前不得
-安装、初始化、导入、提交或部署学习者状态。模板维护、文档、测试和开源发布
+时，一次询问学习目标、学科、当前资料和可选的本地 RAG 选择，建议
+RAG-Anything 但保持可选。当前请求或 `gitlearnos.yml` 中已经提供的事实视为已回答，
+不得重复询问；回答前不得安装、初始化、导入、提交或部署学习者状态。模板维护、文档、测试和开源发布
 不适用此门槛。
 
 部署学习者系统时，为 `maintenance`（默认每天 21:30）和 `due-review`
 （默认每天 07:00）确定 IANA 时区与学习者本地重复时间。在真正拥有仓库能力的
-调度器中创建并测试两项任务。请求政策写入 `learning-policy.md`，可观察状态写入
+调度器中创建并测试两项任务。请求政策写入 `gitlearnos.yml`，可观察状态写入
 `automation.md`；两者未全部验证时，部署自动化必须报告 `incomplete`。接手时检查或提醒不能代替它们。
 
 ## 最小操作路由
@@ -50,12 +52,14 @@
 
 ## 权限与事实
 
-同时根据 `gitlearnos.yml` 和 `learning-policy.md` 判断有效写入权限；两者冲突
-或含糊时采用更严格的一项：
+只根据 `gitlearnos.yml` 判断有效写入权限；旧版 `learning-policy.md` 不能改变当前权限：
 
 - `safe-auto`：访问能力已验证时，完成最小、有用、可撤销的写入和提交；
 - `preview`：展示精确的拟议改动，不写入；
 - `manual` 或禁止自动写入：等待明确批准，或返回精确的待写回内容。
+
+当前交互中的自然语言指令只覆盖本次事件，结束后失效，不会改写
+`gitlearnos.yml`。
 
 保留原始作答、笔记、来源与外部反馈。重要结论必须链接证据。只有间隔后的独立
 作答能证明掌握；若目标要求迁移，证据还必须证明学习者能迁移到足够新的任务。
@@ -67,6 +71,7 @@
 最后提供：
 
 ```text
+设置状态：core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Event and operation:
 Target and subject:
 Changed paths, proposed change, or pending writeback:

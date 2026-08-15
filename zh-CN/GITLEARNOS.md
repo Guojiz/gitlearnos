@@ -7,7 +7,7 @@
 
 协议版本：`2.0-draft`
 
-这是 GitLearnOS 唯一的平台无关行为规范。Agent 入口、Skills、模板、示例和适配器都必须遵守本文；其他文档与本文冲突时，以本文为准。
+这是 GitLearnOS 唯一的平台无关行为规范。Agent 入口、Skills、模板、示例和适配器都必须遵守本文；其他文档与本文冲突时，以本文为准。运行时配置与授权只读取学习者仓库的 `gitlearnos.yml`；`learning-policy.md` 仅是旧版迁移输入，不再生效。
 
 ## 目标
 
@@ -110,7 +110,6 @@ Project Sources 或本地来源文件夹
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -120,16 +119,71 @@ subjects/
         └── main-goal.md
 ```
 
-`gitlearnos.yml` 只保存稳定的协议设置：
+`gitlearnos.yml` 是唯一的持久配置和部署声明，保存稳定协议设置、授权、隐私、来源/RAG 选择和重复调度偏好。最小形状如下：
 
 ```yaml
 protocol: "2.0-draft"
 language: zh-CN
 mode: safe-auto
+identity:
+  repo_id: ""
+  role: learner
+  kind: learner-repository
+  template: false
+authorization:
+  automatic_writes: true
+  commits: true
+  push: false
+privacy:
+  repository: private
+  store_conversations: false
+  store_originals: authorized-only
+  store_sensitive_identity: necessary-and-authorized
+sources:
+  workspace: ""
+  large_materials: project-sources
+rag:
+  provider: rag-anything
+  choice: undecided
+  ingest:
+    enabled: false
+    scope: per-source
+    authorization: explicit
+setup:
+  answers:
+    goal: ""
+    subject: ""
+    material: ""
+    rag_choice: undecided
+  completed_at: ""
+automation:
+  time_zone: Asia/Shanghai
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 3
+  jobs:
+    maintenance: { recurrence: daily, local_time: "21:30" }
+    due-review: { recurrence: daily, local_time: "07:00" }
 ```
 
 学习者要求更严格的写入控制时，把 `safe-auto` 改成 `preview` 或
-`manual`。不要把学习状态塞进这个文件。
+`manual`。该文件只保存授权与部署偏好，不保存变化中的学习状态；实际调度器证据写入 `automation.md`，目标、证据、题目和掌握度写入其他文件。
+示例中的 `rag.choice: undecided` 是设置门槛前的诚实默认值；只有学习者明确选择
+`enabled` 或 `declined` 后，才满足 `knowledge-ready`。
+
+### 设置门槛与就绪状态
+
+改变学习者状态前，Agent 一次询问目标、学科、当前材料和可选的本地 RAG 选择。若无法安全推断，还可询问 IANA 时区或重复时间。用户当前消息已经提供、或目标配置中已经验证的事实视为已回答，不得重复询问；每次最多就下一个缺失事实问一个简短问题。维护、记录、测试或发布公共模板不受此门槛限制。
+
+就绪状态必须由可验证证据计算，不能手写成宣传字段：
+
+| 状态 | 含义 |
+|---|---|
+| `core-ready` | 已验证目标仓库身份、`gitlearnos.yml`、入口说明及基本读写/Git 能力 |
+| `knowledge-ready` | 已回答并记录目标、学科、材料边界、来源工作区及明确的 RAG 选择（`enabled` 或 `declined`）；`undecided` 不算就绪 |
+| `automation-ready` | 两个重复任务均在具备仓库访问能力的调度器中观察到，并各完成一次真实测试运行 |
+| `full-ready` | `core-ready` + `knowledge-ready` + `automation-ready`，且所有声明的能力均独立验证 |
+
+缺失能力必须诚实标为 `incomplete`、`unavailable` 或 `unknown`，不可静默升级。
 
 以下学科目录只在第一次真实使用时创建：
 
@@ -149,7 +203,7 @@ events/           有长期价值的跨渠道学习事件，不是聊天记录
 不要预读整个仓库。处理一次与学习有关的交互时只读：
 
 1. 由当前 Agent 入口引导读取本协议；
-2. 目标仓库中的 `learning-policy.md`；
+2. 目标仓库中的 `gitlearnos.yml`（只有执行一次性迁移时才读取旧版 `learning-policy.md`）；
 3. 根目录 `dashboard.md`；
 4. 当前学科目标；
 5. 与当前事件直接相关的证据和状态。
@@ -178,7 +232,7 @@ Project Sources 或本地来源文件夹
 ```
 
 启用的 RAG-Anything 与 Git 及其他工具并列，由唯一主 Agent 使用。不能创建
-第二个 RAG Agent，也不能把政策决定交给索引。
+第二个 RAG Agent，也不能把学习决定交给索引。
 
 ## Git 与 RAG-Anything 决策规则
 
@@ -325,10 +379,13 @@ GitLearnOS 可以降低应用与流量负担，但不能让 AI 运行环境、�
 
 默认模式是 `safe-auto`。
 
-有效写入权限取 `gitlearnos.yml` 与 `learning-policy.md` 的共同允许范围。默认值
-绝不能覆盖明确的更严格设置。两份文件冲突或含糊时，采用更严格的一项：
-`preview` 只展示拟议改动，不写入；`manual` 或禁止自动写入的政策要求在任何
-写入或提交前取得明确批准。
+有效写入权限只取 `gitlearnos.yml`。旧版 `learning-policy.md` 只能读取一次来
+提出迁移建议，不能扩大或收紧当前配置；迁移后应归档，或保留为明确标注的
+非生效说明。
+
+当前交互中的自然语言指令（如“只记录”“先预览”“不要保存”）只覆盖本次事件，
+事件结束即失效，不会改写 `gitlearnos.yml`。即使是 `safe-auto`，删除、隐私、
+对外发布、密钥和大范围重构仍须确认。
 
 Agent 可以自动：
 
@@ -344,7 +401,7 @@ Agent 可以自动：
 以下操作必须先询问：
 
 - 删除历史或覆盖原始笔记；
-- 改变长期目标或学习策略；
+- 改变长期目标或 `gitlearnos.yml`；
 - 发布、修改可见性或把数据发送到外部服务；
 - 可能破坏链接的大范围重构；
 - 保存敏感身份、密钥或未授权原件。
@@ -389,7 +446,7 @@ maintenance：每天学习者本地时间 21:30
 部署验证后，无工作跳过只保留在提供方运行证据中；只有实质学习变化本就需要提交时，
 才汇总到 `automation.md`。
 
-在 `learning-policy.md` 记录可移植时间与交付偏好；在 `automation.md` 记录真实
+在 `gitlearnos.yml` 记录可移植时间与交付偏好；在 `automation.md` 记录真实
 调度器状态：`requested`、`configured`、`verified`、`unavailable` 或
 `disabled`，以及提供方、不透明任务标识、时区、重复规则、下次运行和最近一次
 已验证运行。平台表达式和凭据留在学习状态之外。只有调度器中确实存在重复任务，
@@ -454,12 +511,14 @@ Code 使用 `.claude/skills/gitlearnos/`。安装状态必须报告为 `installe
 完成可写操作后报告：
 
 ```text
+设置状态：core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 模式：
 学科：
 整理：
 题目：
 改动文件：
 证据：
+本次自然语言覆盖：无 / <一次性指令>
 真实完成的自动化：
 Skill 安装：
 下一步：

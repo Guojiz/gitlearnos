@@ -37,7 +37,6 @@ paper reference
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 learner-profile.md
 subjects/research/goals/main-goal.md
 subjects/research/sources/paper-source-record.md

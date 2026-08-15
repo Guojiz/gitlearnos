@@ -1,10 +1,17 @@
 # Knowledge Gap
 
+ID: `gap-<stable-slug>`
+Canonical path: `subjects/<subject>/knowledge-gaps/<file>.md`
+Version: `1`
+Depends on (event IDs):
+Composes with (model/review IDs):
+Supersedes (gap ID/version):
+Conflicts (evidence IDs):
 Resolution: `open` / `resolved` / `needs-check`
 Mastery: `unknown` / `learning` / `demonstrated`
-Subject:  
-Goal link:  
-Created:  
+Subject:
+Goal link:
+Created:
 Updated:
 
 ## Situation pattern
@@ -16,6 +23,7 @@ Updated:
 - Last observed:
 - Linked observation count:
 - Model status: `none` / `draft` / `active` / `archived`
+- State-machine position: `event` / `gap` / `model-draft` / `model-active` / `planned` / `transfer-attempted` / `mastery-learning` / `mastery-demonstrated`
 
 ## Observable problem
 
@@ -60,3 +68,5 @@ Link distinct observations; do not paste duplicate problems.
 - Date or next handoff:
 - Question, model, source, or handoff:
 - Fresh transfer check:
+- Next check date:
+- Next-check reason:

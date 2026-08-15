@@ -48,3 +48,13 @@ verified-deployment variant; without one the only truthful result is
 does not make DeepSeek Harness a v2 requirement. During its Developer Preview,
 the shipped narrow Host may earn `host-baseline-pass`; only a demonstrated
 write-capable integration may earn `full-pass`.
+
+## Machine-checkable artifact schema
+
+```json
+{"mode":"safe-auto|preview|manual","subject":"string","records":[{"id":"event|gap|model|review-*","path":"subjects/...","status":"string","version":1}],"links":[{"from":"id","field":"depends_on|composes_with|supersedes|conflicts","to":"id"}],"transition":"event→gap→model-draft→model-active→planned→transfer-attempted→mastery-learning|mastery-demonstrated","next_check":"YYYY-MM-DD|noSignal","queue":[{"id":"string","path":"subjects/..."}],"receipt_fields":["Mode","Subject","Organized","Questions","Changed files","Evidence","Automation actually completed","Skill installation","Next action","Undo"]}
+```
+
+Assert one-tap fallback, only-question redaction, evidence-backed promotion
+without blocking conflicts, delayed independent transfer for demonstrated, and
+canonical queue IDs/paths with material-change-only reorder.

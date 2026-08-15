@@ -4,13 +4,13 @@ Follow the Router's core contract. This reference may repair deterministic
 state but may not invent evidence or rewrite preserved learner records.
 
 When invoked as the required recurring `maintenance` job, use the configured
-local time and scheduler state from `learning-policy.md` and `automation.md`.
+local time and scheduler state from `gitlearnos.yml` and `automation.md`.
 No pending input or material change means `skipped`: do not notify, modify a
 last-run timestamp, or commit.
 
 ## Audit order
 
-1. `learning-policy.md` and actual runtime capability;
+1. `gitlearnos.yml` and actual runtime capability;
 2. root dashboard, subject index, and active subject goal;
 3. unprocessed inbox and waiting handoffs inside the active subject;
 4. active gaps and resolution/mastery separation;

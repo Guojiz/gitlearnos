@@ -16,6 +16,13 @@
 - 怎样用一道新任务验证迁移？
 - 哪些已链接观察支持它，什么新证据会修订它？
 
+## 稳定身份与组合
+
+每个模型文件开头都要有稳定 `id`、规范 `path`、整数 `version`，以及
+`status: draft | active | archived`。先修模型用 `depends_on`，一起使用的模型用
+`composes_with`，替代旧版本用 `supersedes`，限制或阻止归纳的证据用 `conflicts`。
+修改正文或路径不能改变 ID。
+
 ## 工作流
 
 先确定学科，把模型写入 `subjects/<subject>/models/`。只有真正可复用时才跨学科链接，并保留一个规范所有者。
@@ -36,12 +43,15 @@
 ## 晋升依据
 
 一个可能成立但仍需另一条观察或学习者核对的结构保持 `draft`。满足以下任一条件
-时可晋升为 `active`：
+时才可晋升为 `active`：
 
 - 至少两条已链接观察支持同一个识别与行动模式；或
 - 学习者、教师或权威来源明确提供可复用方法。
 
-同一事件的重复副本不能算独立证据。记录证据链接、冲突例子与晋升原因。答题
+同一事件的重复副本不能算独立证据。记录证据链接、冲突例子与晋升原因。晋升必须
+写出 `promotion_evidence`（至少两个不同的 event/review ID，或一次学习者、教师、
+权威来源明确提供的可复用贡献）与 `promotion_reason`。存在尚未解决的阻断性
+`conflicts` 时，即使正文完整也保持 `draft`。答题
 模板是决策顺序，不是抄下的一道完整答案。二级结论必须注明条件与证据；不能从
 不完整材料中臆造方便的捷径。
 
@@ -55,7 +65,7 @@ AI 生成的归纳始终属于可编辑派生状态。创建、激活或导入�
 
 不要依据一次含糊或不完整的事件创建永久模型，除非它有明确的未来价值；否则保留为草稿或知识缺口。
 
-修订模型后，生成或链接一道足够新的迁移检验，并用之后的结果修订模型、诊断和
+修订模型后，生成或链接一道足够新的、延迟且独立的迁移检验，状态为 `planned`，并用之后的结果修订模型、诊断和
 下一步。不能改变之后识别、行动或问题选择的模型只是总结，不是完成的学习闭环。
 
 ## 输出
@@ -65,6 +75,9 @@ Model created or refined:
 Subject path:
 Grounding source:
 Promotion basis and evidence links:
+Stable ID / version:
+Dependencies / composition:
+Conflicts / supersedes:
 Linked gap:
 Transfer check:
 RAG status: not-needed / pending-authorization / unavailable / inserted

@@ -10,7 +10,7 @@
 2. 等待学习者回答；不得安装、初始化、导入、提交或部署
 3. 选择项目 Sources 与目标 Git 仓库
 4. 验证记忆、指令、Skills、读、写、来源、RAG 和调度能力
-5. 检查已有状态、`AGENTS.md` 和 `learning-policy.md`
+5. 检查已有状态、`AGENTS.md` 和 `gitlearnos.yml`
 6. 只创建缺少的最小状态，并配置持久触发
 7. 确认或接受两个必需任务的学习者本地时间与 IANA 时区：
    `maintenance`（默认每天 21:30）和 `due-review`（默认每天 07:00）
@@ -28,7 +28,7 @@
 
 ```text
 AGENTS.md
-learning-policy.md
+gitlearnos.yml
 automation.md
 dashboard.md
 learner-profile.md

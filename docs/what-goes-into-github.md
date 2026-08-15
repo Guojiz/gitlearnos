@@ -5,7 +5,7 @@ not only GitHub.
 
 ## Keep in the repository
 
-- goals and learner policy;
+- goals and learner configuration;
 - source records and accurate locators;
 - original learner answers, useful notes, and external feedback;
 - AI-derived models and current gaps;

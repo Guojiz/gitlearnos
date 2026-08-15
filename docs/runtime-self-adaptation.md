@@ -110,9 +110,9 @@ For a complete learner deployment, however, the runtime must provision and
 verify both required recurring background jobs; otherwise deployment
 automation is explicitly `incomplete`.
 
-## Policy and safety
+## Configuration and safety
 
-Read `learning-policy.md`. Under `safe-auto`, ordinary low-risk reversible state changes proceed without repeated confirmation. Ask before deletion, broad overwrite, policy change, visibility change, private publication, sensitive identity, secrets, or license changes.
+Read `gitlearnos.yml`, the only active durable configuration. Under `safe-auto`, ordinary low-risk reversible state changes proceed without repeated confirmation. Ask before deletion, broad overwrite, configuration change, visibility change, private publication, sensitive identity, secrets, or license changes. A legacy `learning-policy.md` is migration input only.
 
 Repeated input should be idempotent. Prefer one event per atomic update and report whether safe undo is available.
 

@@ -26,7 +26,7 @@
 
 ## 读取
 
-1. 存在时读取 `learning-policy.md`；
+1. 读取 `gitlearnos.yml`；
 2. 读取根目录 `dashboard.md` 与当前学科入口；
 3. 读取 `subjects/<subject>/` 下的目标，以及候选缺口、来源、模型、交接和复习；
 4. 读取输入或已授权的原始材料。

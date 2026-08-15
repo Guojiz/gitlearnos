@@ -42,3 +42,12 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 场景 16 单独评测可选运行时适配，不会把 DeepSeek Harness 变成 v2 必需项。
 在 Developer Preview 阶段，当前发布的狭窄 Host 可以取得
 `host-baseline-pass`；只有被真实证明拥有写能力的适配才能取得 `full-pass`。
+
+## 机器可判定产物模式
+
+```json
+{"mode":"safe-auto|preview|manual","subject":"string","records":[{"id":"event|gap|model|review-*","path":"subjects/...","status":"string","version":1}],"links":[{"from":"id","field":"depends_on|composes_with|supersedes|conflicts","to":"id"}],"transition":"event→gap→model-draft→model-active→planned→transfer-attempted→mastery-learning|mastery-demonstrated","next_check":"YYYY-MM-DD|noSignal","queue":[{"id":"string","path":"subjects/..."}],"receipt_fields":["Mode","Subject","Organized","Questions","Changed files","Evidence","Automation actually completed","Skill installation","Next action","Undo"]}
+```
+
+断言一句确认回退、只发题隐藏答案、无阻断冲突的证据晋升、延迟独立迁移才能
+demonstrated，以及队列只含规范 ID/路径且仅在实质变化后重排。

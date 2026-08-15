@@ -21,7 +21,9 @@ move only when links and history can be preserved safely.
 ## Safe migration order
 
 1. Commit or otherwise preserve the current repository state.
-2. Add `gitlearnos.yml`, `learning-policy.md`, and a root dashboard if missing.
+2. Add the complete `gitlearnos.yml` and a root dashboard if missing. Migrate
+   any old `learning-policy.md` choices into `gitlearnos.yml`; the old file is
+   not active policy in v2.
 3. Choose one active subject and route all new state to
    `subjects/<subject>/`.
 4. Move old files only when their links can be updated and checked.

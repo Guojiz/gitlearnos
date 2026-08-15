@@ -12,11 +12,12 @@ const MAX_DIRECTORY_ENTRIES = 128
 const MAX_SCAN_FILES = 512
 const MAX_INTENT_CHARS = 4_000
 const MAX_EVENT_BODY_CHARS = 32_000
+const MAX_TRANSACTION_OPERATIONS = 24
+const MAX_OPERATION_BODY_CHARS = 64 * 1024
 const execFileAsync = promisify(execFile)
 
 const STATUS_PATHS = Object.freeze([
   'gitlearnos.yml',
-  'learning-policy.md',
   'dashboard.md',
   'automation.md',
 ])
@@ -26,9 +27,7 @@ const STATUS_PATHS = Object.freeze([
 // Bare words like "due dates" without a date never match.
 const DUE_MARKER = /next\s*review|next\s*check|review\s*date|review\s+on|due\s*review|date\s+or\s+next\s+handoff|next\s+handoff/i
 
-const SYSTEM_PROMPT = `## GitLearnOS
-
-Treat this workspace as learner-owned Git learning state only when actual files support that conclusion. Answer the immediate request first. For learning work, inspect policy, dashboard, the active goal, and only relevant evidence. Use the stricter of gitlearnos.yml and learning-policy.md: safe-auto permits only safe reversible learning writeback; preview proposes changes without writing; manual requires approval. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. RAG is optional and a tool of the one main agent. A reminder or session-local schedule is not proof of repository-capable recurring automation. learning_status and learning_route are read-only observations. learning_status also reports dueReview and reviewFiles derived only from explicit next-review/next-check dates; unparseable or absent dates are noSignal, never guessed. learning_record is the only native write path: use it only for faithful durable evidence after the setup conversation is actually complete, pass the gitRevision returned by learning_status, and trust only its receipt as proof of persistence. After each learning event, maintain the dashboard Next up queue by the measured ordering (排兵布阵): prerequisites before their dependents; among buildable items blend urgency (overdue/today review, then due-soon review, then upcoming review, then gap, then new), leverage (importance × weakness), and gentleness (easier first for a warm start and quick win); break ties by subject variety. One line per item as 1. <knowledge point> (<action>). Also write exactly one presentation line in that section: Panel: expand when showing the queue now is the helpful next move, otherwise Panel: collapse. This is the main agent's contextual judgment, never a Host ranking rule. The learning panel only reads these decisions, never writes them.`
+const SYSTEM_PROMPT = '## GitLearnOS\nUse gitlearnos.yml as the sole stable configuration and require a learner repository identity. Never write the public template or examples. Answer the immediate request first. learning_status and learning_route are read-only observations. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled worker, or demonstrated mastery without direct evidence. learning_apply is the only composite native write path; learning_record is a compatibility wrapper. Never claim external RAG or automation verification from plain text: only a machine receipt proves it. Preview and manual modes never write. Preserve unrelated dirty work, use exact base revisions, one lock and one reversible commit.'
 
 function objectSchema(properties, required = []) {
   return { type: 'object', additionalProperties: false, properties, required }
@@ -44,6 +43,9 @@ const dueItemSchema = objectSchema({
 const queueItemSchema = objectSchema({
   name: { type: 'string' },
   verb: { type: 'string' },
+  id: { type: 'string' },
+  path: { type: 'string' },
+  stale: { type: 'boolean' },
 }, ['name', 'verb'])
 
 const statusOutputSchema = objectSchema({
@@ -52,6 +54,11 @@ const statusOutputSchema = objectSchema({
   protocol: { oneOf: [{ type: 'string' }, { type: 'null' }] },
   configuredMode: { oneOf: [{ type: 'string' }, { type: 'null' }] },
   effectiveMode: { type: 'string' },
+  learner: objectSchema({
+    identified: { type: 'boolean' },
+    identity: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+    reason: { type: 'string' },
+  }, ['identified', 'identity', 'reason']),
   files: objectSchema(Object.fromEntries(STATUS_PATHS.map(path => [path, { type: 'boolean' }]))),
   activeGoals: { type: 'array', items: { type: 'string' } },
   dueReview: objectSchema({
@@ -62,26 +69,27 @@ const statusOutputSchema = objectSchema({
   reviewFiles: { type: 'array', items: { type: 'string' } },
   knowledgeGaps: { type: 'array', items: { type: 'string' } },
   queue: { type: 'array', items: queueItemSchema },
-  rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
-  automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
+  rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } }, marker: { type: 'object' }, verifiedReceipt: { oneOf: [{ type: 'object' }, { type: 'null' }] } }, ['state', 'evidence', 'marker', 'verifiedReceipt']),
+  automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } }, marker: { type: 'object' }, verifiedReceipt: { oneOf: [{ type: 'object' }, { type: 'null' }] } }, ['state', 'evidence', 'marker', 'verifiedReceipt']),
   limitations: { type: 'array', items: { type: 'string' } },
-}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'queue', 'rag', 'automation', 'limitations'])
+}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'learner', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'queue', 'rag', 'automation', 'limitations'])
 
 const routeOutputSchema = objectSchema({
   operation: { type: 'string' },
+  operations: { type: 'array', items: { type: 'string' } },
   effectiveMode: { type: 'string' },
   recommendedReads: { type: 'array', items: { type: 'string' } },
   nextAction: { type: 'string' },
   writeAuthorized: { type: 'boolean' },
   persisted: { type: 'boolean' },
   reason: { type: 'string' },
-}, ['operation', 'effectiveMode', 'recommendedReads', 'nextAction', 'writeAuthorized', 'persisted', 'reason'])
+}, ['operation', 'operations', 'effectiveMode', 'recommendedReads', 'nextAction', 'writeAuthorized', 'persisted', 'reason'])
 
 const recordOutputSchema = objectSchema({
   status: { type: 'string' },
   effectiveMode: { type: 'string' },
   persisted: { type: 'boolean' },
-  path: { type: 'string' },
+  path: { oneOf: [{ type: 'string' }, { type: 'null' }] },
   proposal: { type: 'string' },
   baseRevision: { type: 'string' },
   commit: { oneOf: [{ type: 'string' }, { type: 'null' }] },
@@ -95,31 +103,50 @@ function textResult(value) {
 }
 
 function parseSetting(text, key) {
-  const match = text?.match(new RegExp(`^\\s*${key}\\s*:\\s*["']?([^\\s#"']+)`, 'm'))
+  const match = text?.match(new RegExp(`^${key}\\s*:\\s*["']?([^\\s#"']+)`, 'm'))
   return match?.[1] ?? null
 }
 
-function policyMode(text) {
+function indentedBlock(text, key, indent = 0) {
   if (!text) return null
-  const explicit = text.match(/(?:write authority|mode|automatic writes?)\s*[:=]\s*`?(safe-auto|preview|manual)/i)?.[1]
-  if (explicit) return explicit.toLowerCase()
-  if (/automatic writes?[^\n]*(?:disabled|false|require[^\n]*approval)/i.test(text)) return 'manual'
-  return null
+  const lines = text.split(/\r?\n/)
+  const header = new RegExp(`^ {${indent}}${key}\\s*:\\s*(?:#.*)?$`)
+  const start = lines.findIndex(line => header.test(line))
+  if (start < 0) return null
+  let end = start + 1
+  while (end < lines.length) {
+    const line = lines[end]
+    if (line.trim() && (line.match(/^ */)?.[0].length ?? 0) <= indent) break
+    end += 1
+  }
+  return lines.slice(start + 1, end).join('\n')
 }
 
-function stricterMode(first, second) {
-  const rank = { 'safe-auto': 0, preview: 1, manual: 2 }
-  const known = [first, second].filter(value => Object.hasOwn(rank, value))
-  if (known.length === 0) return 'manual'
-  return known.reduce((strictest, value) => rank[value] > rank[strictest] ? value : strictest)
-}
-
-function effectiveWriteMode(configuredMode, policyText) {
+function effectiveWriteMode(configuredMode) {
   const knownModes = new Set(['safe-auto', 'preview', 'manual'])
   if (!knownModes.has(configuredMode)) return 'manual'
-  const declaredPolicyMode = policyMode(policyText)
-  if (policyText !== null && declaredPolicyMode === null) return 'manual'
-  return stricterMode(configuredMode, declaredPolicyMode)
+  return configuredMode
+}
+
+function templateLikeRoot(root) {
+  const path = root.split(/[\\/]/).map(part => part.toLowerCase())
+  return path.includes('examples') || path.some(part => part.includes('github-gitlearnos-anything-rag-agent-readme')) || (path.includes('gitlearnos') && path.includes('template'))
+}
+
+async function learnerIdentity(root, configText, files = {}) {
+  const identity = indentedBlock(configText, 'identity')
+  const repoId = identity?.match(/^\s*repo_id\s*:\s*["']?([^"'\s#]+)/mi)?.[1] ?? null
+  const role = identity?.match(/^\s*role\s*:\s*["']?([a-z-]+)/mi)?.[1] ?? null
+  const kind = identity?.match(/^\s*kind\s*:\s*["']?([a-z-]+)/mi)?.[1] ?? null
+  const template = identity?.match(/^\s*template\s*:\s*(true|false)/mi)?.[1] ?? null
+  const validId = Boolean(repoId && !/replace-with|placeholder|example|template|^null$|^none$/i.test(repoId))
+  if (validId && role === 'learner' && kind === 'learner-repository' && template === 'false') {
+    return { identified: true, identity: 'learner-repository', reason: 'gitlearnos.yml explicitly identifies a learner repository.' }
+  }
+  const reason = templateLikeRoot(root) || template === 'true' || kind === 'public-example'
+    ? 'Public template/example repositories are never learner state.'
+    : 'gitlearnos.yml requires repo_id, role: learner, kind: learner-repository, and template: false.'
+  return { identified: false, identity: null, reason }
 }
 
 async function workspaceRoot(root) {
@@ -225,9 +252,11 @@ function findDueMarker(text) {
 async function dueReviewState(root, now) {
   const reviewFiles = await subjectFiles(root, 'reviews')
   const modelFiles = await subjectFiles(root, 'models')
+  const gapFiles = await subjectFiles(root, 'knowledge-gaps')
   const targets = [
     ...reviewFiles.map(path => ({ path, kind: 'review' })),
     ...modelFiles.map(path => ({ path, kind: 'model' })),
+    ...gapFiles.map(path => ({ path, kind: 'gap' })),
   ].slice(0, MAX_SCAN_FILES)
   const due = []
   const upcoming = []
@@ -258,10 +287,32 @@ function nextUpSection(dashboard) {
 function parseQueue(dashboard) {
   const queue = []
   for (const line of nextUpSection(dashboard).split(/\r?\n/)) {
-    const item = line.match(/^\s*(?:\d+[.、]|[-*])\s*(.+?)\s*[（(]([^）)]+)[）)]\s*$/)
-    if (item) queue.push({ name: item[1].trim(), verb: item[2].trim() })
+    const canonical = line.match(/^\s*(?:\d+[.、]|[-*])\s*([a-z0-9][a-z0-9-]{0,63})\s*[—-]\s*([A-Za-z0-9_./-]+)\s*[—-]\s*(.+?)\s*$/i)
+    if (canonical) {
+      queue.push({ name: canonical[1], id: canonical[1], path: canonical[2], verb: canonical[3].trim(), stale: false })
+      continue
+    }
+    const item = line.match(/^\s*(?:\d+[.、]|[-*])\s*(.+?)\s*[（(]([^）)]+)[）)](?:\s*(?:\[|\{)?\s*id\s*[:=]\s*([a-z0-9][a-z0-9-]{0,63})\s*(?:,|;|\s+)\s*path\s*[:=]\s*([A-Za-z0-9_./-]+)\s*(?:\]|\})?)?\s*$/i)
+    if (!item) continue
+    const [, name, verb, id, path] = item
+    queue.push({ name: name.trim(), verb: verb.trim(), ...(id ? { id, path, stale: false } : { stale: true }) })
   }
   return queue
+}
+
+async function validateQueue(root, queue) {
+  const result = []
+  for (const item of queue) {
+    if (!item.id || !item.path) {
+      result.push(item)
+      continue
+    }
+    const text = await safeRead(root, item.path)
+    const idMarker = text?.match(/(?:Event ID|Gap ID|Model ID|Review ID|Canonical ID)\s*:\s*([a-z0-9][a-z0-9-]{0,63})/i)?.[1]
+    const heading = text?.match(/^#\s+(.+?)\s*$/m)?.[1]?.trim()
+    result.push({ ...item, name: heading || item.name, stale: text === null || idMarker !== item.id })
+  }
+  return result
 }
 
 function panelPresentation(dashboard, topics) {
@@ -300,17 +351,23 @@ const PANEL_SAMPLE = Object.freeze({
 export async function panelStatus(root = process.cwd()) {
   const yml = await safeRead(root, 'gitlearnos.yml')
   const dashboard = await safeRead(root, 'dashboard.md')
-  const queue = parseQueue(dashboard)
-  if (yml !== null) {
+  const identity = await learnerIdentity(await workspaceRoot(root), yml, {
+    'dashboard.md': dashboard !== null,
+    'automation.md': await safeRead(root, 'automation.md') !== null,
+  })
+  const queue = await validateQueue(root, parseQueue(dashboard))
+  if (yml !== null && identity.identified) {
+    const visibleQueue = queue.filter(item => !item.stale)
     return {
       isLearnerRepo: true,
       isSample: false,
-      queueMaintained: queue.length > 0,
-      topics: queue,
-      ...panelPresentation(dashboard, queue),
+      queueMaintained: visibleQueue.length > 0,
+      topics: visibleQueue,
+      staleCount: queue.length - visibleQueue.length,
+      ...panelPresentation(dashboard, visibleQueue),
     }
   }
-  return PANEL_SAMPLE
+  return { ...PANEL_SAMPLE, isLearnerRepo: false, isSample: true, identity }
 }
 
 // Host handler for the /gitlearnos logical RPC channel the client panel calls.
@@ -332,6 +389,31 @@ function evidenceLines(text, pattern, cap = 8) {
   return text.split(/\r?\n/).filter(line => pattern.test(line)).slice(0, cap).map(line => line.trim().slice(0, 240))
 }
 
+async function verifiedReceipt(root, kind) {
+  const paths = kind === 'rag'
+    ? ['.gitlearnos/receipts/rag.json', '.gitlearnos/receipts/external-rag.json']
+    : ['.gitlearnos/receipts/automation.json', '.gitlearnos/receipts/scheduler.json']
+  for (const path of paths) {
+    const text = await safeRead(root, path)
+    if (!text) continue
+    try {
+      const receipt = JSON.parse(text)
+      if (receipt?.schema === 'gitlearnos.external-receipt/v1' && receipt.kind === 'rag') {
+        const evidence = ['ingest', 'query', 'rebuild', 'delete'].map(key => receipt[key])
+        if (receipt.provider && receipt.doc_id && receipt.source_boundary?.evidence && receipt.observed_at && evidence.every(item => item?.status === 'completed' && typeof item.evidence === 'string' && item.evidence.trim())) {
+          return { kind: 'rag', provider: receipt.provider, id: receipt.doc_id, observedAt: receipt.observed_at }
+        }
+      }
+      if (receipt?.schema === 'gitlearnos.external-receipt/v1' && receipt.kind === 'scheduler') {
+        if (receipt.provider && receipt.task_id && receipt.tz && receipt.recurrence && receipt.run_id && receipt.occurrence_key && receipt.repo_revision && ['completed', 'skipped'].includes(receipt.result) && typeof receipt.delivery_status === 'string' && receipt.delivery_status.trim() && (receipt.message_id === null || (typeof receipt.message_id === 'string' && receipt.message_id.trim())) && receipt.observed_at) {
+          return { kind: 'scheduler', provider: receipt.provider, id: receipt.task_id, observedAt: receipt.observed_at, repoRevision: receipt.repo_revision }
+        }
+      }
+    } catch {}
+  }
+  return null
+}
+
 export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
   const canonicalRoot = await workspaceRoot(root)
   const files = {}
@@ -344,17 +426,16 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
   const activeGoals = await goalPaths(root)
   const dueState = await dueReviewState(root, now)
   const gapFiles = await subjectFiles(root, 'knowledge-gaps')
-  const queue = parseQueue(contents['dashboard.md'])
+  const queue = await validateQueue(canonicalRoot, parseQueue(contents['dashboard.md']))
   const configuredMode = parseSetting(contents['gitlearnos.yml'], 'mode')
-  const effectiveMode = effectiveWriteMode(configuredMode, contents['learning-policy.md'])
+  const effectiveMode = effectiveWriteMode(configuredMode)
   const protocol = parseSetting(contents['gitlearnos.yml'], 'protocol')
+  const learner = await learnerIdentity(canonicalRoot, contents['gitlearnos.yml'], files)
   const combined = Object.values(contents).filter(Boolean).join('\n')
   const ragEvidence = evidenceLines(combined, /RAG|retriev|ingest|index/i)
-  const verifiedRag = ragEvidence.some(line => /(?:enabled|verified|retrieved|ingested)/i.test(line))
-    && ragEvidence.some(line => /(?:identifier|source|query|revision)/i.test(line))
+  const ragReceipt = await verifiedReceipt(canonicalRoot, 'rag')
   const automationEvidence = evidenceLines(contents['automation.md'], /due-review|maintenance|verified|configured|requested|unavailable|disabled|provider|task/i)
-  const dueVerified = automationEvidence.some(line => /due-review/i.test(line) && /verified/i.test(line))
-  const maintenanceVerified = automationEvidence.some(line => /maintenance/i.test(line) && /verified/i.test(line))
+  const automationReceipt = await verifiedReceipt(canonicalRoot, 'automation')
   let gitRevision = null
   try {
     gitRevision = await git(canonicalRoot, ['rev-parse', 'HEAD'])
@@ -365,25 +446,30 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
     protocol,
     configuredMode,
     effectiveMode,
+    learner,
     files,
     activeGoals,
     dueReview: { due: dueState.due, upcoming: dueState.upcoming, noSignal: dueState.noSignal },
     reviewFiles: dueState.reviewFiles,
     knowledgeGaps: gapFiles.slice().sort(),
-    queue,
+    queue: queue.filter(item => !item.stale),
     rag: {
-      state: verifiedRag ? 'reported-with-evidence-markers' : ragEvidence.length ? 'mentioned-not-verified' : 'unknown',
+      state: ragReceipt ? 'externallyVerified' : ragEvidence.length ? 'reported' : 'unknown',
       evidence: ragEvidence,
+      marker: { state: ragEvidence.length ? 'reported' : 'none', evidence: ragEvidence },
+      verifiedReceipt: ragReceipt,
     },
     automation: {
-      state: dueVerified && maintenanceVerified ? 'reported-verified' : automationEvidence.length ? 'incomplete-or-unverified' : 'unknown',
+      state: automationReceipt ? 'externallyVerified' : automationEvidence.length ? 'reported' : 'unknown',
       evidence: automationEvidence,
+      marker: { state: automationEvidence.length ? 'reported' : 'none', evidence: automationEvidence },
+      verifiedReceipt: automationReceipt,
     },
     limitations: [
       'Read-only scan; no file write, Git commit, RAG request, or scheduler request was performed.',
-      'Reported markers are repository text, not independent verification of external systems.',
+      'Reported markers are repository text, not independent verification; externallyVerified requires a machine receipt under .gitlearnos/receipts/.',
       `Files over ${MAX_FILE_BYTES} bytes, symlink escapes, and directory entries beyond ${MAX_DIRECTORY_ENTRIES} are ignored.`,
-      'dueReview is derived from explicit next-review/next-check dates in review and model files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
+      'dueReview is derived from explicit next-review/next-check dates in review, model, and knowledge-gap files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
       'dueReview, reviewFiles, and knowledgeGaps are evidence inputs, not a priority ranking; only the main agent maintains the ordered dashboard queue from the learner goal and relevant evidence.',
       'queue is the agent-maintained dashboard Next up list read verbatim in order; it is empty until the agent maintains it, and this tool never writes it.',
     ],
@@ -401,22 +487,48 @@ function chooseOperation(intent) {
   return 'organize'
 }
 
+function detectOperations(intent) {
+  const text = String(intent ?? '').toLowerCase()
+  const found = []
+  const add = (name) => { if (!found.includes(name)) found.push(name) }
+  if (/设置|安装|初始化|set ?up|install|bootstrap|initiali[sz]/.test(text)) add('setup')
+  if (/整理|记录|归纳|organize|note/.test(text)) add('organize')
+  if (/总结|概括|summari[sz]e|synthesis/.test(text)) add('summarize')
+  if (/题|练习|quiz|question|practice/.test(text)) add('question')
+  if (/复习|review|feedback|批改|答案/.test(text)) add('review')
+  if (/来源|书|pdf|材料|rag|source|material/.test(text)) add('source')
+  if (/模型|方法|规律|model|method|pattern/.test(text)) add('model')
+  if (/维护|自动化|stale|reconcile|maintenance/.test(text)) add('maintenance')
+  if (/讲解|教我|teach|explain/.test(text)) add('tutor')
+  return found.length ? found : [chooseOperation(text)]
+}
+
+function normalizeRequestedOperation(value) {
+  const normalized = String(value ?? '').trim().toLowerCase()
+  const known = new Set(['setup', 'organize', 'summarize', 'question', 'review', 'source', 'model', 'maintenance', 'tutor'])
+  return known.has(normalized) ? normalized : chooseOperation(normalized)
+}
+
 export async function routeLearningEvent(root, intent) {
-  const normalizedIntent = typeof intent === 'string' ? intent.trim().slice(0, MAX_INTENT_CHARS) : ''
+  const normalizedIntent = typeof intent === 'string' ? intent.trim().slice(0, MAX_INTENT_CHARS) : typeof intent?.intent === 'string' ? intent.intent.trim().slice(0, MAX_INTENT_CHARS) : ''
   const status = await inspectWorkspace(root)
-  const operation = chooseOperation(normalizedIntent)
-  const recommendedReads = ['learning-policy.md', 'dashboard.md', ...status.activeGoals.slice(0, 1)]
+  const requestedOperations = Array.isArray(intent?.operations) ? intent.operations.map(item => typeof item === 'string' ? item : item?.kind).filter(Boolean) : []
+  const operations = requestedOperations.length ? [...new Set(requestedOperations.map(normalizeRequestedOperation))] : detectOperations(normalizedIntent)
+  const operation = operations[0]
+  const operationPlan = operations.join(' → ')
+  const recommendedReads = ['gitlearnos.yml', 'dashboard.md', ...status.activeGoals.slice(0, 1)]
     .filter(path => status.files[path] !== false)
   const writeAuthorized = status.effectiveMode === 'safe-auto'
   return {
     operation,
+    operations,
     effectiveMode: status.effectiveMode,
     recommendedReads,
     nextAction: writeAuthorized
-      ? `Answer the immediate request, then perform only the smallest safe reversible ${operation} update if durable learning value is clear.`
+      ? `Answer the immediate request, then perform only the smallest safe reversible ${operationPlan} update if durable learning value is clear.`
       : status.effectiveMode === 'preview'
-        ? `Answer the immediate request, then preview the smallest useful ${operation} update without writing.`
-        : `Answer the immediate request, then request approval before any ${operation} write.`,
+        ? `Answer the immediate request, then preview the smallest useful ${operationPlan} update without writing.`
+        : `Answer the immediate request, then request approval before any ${operationPlan} write.`,
     writeAuthorized,
     persisted: false,
     reason: 'This route is derived from bounded workspace reads and the effective GitLearnOS write mode; no action was executed.',
@@ -458,14 +570,35 @@ async function requireGitWorkspace(root) {
   return canonicalRoot
 }
 
-async function setupGate(root, status) {
-  const required = ['gitlearnos.yml', 'learning-policy.md', 'dashboard.md', 'automation.md']
+export async function setupGate(root, status = null) {
+  status ??= await inspectWorkspace(root)
+  const required = ['gitlearnos.yml', 'dashboard.md', 'automation.md']
   const missing = required.filter(path => !status.files[path])
   for (const path of ['AGENTS.md', 'learner-profile.md']) {
     if (await safeRead(root, path) === null) missing.push(path)
   }
   if (status.activeGoals.length === 0) missing.push('subjects/<subject>/goals/main-goal.md')
-  return { complete: missing.length === 0, missing }
+  const config = await safeRead(root, 'gitlearnos.yml')
+  const setupBlock = indentedBlock(config, 'setup')
+  const answersBlock = indentedBlock(setupBlock, 'answers', 2)
+  const answerLines = answersBlock?.split(/\r?\n/) ?? []
+  for (const key of ['goal', 'subject', 'material', 'rag_choice']) {
+    const line = answerLines.find(item => item.trim().startsWith(key + ':'))
+    const value = line?.slice(line.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
+    if (!value || (key === 'rag_choice' ? !['enabled', 'declined'].includes(value) : value === 'undecided')) missing.push('setup.answers.' + key)
+  }
+  const completedLine = setupBlock?.split(/\r?\n/).find(item => /^\s{2}completed_at\s*:/.test(item))
+  const completedAt = completedLine?.slice(completedLine.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
+  if (!completedAt || Number.isNaN(Date.parse(completedAt))) missing.push('setup.completed_at')
+  if (!status.learner?.identified) missing.push('gitlearnos.yml: identity: learner')
+  return {
+    complete: missing.length === 0,
+    missing,
+    marker: missing.length === 0 ? 'setup-complete' : 'setup-incomplete',
+    answer: missing.length === 0
+      ? { setup: 'complete', learner: status.learner?.identity ?? 'unknown', next: 'answer immediate request' }
+      : { setup: 'blocked', missing, next: 'complete learner repository setup' },
+  }
 }
 
 async function safeEventParent(root, subject) {
@@ -500,23 +633,81 @@ function recordResult({ status, effectiveMode, path, proposal, baseRevision, com
   return { status, effectiveMode, persisted: status === 'committed' || status === 'unchanged', path, proposal, baseRevision, commit, changedFiles, undo, reason }
 }
 
+function operationMarkdown(kind, id, title, body) {
+  if (kind === 'event') return eventMarkdown(id, title, body)
+  if (typeof title !== 'string' || !title.trim() || title.length > 160 || /[\r\n]/.test(title)) throw new Error('title must be one non-empty line of at most 160 characters')
+  if (typeof body !== 'string' || !body.trim() || body.length > MAX_OPERATION_BODY_CHARS) throw new Error('body is required and bounded')
+  const label = { gap: 'Gap ID', model: 'Model ID', review: 'Review ID' }[kind]
+  if (!label) throw new Error('unsupported operation kind: ' + kind)
+  return '# ' + title.trim() + '\n\n' + label + ': ' + id + '\n\n' + body.trim() + '\n'
+}
+
+function normalizeOperations(input) {
+  const operations = Array.isArray(input?.operations) ? input.operations : [input]
+  if (operations.length === 0 || operations.length > MAX_TRANSACTION_OPERATIONS) throw new Error('operations count is out of bounds')
+  return operations.map((operation, index) => {
+    const kind = operation?.kind ?? 'event'
+    if (!['event', 'gap', 'model', 'review', 'dashboard'].includes(kind)) throw new Error('operations[' + index + '].kind is not allowed')
+    if (kind === 'dashboard') {
+      if (operation.path && operation.path !== 'dashboard.md') throw new Error('dashboard path must be dashboard.md')
+      if (typeof operation.content !== 'string' || !operation.content.trim() || operation.content.length > MAX_OPERATION_BODY_CHARS) throw new Error('dashboard content is required and bounded')
+      return { kind, path: 'dashboard.md', proposal: operation.content.endsWith('\n') ? operation.content : operation.content + '\n' }
+    }
+    const subject = safeSegment(operation?.subject, 'operations[' + index + '].subject')
+    const id = safeSegment(operation?.id ?? operation?.eventId, 'operations[' + index + '].id')
+    const folder = { event: 'events', gap: 'knowledge-gaps', model: 'models', review: 'reviews' }[kind]
+    const path = 'subjects/' + subject + '/' + folder + '/' + id + '.md'
+    if (operation.path && operation.path !== path) throw new Error('operation path must be canonical ' + path)
+    return { kind, subject, id, path, proposal: operationMarkdown(kind, id, operation.title, operation.body) }
+  })
+}
+
+async function ensureParentForPath(root, path) {
+  if (path === 'dashboard.md') return root
+  const parts = path.split('/')
+  if (parts.length !== 4 || parts[0] !== 'subjects') throw new Error('target path is outside the learning state schema')
+  const subject = safeSegment(parts[1], 'subject')
+  const folder = parts[2]
+  if (!['events', 'knowledge-gaps', 'models', 'reviews'].includes(folder)) throw new Error('target path folder is not allowed')
+  const subjectPath = resolve(root, 'subjects', subject)
+  const stat = await lstat(subjectPath).catch(error => { if (error?.code === 'ENOENT') throw new Error('subject does not exist: ' + subject); throw error })
+  if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error('subject path must be a real directory')
+  const canonicalSubject = await realpath(subjectPath)
+  if (relative(root, canonicalSubject).split(/[\\/]/).includes('..')) throw new Error('subject path escapes workspace')
+  const folderPath = resolve(canonicalSubject, folder)
+  const existing = await lstat(folderPath).catch(error => error?.code === 'ENOENT' ? null : Promise.reject(error))
+  if (existing && (!existing.isDirectory() || existing.isSymbolicLink())) throw new Error(folder + ' path must be a real directory')
+  if (!existing) await mkdir(folderPath)
+  const canonicalFolder = await realpath(folderPath)
+  const rel = relative(root, canonicalFolder)
+  if (rel === '..' || rel.startsWith('..' + (process.platform === 'win32' ? '\\\\' : '/')) || isAbsolute(rel)) throw new Error('target path escapes workspace')
+  return canonicalFolder
+}
+
+async function readTrackedAtHead(root, path) {
+  try { return await git(root, ['show', 'HEAD:' + path]) } catch { return null }
+}
+
 export async function recordLearningEvent(root, input) {
+  return applyLearningTransaction(root, { ...input, operations: [{ kind: 'event', subject: input?.subject, id: input?.eventId, title: input?.title, body: input?.body }] })
+}
+
+export async function applyLearningTransaction(root, input) {
   const canonicalRoot = await requireGitWorkspace(root)
-  const subject = safeSegment(input?.subject, 'subject')
-  const eventId = safeSegment(input?.eventId, 'eventId')
-  const proposal = eventMarkdown(eventId, input?.title, input?.body)
-  const path = `subjects/${subject}/events/${eventId}.md`
+  const operations = normalizeOperations(input)
+  const path = operations.length === 1 ? operations[0].path : null
+  const proposal = operations.length === 1 ? operations[0].proposal : operations.map(item => '### ' + item.path + '\n\n' + item.proposal).join('\n')
   const status = await inspectWorkspace(canonicalRoot)
   const gate = await setupGate(canonicalRoot, status)
   const currentRevision = await git(canonicalRoot, ['rev-parse', 'HEAD'])
   if (!gate.complete) {
-    return recordResult({ status: 'blocked', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: `Setup gate incomplete: ${gate.missing.join(', ')}` })
+    return { ...recordResult({ status: 'blocked', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: 'Setup gate incomplete: ' + gate.missing.join(', ') }), setup: gate.answer, setupMarker: gate.marker }
   }
   if (status.effectiveMode === 'preview') {
     return recordResult({ status: 'preview', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: 'Exact pending proposal; preview mode performed zero writes.' })
   }
   if (status.effectiveMode !== 'safe-auto') {
-    return recordResult({ status: 'requires-approval', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: 'Manual or unclear policy requires approval outside this tool; the model cannot self-approve.' })
+    return recordResult({ status: 'requires-approval', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: 'Manual or unclear configuration requires approval outside this tool; the model cannot self-approve.' })
   }
   if (typeof input?.baseRevision !== 'string' || !/^[0-9a-f]{40,64}$/i.test(input.baseRevision)) {
     return recordResult({ status: 'conflict', effectiveMode: status.effectiveMode, path, proposal, baseRevision: currentRevision, reason: 'safe-auto requires the exact Git baseRevision previously observed by the caller.' })
@@ -524,8 +715,9 @@ export async function recordLearningEvent(root, input) {
 
   const lockPath = resolve(canonicalRoot, '.gitlearnos-write.lock')
   let lock
-  let target
-  let created = false
+  const createdTargets = []
+  const createdParents = []
+  const replacedTargets = []
   let committed = false
   try {
     lock = await open(lockPath, 'wx', 0o600)
@@ -533,36 +725,64 @@ export async function recordLearningEvent(root, input) {
     if (lockedRevision !== input.baseRevision) {
       return recordResult({ status: 'conflict', effectiveMode: status.effectiveMode, path, proposal, baseRevision: lockedRevision, reason: 'Git HEAD changed after the proposal was observed; rerun against the new base.' })
     }
-    const parent = await safeEventParent(canonicalRoot, subject)
-    target = resolve(parent, `${eventId}.md`)
-    try {
-      const existingStat = await lstat(target)
-      if (!existingStat.isFile() || existingStat.isSymbolicLink()) throw new Error('existing event path is not a regular file')
-      const existing = await readFile(target, 'utf8')
-      if (existing !== proposal) throw new Error('event id already exists with different content; overwrite refused')
-      const priorCommit = await git(canonicalRoot, ['log', '-1', '--format=%H', '--', path])
-      let committedContent = null
-      try { committedContent = await git(canonicalRoot, ['show', `HEAD:${path}`]) } catch {}
-      if (!priorCommit || `${committedContent}\n` !== proposal) {
-        throw new Error('identical event exists only as uncommitted user content; ownership and overwrite refused')
+    const existingCommits = []
+    let allUnchanged = true
+    for (const operation of operations) {
+      if (operation.path !== 'dashboard.md') {
+        const parentCandidate = resolve(canonicalRoot, 'subjects', operation.subject, operation.path.split('/')[2])
+        const hadParent = await lstat(parentCandidate).then(() => true).catch(error => error?.code === 'ENOENT' ? false : Promise.reject(error))
+        if (!hadParent) createdParents.push(parentCandidate)
       }
-      return recordResult({ status: 'unchanged', effectiveMode: status.effectiveMode, path, proposal, baseRevision: lockedRevision, commit: priorCommit || null, undo: priorCommit ? `git revert ${priorCommit}` : null, reason: 'Identical event already exists; no file or commit was created.' })
-    } catch (error) {
-      if (error?.code !== 'ENOENT') throw error
+      const parent = await ensureParentForPath(canonicalRoot, operation.path)
+      const filename = operation.path === 'dashboard.md' ? 'dashboard.md' : operation.path.split('/').at(-1)
+      const target = resolve(parent, filename)
+      const existingStat = await lstat(target).catch(error => error?.code === 'ENOENT' ? null : Promise.reject(error))
+      if (existingStat) {
+        if (!existingStat.isFile() || existingStat.isSymbolicLink()) throw new Error('existing target path is not a regular file')
+        const existing = await readFile(target, 'utf8')
+        if (existing !== operation.proposal) {
+          if (operation.kind !== 'dashboard') throw new Error('target id already exists with different content; overwrite refused')
+          const trackedDashboard = await readTrackedAtHead(canonicalRoot, operation.path)
+          if (trackedDashboard !== existing && trackedDashboard + '\n' !== existing) throw new Error('dashboard has uncommitted user content; projection overwrite refused')
+          replacedTargets.push({ target, existing })
+          allUnchanged = false
+          await writeFile(target, operation.proposal, { encoding: 'utf8' })
+          continue
+        }
+        const committedContent = await readTrackedAtHead(canonicalRoot, operation.path)
+        if (committedContent !== operation.proposal && committedContent + '\n' !== operation.proposal) throw new Error('identical target exists only as uncommitted user content; ownership and overwrite refused')
+        const priorCommit = await git(canonicalRoot, ['log', '-1', '--format=%H', '--', operation.path])
+        if (priorCommit) existingCommits.push(priorCommit)
+      } else {
+        allUnchanged = false
+        await writeFile(target, operation.proposal, { encoding: 'utf8', flag: 'wx', mode: 0o600 })
+        createdTargets.push(target)
+      }
     }
-    await writeFile(target, proposal, { encoding: 'utf8', flag: 'wx', mode: 0o600 })
-    created = true
+    if (allUnchanged) {
+      const commit = existingCommits[0] || lockedRevision
+      return recordResult({ status: 'unchanged', effectiveMode: status.effectiveMode, path, proposal, baseRevision: lockedRevision, commit, changedFiles: operations.map(item => item.path), undo: 'git revert ' + commit, reason: 'Identical transaction already exists; no file or commit was created.' })
+    }
     const beforeCommit = await git(canonicalRoot, ['rev-parse', 'HEAD'])
     if (beforeCommit !== lockedRevision) throw new Error('Git HEAD changed during transaction')
-    await git(canonicalRoot, ['add', '--', path])
-    await git(canonicalRoot, ['commit', '--only', '-m', `learn(${subject}): record event ${eventId}`, '--', path])
+    const paths = operations.map(item => item.path)
+    await git(canonicalRoot, ['add', '--', ...paths])
+    await git(canonicalRoot, ['commit', '--only', '-m', 'learn: apply ' + operations.length + ' learning operation' + (operations.length === 1 ? '' : 's'), '--', ...paths])
     committed = true
     const commit = await git(canonicalRoot, ['rev-parse', 'HEAD'])
-    return recordResult({ status: 'committed', effectiveMode: status.effectiveMode, path, proposal, baseRevision: lockedRevision, commit, changedFiles: [path], undo: `git revert ${commit}`, reason: 'Committed one policy-authorized event; unrelated working-tree and index changes were preserved.' })
+    return recordResult({ status: 'committed', effectiveMode: status.effectiveMode, path, proposal, baseRevision: lockedRevision, commit, changedFiles: paths, undo: 'git revert ' + commit, reason: 'Committed one config-authorized learning transaction; unrelated working-tree and index changes were preserved.' })
   } catch (error) {
-    if (created && !committed && target) {
-      try { await git(canonicalRoot, ['reset', '--', path]) } catch {}
-      try { await rm(target) } catch {}
+    if (!committed) {
+      try { await git(canonicalRoot, ['reset', '--', ...operations.map(item => item.path)]) } catch {}
+      for (const target of createdTargets) {
+        try { await rm(target) } catch {}
+      }
+      for (const replacement of replacedTargets) {
+        try { await writeFile(replacement.target, replacement.existing, { encoding: 'utf8' }) } catch {}
+      }
+      for (const parent of createdParents.reverse()) {
+        try { await rm(parent) } catch {}
+      }
     }
     throw error
   } finally {
@@ -603,8 +823,19 @@ export function apply(ctx, config = {}) {
     async args => routeLearningEvent(root, args.intent),
   ))
   ctx.tools.register(tool(
+    'learning_apply',
+    'Apply one bounded composite learning transaction (event, gap, model, review, and dashboard projection) as one reversible commit.',
+    objectSchema({
+      baseRevision: { type: 'string', description: 'Exact HEAD revision observed while preparing this transaction.' },
+      operations: { type: 'array', minItems: 1, maxItems: MAX_TRANSACTION_OPERATIONS, items: { type: 'object' } },
+    }, ['baseRevision', 'operations']),
+    recordOutputSchema,
+    async args => applyLearningTransaction(root, args),
+    { concurrencySafe: false, kind: 'write' },
+  ))
+  ctx.tools.register(tool(
     'learning_record',
-    'Record one bounded learning event through a policy-checked, reversible Git transaction. Preview and manual modes never write.',
+    'Record one bounded learning event through a gitlearnos.yml-authorized, reversible Git transaction. Preview and manual modes never write.',
     objectSchema({
       subject: { type: 'string', description: 'Existing lowercase subject slug.' },
       eventId: { type: 'string', description: 'Stable lowercase event id; retries must reuse it.' },

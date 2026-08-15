@@ -2,96 +2,97 @@
 
 [中文](../../zh-CN/adapters/automation/README.md)
 
-GitLearnOS stores portable intent. A scheduler or capable agent performs it.
-[`tasks.example.yml`](tasks.example.yml) is the minimal portable definition.
-Every learner deployment assigns both jobs a recurring local time and IANA time
-zone. Provider-specific expressions and credentials remain outside Git; the
-learner repository records actual state in `automation.md`.
+GitLearnOS stores portable intent in `gitlearnos.yml`; a scheduler or capable
+agent performs it. `tasks.example.yml` is an example translation. Provider
+expressions and credentials stay outside the learner repository.
 
-## Two portable jobs
+## Portable configuration
 
-The canonical mapping is fixed:
+The effective fields are `automation.time_zone`, `quiet_hours`,
+`max_questions_per_due_run`, `delivery_channel`, and the two jobs below:
 
-- recurring organization = `maintenance`, default daily at 21:30 local time;
-- recurring question generation = `due-review`, default daily at 07:00 local
-  time.
+```yaml
+automation:
+  time_zone: Asia/Shanghai
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 3
+  delivery_channel: current-authorized-channel
+  jobs:
+    maintenance: {recurrence: daily, local_time: "21:30"}
+    due-review: {recurrence: daily, local_time: "07:00"}
+```
 
-The learner may change both times and delivery preferences. Daily means “check
-daily,” not “create content daily.”
+Legacy policy documents are migration-only and must not override this configuration.
+The defaults are editable local times, not evidence that a scheduler exists.
 
-### `due-review`
+## Two jobs
 
-At run time:
+- `maintenance`: reconcile pending input, external feedback, stale views,
+  contradictions, and repeated patterns.
+- `due-review`: read due evidence and generate at most the configured number of
+  fresh, answerable questions.
 
-1. open the current dashboard and due review links;
-2. read the active goal, linked evidence, and recent questions;
-3. generate a small set of fresh, answerable questions;
-4. deliver the questions in the current channel;
-5. under effective `safe-auto`, persist an actually assigned set as `planned`,
-   link it from the gap and dashboard, and commit that assignment; write the
-   assessment only after an answer;
-6. report what actually ran.
+Daily means “check daily”, not “create content daily”. With no due or changed
+evidence, return `skipped` without a question, notification, timestamp-only
+commit, or duplicate delivery. Workers use one writer lock, inspect the current
+Git revision, stop on a changed base, and catch up a missed occurrence at most
+once. Never include answer keys in delivery or push unattended without explicit
+private-remote authorization.
 
-The output is not merely “remember to review.”
-If no evidence is due, finish `skipped` without a question, delivery, or commit.
-Never deliver the answer key in the question channel.
+## Machine-readable scheduler receipt
 
-### `maintenance`
+Every external run that is claimed as observed must emit a JSON receipt with
+this shape (for example `external/receipts/scheduler-<run-id>.json`):
+The normative JSON Schema is [`external-receipt.schema.json`](external-receipt.schema.json).
 
-Inspect unprocessed input, waiting external feedback, stale dashboard links,
-contradictory derived state, and due work. Make only safe reversible repairs;
-queue uncertain work without guessing.
-With no pending input or material state change, finish `skipped` without a
-notification or timestamp-only commit.
+```json
+{
+  "schema": "gitlearnos.external-receipt/v1",
+  "kind": "scheduler",
+  "provider": "local-cron",
+  "task_id": "opaque-provider-task-id",
+  "tz": "Asia/Shanghai",
+  "recurrence": "daily",
+  "run_id": "run-2026-08-15T07:00+08:00",
+  "occurrence_key": "due-review/2026-08-15T07:00:00+08:00",
+  "repo_revision": "0123456789abcdef",
+  "result": "skipped",
+  "delivery_status": "not-sent",
+  "message_id": null,
+  "observed_at": "2026-08-15T07:00:03+08:00"
+}
+```
 
-The initial verification skip may be captured in the deployment commit. Later
-no-work skips stay in provider logs and do not update Git by themselves.
+The checker requires non-empty `provider`, `task_id`, `tz` (IANA),
+`recurrence`, `run_id`, `occurrence_key`, and `repo_revision`; an explicit
+`result`; and both `delivery_status` and `message_id` (use `null` when no
+message was sent). A receipt is provider evidence, not a scheduler itself.
+The local checker validates structure and never creates a task or contacts a
+provider.
 
-## Provision and verify
+## Harness boundary
 
-For each job:
+DeepSeek Harness **Schedule** is a session-local prompt/timer facility. It can
+help a warm interactive session notice a task, but it cannot wake a cold
+session, grant repository access, or prove a recurring worker run. A verified
+background deployment requires an external cold-capable worker whose provider
+receipt contains the fields above and whose run actually read the intended
+repository. Harness text markers remain `reported-only`.
 
-1. resolve the learner's IANA time zone, local time, quiet hours, catch-up
-   preference, question channel, and maximum question count;
-2. create the provider's recurring task with repository-capable tools;
-3. record it as `configured` with its opaque provider task ID and next run;
-4. run one real test occurrence against the intended repository;
-5. record `verified` only when the worker safely completes or skips and the
-   scheduler still shows the recurrence.
+## Verification states
 
-Pin the scheduled worker to the learner-approved provider and model instead of
-silently inheriting an interactive default. For example, an OpenCode worker
-should pass its verified `--model provider/model` explicitly. Before verifying
-a source-dependent run, grant the worker access to every authorized external
-source directory it must read; an auto-rejected `external_directory` request
-means that source access remains unverified even if the process exits zero.
+`requested` means approved and awaiting provisioning; `configured` means a
+provider task exists but has not run; `verified` means the recurring entry and
+one repository-capable run are both evidenced; `unavailable` means capability
+inspection found no usable scheduler; `disabled` means the learner chose not to
+run it and deployment remains incomplete. Keep these states in `automation.md`
+only when supported by observed receipts.
 
-Both jobs must be `verified` for deployment automation to be complete. A
-prompt-only reminder or on-handoff check leaves the requested schedule visible
-but reports deployment automation as `incomplete`.
+Run the local structural check with:
 
-## Run safety
+```bash
+node scripts/check-external-receipts.mjs external/receipts/*.json
+```
 
-- derive one idempotency key from job ID and scheduled occurrence;
-- acquire a single writer lock or lease and inspect the Git base revision;
-- stop on concurrent change; do not automatically rebase, force-push, or
-  overwrite;
-- catch up a missed occurrence at most once and deduplicate due delivery;
-- create at most one commit and only for material state change;
-- keep answers out of notifications and credentials out of Git and logs;
-- do not push unattended unless the learner separately authorized the intended
-  private remote.
-
-## Execution modes
-
-| Mode | Meaning |
-|---|---|
-| immediate | completed in the current interaction |
-| on-handoff | fallback check when a capable agent resumes; not a verified recurring schedule |
-| background worker | a real scheduled run with repository access |
-| prompt-only reminder | a handoff; no repository work may be claimed |
-
-ChatGPT Automations, cron, CI, and other schedulers may implement the same two
-jobs when they can actually access the repository and tools. Provider-specific
-schedules stay outside learner state; portable intent, requested local time,
-status, and evidence stay in Git.
+The command reports structural validity and explicitly says that external
+provider execution was not performed.

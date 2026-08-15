@@ -1,5 +1,6 @@
 version: 2
-timezone: "Etc/UTC" # replace with the learner's actual IANA time zone
+# Translation example only. Effective values live in gitlearnos.yml.
+timezone: "Etc/UTC" # replace with automation.time_zone
 jobs:
   - id: maintenance
     intent: reconcile pending input, feedback, views, and contradictions
@@ -8,6 +9,7 @@ jobs:
     schedule: provider-managed
     no_work: skip-silently
     catch_up: once
+    receipt: external-receipt/v1
   - id: due-review
     intent: generate concrete questions from due evidence
     recurrence: daily
@@ -15,3 +17,4 @@ jobs:
     schedule: provider-managed
     no_work: skip-silently
     catch_up: once
+    receipt: external-receipt/v1

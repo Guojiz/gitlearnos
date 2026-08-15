@@ -5,7 +5,8 @@
 Updated:  
 Updated by:  
 Repository state: `active` / `paused` / `needs-input`  
-Automation policy: [link to learning-policy.md]
+Configuration: `gitlearnos.yml`
+Queue revision:
 
 ## Subject overview
 
@@ -23,19 +24,17 @@ Automation policy: [link to learning-policy.md]
 ## Next up
 
 > Agent-maintained ordered queue, projected read-only by the learning panel.
-> Order (排兵布阵, measured in `scripts/ordering-experiment.mjs`): prerequisites
-> before dependents; among buildable items blend urgency (overdue/today review →
-> due-soon review → upcoming review → gap → new), leverage (importance ×
-> weakness), and gentleness (easier first for a warm start and quick win); break
-> ties by subject variety. One item per line: `1. <knowledge point> (<action>)`.
-> `Panel: expand` lets the Agent open this queue when seeing it now is helpful;
-> `Panel: collapse` keeps it folded. A new queue/presentation revision applies
-> once, then the learner's manual toggle wins until the Agent changes it again.
+> Rows must use canonical IDs and paths only (`<id> — <path> — <action>`), never
+> copied examples or answer text. Reorder only after a material state change;
+> apply prerequisites, due planned reviews, gaps, then new work, with leverage,
+> gentleness, subject variety, and stable-ID tie breaks as documented by the
+> Router. `Panel: expand` opens a useful queue; `Panel: collapse` keeps it folded.
+> Learner toggles win until a new Queue revision or urgent due item.
 
 Panel: collapse
 
-1. Chemical equilibrium shift (follow up)
-2. Quadratic extrema (review)
+1. `<canonical-id> — <canonical-path> — <action>`
+2. `<canonical-id> — <canonical-path> — <action>`
 
 ## Do now
 
@@ -83,7 +82,7 @@ Panel: collapse
 
 ## On-handoff checks
 
-1. read `learning-policy.md`;
+1. read `gitlearnos.yml`;
 2. identify the active subject and inspect its `inbox/` only when needed;
 3. check due questions in linked subject folders;
 4. check waiting external feedback in linked subject folders;

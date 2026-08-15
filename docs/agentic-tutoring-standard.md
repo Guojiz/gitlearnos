@@ -32,7 +32,7 @@ Given “my teacher resolved this; here are my notes,” the agent:
 - records provenance and privacy correctly;
 - updates resolution without inventing mastery;
 - retires obsolete AI teaching;
-- schedules verification only under learner policy;
+- schedules verification only under learner configuration and authorization;
 - reports changed files.
 
 Fail if the learner must name paths or repeat the event in several forms.
@@ -54,7 +54,7 @@ a model from one ambiguous occurrence, or treats model creation as mastery.
 
 ### B1. Subject routing
 
-The agent infers the subject, writes subject-specific state under `subjects/<subject>/`, keeps shared policy at the root, and asks only when an incorrect write is plausible. A learner correction immediately overrides the inference.
+The agent infers the subject, writes subject-specific state under `subjects/<subject>/`, keeps shared configuration at the root, and asks only when an incorrect write is plausible. A learner correction immediately overrides the inference.
 
 Fail if the learner must choose folders, every subject becomes a separate repository, or empty subject trees are created in advance.
 

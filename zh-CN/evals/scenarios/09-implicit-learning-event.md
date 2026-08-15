@@ -37,9 +37,9 @@ Agent 必须：
 用更严格的有效权限重复本事件：
 
 - `preview` 下，Agent 先回答并展示精确的拟议改动，但不写入、不提交；
-- `manual` 下，或 `learning-policy.md` 禁止自动写入时，Agent 先回答，再等待
+- `gitlearnos.yml` 为 `manual` 时，Agent 先回答，再等待
   明确批准，或返回精确的待写回内容；
-- `gitlearnos.yml` 与 `learning-policy.md` 冲突或含糊时，采用更严格的一项。
+- `gitlearnos.yml` 缺失或含糊时，使用 `manual`。
 
 ## 禁止行为
 

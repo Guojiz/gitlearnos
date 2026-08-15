@@ -10,9 +10,11 @@
 - one subject, goal, or current learning event.
 
 For learner deployment, the agent must read the protocol completely, assume the
-user is the learner, ask for the learning goal, subject, and current material,
-and recommend enabling a local RAG knowledge layer. It must wait for the learner's answer before
-installing, initializing, ingesting, committing, or deploying.
+user is the learner, ask one setup gate for the learning goal, subject, current
+material, and optional local RAG choice, and recommend a local RAG knowledge
+layer. Facts supplied in the request or already verified in `gitlearnos.yml`
+count as answered and must not be asked again. It must wait for the learner's
+answer before installing, initializing, ingesting, committing, or deploying.
 This gate does not apply to maintaining, documenting, testing, or publishing
 the public template.
 
@@ -80,9 +82,11 @@ Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
 My learning Git repository or local checkout is: <target>
 
 Read GITLEARNOS.md and START-HERE.md completely. Before changing anything, ask
-me for my learning goal, subject, and current material. Recommend enabling a
-local RAG knowledge layer, using RAG-Anything as the first supported option.
-Wait for my answer before any learner
+me for the setup gate: my learning goal, subject, current material, and whether
+to enable the optional local RAG knowledge layer (RAG-Anything is the first
+supported option). Treat any of those facts already present in this request or
+verified in my target `gitlearnos.yml` as answered; do not ask again. Wait for
+the next missing answer before any learner
 installation, initialization, ingestion, commit, or deployment. Then use
 the complete skills/gitlearnos/ folder when Skills are supported. Detect the
 main agent, install the folder in its documented native project location, and
@@ -113,7 +117,6 @@ Do not manually create the GitLearnOS folder tree when the agent can do it.
 ```text
 AGENTS.md
 gitlearnos.yml
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -129,6 +132,7 @@ adds the thin `CLAUDE.md` adapter. These are runtime files, not learner state.
 The setup agent should also report:
 
 ```text
+Setup status: core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Daily surface: Chat / Work / other
 Project or source workspace:
 Repository:
@@ -142,6 +146,14 @@ Maintenance: requested / configured / verified / unavailable / disabled
 Due review: requested / configured / verified / unavailable / disabled
 Deployment automation: verified / incomplete
 ```
+
+`core-ready` means the target, config, instructions, and basic repository
+capabilities were verified. `knowledge-ready` additionally means goal,
+subject, material boundary, source workspace, and an explicit RAG choice
+(`enabled` or `declined`) were answered; `undecided` is not ready.
+`automation-ready` means both recurring jobs were observed and each had a real
+test run. `full-ready` requires all three; compute these labels from evidence,
+not from a hand-written claim.
 
 ## Everyday requests
 

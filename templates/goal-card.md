@@ -39,7 +39,7 @@ What reusable models should be extracted?
 
 ## Automations
 
-These canonical recurring jobs must have explicit times in the learner policy
+These canonical recurring jobs must have explicit times in `gitlearnos.yml`
 and verified status in `automation.md`:
 
 - `maintenance` — recurring organization:

@@ -9,8 +9,9 @@
 - 可用时，一个用于大型学习文件的持久项目或来源区域；
 - 一个学科、目标或当前学习事件。
 
-部署学习者系统前，Agent 必须完整阅读协议，默认用户就是学习者，询问学习目标、
-学科和当前资料，并建议启用本地 RAG 知识层。学习者回答前，不得安装、初始化、导入、
+部署学习者系统前，Agent 必须完整阅读协议，默认用户就是学习者，一次询问学习目标、
+学科、当前资料和可选的本地 RAG 选择，并建议 RAG-Anything 但保持可选。当前请求或
+已验证的 `gitlearnos.yml` 已提供的事实视为已回答，不得重复询问。学习者回答前，不得安装、初始化、导入、
 提交或部署。
 此门槛不适用于维护、编写文档、测试或发布公开模板。
 
@@ -64,8 +65,9 @@ OpenAI 文档说明本地 Project 可以进行 Git 操作，但 ChatGPT 的能�
 我的学习 Git 仓库或本地工作区是：<目标>
 
 完整阅读 zh-CN/GITLEARNOS.md 和 zh-CN/START-HERE.md。修改任何内容前，询问
-我的学习目标、学科和当前资料，建议启用本地 RAG 知识层，并把 RAG-Anything
-作为首个支持选项。安装、初始化、导入、提交或部署学习者状态前必须等我回答。
+设置门槛：我的学习目标、学科、当前资料，以及是否启用可选本地 RAG 知识层（RAG-Anything
+是首个支持选项）。本请求或目标 `gitlearnos.yml` 已有的事实视为已回答，不要重复询问。
+安装、初始化、导入、提交或部署学习者状态前必须等我回答。
 然后在环境支持 Skills 时使用
 完整 skills/gitlearnos/ 文件夹。检查主 Agent，把该文件夹安装到其正式记录的
 原生项目位置，并验证 Skill 清单确实出现 gitlearnos；复制源文件本身不能证明
@@ -90,7 +92,6 @@ Agent 能完成时，不要手工建立 GitLearnOS 文件夹。
 ```text
 AGENTS.md
 gitlearnos.yml
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -105,6 +106,7 @@ subjects/<subject>/goals/main-goal.md
 设置 Agent 还应报告：
 
 ```text
+设置状态：core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Daily surface: Chat / Work / other
 Project or source workspace:
 Repository:
@@ -118,6 +120,11 @@ Maintenance: requested / configured / verified / unavailable / disabled
 Due review: requested / configured / verified / unavailable / disabled
 Deployment automation: verified / incomplete
 ```
+
+`core-ready` 表示目标、配置、指令和基本仓库能力已验证；`knowledge-ready` 还要求
+目标、学科、材料边界、来源工作区和明确的 RAG 选择（`enabled` 或 `declined`）已回答；
+`undecided` 不算就绪。`automation-ready` 表示两项
+重复任务均已观察并真实测试；`full-ready` 需三者都满足。状态必须由证据计算，不能手写成承诺。
 
 ## 日常使用
 

@@ -21,7 +21,9 @@ GitLearnOS v2 采用渐进迁移，不做破坏性重写。新内容遵守
 ## 安全迁移顺序
 
 1. 先提交或用其他方式保存当前仓库状态。
-2. 缺失时加入 `gitlearnos.yml`、`learning-policy.md` 和根目录 dashboard。
+2. 缺失时加入完整的 `gitlearnos.yml` 和根目录 dashboard。把旧
+   `learning-policy.md` 中的选择迁移到 `gitlearnos.yml`；旧文件不再是
+   v2 的生效政策。
 3. 选定一个正在使用的学科，把新状态直接写入
    `subjects/<subject>/`。
 4. 只有在链接可更新、可检查时，才逐步移动旧文件。

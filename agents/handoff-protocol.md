@@ -5,7 +5,7 @@ Use when the same or a replacement main agent resumes a GitLearnOS target reposi
 ## Read only
 
 1. target `AGENTS.md`;
-2. `learning-policy.md`;
+2. `gitlearnos.yml`;
 3. `dashboard.md`;
 4. the linked active goal;
 5. files required by the current next action.

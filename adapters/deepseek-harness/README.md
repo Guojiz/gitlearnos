@@ -2,15 +2,15 @@
 
 This adapter makes GitLearnOS a native installable bundle for the official
 DeepSeek Harness **Developer Preview**. It mounts a Host plugin that adds a
-`gitlearnos` system-prompt section and three bounded tools:
+`gitlearnos` system-prompt section and four bounded tools:
 
 - `learning_status` reports GitLearnOS coordination files, active goal paths,
   effective write mode, repository-reported RAG and automation markers, and a
   read-only due-review observation (see [Revisit-ready read](#revisit-ready-read));
 - `learning_route` selects the relevant GitLearnOS operation and an
   authority-aware next action without performing or claiming writeback.
-- `learning_record` writes one new learning-event file through a serialized,
-  policy-checked Git transaction, or returns an exact no-write result.
+- `learning_apply` applies a typed event/gap/model/review/dashboard plan as
+  one atomic Git commit; `learning_record` remains a compatibility wrapper.
 
 DeepSeek Harness and this adapter are both early integration surfaces. Expect
 breaking upstream changes and review the pinned revisions before installing.
@@ -50,28 +50,30 @@ dsh --profile web --dump-config
 
 ## Native write transaction
 
-`learning_record` is intentionally narrower than a general file or shell tool.
-It accepts only existing lowercase subject slugs and stable event IDs, and may
-create only `subjects/<subject>/events/<event-id>.md`. Before any write it
-requires the complete learner-repository setup files, an active goal, a cleanly
-identified Git worktree root, and the exact base revision observed by the
-caller.
+`learning_apply` is intentionally narrower than a general file or shell tool.
+It accepts a bounded typed plan of event, gap, model, review, and dashboard
+projection operations. Each record receives a canonical lowercase ID and
+schema-owned path; dashboard projections may update only `dashboard.md`.
+Before writing it requires explicit learner identity, completed setup answers,
+an active goal, a clean Git worktree root, and the exact base revision observed
+by the caller.
 
-- `safe-auto` may create and commit that one new event. A writer lock and two
-  revision checks stop concurrent or stale writes; only that path is staged and
-  committed, so unrelated staged or unstaged work remains untouched.
+- `safe-auto` may create and commit the whole plan as one transaction. A writer
+  lock and revision checks stop concurrent or stale writes; only declared paths
+  are staged and committed, so unrelated staged or unstaged work remains untouched.
 - `preview` returns the exact Markdown proposal with zero writes.
-- `manual` and unclear policy return `requires-approval` with zero writes. The
-  tool has no model-supplied approval switch, so the model cannot approve its
-  own write.
+- `manual` returns `requires-approval` with zero writes. `gitlearnos.yml` is
+  the sole stable authority source; legacy policy text is not consulted.
+  The tool has no model-supplied approval switch, so the model cannot approve
+  its own write.
 - An identical retry is `unchanged` and creates no empty commit. A reused ID
   with different content, overwrite, traversal, symlink escape, or changed Git
   base is refused. A successful result includes the commit and `git revert`
   undo boundary.
 
-This is the first native write path, not arbitrary repository maintenance. The
+This is a typed atomic write path, not arbitrary repository maintenance. The
 main GitLearnOS workflow remains responsible for deciding whether evidence is
-durable and for updating linked gaps, questions, models, reviews, and views.
+durable and for choosing the plan.
 
 ## Revisit-ready read
 
@@ -128,7 +130,8 @@ dependencies are declared in `package.json`.
 ## Limits
 
 - The Host uses the active process working directory, or an explicit deployment
-  `root`. Only `learning_record` writes or runs Git, and only within the narrow
+  `root`. Only `learning_apply` (with `learning_record` compatibility wrapper)
+  writes or runs Git, and only within the narrow
   transaction described above. The Host does not invoke RAG or provision
   schedules.
 - Reads reject absolute paths, parent traversal, and symlink escapes; cap files
@@ -144,26 +147,19 @@ dependencies are declared in `package.json`.
   other visual evidence require a verified multimodal provider or an
   authorized OCR/parser path; the agent must not infer unseen content.
 - `safe-auto` authorizes only the smallest safe, reversible learning writeback
-  allowed by the learner policy. It does not bypass Harness tool policy, the
+  allowed by learner configuration. It does not bypass Harness tool policy, the
   operating-system sandbox, credentials, or approval for destructive or
   otherwise high-risk actions.
 - The full GitLearnOS protocol remains authoritative. Installing the bundle
   alone is not a complete learner deployment, RAG deployment, or verified
   recurring-automation deployment.
 
-## Roadmap, not current capability
+## Current boundaries
 
-The intended native Harness expansion is deliberately explicit so a future
-feature is never mistaken for a shipped one:
-
-- a replaceable RAG provider with provenance-bearing ingestion and retrieval;
-- a Web learning Cockpit (the shipped panel is a read-only queue view;
-  the fuller durable-Git-backed cockpit is not yet built);
-- a transfer-mastery workflow that generates, reviews, and later rechecks
-  composable models;
-- a verified external recurring-worker bridge for cold-session automation.
-
-The other three items are not implemented by the current Host base; the
-Cockpit exists only as the read-only queue panel described above. Until each
-item's code and end-to-end evidence exist, use the normal GitLearnOS agent
-workflow and the repository-capable automation adapters documented elsewhere.
+The shipped Host provides typed atomic Git writeback, bounded due/gap scans,
+machine-receipt-aware external status, and a read-only canonical queue panel.
+External RAG ingestion and recurring automation remain replaceable adapters:
+this bundle records their markers or strict receipts but never invokes them or
+claims execution without a receipt. Use the normal GitLearnOS agent workflow
+for evidence decisions and the repository-capable automation adapters for
+background work.

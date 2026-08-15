@@ -97,7 +97,6 @@ next runs, but deployment automation is `incomplete`.
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md

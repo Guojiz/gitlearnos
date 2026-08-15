@@ -1,50 +1,37 @@
 # AI Runtime Support
 
-GitLearnOS supports any one main AI runtime that can execute the learner-owned control contract honestly.
+GitLearnOS supports any one main AI runtime that can execute the learner-owned
+contract honestly. A product label does not prove access: test the current
+surface for repository, source, memory, Skill, and scheduler capabilities.
 
-## Best experience
+## Core-ready capability
 
-```text
-tool-capable workspace
-+ one private target repository
-+ persistent project sources when needed
-+ durable GitLearnOS rules or project instructions
-+ optional native memory and Skills
-```
+The main agent must be able to:
 
-ChatGPT Chat is a good daily path and Work is a good setup/maintenance path
-when the current project has verified repository and source access. A
-repository-aware coding agent is also valid. No surface label proves access.
+1. receive a goal or learning event and recognize useful implicit events;
+2. read the minimum relevant configuration, dashboard, goal, and evidence;
+3. organize evidence and generate a grounded next question;
+4. follow write authority and source/privacy rules;
+5. write the target, or return the exact pending writeback when it cannot;
+6. report changed files, commits, current-agent work, and verified background work.
 
-## Minimum capability
+Live tutoring, Skills, native memory, web search, visual generation, and RAG
+are optional improvements. A text-only provider cannot see images, screenshots,
+boards, or other visual evidence; use verified multimodal or OCR/parser support,
+or ask for a faithful transcription. Never infer unseen content.
 
-The agent can:
+## Runtime roles
 
-1. receive a goal or learning event;
-2. recognize useful implicit learning events without requiring a Skill name;
-3. read minimum relevant state;
-4. organize and connect input;
-5. generate targeted, scoreable questions;
-6. follow source and user-policy rules;
-7. write the target or return exact pending writeback;
-8. report actual automation and changed files.
+Chat or another daily surface can handle short questions and learning events
+when repository access is verified. A Work or coding-agent surface is useful
+for setup, imports, migrations, and maintenance. The current agent may perform
+an immediate safe write under `safe-auto`; a recurring background job requires a
+separate repository-capable worker and observed scheduler run.
 
-Live tutoring is optional.
+## State boundaries
 
-## Optional capability
-
-Native memory, project instructions, Project Sources, Skills, connected files,
-web research, code execution, visual generation, local-file access, and a real
-scheduler may improve execution. The current standard does not require
-subagents, a multi-agent framework, RAG, or a database.
-
-## Unsupported behavior
-
-A runtime is unsuitable for autonomous writeback when it cannot identify target, permissions, policy, or changed files. It may still use the read-only path.
-
-## Source of truth
-
-The target stores changing learner state and policy. Native memory wakes the
-system and caches stable preferences. Project Sources hold large reusable
-materials. The current workspace performs temporary work. Do not collapse them
-into hidden runtime memory.
+The learner repository stores changing goals, evidence, configuration, and history.
+Project Sources hold large reusable materials. Native memory only wakes the
+behavior and caches stable preferences. RAG is optional, rebuildable, and
+managed by the same main agent. Do not treat hidden runtime memory as proof of
+learning state, and do not claim a scheduled run without direct evidence.

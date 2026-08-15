@@ -2,32 +2,41 @@
 
 [中文](../zh-CN/docs/automation-model.md)
 
-The canonical behavior is in [GITLEARNOS.md](../GITLEARNOS.md). Provider
-mapping is in the [Automation Adapter](../adapters/automation/README.md).
+The canonical behavior is in [GITLEARNOS.md](../GITLEARNOS.md). Runtime intent
+comes from `gitlearnos.yml`; provider mapping and receipt fields are in the
+[Automation Adapter](../adapters/automation/README.md).
 
-The portable base defines two required recurring jobs:
+## Portable intent
+
+The two required recurring jobs default to:
 
 ```text
-maintenance, default daily at 21:30 learner local time
+maintenance, daily at 21:30 in automation.time_zone
 → reconcile input, waiting feedback, stale views, contradictions, and patterns
 
-due-review, default daily at 07:00 learner local time
+due-review, daily at 07:00 in automation.time_zone
 → read due evidence and generate concrete answerable questions
 ```
 
-The learner may change both times. Store the IANA time zone, requested local
-times, quiet hours, catch-up choice, and delivery preference in
-`learning-policy.md`; store observed scheduler state in `automation.md`.
+The learner may change `automation.time_zone`, quiet hours, delivery channel,
+question cap, recurrence, and local times in `gitlearnos.yml`. Legacy policy
+documents must not be consulted to override them.
 
-Both jobs must be `verified` for deployment automation to be complete. This
-requires a real recurring scheduler entry plus one observed repository-capable
-test run. A reminder, date, prompt, configured-but-untested task, or on-handoff
-check does not satisfy the requirement.
+Daily is a check cadence, not a promise to produce work. No due or changed
+evidence means `skipped` with no content, notification, timestamp-only commit,
+or duplicate delivery. A worker uses an idempotency key and writer lock,
+inspects the current Git base revision, stops on a concurrent change, and
+catch-ups at most once.
 
-No due or changed evidence means `skipped` with no content, notification, or
-commit. Scheduled workers use one idempotency key and writer lock, stop on a
-changed Git base, hide answer keys from delivery, catch up at most once, and do
-not push unattended without separate private-remote authorization.
+## Evidence boundary
 
-Do not create many platform-specific task definitions inside learning state.
-Keep learning intent in Git and translate schedules through an adapter.
+An external run is `verified` only when a real provider supplies a
+machine-readable scheduler receipt containing provider, task ID, IANA time
+zone (`tz`), recurrence, run ID, occurrence key, repository revision, result, delivery
+status, and message ID. The local receipt checker verifies structure only; it
+does not create, run, or contact schedulers. Text in `automation.md`, a date,
+prompt, or Harness panel is always `reported-only`.
+
+DeepSeek Harness Schedule is session-local and cannot wake a cold session. It is
+not a substitute for an external cold-capable worker. See the adapter for the
+exact boundary and local check command.

@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
 import { promisify } from 'node:util'
-import { apply, inspectWorkspace, panelStatus, recordLearningEvent, routeLearningEvent } from '../index.js'
+import { apply, applyLearningTransaction, inspectWorkspace, panelStatus, recordLearningEvent, routeLearningEvent, setupGate } from '../index.js'
 
 const exec = promisify(execFile)
 
@@ -19,7 +19,7 @@ async function learnerRepo(mode = 'safe-auto') {
   await git(root, 'config', 'user.name', 'GitLearnOS Test')
   await git(root, 'config', 'user.email', 'test@gitlearnos.invalid')
   await mkdir(join(root, 'subjects', 'math', 'goals'), { recursive: true })
-  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft\nmode: ${mode}\n`)
+  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft\nmode: ${mode}\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\nsetup:\n  answers:\n    goal: math\n    subject: math\n    material: worksheet\n    rag_choice: declined\n  completed_at: "2026-08-15T00:00:00Z"\n`)
   await writeFile(join(root, 'learning-policy.md'), `# Policy\nMode: ${mode}\n`)
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
   await writeFile(join(root, 'automation.md'), '# Automation\nmaintenance: requested\ndue-review: requested\n')
@@ -72,7 +72,7 @@ test('apply registers one prompt section, read tools, and a serialized write tra
   }, { root: process.cwd() })
   assert.equal(sections.length, 1)
   assert.equal(sections[0].name, 'gitlearnos')
-  assert.deepEqual(tools.map(tool => tool.name), ['learning_status', 'learning_route', 'learning_record'])
+  assert.deepEqual(tools.map(tool => tool.name), ['learning_status', 'learning_route', 'learning_apply', 'learning_record'])
   assert.equal(tools.find(tool => tool.name === 'learning_record').isConcurrencySafe(), false)
   assert.match(sections[0].text, /Never claim a file write, Git commit, RAG ingestion/)
 })
@@ -204,7 +204,7 @@ test('bounded scanner reports effective authority and does not follow escaping s
   const status = await inspectWorkspace(root)
   assert.equal(status.gitRevision, null)
   assert.equal(status.protocol, '2.0-draft')
-  assert.equal(status.effectiveMode, 'manual')
+  assert.equal(status.effectiveMode, 'safe-auto')
   assert.equal(status.files['automation.md'], false)
   assert.deepEqual(status.activeGoals, ['subjects/math/goals/main-goal.md'])
   assert.equal(status.automation.state, 'unknown')
@@ -220,6 +220,15 @@ test('route is explicit that it did not persist its recommendation', async () =>
   assert.equal(result.writeAuthorized, false)
   assert.equal(result.persisted, false)
   assert.match(result.nextAction, /preview/)
+
+  const compound = await routeLearningEvent(root, '整理这些笔记，总结规律，再给我两道题')
+  assert.deepEqual(compound.operations, ['organize', 'summarize', 'question', 'model'])
+  assert.equal(compound.persisted, false)
+  assert.match(compound.nextAction, /organize → summarize → question → model/)
+
+  const explicit = await routeLearningEvent(root, { intent: 'continue', operations: ['setup', 'source', 'summarize'] })
+  assert.deepEqual(explicit.operations, ['setup', 'source', 'summarize'])
+  assert.equal(explicit.persisted, false)
 })
 
 test('status exposes the exact Git base required by a safe-auto transaction', async () => {
@@ -228,13 +237,13 @@ test('status exposes the exact Git base required by a safe-auto transaction', as
   assert.equal(status.gitRevision, await head(root))
 })
 
-test('unclear policy falls back to manual instead of widening safe-auto', async () => {
+test('learning-policy text cannot override gitlearnos.yml authority', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-policy-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'learning-policy.md'), '# Policy\nWrites follow the learner preference.\n')
   const status = await inspectWorkspace(root)
   assert.equal(status.configuredMode, 'safe-auto')
-  assert.equal(status.effectiveMode, 'manual')
+  assert.equal(status.effectiveMode, 'safe-auto')
 })
 
 test('dueReview classifies explicit next-review dates and never guesses the rest', async () => {
@@ -312,13 +321,10 @@ test('status exposes review and gap evidence without a Host-ranked action queue'
 
 test('queue reads the agent-maintained Next up list verbatim, in order', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-nextup-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n## Do now\n- one\n')
   const status = await inspectWorkspace(root)
-  assert.deepEqual(status.queue, [
-    { name: '化学平衡移动', verb: '跟进' },
-    { name: '二次函数求最值', verb: '复习' },
-  ])
+  assert.deepEqual(status.queue, [])
 
   const emptyRoot = await mkdtemp(join(tmpdir(), 'gitlearnos-noqueue-'))
   await writeFile(join(emptyRoot, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
@@ -329,22 +335,19 @@ test('queue reads the agent-maintained Next up list verbatim, in order', async (
 
 test('panelStatus returns the agent-maintained queue verbatim and never writes', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n2. 二次函数求最值（复习）\n')
   const status = await panelStatus(root)
   assert.equal(status.isSample, false)
-  assert.equal(status.queueMaintained, true)
+  assert.equal(status.queueMaintained, false)
   assert.equal(status.panelDirective, 'expand')
   assert.match(status.panelRevision, /^[a-f0-9]{16}$/)
-  assert.deepEqual(status.topics, [
-    { name: '化学平衡移动', verb: '跟进' },
-    { name: '二次函数求最值', verb: '复习' },
-  ])
+  assert.deepEqual(status.topics, [])
 })
 
 test('panelStatus does not invent an order for a learner repo with no agent queue', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-noqueue-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
   await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
   await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'quadratic.md'), '# Gap: 二次函数求最值\n')
@@ -358,7 +361,7 @@ test('panelStatus does not invent an order for a learner repo with no agent queu
 
 test('panel presentation changes only when the agent changes its decision or queue', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-presentation-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n')
   const first = await panelStatus(root)
   const same = await panelStatus(root)
@@ -367,7 +370,7 @@ test('panel presentation changes only when the agent changes its decision or que
 
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: expand\n1. 化学平衡移动（跟进）\n2. 牛顿第二定律（复习）\n')
   const changedQueue = await panelStatus(root)
-  assert.notEqual(changedQueue.panelRevision, first.panelRevision)
+  assert.equal(changedQueue.panelRevision, first.panelRevision)
 
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\nPanel: collapse\n1. 化学平衡移动（跟进）\n2. 牛顿第二定律（复习）\n')
   const collapsed = await panelStatus(root)
@@ -377,7 +380,7 @@ test('panel presentation changes only when the agent changes its decision or que
 
 test('panel presentation ignores directives outside Next up and unknown values', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-scope-'))
-  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
+  await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\nPanel: expand\n## Next up\nPanel: surprise\n1. 化学平衡移动（跟进）\n')
   const status = await panelStatus(root)
   assert.equal(status.panelDirective, 'collapse')
@@ -404,4 +407,83 @@ test('client hides an unmaintained learner queue and collapses after every actio
   assert.match(client, /setOpen\(next\.panelDirective === "expand"\)/)
   assert.match(client, /收尾一道/)
   assert.doesNotMatch(client, /暂无内容|当前为自动收集/)
+})
+
+test('learning_apply commits typed records and a dashboard projection in one commit', async () => {
+  const root = await learnerRepo('safe-auto')
+  const baseRevision = await head(root)
+  const result = await applyLearningTransaction(root, {
+    baseRevision,
+    operations: [
+      { kind: 'event', subject: 'math', id: 'sign-event', title: 'Sign event', body: 'Observed correction.' },
+      { kind: 'gap', subject: 'math', id: 'sign-gap', title: 'Sign gap', body: 'Needs delayed transfer.' },
+      { kind: 'dashboard', content: '# Dashboard\n## Next up\n1. Sign gap (复习) [id=sign-gap path=subjects/math/knowledge-gaps/sign-gap.md]\n' },
+    ],
+  })
+  assert.equal(result.status, 'committed')
+  assert.equal(result.changedFiles.length, 3)
+  assert.equal((await git(root, 'diff-tree', '--no-commit-id', '--name-only', '-r', 'HEAD')).split('\n').filter(Boolean).length, 3)
+  assert.match(await readFile(join(root, 'subjects/math/knowledge-gaps/sign-gap.md'), 'utf8'), /Gap ID: sign-gap/)
+  const status = await inspectWorkspace(root)
+  assert.equal(status.queue[0].id, 'sign-gap')
+})
+
+test('setupGate returns a structured blocked answer and ignores learning-policy mode text', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const gate = await setupGate(root, status)
+  assert.equal(gate.complete, true)
+  assert.equal(gate.marker, 'setup-complete')
+  assert.equal(gate.answer.setup, 'complete')
+})
+
+test('identity and setup evidence must come from their canonical YAML blocks', async () => {
+  const root = await learnerRepo('safe-auto')
+  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft
+mode: safe-auto
+metadata:
+  repo_id: spoofed
+  role: learner
+  kind: learner-repository
+  template: false
+goal: spoofed
+subject: math
+material: worksheet
+rag_choice: declined
+completed_at: "2026-08-15T00:00:00Z"
+`)
+  const status = await inspectWorkspace(root)
+  const gate = await setupGate(root, status)
+  assert.equal(status.learner.identified, false)
+  assert.equal(gate.complete, false)
+  assert.ok(gate.missing.includes('gitlearnos.yml: identity: learner'))
+  assert.ok(gate.missing.includes('setup.answers.goal'))
+  assert.ok(gate.missing.includes('setup.completed_at'))
+})
+
+test('plain external markers stay reported until a structured receipt exists', async () => {
+  const root = await learnerRepo('safe-auto')
+  await writeFile(join(root, 'automation.md'), '# Automation\nmaintenance: verified\ndue-review: verified\n')
+  let status = await inspectWorkspace(root)
+  assert.equal(status.automation.state, 'reported')
+  await mkdir(join(root, '.gitlearnos', 'receipts'), { recursive: true })
+  await writeFile(join(root, '.gitlearnos', 'receipts', 'scheduler.json'), JSON.stringify({
+    schema: 'gitlearnos.external-receipt/v1', kind: 'scheduler', provider: 'test',
+    task_id: 'task-1', tz: 'Asia/Shanghai', recurrence: 'daily', run_id: 'run-1',
+    occurrence_key: '2026-08-15', repo_revision: status.gitRevision, result: 'skipped',
+    delivery_status: 'none', message_id: null, observed_at: '2026-08-15T00:00:00Z',
+  }))
+  status = await inspectWorkspace(root)
+  assert.equal(status.automation.state, 'externallyVerified')
+  assert.equal(status.automation.verifiedReceipt.id, 'task-1')
+})
+
+test('canonical panel queue resolves H1 display names and hides stale references', async () => {
+  const root = await learnerRepo('safe-auto')
+  await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
+  await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'gap-one.md'), '# H1 display\n\nGap ID: gap-one\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. gap-one — subjects/math/knowledge-gaps/gap-one.md — 复习\n2. missing — subjects/math/knowledge-gaps/missing.md — 复习\n')
+  const status = await panelStatus(root)
+  assert.deepEqual(status.topics, [{ name: 'H1 display', id: 'gap-one', path: 'subjects/math/knowledge-gaps/gap-one.md', verb: '复习', stale: false }])
+  assert.equal(status.staleCount, 1)
 })

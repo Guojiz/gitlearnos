@@ -48,7 +48,7 @@
 
   <rect x="260" y="220" width="680" height="190" rx="18" class="core"/>
   <text x="600" y="255" text-anchor="middle" class="label">One Replaceable Main AI Agent</text>
-  <text x="600" y="280" text-anchor="middle" class="small">Select the smallest workflow by goal, track, need, time, and learner policy</text>
+  <text x="600" y="280" text-anchor="middle" class="small">Select the smallest workflow by goal, track, need, time, and learner configuration</text>
   <rect x="300" y="305" width="180" height="76" rx="12" class="cap"/>
   <rect x="510" y="305" width="180" height="76" rx="12" class="cap"/>
   <rect x="720" y="305" width="180" height="76" rx="12" class="cap"/>
@@ -62,7 +62,7 @@
   <path d="M600 410 L600 452" class="arrow"/>
   <rect x="210" y="452" width="780" height="102" rx="18" class="repo"/>
   <text x="600" y="485" text-anchor="middle" class="label">One Learner-Owned Git Repository</text>
-  <text x="600" y="512" text-anchor="middle" class="small">root policy + dashboard · subjects/math/ · subjects/english/ · subjects/coding/</text>
+  <text x="600" y="512" text-anchor="middle" class="small">root configuration + dashboard · subjects/math/ · subjects/english/ · subjects/coding/</text>
   <text x="600" y="536" text-anchor="middle" class="small">inspectable · portable · correctable · reversible · agent-independent</text>
 
   <rect x="68" y="575" width="310" height="46" rx="12" class="track"/>

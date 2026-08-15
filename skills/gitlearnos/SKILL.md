@@ -37,7 +37,7 @@ on a surface where Skills are unavailable.
    or deploying learner state. Do not apply this gate to template maintenance,
    documentation, tests, or open-source release;
 3. detect actual read, write, Git, source, RAG, and scheduler capability;
-4. read target `learning-policy.md`, dashboard, active subject goal, and only
+4. read target `gitlearnos.yml`, dashboard, active subject goal, and only
    directly related evidence;
 5. honor device, bandwidth, time, language, and delivery constraints with the
    smallest useful interaction;
@@ -56,6 +56,7 @@ on a surface where Skills are unavailable.
 | source access, provenance, privacy, or completeness | [`references/source.md`](references/source.md) |
 | decide, deploy, ingest, promote, or query RAG-Anything | [`references/rag.md`](references/rag.md) |
 | extract reusable understanding | [`references/model.md`](references/model.md) |
+| summarize linked evidence or prepare a compact handoff | [`references/summarize.md`](references/summarize.md) |
 | repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |
 
 Do not turn note capture, teacher feedback, or preparation for human help into
@@ -69,6 +70,13 @@ under `safe-auto` when write and Git access exist.
 
 When subject-specific form matters, load only one reference from
 [`references/subjects/`](references/subjects/README.md).
+
+If the learner says “only send the question” (or equivalent), use the
+question-intent branch: send only the question stem and purpose, keep the
+answer key/rubric in the canonical planned review, and do not teach, score, or
+reveal the answer. If a one-tap confirmation is answered while no `planned`
+review exists, create one canonical `review` record with `origin: one-tap` and
+`status: attempted`; never drop the result into chat-only state.
 
 ## Finish
 

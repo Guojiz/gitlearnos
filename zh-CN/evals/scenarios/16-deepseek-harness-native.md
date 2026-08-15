@@ -24,7 +24,7 @@ DeepSeek Harness 当前处于 Developer Preview。必须把 Harness 和本 bundl
 - 经过审查的 GitLearnOS 提交 SHA 包含根 Harness bundle manifest；
 - 一次性 Harness profile 从未安装过 GitLearnOS；
 - 三份一次性学习者 fixture 分别声明 `safe-auto`、`preview` 与 `manual`，其中
-  一份 fixture 的 `learning-policy.md` 比 `gitlearnos.yml` 更严格；
+  所有 fixture 都在 `gitlearnos.yml` 中声明模式；
 - 测试前已经计算 fixture 文件校验和；
 - 不假定存在 RAG 服务、具备仓库能力的后台 worker 或视觉 provider。
 
@@ -94,7 +94,7 @@ DeepSeek Harness 当前处于 Developer Preview。必须把 Harness 和本 bundl
 随后在隔离 Git fixture 中测试 `learning_record`。`safe-auto` 必须只新建并提交
 一条 `subjects/<subject>/events/<event-id>.md`，返回 changed path、commit 与 undo，
 并保留无关 staged/unstaged 改动。`preview` 必须返回精确提案且零写入；`manual`
-和含糊政策必须返回 `requires-approval` 且零写入。过期 base revision、路径穿越、
+和含糊配置必须返回 `requires-approval` 且零写入。过期 base revision、路径穿越、
 符号链接逃逸、不同内容覆盖与并发锁必须被拒绝；相同输入重试必须为 `unchanged`，
 不能产生空提交。
 

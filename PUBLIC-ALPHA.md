@@ -14,7 +14,7 @@ The repository was renamed from `Repo-as-Review-OS` to `GitLearnOS`.
 - cross-channel input from teachers, class, paper, platforms, and AI;
 - automatic organization, linking, deduplication, and external-feedback reconciliation;
 - personalized diagnostic, variation, transfer, review, and teacher-handoff questions;
-- learner policy through `safe-auto`, `preview`, and `manual`;
+- learner-controlled write modes through `safe-auto`, `preview`, and `manual`;
 - immediate writeback and on-handoff checks;
 - source, profile, model, gap, handoff, review, and activity templates;
 - separate resolution and mastery state;
@@ -32,7 +32,7 @@ Learning goal or current input: <content>
 Read GITLEARNOS.md and START-HERE.md and use safe-auto. Organize automatically,
 generate targeted questions when useful, and actually write safe changes.
 Do not default to an AI tutoring session. Report changes, evidence, actual
-automation, next action, and undo capability. Keep shared policy at the root
+automation, next action, and undo capability. Keep shared configuration at the root
 and subject-specific state under subjects/<subject>/.
 ```
 

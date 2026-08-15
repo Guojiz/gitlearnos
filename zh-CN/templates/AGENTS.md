@@ -8,10 +8,11 @@ GitLearnOS 协议。
 1. 所有涉及学习的请求都走 GitLearnOS 行为路由；可用时使用已安装的
    `gitlearnos` Skill，否则直接执行本文件的最小路由；
 2. 除非任务明显是在维护、编写文档、测试或发布公开模板，否则默认用户就是
-   学习者。部署学习者系统时，先询问学习目标、学科和当前资料，默认建议启用
-   本地 RAG 知识层；回答前不得安装、初始化、导入、提交或部署学习者状态。
+   学习者。部署学习者系统时，一次询问学习目标、学科、当前资料和可选的本地
+   RAG 选择，默认建议 RAG-Anything 但保持可选；当前请求或 `gitlearnos.yml`
+   中已有的事实视为已回答，不得重复询问。回答前不得安装、初始化、导入、提交或部署学习者状态。
    此门槛不阻止模板维护或开源发布；
-3. 阅读 `gitlearnos.yml`、`learning-policy.md` 和 `dashboard.md`；
+3. 阅读 `gitlearnos.yml` 和 `dashboard.md`；旧版 `learning-policy.md` 只作为一次迁移输入；
 4. 读取当前学科目标，以及本次确实需要的已链接证据；
 5. 即使学习者没有提 GitLearnOS 或调用 Skill，也把学科问题、作答、错误、
    拍摄页面、笔记、反馈和结果视为候选学习事件；
@@ -19,11 +20,10 @@ GitLearnOS 协议。
 7. 先解决学习者眼前的需要，再在 `safe-auto` 下主动执行最小的获授权
    GitLearnOS 操作；如果只缺一个必要事实，就简短询问一次，不能等待学习者
    主动要求整理、写回、检索或下一步；
-8. 同时根据 `gitlearnos.yml` 和 `learning-policy.md` 判断有效写入权限；两者
-   冲突或含糊时采用更严格的一项；
+8. 只根据 `gitlearnos.yml` 判断有效写入权限；旧版 `learning-policy.md` 不能改变当前权限；
 9. 有效模式为 `safe-auto` 时，事件有明确长期价值才做最小更新；`preview`
    时只展示拟议改动，不写入；`manual` 或政策禁用自动写入时，等待明确批准，
-   或返回精确的待写回内容；
+   或返回精确的待写回内容；当前交互的自然语言指令只覆盖本次事件，结束后失效，也不会改写 `gitlearnos.yml`；
 10. 保留原始作答、笔记与外部反馈；
 11. 只有有效权限允许写入时，才为一个有意义的学习事件提交一次，并返回诚实
    回执。
@@ -47,6 +47,11 @@ GitLearnOS 协议。
 按需读取操作参考文件。Codex 与 OpenCode 通常发现
 `.agents/skills/gitlearnos/`；Claude Code 通过配套 `CLAUDE.md` 发现
 `.claude/skills/gitlearnos/`。只有文件存在不能证明已经安装。
+
+设置或可写事件后，返回统一回执：设置状态（`core-ready`、`knowledge-ready`、
+`automation-ready`、`full-ready` 或 `incomplete`）、模式、学科、整理证据、问题、
+改动路径或待写回、证据、本次自然语言覆盖、实际自动化、Skill 状态、下一步和撤销边界。
+能力缺失时写出 `unavailable`/`unknown`，不能省略。
 
 不要保存普通聊天，不要编造无法访问的证据，也不要在未经验证时声称完成远程
 push、后台调度、跨对话记忆或证明掌握。输入只是临时、含糊或无关内容时，

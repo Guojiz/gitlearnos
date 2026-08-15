@@ -32,7 +32,7 @@ parser. Record a low-confidence transcription as a locator with
 
 ## Read
 
-1. `learning-policy.md` when present;
+1. `gitlearnos.yml`;
 2. root `dashboard.md` and the active subject entry;
 3. the goal and candidate gaps, sources, models, handoffs, and reviews under `subjects/<subject>/`;
 4. the input or authorized original.

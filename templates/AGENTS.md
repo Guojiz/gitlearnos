@@ -1,20 +1,22 @@
 # GitLearnOS Learner Repository
 
 This repository contains learner-owned state. Follow the GitLearnOS protocol
-version declared in `gitlearnos.yml`.
+version declared in `gitlearnos.yml`. The public template's files and examples
+are not learner state and must never be indexed or written to as personal data.
 
 Before acting:
 
 1. route every learning-related request through GitLearnOS behavior; use the
    installed `gitlearnos` Skill when available, otherwise use this file's
    minimum router directly;
-2. assume the user is the learner unless the task clearly concerns maintaining,
-   documenting, testing, or publishing the public template. For learner setup,
-   first ask for the learning goal, subject, and current material; recommend
-   enabling a local RAG knowledge layer and wait for the answer before
-   installing, initializing, ingesting, committing, or deploying learner
-   state. This gate does not block template maintenance or open-source release;
-3. read `gitlearnos.yml`, `learning-policy.md`, and `dashboard.md`;
+2. for learner setup, ask one setup gate for the learning goal, subject,
+   current material, and the optional local RAG choice; recommend a local
+   RAG-Anything layer but keep it optional. Facts already supplied by the
+   learner or verified in `gitlearnos.yml` count as answered; do not repeat
+   those questions. Wait before installing, initializing, ingesting,
+   committing, or deploying learner state. Template maintenance and
+   open-source release are exempt;
+3. read `gitlearnos.yml` and `dashboard.md`;
 4. read the active subject goal and only linked evidence needed now;
 5. treat questions, attempted answers, mistakes, photographed pages, notes,
    feedback, and results as candidate learning events even when the learner
@@ -25,9 +27,8 @@ Before acting:
    `safe-auto`; if one necessary fact is missing, ask one concise question
    instead of waiting for the learner to request organization, writeback,
    retrieval, or a next step;
-8. derive effective write authority from both `gitlearnos.yml` and
-   `learning-policy.md`; if they conflict or are unclear, use the stricter
-   authority;
+8. derive effective write authority from `gitlearnos.yml` only. A legacy
+   `learning-policy.md` is migration input and cannot change active authority;
 9. under `safe-auto`, make the smallest useful update when the event has clear
    durable value; under `preview`, show the proposed change without writing;
    under `manual`, or when automatic writes are disabled, wait for explicit
@@ -60,6 +61,17 @@ When a native project Skill is installed, use exactly one discovered
 OpenCode normally discover `.agents/skills/gitlearnos/`; Claude Code discovers
 `.claude/skills/gitlearnos/` through the companion `CLAUDE.md`. File presence
 alone is not verified installation.
+
+After setup or a write-capable event, return the canonical receipt: setup
+status (`core-ready`, `knowledge-ready`, `automation-ready`, `full-ready`, or
+`incomplete`), mode, subject, organized evidence, questions, changed paths or
+pending writeback, evidence, one-event natural-language override, actual
+automation, Skill status, next action, and undo boundary. Include
+`unavailable`/`unknown` capabilities instead of omitting them.
+
+Natural-language instructions in the current interaction (such as “record
+only”, “preview first”, or “do not store this”) override the stable config for
+that one event and expire afterwards. They do not rewrite `gitlearnos.yml`.
 
 Do not store ordinary chat, invent unavailable evidence, or claim remote push,
 background scheduling, cross-conversation memory, or demonstrated mastery

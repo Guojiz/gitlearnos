@@ -10,9 +10,9 @@ a dashboard.
 No real College Board material, private score report, or copyrighted question text is included.
 
 The fictional learner has limited mobile data, uses a shared phone, studies in
-20-minute blocks, and does not have continuous paid tutoring. These constraints
-are stored in `learning-policy.md` and change what the agent delivers: existing
-material first, plain text, and one question at a time.
+20-minute blocks, and does not have continuous paid tutoring. These stable
+constraints are stored in `learner-profile.md`; authorization, privacy, RAG,
+and automation configuration live in `gitlearnos.yml`.
 
 To run the interaction rather than only inspect the completed state, use the
 repository-level [live demo](../../../LIVE-DEMO.md).
@@ -48,7 +48,6 @@ practice result
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 learner-profile.md
 subjects/english/goals/main-goal.md
 subjects/english/events/2026-07-03_practice-result.md

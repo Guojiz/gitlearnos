@@ -21,7 +21,6 @@ const requiredHumanPairs = [
   "templates/CLAUDE.md",
   "templates/project-instructions.md",
   "templates/native-memory-pointer.md",
-  "templates/learning-policy.md",
   "templates/automation.md",
   "adapters/agents/README.md",
   "adapters/git/README.md",

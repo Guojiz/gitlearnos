@@ -5,7 +5,7 @@
 更新时间：2026-07-08  
 更新者：GitLearnOS 主 Agent  
 仓库状态：`active`  
-自动化政策：[safe-auto](learning-policy.md)
+运行配置：[`safe-auto`](gitlearnos.yml)
 
 ## 学科总览
 
@@ -67,6 +67,6 @@
 
 ## Agent 接手
 
-只需读取本文件、[政策](learning-policy.md)、[数学目标](subjects/math/goals/main-goal.md)、[缺口](subjects/math/knowledge-gaps/similarity-correspondence-gap.md)与到期[题组](subjects/math/reviews/2026-07-15_delayed-review.md)。
+只需读取本文件、[运行配置](gitlearnos.yml)、[数学目标](subjects/math/goals/main-goal.md)、[缺口](subjects/math/knowledge-gaps/similarity-correspondence-gap.md)与到期[题组](subjects/math/reviews/2026-07-15_delayed-review.md)。
 
 唯一下一步：到期后隐藏答案，让学习者独立完成延迟复习；作答前不重读老师反馈。

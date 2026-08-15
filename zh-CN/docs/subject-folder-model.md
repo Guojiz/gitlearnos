@@ -7,7 +7,7 @@ GitLearnOS 使用一个由学习者拥有的仓库，并在其中按学科建立
 ```text
 my-gitlearnos/
 ├── AGENTS.md
-├── learning-policy.md
+├── gitlearnos.yml
 ├── learner-profile.md
 ├── dashboard.md
 ├── goals/                       # 可选，只放真正跨学科目标
@@ -31,7 +31,7 @@ my-gitlearnos/
 
 | 根目录 | 学科文件夹 |
 |---|---|
-| 自动化与隐私政策 | 学科目标与约束 |
+| 授权、隐私与自动化配置 | 学科目标与约束 |
 | 稳定学习偏好 | 学科来源与外部反馈 |
 | 跨学科优先级视图 | 模型与知识缺口 |
 | 真正跨学科的目标 | 题目、结果、问题包与活动 |

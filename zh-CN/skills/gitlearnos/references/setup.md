@@ -109,7 +109,6 @@ OpenCode 定时 Worker 必须显式选择学习者批准的模型，不能继承
 ```text
 AGENTS.md
 gitlearnos.yml
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -141,7 +140,7 @@ archive/
 学习者可以修改时间。无法安全推断时区时，只问一个简洁的时间问题；默认安静时段为
 22:00 至 07:00 之前（不含 07:00），交付到当前已授权学习渠道，每次到期运行最多三道题。
 把请求的重复规则与交付偏好写入
-`learning-policy.md`，并从模板创建 `automation.md`，作为唯一调度状态记录。
+`gitlearnos.yml`，并从模板创建 `automation.md`，作为唯一调度状态记录。
 
 通过真实具备仓库能力的调度器创建每个重复任务，记录不透明提供方 ID 和下次
 运行并标记为 `configured`，然后安全试运行一次。只有同时观察到调度条目与
@@ -159,7 +158,7 @@ Worker 的仓库访问，才能标记 `verified`。没有工作时，试运行�
 2. 建立持久的项目或来源区域；可用且获授权时，把大型学习文件放入或链接到那里；
 3. 从示例创建 `gitlearnos.yml`；模板可访问时复制轻量
    `templates/AGENTS.md`，否则根据 `core-contract.md` 生成等价入口；并以
-   `safe-auto` 建立 `learning-policy.md`，除非学习者要求预览或手动模式；
+   `safe-auto` 写入 `gitlearnos.yml`，除非学习者要求预览或手动模式；
 4. 把单一 Skill 文件夹安装到主 Agent 的原生位置，安装对应的仓库入口文件，
    提供经过适配的项目或自定义指令；获允许时配置原生记忆指针；并为每个层
    报告已验证状态；

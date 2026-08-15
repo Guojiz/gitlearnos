@@ -11,7 +11,7 @@
 ```text
 README.md                         ↔ zh-CN/README.md
 docs/architecture.md             ↔ zh-CN/docs/architecture.md
-templates/learning-policy.md     ↔ zh-CN/templates/learning-policy.md
+templates/automation.md          ↔ zh-CN/templates/automation.md
 evals/scenarios/01-bootstrap.md  ↔ zh-CN/evals/scenarios/01-bootstrap.md
 skills/gitlearnos/references/review.md ↔ zh-CN/skills/gitlearnos/references/review.md
 ```

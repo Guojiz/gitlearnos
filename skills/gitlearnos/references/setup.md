@@ -143,7 +143,6 @@ Create only what the first goal or input needs:
 ```text
 AGENTS.md
 gitlearnos.yml
-learning-policy.md
 automation.md
 dashboard.md
 learner-profile.md
@@ -179,7 +178,7 @@ the time zone cannot be inferred safely; default quiet hours to 22:00–before
 07:00 (excluding 07:00),
 delivery to the current authorized learning channel, and each due run to at
 most three questions. Persist the requested recurrence
-and delivery preferences in `learning-policy.md`, and create `automation.md`
+   and delivery preferences in `gitlearnos.yml`, and create `automation.md`
 from its template as the single scheduler-status record.
 
 Create each recurring task through a real repository-capable scheduler, record
@@ -204,7 +203,7 @@ learning may continue.
 3. create `gitlearnos.yml` from the example, copy the template's thin
    `templates/AGENTS.md` entry when accessible or generate its equivalent from
    `core-contract.md`, and establish
-   `learning-policy.md` with `safe-auto` unless the learner requests
+   `gitlearnos.yml` with `safe-auto` unless the learner requests
    preview/manual;
 4. install the single Skill folder in the main agent's native location, install
    the matching repository entry file, provide adapted project/custom

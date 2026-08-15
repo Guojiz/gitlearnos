@@ -7,12 +7,16 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 ## Agent path
 
 1. Read [GITLEARNOS.md](GITLEARNOS.md).
-2. Identify the learner's target Git repository or local checkout.
+2. Identify the learner's target Git repository or local checkout; this public
+   template is never the learner's state repository.
 3. Unless clearly maintaining or publishing the public template, treat the user
-   as the learner. Ask for the learning goal, subject, and current material;
-   recommend enabling a local RAG knowledge layer; stop before learner
-   installation or deployment until the learner answers. Template maintenance,
-   documentation, tests, and open-source release are exempt from this gate.
+   as the learner. Ask one setup gate for learning goal, subject, current
+   material, and optional local RAG choice; recommend RAG-Anything while keeping
+   it optional. Facts supplied in the current request or verified in
+   `gitlearnos.yml` are already answered, so do not repeat them. Stop before
+   learner installation or deployment until the next missing answer arrives.
+   Template maintenance, documentation, tests, and open-source release are
+   exempt from this gate.
 4. Guide the learner to a persistent project/source area for large learning
    files.
 5. Detect actual Chat/Work/agent, memory, instructions, Skills, read, write,
@@ -22,8 +26,8 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 7. Confirm or accept learner-local recurring times and an IANA time zone for
    `maintenance` (default daily 21:30) and `due-review` (default daily 07:00),
    then create and test both with a real repository-capable scheduler.
-8. Read the target policy, dashboard, active subject goal, and only related
-   evidence.
+8. Read target `gitlearnos.yml`, dashboard, active subject goal, and only
+   related evidence. A legacy `learning-policy.md` is migration input only.
 9. When Skills are supported, install the complete
    [`skills/gitlearnos/`](skills/gitlearnos/) folder in the main agent's native
    location, verify discovery, and route through its single Router.
@@ -33,6 +37,9 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 ## Important boundaries
 
 - Personal state belongs only in the learner repository.
+- Stable authorization, privacy, source/RAG choices, setup answers, and
+  schedules belong in the learner repository's `gitlearnos.yml`; changing
+  learning state belongs in its normal subject files.
 - GitHub is one optional Git host, not a core requirement.
 - Chat and Work may both be valid; actual tools and limits must be checked.
 - Skills are optional; `AGENTS.md`, Claude Code's thin `CLAUDE.md` adapter,
@@ -45,5 +52,12 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 - Missing or untested required recurring jobs make deployment automation
   incomplete; on-handoff checks do not replace them.
 - Without real write or scheduling capability, return pending work honestly.
+
+Readiness labels are evidence-based: `core-ready` (target/config/instructions
+and basic repository capability), `knowledge-ready` (goal/material boundary,
+source workspace, and an explicit RAG choice of `enabled` or `declined`; an
+`undecided` choice is not ready), `automation-ready` (both recurring jobs
+observed and tested), and `full-ready` (all three). Include the computed label
+in the setup receipt; never claim it from a config field alone.
 
 For a copyable setup request, see [QUICKSTART.md](QUICKSTART.md).

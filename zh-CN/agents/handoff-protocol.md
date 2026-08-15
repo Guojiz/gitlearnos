@@ -5,7 +5,7 @@
 ## 只读
 
 1. 目标仓库 `AGENTS.md`；
-2. `learning-policy.md`；
+2. `gitlearnos.yml`；
 3. `dashboard.md`；
 4. 已链接的活跃目标；
 5. 当前下一步真正需要的文件。

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitlearnos.org/schemas/external-receipt/v1",
+  "title": "GitLearnOS external provider receipt",
+  "oneOf": [
+    {
+      "title": "RAG receipt",
+      "type": "object",
+      "required": ["schema", "kind", "provider", "doc_id", "source_boundary", "ingest", "query", "rebuild", "delete", "observed_at"],
+      "properties": {
+        "schema": {"const": "gitlearnos.external-receipt/v1"},
+        "kind": {"const": "rag"},
+        "provider": {"type": "string", "minLength": 1},
+        "doc_id": {"type": "string", "minLength": 1},
+        "source_boundary": {"type": "object", "required": ["evidence"], "properties": {"evidence": {"type": "string", "minLength": 1}}, "minProperties": 1},
+        "ingest": {"$ref": "#/$defs/evidence"},
+        "query": {"$ref": "#/$defs/evidence"},
+        "rebuild": {"$ref": "#/$defs/evidence"},
+        "delete": {"$ref": "#/$defs/evidence"},
+        "observed_at": {"type": "string", "minLength": 1}
+      },
+      "$defs": {
+        "evidence": {
+          "type": "object",
+          "required": ["status", "evidence"],
+          "properties": {
+            "status": {"enum": ["completed", "available", "unavailable", "failed"]},
+            "evidence": {"type": "string", "minLength": 1},
+            "run_id": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    {
+      "title": "Scheduler receipt",
+      "type": "object",
+      "required": ["schema", "kind", "provider", "task_id", "tz", "recurrence", "run_id", "occurrence_key", "repo_revision", "result", "delivery_status", "message_id", "observed_at"],
+      "properties": {
+        "schema": {"const": "gitlearnos.external-receipt/v1"},
+        "kind": {"const": "scheduler"},
+        "provider": {"type": "string", "minLength": 1},
+        "task_id": {"type": "string", "minLength": 1},
+        "tz": {"type": "string", "minLength": 1},
+        "recurrence": {"type": "string", "minLength": 1},
+        "run_id": {"type": "string", "minLength": 1},
+        "occurrence_key": {"type": "string", "minLength": 1},
+        "repo_revision": {"type": "string", "minLength": 1},
+        "result": {"enum": ["completed", "skipped", "failed", "unknown"]},
+        "delivery_status": {"type": "string", "minLength": 1},
+        "message_id": {"type": ["string", "null"]},
+        "observed_at": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": true
+    }
+  ]
+}

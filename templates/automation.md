@@ -1,10 +1,10 @@
 # Recurring Automation Status
 
-> This records verified scheduler state, not credentials or a substitute for
-> provider configuration. Update it only from observed scheduler and run
-> evidence. A deployment test may update this file in the deployment commit.
-> Later no-work skips remain in provider logs until a material learning change
-> is committed; never create a Git change only to record `skipped` or a time.
+> This records observed scheduler state, not credentials or a substitute for
+> provider configuration. Effective intent (time zone, quiet hours, delivery,
+> and job times) lives in `gitlearnos.yml`. Update this file only from a
+> machine-readable external receipt or an explicit unavailable/disabled
+> decision. Text here is always `reported-only`.
 
 Deployment automation: `incomplete` / `verified`
 Learner time zone:
@@ -14,39 +14,46 @@ Unattended private-remote push: `disabled` / `authorized`
 ## `maintenance` — recurring organization
 
 - State: `requested` / `configured` / `verified` / `unavailable` / `disabled`
-- Recurrence: `daily`
-- Local time: `21:30`
+- Recurrence:
+- Local time:
 - Provider:
 - Provider task ID:
 - Next run:
 - Last verified run:
-- Last materially recorded or verification run result: `completed` / `skipped` / `failed` / `unknown`
-- Verification evidence:
+- Last result: `completed` / `skipped` / `failed` / `unknown`
+- Receipt path or external receipt ID:
+- Delivery status:
+- Message ID (or `null` when not sent):
 
 ## `due-review` — recurring question generation
 
 - State: `requested` / `configured` / `verified` / `unavailable` / `disabled`
-- Recurrence: `daily`
-- Local time: `07:00`
+- Recurrence:
+- Local time:
 - Provider:
 - Provider task ID:
-- Delivery channel:
 - Next run:
 - Last verified run:
-- Last materially recorded or verification run result: `completed` / `skipped` / `failed` / `unknown`
-- Verification evidence:
+- Last result: `completed` / `skipped` / `failed` / `unknown`
+- Delivery channel:
+- Receipt path or external receipt ID:
+- Delivery status:
+- Message ID (or `null` when not sent):
 
 ## Run contract
 
-State meanings: `requested` = approved and awaiting provisioning;
-`configured` = created but untested; `verified` = scheduler entry plus observed
-repository-capable test; `unavailable` = capability inspection found no usable
-scheduler; `disabled` = learner explicitly disabled it and deployment remains
-incomplete.
+Each provider receipt must contain `provider`, `task_id`, `tz`,
+`recurrence`, `run_id`, `occurrence_key`, `repo_revision`, `result`,
+`delivery_status`, and `message_id`. Use one idempotency key and writer lock;
+stop if the Git base revision changes. No due or changed evidence means
+`skipped` with no question, message, or commit. Catch up once at most and never
+redeliver a due item. Keep credentials and provider expressions outside Git.
 
-- One idempotency key per job and scheduled occurrence.
-- One writer lock or lease; stop if the Git base revision changes.
-- No due or changed evidence means `skipped`: no question, message, or commit.
-- Catch up a missed occurrence at most once and never redeliver a due item.
-- Deliver questions without answer keys.
-- Keep credentials and provider expressions outside Git.
+Run the local structural check with:
+
+```bash
+node scripts/check-external-receipts.mjs external/receipts/*.json
+```
+
+The checker does not contact a scheduler or prove that a provider ran; it only
+reports whether receipt documents have the required shape.

@@ -1,10 +1,17 @@
 # 学习缺口
 
+ID：`gap-<stable-slug>`
+规范路径：`subjects/<subject>/knowledge-gaps/<file>.md`
+版本：`1`
+依赖（event ID）：
+组合使用（model/review ID）：
+替代（缺口 ID/版本）：
+冲突（证据 ID）：
 处理状态：`open` / `resolved` / `needs-check`
 掌握状态：`unknown` / `learning` / `demonstrated`
-学科：  
-目标链接：  
-创建日期：  
+学科：
+目标链接：
+创建日期：
 更新时间：
 
 ## 情境模式
@@ -16,6 +23,7 @@
 - 最近观察：
 - 已链接观察数：
 - 模型状态：`none` / `draft` / `active` / `archived`
+- 状态机位置：`event` / `gap` / `model-draft` / `model-active` / `planned` / `transfer-attempted` / `mastery-learning` / `mastery-demonstrated`
 
 ## 可观察问题
 
@@ -59,3 +67,5 @@
 - 日期或下次接手：
 - 问题、模型、来源或问题包：
 - 新迁移检验：
+- 下次检查日期：
+- 下次检查原因：

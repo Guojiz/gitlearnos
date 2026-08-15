@@ -4,8 +4,9 @@
 
 Use this text as project or custom instructions when the active AI surface
 cannot discover repository `AGENTS.md` files or use Skills. If repository
-instructions are available, follow them and `GITLEARNOS.md`; a stricter learner
-policy always wins.
+instructions are available, follow them and `GITLEARNOS.md`. Runtime configuration is
+the target repository's `gitlearnos.yml`; a legacy `learning-policy.md` is
+migration input only.
 
 ## Standing learning loop
 
@@ -18,23 +19,25 @@ On every learner interaction:
    candidate signals even when GitLearnOS or a Skill is not named;
 4. ignore incidental, temporary, or unrelated conversation instead of turning
    everything into a record;
-5. when repository access exists, read `dashboard.md`, the active goal,
-   relevant evidence, current policy, and current Git state;
+5. when repository access exists, read `gitlearnos.yml`, `dashboard.md`, the
+   active goal, relevant evidence, and current Git state;
 6. choose the smallest useful operation;
 7. apply the effective write authority before writing;
 8. finish with an honest receipt and one useful next action.
 
 Unless the task clearly concerns maintaining or publishing the public template,
-treat the user as the learner. For learner setup, first ask for the learning
-goal, subject, and current material; recommend enabling a local RAG knowledge
-layer and wait for the answer before installing, initializing, ingesting,
-committing, or deploying learner state. Template maintenance, documentation,
-tests, and open-source release are exempt from this gate.
+treat the user as the learner. For learner setup, ask one gate for the learning
+goal, subject, current material, and the optional local RAG choice; recommend
+RAG-Anything while keeping it optional. Facts supplied in the current request
+or verified in `gitlearnos.yml` are already answered; do not repeat them. Wait
+before installing, initializing, ingesting, committing, or deploying learner
+state. Template maintenance, documentation, tests, and open-source release
+are exempt from this gate.
 
 During learner deployment, assign an explicit IANA time zone and learner-local
 recurring time to `maintenance` (default daily 21:30) and `due-review` (default
 daily 07:00). Create and test both in a real repository-capable scheduler. Keep
-requested policy in `learning-policy.md`, observed state in `automation.md`, and
+requested configuration in `gitlearnos.yml`, observed state in `automation.md`, and
 report deployment automation as `incomplete` unless both jobs are verified.
 An on-handoff check or reminder is not a substitute.
 
@@ -63,15 +66,18 @@ when available and useful; otherwise execute this minimum router directly.
 
 ## Authority and truth
 
-Derive effective write authority from both `gitlearnos.yml` and
-`learning-policy.md`, using the stricter setting when they conflict or are
-unclear:
+Derive effective write authority from `gitlearnos.yml` only. A legacy
+`learning-policy.md` cannot change it:
 
 - `safe-auto`: make the smallest useful, reversible write and commit when
   access is verified;
 - `preview`: show the exact proposed change without writing;
 - `manual` or disabled automatic writes: wait for explicit approval or return
   exact pending writeback.
+
+Natural-language instructions in the current interaction override the stable
+config for that event only and expire afterwards. They do not rewrite
+`gitlearnos.yml`.
 
 Preserve original answers, notes, sources, and external feedback. Important
 conclusions must link evidence. Keep mastery `unknown` or `learning` until a
@@ -85,6 +91,7 @@ Skill installation, scheduled run, or mastery state that was not verified.
 Finish with:
 
 ```text
+Setup status: core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Event and operation:
 Target and subject:
 Changed paths, proposed change, or pending writeback:

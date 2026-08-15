@@ -1,82 +1,86 @@
-# 自动化适配
+# 自动化适配器
 
 [English](../../../adapters/automation/README.md)
 
-GitLearnOS 保存可移植的任务意图，由调度器或有能力的 Agent 真正执行。
-[`tasks.example.yml`](../../../adapters/automation/tasks.example.yml) 是最小可移植
-定义。每个学习者部署都必须为两个任务设置重复本地时间和 IANA 时区。平台表达式
-与凭据留在 Git 外；学习者仓库在 `automation.md` 记录真实状态。
+GitLearnOS 将可移植意图保存在 `gitlearnos.yml`，由调度器或有能力的 Agent 执行。
+`tasks.example.yml` 是一种示例转换。提供方表达式和凭据留在学习者仓库之外。
 
-## 两个通用任务
+## 可移植配置
 
-正式映射固定为：
+生效字段为 `automation.time_zone`、`quiet_hours`、`max_questions_per_due_run`、
+`delivery_channel` 以及下面两个任务：
 
-- 重复整理 = `maintenance`，默认每天本地时间 21:30；
-- 重复出题 = `due-review`，默认每天本地时间 07:00。
+```yaml
+automation:
+  time_zone: Asia/Shanghai
+  quiet_hours: "22:00-07:00"
+  max_questions_per_due_run: 3
+  delivery_channel: current-authorized-channel
+  jobs:
+    maintenance: {recurrence: daily, local_time: "21:30"}
+    due-review: {recurrence: daily, local_time: "07:00"}
+```
 
-学习者可以修改时间与交付偏好。“每天”表示每天检查，不表示每天都要产生内容。
+旧的策略文档仅用于迁移，不能覆盖此配置。默认时间可编辑，不能证明已存在
+调度器。
 
-### `due-review`
+## 两个任务
 
-执行时：
+- `maintenance`：整理待处理输入、外部反馈、过时视图、矛盾和反复模式。
+- `due-review`：读取到期证据，最多生成配置数量的全新可作答题目。
 
-1. 打开当前 Dashboard 和到期复测链接；
-2. 读取当前目标、相关证据和最近题目；
-3. 生成少量新的、可以立即作答的问题；
-4. 在当前渠道交付问题；
-5. 在有效 `safe-auto` 下，把实际布置的题集以 `planned` 状态持久化，从缺口与
-   仪表盘链接并提交这次布置；用户作答后才写入评估；
-6. 报告实际完成的操作。
+“每天”表示每天检查，不表示每天都产出内容。没有到期或变化证据时返回 `skipped`，
+不出题、不发通知、不做仅时间戳提交，也不重复交付。Worker 使用一个写入锁，检查
+当前 Git 版本，基础版本变化时停止，错过的发生最多补跑一次。交付不能包含答案键；
+没有明确的私有远程授权不得无人值守 push。
 
-它的输出不能只是“记得复习”。
-没有到期证据时以 `skipped` 结束，不出题、不交付、不提交。题目渠道绝不能发送
-答案键。
+## 机器可读的调度回执
 
-### `maintenance`
+声称已观察到的每次外部运行都必须发出如下 JSON 回执（例如
+`external/receipts/scheduler-<run-id>.json`）。规范 JSON Schema 见
+[`external-receipt.schema.json`](../../../adapters/automation/external-receipt.schema.json)：
 
-检查待整理输入、等待中的外部反馈、过时 Dashboard 链接、矛盾的 AI 状态和到期任务。只自动修复安全且可撤销的问题；不确定内容进入待处理，不允许猜测。
-没有待处理输入或实质状态变化时，以 `skipped` 结束，不通知，也不只为时间戳提交。
+```json
+{
+  "schema": "gitlearnos.external-receipt/v1",
+  "kind": "scheduler",
+  "provider": "local-cron",
+  "task_id": "opaque-provider-task-id",
+  "tz": "Asia/Shanghai",
+  "recurrence": "daily",
+  "run_id": "run-2026-08-15T07:00+08:00",
+  "occurrence_key": "due-review/2026-08-15T07:00:00+08:00",
+  "repo_revision": "0123456789abcdef",
+  "result": "skipped",
+  "delivery_status": "not-sent",
+  "message_id": null,
+  "observed_at": "2026-08-15T07:00:03+08:00"
+}
+```
 
-首次验证跳过可记录在部署提交中。之后的无工作跳过只留在提供方日志，不单独更新 Git。
+检查器要求非空的 `provider`、`task_id`、IANA `tz`、`recurrence`、`run_id`、
+`occurrence_key`、`repo_revision`，明确的 `result`，以及 `delivery_status` 和
+`message_id`（未发送消息时使用 `null`）。回执是提供方证据，不是调度器本身；本地
+检查器只检查结构，不创建任务，也不联系提供方。
 
-## 创建与验证
+## Harness 边界
 
-对每个任务：
+DeepSeek Harness 的 **Schedule** 是会话内的提示／计时设施。它可以帮助仍在运行的
+交互会话注意任务，但不能唤醒冷会话、授予仓库权限或证明重复 Worker 运行。已验证的
+后台部署必须使用能在冷状态启动的外部 Worker，其提供方回执包含上述字段，并且运行
+确实读取了目标仓库。Harness 文本标记始终是 `reported-only`。
 
-1. 确定学习者 IANA 时区、本地时间、安静时段、补跑偏好、题目渠道和最大题量；
-2. 使用具备仓库工具的提供方创建重复任务；
-3. 记录为 `configured`，保存不透明提供方任务 ID 与下次运行；
-4. 对目标仓库实际运行一次测试；
-5. 只有 Worker 安全完成或跳过，并且调度器仍显示重复规则时，才记录为
-   `verified`。
+## 验证状态
 
-定时 Worker 必须显式固定为学习者批准的提供方和模型，不能静默继承交互会话的
-默认值。例如 OpenCode Worker 应明确传入已验证的 `--model provider/model`。
-验证依赖来源的运行前，应授权 Worker 访问所需的每个外部资料目录；只要出现自动
-拒绝的 `external_directory` 请求，即使进程退出码为零，该来源访问仍未验证。
+`requested` = 已同意、等待创建；`configured` = 提供方任务存在但尚未运行；`verified`
+= 重复条目和一次具备仓库能力的运行都有证据；`unavailable` = 能力检查找不到可用调度器；
+`disabled` = 学习者选择不运行，部署仍不完整。只有有观察回执支持时才在 `automation.md`
+保存这些状态。
 
-两个任务都为 `verified` 时，部署自动化才完整。仅提示提醒或接手检查应保留请求
-时间，但部署自动化必须报告 `incomplete`。
+使用以下命令进行本地结构检查：
 
-## 运行安全
+```bash
+node scripts/check-external-receipts.mjs external/receipts/*.json
+```
 
-- 根据任务 ID 和计划发生时刻生成唯一幂等键；
-- 取得单一写入锁或租约并检查 Git 基础版本；
-- 发生并发变化时停止，不自动 rebase、强制 push 或覆盖；
-- 错过的运行最多补跑一次，并对到期交付去重；
-- 最多创建一个提交，且只有实质状态变化时才提交；
-- 答案不能进入通知，凭据不能进入 Git 与日志；
-- 学习者未另行授权指定私有远程时，不得无人值守 push。
-
-## 执行模式
-
-| 模式 | 含义 |
-|---|---|
-| 即时 | 当前交互中已经完成 |
-| 接手检查 | 有能力的 Agent 恢复时执行的回退检查，不算已验证重复调度 |
-| 后台 Worker | 真正拥有仓库权限的计划任务 |
-| 仅提示提醒 | 只是交接，不能声称完成仓库工作 |
-
-ChatGPT Automations、cron、CI 和其他调度器只有真实具备仓库与工具访问时才能
-实现这两个任务。平台专用时间设置留在学习状态之外；可移植意图、请求的本地
-时间、状态与证据留在 Git。
+命令会报告结构是否有效，并明确说明没有执行外部提供方运行。

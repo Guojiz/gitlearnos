@@ -2,53 +2,46 @@
 
 [中文](../zh-CN/docs/deepseek-harness-launch.md)
 
-GitLearnOS now has a native learning surface for DeepSeek Harness.
+GitLearnOS ships **exclusive native DeepSeek Harness support** for the official
+Harness **Developer Preview**. It brings a complete, verifiable Git learning
+transaction and an agent-controlled panel into the conversation: the main
+agent decides what should come next and when the panel should appear, while the
+learner keeps the final manual control. The Host is bounded plumbing, not the
+owner of learning order.
 
-Most AI study tools begin with another chat box. GitLearnOS begins with the
-learning state the learner already owns. Goals, mistakes, reviews, notes, and
-next steps stay in a readable Git repository. The main agent uses that evidence
-to decide what deserves attention next.
+## What the current code proves
 
-In DeepSeek Harness, a `GitLearnOS ▸` bar shows that agent-maintained learning
-queue beside the conversation input. The main agent decides whether a new queue
-revision should open now or remain folded; that decision applies once, and the
-learner can still toggle it without a timer reopening it. There are no subject
-tabs and no Host-generated ranking. The learner sees one ordered list and
-chooses a plain action: review it, practise it, ask a teacher, read their notes,
-or close the point with one question.
+The reviewed bundle includes a no-build Host and browser client. The Host
+exposes bounded `learning_status` and `learning_route` reads plus a
+`gitlearnos.yml`-authorized `learning_apply` transaction. In `safe-auto`, `learning_apply`
+can atomically apply typed event, knowledge-gap, model, review, and dashboard
+operations in one Git commit after strict learner identity, setup/config,
+authority, and base-revision checks. `preview` emits the exact proposal;
+`manual` requires approval. The receipt includes changed files and a
+`git revert` boundary. `learning_record` remains a compatibility wrapper for a
+single event.
 
-The order belongs to the agent, not the plugin. The Host exposes bounded
-evidence; the main agent weighs the learner's goal, prerequisites, urgency,
-difficulty, importance, mastery, retention, and current constraints, then
-writes the resulting `Next up` queue back to Git. The panel only reads that
-order.
+The browser client reads the agent-maintained `Next up` list through a
+loopback-only RPC channel. It never ranks or writes the queue, hides an
+unmaintained learner queue instead of inventing one, labels non-learner sample
+data, and applies a new `Panel: expand|collapse` decision once per revision.
+Selecting an item exposes five code-backed conversation actions: review,
+practice, close with one multiple-choice question, ask a teacher, or read the
+learner's notes.
 
-After an explanation, GitLearnOS can use one Harness-native multiple-choice
-prompt as a lightweight close. A correct immediate answer remains supported
-learning evidence, not proof of mastery. A wrong distractor suggests a likely
-confusion; it does not pretend to prove the learner's hidden reasoning.
+## Separate layers and narrow roadmap
 
-## What is real in this Developer Preview
+RAG provider access and cold-session recurring workers are separate layers; the
+current bundle does **not** call or provision either one. Harness Schedule is
+session-local and does not satisfy recurring repository automation. The narrow
+roadmap is richer visual editing, a RAG bridge, and an external recurring worker.
 
-- a no-build, installable DeepSeek Harness Host + browser bundle;
-- an Agent-presented learning bar and flat agent-maintained queue, with the
-  learner's manual toggle preserved;
-- actions that place a useful request into the conversation and collapse the
-  panel again;
-- bounded status, routing, due-review evidence, and one policy-checked,
-  reversible Git event transaction;
-- loopback-only panel reads, explicit sample labeling, and no invented order
-  when a learner queue has not been maintained;
-- paired English and Chinese documentation and executable adapter tests.
+DeepSeek's official provider is text-only. Images, screenshots, boards, and
+other visual evidence require a verified multimodal provider or an authorized
+OCR/parser path; the text-only agent must not infer unseen content. A correct
+immediate tap is supported evidence, not proof of mastery.
 
-## What it does not claim
-
-The current bundle does not make RAG calls, provision verified cold-session
-background automation, understand images through DeepSeek's text-only
-provider, or prove mastery from an immediate tap. RAG-Anything remains an
-optional local knowledge layer, and recurring maintenance still needs a real
-repository-capable scheduler.
-
-Install from a reviewed, pinned Git commit and follow the
-[DeepSeek Harness adapter guide](../adapters/deepseek-harness/README.md) for the
-exact verification and rollback steps.
+Install from a reviewed, pinned commit and follow the
+[adapter guide](../adapters/deepseek-harness/README.md) for verification and
+rollback. Installation proves bundle discovery only; it does not prove learner
+repository write access, RAG ingestion, or background deployment.

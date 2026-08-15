@@ -26,7 +26,7 @@ repository:
 3. inspect only active target state;
 4. answer the immediate request;
 5. organize input or generate targeted questions directly when useful;
-6. write policy-authorized state changes to canonical files;
+6. write configuration-authorized state changes to canonical files;
 7. update native memory only when the activation pointer, a stable preference,
    or a durable pattern changed.
 

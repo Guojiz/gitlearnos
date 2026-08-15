@@ -2,15 +2,15 @@
 
 本适配器把 GitLearnOS 作为可原生安装的 bundle 接入官方 DeepSeek Harness
 **Developer Preview**。它挂载一个 Host 插件，加入 `gitlearnos` 系统提示词
-区段和三个有界工具：
+区段和四个有界工具：
 
 - `learning_status` 报告 GitLearnOS 协调文件、当前目标路径、有效写入模式、
   仓库中记录的 RAG 与自动化证据标记，以及只读的复测就绪观察（见
   [复测就绪读取](#复测就绪读取)）；
 - `learning_route` 选择对应的 GitLearnOS 操作与符合权限的下一步，但不会执行或
   声称已经写回。
-- `learning_record` 通过串行、受政策约束的 Git 事务写入一条新学习事件，或返回
-  精确的零写入结果。
+- `learning_apply` 把 event/gap/model/review/dashboard 计划作为一个原子 Git 提交执行；
+  `learning_record` 保留为兼容用的单事件包装器。
 
 DeepSeek Harness 和本适配器都仍是早期接入面。上游可能发生破坏性变化，安装前
 必须审阅并固定版本。
@@ -46,22 +46,23 @@ dsh --profile web --dump-config
 
 ## 原生写入事务
 
-`learning_record` 刻意比通用文件或 shell 工具更窄。它只接受既有的小写学科 slug
-与稳定事件 ID，也只能新建 `subjects/<subject>/events/<event-id>.md`。写入前必须
-存在完整学习者仓库设置文件与 active goal，目标必须是明确的 Git worktree 根，
-并且调用方必须提供刚观察到的准确 base revision。
+`learning_apply` 刻意比通用文件或 shell 工具更窄。它接受 event、gap、model、
+review 与 dashboard projection 组成的有界 typed plan；每条记录都有规范的小写 ID
+与 schema 规定的路径，dashboard 只允许投影到 `dashboard.md`。写入前必须存在明确
+的 learner identity、完整 setup answers、active goal、Git worktree 根，并提供刚观察
+到的准确 base revision。
 
-- `safe-auto` 可以新建并提交这一条事件。写入锁与两次 revision 检查会阻止并发
-  或过期写入；事务只暂存并提交该路径，因此无关 staged/unstaged 工作保持不变。
+- `safe-auto` 可以把整个 plan 作为一个事务提交。写入锁与 revision 检查会阻止并发
+  或过期写入；只暂存并提交声明的路径，因此无关 staged/unstaged 工作保持不变。
 - `preview` 返回精确 Markdown 提案，零写入。
-- `manual` 与含糊政策返回 `requires-approval`，零写入。工具没有由模型传入的
+- `manual` 与含糊配置返回 `requires-approval`，零写入。工具没有由模型传入的
   approval 开关，因此模型不能自我批准。
 - 相同输入重试返回 `unchanged`，不会形成空提交。不同内容复用 ID、覆盖、路径
   穿越、符号链接逃逸或 Git base 改变都会被拒绝。成功结果包含 commit 与
   `git revert` 撤销边界。
 
-这是第一条原生写路径，不是任意仓库维护。主 GitLearnOS 工作流仍负责判断证据
-是否值得长期保存，并更新相关缺口、题目、模型、复测与视图。
+这是 typed atomic 写入路径，不是任意仓库维护。主 GitLearnOS 工作流仍负责判断
+证据是否值得长期保存并选择 plan。
 
 ## 复测就绪读取
 
@@ -108,7 +109,7 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
 ## 当前限制
 
 - Host 使用当前进程工作目录，或部署时显式配置的 `root`。只有
-  `learning_record` 会写入或运行 Git，且仅限上述窄事务。Host 不会调用 RAG
+  `learning_apply`（`learning_record` 兼容包装器）会写入或运行 Git，且仅限上述窄事务。Host 不会调用 RAG
   或创建调度任务。
 - 读取会拒绝绝对路径、父目录穿越与符号链接逃逸；单文件上限为 64 KiB，学科
   条目上限为 128，复测扫描总量上限为 512 个文件；检查固定协调文件、
@@ -120,21 +121,15 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
   仓库的重复自动化要求。
 - 官方 DeepSeek provider 只处理文本。图片、截图、板书等视觉证据需要已验证的
   多模态 provider，或获授权 OCR/解析器路径；Agent 不得推断未看到的内容。
-- `safe-auto` 只允许学习者政策范围内最小、安全、可撤销的学习写回。它不会绕过
-  Harness 工具政策、操作系统沙箱、凭据要求，或破坏性及其他高风险操作的审批。
+- `safe-auto` 只允许学习者配置范围内最小、安全、可撤销的学习写回。它不会绕过
+  Harness 工具策略、操作系统沙箱、凭据要求，或破坏性及其他高风险操作的审批。
 - 完整 GitLearnOS 协议仍是最高依据。只安装 bundle 不等于完成学习者部署、
   RAG 部署或已验证重复自动化部署。
 
-## 路线图，不是当前能力
+## 当前边界
 
-未来原生 Harness 扩展明确包括以下方向，避免把计划误当成已经交付：
-
-- 带来源追踪的可替换 RAG provider，支持导入与检索；
-- Web 学习 Cockpit（已随包发布的只读队列视图只是第一步，
-  更完整的、由长期 Git 证据支撑的 Cockpit 尚未构建）；
-- 生成、审阅并延迟复测可组合模型的迁移掌握工作流；
-- 能在冷会话中运行的已验证外部重复 worker 桥接。
-
-其余三项当前 Host 基座尚未实现；Cockpit 目前仅以「客户端学习面板」一节的
-只读队列视图存在。在每一项的代码与端到端证据出现前，应继续使用常规 GitLearnOS
-Agent 工作流和其他文档所列、真正拥有仓库能力的自动化适配器。
+当前 Host 已提供 typed atomic Git 写回、有界 due/gap 扫描、基于机器 receipt 的
+外部状态，以及只读 canonical 队列面板。外部 RAG 摄取与周期自动化仍由可替换适配器
+负责；本 bundle 只记录 marker 或严格 receipt，不调用外部系统，也不会无 receipt 声称
+已经执行。证据决策继续由正常 GitLearnOS Agent 流程负责，后台工作使用具备仓库能力的
+自动化适配器。

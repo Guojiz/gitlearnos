@@ -41,11 +41,10 @@ Repeat the event with stricter effective authority:
 
 - under `preview`, the agent answers and shows the exact proposed change, but
   does not write or commit;
-- under `manual`, or when `learning-policy.md` disables automatic writes, the
+- under `manual` in `gitlearnos.yml`, the
   agent answers and waits for explicit approval or returns exact pending
   writeback;
-- when `gitlearnos.yml` and `learning-policy.md` conflict or are unclear, the
-  stricter authority wins.
+- when `gitlearnos.yml` is absent or unclear, use `manual`.
 
 ## Forbidden behavior
 

@@ -60,7 +60,6 @@ Agent 随后自动生成 [2026-07-15 延迟复习](subjects/math/reviews/2026-07
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 dashboard.md
 learner-profile.md
 subjects/math/goals/main-goal.md
@@ -81,4 +80,4 @@ subjects/math/events/
 - 问题处理状态与掌握证据不会混淆；
 - 重复输入应命中已有记录，而不是再造一套文件；
 - 自动化分为当前真实写回、接手检查和可选后台调度；
-- 用户策略、改动文件和下一步都可检查。
+- `gitlearnos.yml` 配置、改动文件和下一步都可检查。

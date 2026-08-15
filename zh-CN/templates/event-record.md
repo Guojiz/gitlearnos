@@ -2,6 +2,13 @@
 
 > 保存来自任意学习渠道的有价值事件，不保存完整聊天或隐藏推理。
 
+ID：`event-<stable-slug>`
+规范路径：`subjects/<subject>/events/<file>.md`
+版本：`1`
+依赖（source/goal ID）：
+组合使用（event/gap/model/review ID）：
+替代（event ID/版本）：
+冲突（证据 ID）：
 日期：
 学科：
 渠道：`teacher` / `class` / `tutoring` / `paper` / `book` / `platform` / `peer` / `ai` / `other`
@@ -31,6 +38,7 @@
 ## 状态变化
 
 - 发生了什么变化：
+- 状态机转移：`event→gap` / `gap→model-draft` / `model-draft→model-active` / `model-active→planned` / `planned→transfer-attempted` / `transfer-attempted→mastery-learning` / `transfer-attempted→mastery-demonstrated` / `none`
 - 证据链接：
 - 仍然未知：
 

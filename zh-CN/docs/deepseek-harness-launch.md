@@ -2,42 +2,33 @@
 
 [English](../../docs/deepseek-harness-launch.md)
 
-GitLearnOS 现在有了 DeepSeek Harness 原生学习入口。
+GitLearnOS 为官方 DeepSeek Harness **Developer Preview** 提供**独家原生支持**。
+它把可验证的完整 Git 学习事务和由 Agent 控制的面板带入对话：主 Agent 决定下一步
+和面板何时出现，学习者保留最后的手动控制。Host 只是有边界的管道，不拥有学习顺序。
 
-大多数 AI 学习工具先给你另一个聊天框。GitLearnOS 从学习者已经拥有的学习状态
-出发：目标、错误、复习、笔记和下一步都留在可阅读的 Git 仓库里，主 Agent 根据
-这些证据判断现在最值得处理什么。
+## 当前代码实际证明了什么
 
-在 DeepSeek Harness 中，会话输入框旁有一条 `GitLearnOS ▸`。主 Agent 判断新的
-队列现在应该出现还是保持收起；这个新决定只应用一次，学习者手动切换后，定时刷新
-不会反复把它弹开。面板里没有学科分类页，也没有 Host 生成的固定排名。学习者只
-看到一份有先后顺序的清单，然后直接选择复习、做题、问老师、看自己的笔记，或者
-用一道题给刚学的内容收尾。
+经审查的 bundle 包含无构建 Host 和浏览器客户端。Host 提供有边界的
+`learning_status`、`learning_route` 读取，以及一条由 `gitlearnos.yml` 配置授权的
+`learning_apply` 事务。`safe-auto` 下，完成严格的学习者身份、设置/配置、写入权限
+和基线版本检查后，它可以把 event、knowledge-gap、model、review、dashboard 的类型化
+操作原子地合并为一次 Git 提交；`preview` 输出精确提案；`manual` 需要批准。回执包括
+改动文件和 `git revert` 撤销边界。`learning_record` 仍是单事件兼容包装器。
 
-顺序属于 Agent，不属于插件。Host 只提供有边界的证据；主 Agent 综合学习目标、
-先决知识、紧迫程度、难度、重要性、掌握度、巩固度和当前限制，再把判断后的
-「接下来」队列写回 Git。面板只负责按原顺序读取。
+浏览器客户端通过仅限回环的 RPC 读取 Agent 维护的 `Next up` 清单；它不排序、不写队列，
+学习者仓库没有维护队列时不编造顺序，非学习者样例会明确标注，并且每个新版本只应用
+一次 `Panel: expand|collapse` 决定。选择一个条目后，会显示五个代码已实现的对话动作：
+复习、练习、用一道选择题收尾、问老师或查看学习者笔记。
 
-讲完一个点后，GitLearnOS 可以使用 Harness 自带的一道多选做轻量收尾。马上选对
-只是有支持的学习证据，不等于已经掌握；选错某个干扰项会提示一种可能的混淆，
-但不会冒充已经证明了学习者脑中的真实原因。
+## 独立层与有限路线
 
-## 这个 Developer Preview 已经真正具备什么
+RAG provider 访问和冷会话重复 Worker 是独立层，当前 bundle **不会**调用或创建它们。
+Harness Schedule 只在当前会话内有效，不能代替重复的仓库自动化。后续路线只包括更丰富
+的视觉编辑、RAG bridge 和外部重复 Worker。
 
-- 无需构建、可以安装的 DeepSeek Harness Host + 浏览器 bundle；
-- 由 Agent 决定何时呈现的学习条和平铺队列，同时保留学习者的手动控制；
-- 点击动作后把清楚的请求放进输入框，并自动收起面板；
-- 有边界的状态、路由、到期复习证据，以及一条受政策约束、可撤销的 Git 事件事务；
-- 只允许本机页面读取面板数据、明确标注演示数据；学习者队列尚未维护时不编造顺序；
-- 成对的中英文文档与可执行适配器测试。
+DeepSeek 官方 provider 是纯文本的。图片、截图、白板及其他视觉证据需要已验证的多模态
+provider 或获授权的 OCR/解析路径；纯文本 Agent 不得臆测未看到的内容。即时点选答对只是
+支持性证据，不等于已经掌握。
 
-## 它没有声称什么
-
-当前 bundle 不会直接调用 RAG，不会创建经过验证的冷会话后台自动化，不会让
-DeepSeek 的纯文本 provider 看懂图片，也不会把一次即时点击当作真正掌握。
-RAG-Anything 仍是可选的本地知识层；重复整理与出题仍需要真正能够操作仓库的
-调度器。
-
-请固定到经过审查的 Git commit 安装，并按照
-[DeepSeek Harness 适配器说明](../adapters/deepseek-harness/README.md)完成准确的
-验证与回滚。
+请固定到经过审查的 commit 安装，并按照[适配器说明](../../adapters/deepseek-harness/README.md)
+完成验证与回滚。安装只证明 bundle 被发现，不能证明学习者仓库写权限、RAG 导入或后台部署。

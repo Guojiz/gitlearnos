@@ -1,6 +1,6 @@
 {
   "name": "gitlearnos",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "Evidence-driven learning memory and automation for Git-native AI agents",
   "license": "MIT",
   "type": "module",
@@ -21,6 +21,7 @@
     "node": "^22.19.0 || >=24.0.0"
   },
   "scripts": {
+    "check:external": "node --check scripts/check-external-receipts.mjs && node --test scripts/test-external-receipts.test.mjs",
     "check:dsh": "node scripts/check-dsh-bundle.mjs && node --check adapters/deepseek-harness/index.js",
     "test:dsh": "node --test adapters/deepseek-harness/test/bundle.test.js",
     "experiment:ordering": "node scripts/ordering-experiment.mjs"

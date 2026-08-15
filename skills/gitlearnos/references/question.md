@@ -12,7 +12,7 @@ Generate the next useful questions, not generic volume. Support two first-class 
 
 When invoked as the required recurring `due-review` job, use the configured
 local time, time zone, quiet hours, channel, and maximum count from
-`learning-policy.md` and the verified scheduler state from `automation.md`.
+`gitlearnos.yml` and the verified scheduler state from `automation.md`.
 No due evidence means `skipped`: do not create filler questions, notify, or
 commit.
 
@@ -27,7 +27,9 @@ When a clear active goal and target repository exist, a useful next question
 may be generated and persisted under `safe-auto` without waiting for “quiz me.”
 When relevance or desired difficulty is uncertain, offer one precise next
 question or ask one necessary clarification. Respect “answer only,” “no
-review,” and fatigue.
+review,” and fatigue. When the learner requests “only send the question,” send
+only the stem and purpose; keep the answer key/rubric in the canonical planned
+review without teaching, scoring, or revealing it.
 
 ## Read
 
@@ -41,6 +43,10 @@ active goal
 ```
 
 If a required source is unavailable, ask for the minimum excerpt or label the result as general-knowledge generation.
+
+Every persisted set receives a stable `review-<slug>` ID, canonical path,
+`version`, `depends_on` links to goal/gap/model/event records, and
+`composes_with` links when it intentionally combines reviews.
 
 ## Choose a purpose
 
@@ -174,6 +180,12 @@ answer key or rubric in authorized repository state for later scoring. Use an
 idempotency key for the scheduled occurrence and due evidence so catch-up and
 on-handoff execution cannot deliver the same set twice. Stop on a concurrent
 Git change rather than rebasing or overwriting.
+
+When no date is specified, use the core defaults: next local day for a new gap
+or incorrect/supported result, three days for partial or external resolution,
+seven days for independent success without transfer, and seven days after a
+transfer attempt. Store the ISO date and reason; an unknown time zone is
+`noSignal`.
 
 ## Output
 

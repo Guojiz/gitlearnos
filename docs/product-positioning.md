@@ -1,13 +1,7 @@
 # Product Positioning
 
-GitLearnOS is a lightweight, learner-owned control protocol for one capable,
-replaceable AI agent and one Git repository.
-
-It does not replace teachers, schools, books, practice platforms, or the
-learner's chosen AI. It connects useful evidence from those channels, generates
-the next useful questions, and keeps durable state inspectable and reversible.
-
-## Core promise
+GitLearnOS is a lightweight control protocol for one capable, replaceable
+main AI agent and one learner-owned Git repository. Its core promise is simple:
 
 ```text
 organize real evidence
@@ -17,32 +11,44 @@ organize real evidence
 → commit the next state
 ```
 
-Success means better later performance, not more generated documents.
+The learner gets a durable, inspectable record without turning learning into
+another app or asking them to operate Git. The protocol connects teachers,
+books, practice platforms, projects, peers, and AI; it does not replace them.
 
-## Product boundary
+## Core-ready boundary
 
 Required:
 
-- one write-capable main AI agent;
-- one local or hosted Git repository;
-- the GitLearnOS protocol;
-- one goal or real learning event.
+- one main agent that can really read and write;
+- one private local or hosted Git repository;
+- the GitLearnOS protocol and durable project instructions;
+- one subject, goal, or real learning event.
 
-Optional:
+GitHub is an optional remote, not a core dependency. A database, vector index,
+server, multi-agent runtime, custom app, live tutoring, and scheduler are also
+optional. Default to private state and ask before publishing, inviting others,
+or pushing sensitive material.
 
-- GitHub, GitLab, Gitea, or another host;
-- connected source systems and search;
-- a real scheduler;
-- databases, vector indexes, OpenSpace, or subject Skills;
-- live AI tutoring.
+## Operating boundary
 
-The core does not require a custom app, server, multi-agent framework, or
-learner-facing Git work.
+The current agent answers first and may perform a safe, reversible write under
+`safe-auto` when evidence, target, goal, and privacy are clear. `preview`
+returns the exact proposal; `manual` requires approval. A recurring
+`maintenance` or `due-review` run is a separate external worker and is complete
+only after a real repository-capable scheduler is observed running it.
 
-## Ownership model
+## Harness and retrieval layers
 
-Root files hold shared policy and current views. Subject state lives under
-`subjects/<subject>/`. Original answers, notes, and external feedback are
-preserved. AI interpretations may change only with linked evidence.
+The DeepSeek Harness adapter is a Developer Preview with code-backed bounded
+status, routing, one `gitlearnos.yml`-authorized learning transaction, and a read-only agent-
+maintained queue panel with five conversation actions. Its fuller learning
+cockpit is a target direction, not a claim that current code supplies RAG,
+cold-session workers, or autonomous ranking. DeepSeek's official provider is
+text-only; visual evidence needs verified multimodal or OCR/parser support.
 
-See [GITLEARNOS.md](../GITLEARNOS.md).
+Local RAG-Anything is the first recommended retrieval implementation, but it
+is optional. Git remains the formal source of truth; RAG is rebuildable and
+holds authorized long-lived material. The same main agent owns decisions.
+
+See [GITLEARNOS.md](../GITLEARNOS.md) and the single canonical prompt in
+[Quickstart](../QUICKSTART.md).

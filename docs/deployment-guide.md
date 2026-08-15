@@ -11,7 +11,7 @@ Deployment attaches GitLearnOS to one learner-owned target repository and one ma
 2. wait for the learner's answer; do not install, initialize, ingest, commit, or deploy
 3. select project sources and the target Git repository
 4. verify memory/instructions/Skills/read/write/source/RAG/scheduler capability
-5. inspect existing state, AGENTS.md, and learning-policy.md
+5. inspect existing state, AGENTS.md, and gitlearnos.yml
 6. create only missing minimum state and configure durable activation
 7. confirm or accept the learner-local schedule and IANA time zone for both
    required jobs: `maintenance` (default daily 21:30) and `due-review`
@@ -31,7 +31,7 @@ Minimum:
 
 ```text
 AGENTS.md
-learning-policy.md
+gitlearnos.yml
 automation.md
 dashboard.md
 learner-profile.md

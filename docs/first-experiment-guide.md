@@ -42,7 +42,6 @@ it.
 ```text
 gitlearnos.yml
 AGENTS.md
-learning-policy.md
 dashboard.md
 learner-profile.md
 subjects/<subject>/goals/main-goal.md

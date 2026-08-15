@@ -18,6 +18,8 @@
 // rubric (not a host-hardcoded function): the agent owns the order, but it
 // follows a rubric that has been measured to feel right.
 
+// Fixtures mirror dashboard records: IDs are stable canonical IDs and
+// `depends_on` is the machine-facing prerequisite link.
 const items = [
   { id: 'm1', subject: 'math', type: 'new', difficulty: 2, importance: 4, mastery: 0.8, dueInDays: null, prereq: null },
   { id: 'm2', subject: 'math', type: 'gap', difficulty: 3, importance: 5, mastery: 0.6, dueInDays: null, prereq: 'm1' },
@@ -34,6 +36,7 @@ const items = [
 ]
 
 const byId = new Map(items.map(i => [i.id, i]))
+for (const item of items) item.canonicalPath = `subjects/${item.subject}/${item.type}/${item.id}.md`
 const weakness = i => 1 - i.mastery
 const leverage = i => i.importance * weakness(i)
 const gentleness = i => (6 - i.difficulty) / 5
@@ -192,3 +195,5 @@ for (const s of rows) {
 console.log('\nBest sequence (' + rows[0].name + '):')
 console.log('  ' + rows[0].order.map(i => i.id).join(' → '))
 console.log('  ' + rows[0].order.map(i => `${i.id}(${i.type})`).join(' · '))
+console.log('Canonical queue rows:')
+for (const i of rows[0].order) console.log(`  ${i.id} — ${i.canonicalPath} — ${i.type}`)

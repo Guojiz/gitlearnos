@@ -25,7 +25,10 @@ learner's answer with their question text, purpose, and dates. If exactly one
 set matches, write the answer back to that review record; do not create a new
 event as a substitute. If several sets plausibly match, ask one short
 disambiguating question. Only use the organize flow when no planned review
-matches.
+matches. When no planned review matches, create one canonical review record
+with stable `review-<slug>` ID, `origin: one-tap`, and `status: attempted`,
+preserving options, selected answer, support, and any diagnostic hypothesis.
+Do not discard the tap or create a duplicate planned set.
 
 For the matched set, read its linked goal, source or model, gap, question
 purpose, saved answer key, rubric, test, or success condition, and recent

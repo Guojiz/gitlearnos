@@ -15,7 +15,7 @@ DeepSeek Harness 当前处于 Developer Preview。必须把 Harness 和本 bundl
 - `full-pass`：未来适配还要证明完整对话式部署问询和更广的关联学习写回。
   当前 Host 不得声称这一结果。
 
-外部 RAG 适配器或重复执行 worker 必须各自验证。`host-baseline-pass` 不要求
+外部 RAG 适配器或主 Agent 的重复定时运行必须各自验证。`host-baseline-pass` 不要求
 存在这两者，仓库里写有相关标记也不能证明它们运行过。
 
 ## 初始状态
@@ -26,7 +26,7 @@ DeepSeek Harness 当前处于 Developer Preview。必须把 Harness 和本 bundl
 - 三份一次性学习者 fixture 分别声明 `safe-auto`、`preview` 与 `manual`，其中
   所有 fixture 都在 `gitlearnos.yml` 中声明模式；
 - 测试前已经计算 fixture 文件校验和；
-- 不假定存在 RAG 服务、具备仓库能力的后台 worker 或视觉 provider。
+- 不假定存在 RAG 服务、具备仓库能力的定时调用或视觉 provider。
 
 ## 学习者输入
 
@@ -158,7 +158,7 @@ bundle 不得删除学习者 Git 状态、RAG 索引、资料文件或外部 aut
 - 用纯文本模型编造图片内容；
 - 把仓库内的 RAG 或 automation 标记当作独立验证；
 - 从缺失或无法解析的 next-check 标记中臆造到期日期；
-- 把 Harness Schedule 当作冷 session 后台 worker；
+- 把 session-local Harness Schedule 条目当作已验证的冷 session 仓库运行；
 - 删除 profile bundle 时删除学习者状态；
 - 把当前狭窄 Host 接入标记为 `full-pass`。
 

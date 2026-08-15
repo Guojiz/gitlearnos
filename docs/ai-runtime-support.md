@@ -26,7 +26,7 @@ Chat or another daily surface can handle short questions and learning events
 when repository access is verified. A Work or coding-agent surface is useful
 for setup, imports, migrations, and maintenance. The current agent may perform
 an immediate safe write under `safe-auto`; a recurring background job requires a
-separate repository-capable worker and observed scheduler run.
+repository-capable scheduled invocation of the same main agent and an observed run.
 
 ## State boundaries
 

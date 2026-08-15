@@ -60,7 +60,7 @@ goal and real input
 
 The success condition is better independent performance on later questions,
 not a larger pile of generated notes. A normal receipt distinguishes what the
-current agent did immediately from what an external worker actually ran.
+current agent did immediately from what a verified scheduled run actually did.
 
 ## A small, useful repository
 
@@ -109,13 +109,15 @@ The code in this repository currently proves:
 - five queue actions that place a review, practice, close-with-one-question,
   ask-a-teacher, or read-notes request into the conversation input.
 
-RAG provider access and cold-session recurring workers remain separate layers;
-they are not built into this bundle. DeepSeek's official provider is text-only:
-images, screenshots, boards, and other visual evidence require a verified
-multimodal provider or an authorized OCR/parser path. An immediate
-multiple-choice answer is supported evidence, not proof of mastery. The narrow
-roadmap is richer visual editing, a RAG bridge, and an external recurring
-worker. See the [launch note](docs/deepseek-harness-launch.md) and the
+RAG provider access remains an optional separate layer; it is not built into
+this bundle. DeepSeek's default provider is text-only, but Harness itself is not
+limited to text. The learner may either configure a third-party multimodal model
+with image input or keep DeepSeek as the main model and install an authorized
+vision/OCR bridge plugin. Without either, the agent asks for a transcription
+instead of guessing. An immediate multiple-choice answer is supported evidence,
+not proof of mastery. Recurring checks use a real scheduler to wake the same main
+agent; they do not require a second learning agent. See the
+[launch note](docs/deepseek-harness-launch.md) and the
 [adapter's limits and verification steps](adapters/deepseek-harness/README.md).
 
 ## RAG and background work are separate layers
@@ -128,10 +130,11 @@ is the first explicitly supported option, not a lock-in.
 - **RAG** is a rebuildable retrieval layer for authorized sources and promoted
   durable knowledge; it is managed by the same main agent, not a second agent.
 - **The current agent** can organize evidence and commit an immediate change.
-- **Background automation** is an external repository-capable worker. A date,
-  reminder, Harness session schedule, or `requested` marker is not proof that
-  a worker ran. `maintenance` and `due-review` are complete only after each
-  recurring task is created and observed in a real scheduler.
+- **Scheduled automation** asks a real repository-capable scheduler to wake the
+  same main agent. A date, reminder, Harness session schedule, or `requested`
+  marker is not proof that a run happened. `maintenance` and `due-review` are
+  complete only after each recurring task is created and observed in a real
+  scheduler.
 
 RAG may be declined and GitLearnOS still works. One-off exercises do not enter
 RAG automatically. If the main agent already understands an image, preserve a

@@ -13,7 +13,7 @@ learning. GitHub, RAG, a database, a server, and a scheduler are optional.
 The agent answers first. `safe-auto` allows only safe, reversible writeback
 when the target and evidence are clear; `preview` proposes; `manual` waits for
 approval. An immediate update belongs to the current agent. A recurring
-background run belongs to an external repository-capable worker and is not
+background run is a repository-capable scheduled invocation of the same main agent and is not
 proven by a reminder or session schedule.
 
 Start with the single canonical setup prompt in [Quickstart](../QUICKSTART.md)

@@ -29,17 +29,29 @@ Selecting an item exposes five code-backed conversation actions: review,
 practice, close with one multiple-choice question, ask a teacher, or read the
 learner's notes.
 
-## Separate layers and narrow roadmap
+## Optional layers and user-chosen vision
 
-RAG provider access and cold-session recurring workers are separate layers; the
-current bundle does **not** call or provision either one. Harness Schedule is
-session-local and does not satisfy recurring repository automation. The narrow
-roadmap is richer visual editing, a RAG bridge, and an external recurring worker.
+RAG provider access is an optional separate layer; the current bundle does
+**not** call or provision it. Recurring checks do not need a second agent or a
+separate product component: a real repository-capable scheduler may wake the
+same main agent at the configured time. Harness Schedule is session-local, so
+it proves recurring repository automation only when it actually provides that
+repository-capable scheduled invocation and an observed run receipt.
 
-DeepSeek's official provider is text-only. Images, screenshots, boards, and
-other visual evidence require a verified multimodal provider or an authorized
-OCR/parser path; the text-only agent must not infer unseen content. A correct
-immediate tap is supported evidence, not proof of mastery.
+DeepSeek's default provider is text-only, but Harness itself is model- and
+plugin-extensible. Users have two supported patterns for visual evidence:
+
+1. configure a third-party multimodal model and declare image input, for
+   example `input: [text, image]` in the model profile;
+2. keep DeepSeek as the main reasoning model and install an authorized
+   vision/OCR bridge plugin that returns structured visual evidence.
+
+The public [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) already
+contains third-party visual bridges. They are ecosystem options, not bundled
+GitLearnOS dependencies: review the source, capabilities, data destination, and
+permissions, then pin a commit before installing. If neither visual path is
+enabled, the agent asks for transcription and must not infer unseen content. A
+correct immediate tap is supported evidence, not proof of mastery.
 
 Install from a reviewed, pinned commit and follow the
 [adapter guide](../adapters/deepseek-harness/README.md) for verification and

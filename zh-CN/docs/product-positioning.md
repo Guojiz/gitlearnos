@@ -31,14 +31,15 @@ GitHub 是可选远程，不是核心依赖。数据库、向量索引、服务�
 
 当前 Agent 先回答，再在证据、目标、仓库和隐私都明确时按 `safe-auto` 执行安全、可
 撤销写回；`preview` 返回精确提案；`manual` 必须等待批准。重复运行的
-`maintenance` 或 `due-review` 属于外部 Worker，只有真实仓库调度器实际运行后才算完成。
+`maintenance` 或 `due-review` 是调度器对同一个主 Agent 的定时调用，只有真实仓库调度器实际运行后才算完成。
 
 ## Harness 与检索层
 
 DeepSeek Harness 适配器目前是 Developer Preview：代码已证明有边界的状态读取、路由、
 一条由 `gitlearnos.yml` 配置授权的学习事务，以及由 Agent 维护、只读的队列面板和五个对话动作。更完整
-的学习 Cockpit 是目标方向，不能声称当前代码已经提供 RAG、冷会话 Worker 或自主排名。
-DeepSeek 官方 provider 是纯文本的；视觉证据需要已验证的多模态或 OCR/解析支持。
+的学习 Cockpit 是目标方向，不能声称当前代码已经提供 RAG、冷会话调度或自主排名。
+DeepSeek 默认 provider 是纯文本的；Harness 可以使用用户配置的第三方多模态模型，
+也可以使用视觉/OCR桥接插件。
 
 本地 RAG-Anything 是首个推荐的检索实现，但仍可选。Git 仍是正式事实来源；RAG 可重
 建，只保存获授权的长期资料，由同一个主 Agent 负责决策。

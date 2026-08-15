@@ -34,7 +34,7 @@ or pushing sensitive material.
 The current agent answers first and may perform a safe, reversible write under
 `safe-auto` when evidence, target, goal, and privacy are clear. `preview`
 returns the exact proposal; `manual` requires approval. A recurring
-`maintenance` or `due-review` run is a separate external worker and is complete
+`maintenance` or `due-review` is a scheduled invocation of the same main agent and is complete
 only after a real repository-capable scheduler is observed running it.
 
 ## Harness and retrieval layers
@@ -43,8 +43,9 @@ The DeepSeek Harness adapter is a Developer Preview with code-backed bounded
 status, routing, one `gitlearnos.yml`-authorized learning transaction, and a read-only agent-
 maintained queue panel with five conversation actions. Its fuller learning
 cockpit is a target direction, not a claim that current code supplies RAG,
-cold-session workers, or autonomous ranking. DeepSeek's official provider is
-text-only; visual evidence needs verified multimodal or OCR/parser support.
+cold-session scheduling, or autonomous ranking. DeepSeek's default provider is
+text-only, while Harness can use either a configured third-party multimodal
+model or a vision/OCR bridge plugin chosen by the user.
 
 Local RAG-Anything is the first recommended retrieval implementation, but it
 is optional. Git remains the formal source of truth; RAG is rebuildable and

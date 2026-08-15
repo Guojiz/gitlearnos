@@ -21,7 +21,7 @@ due-review，在 automation.time_zone 的每天 07:00
 题量上限、重复规则和本地时间。旧的策略文档不能覆盖它们。
 
 每天只是检查节奏，不承诺每天产出。没有到期或变化证据时返回 `skipped`，不产生内容、
-通知、仅时间戳提交或重复交付。Worker 使用幂等键和写入锁，检查 Git 当前基础版本，
+通知、仅时间戳提交或重复交付。主 Agent 的定时运行使用幂等键和写入锁，检查 Git 当前基础版本，
 发生并发变化时停止，错过的运行最多补跑一次。
 
 ## 证据边界
@@ -31,5 +31,5 @@ run ID、occurrence key、仓库版本、结果、交付状态和消息 ID）时
 `verified`。本地回执检查器只检查结构，不创建、运行或联系调度器。`automation.md`
 中的文本、日期、提示词或 Harness 面板始终是 `reported-only`。
 
-DeepSeek Harness Schedule 仅在会话内运行，不能唤醒冷会话，不能替代外部冷启动 Worker。
+DeepSeek Harness Schedule 仅在会话内运行，不能唤醒冷会话，也不能证明冷状态下存在可访问仓库的定时调用。
 准确边界和本地检查命令见适配器。

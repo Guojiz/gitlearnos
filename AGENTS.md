@@ -63,7 +63,7 @@ memory may carry the compact activation pointer in
 `templates/native-memory-pointer.md`, but not the changing learner state.
 
 Never claim repository access, Skill installation, a commit, a scheduled
-worker, RAG ingestion or retrieval, or demonstrated mastery without evidence
+main-agent run, RAG ingestion or retrieval, or demonstrated mastery without evidence
 that it actually exists. A local RAG knowledge layer is recommended by default
 but remains optional. RAG-Anything is the first explicitly supported and
 recommended implementation, not a mandatory or exclusive dependency. It is a

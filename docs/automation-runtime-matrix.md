@@ -6,9 +6,9 @@
 |---|---:|---:|---|
 | capable interactive agent | yes | no | immediate work or on-handoff check; recurring deployment remains incomplete |
 | DeepSeek Harness Schedule | session-local | no | prompt/timer observation only; text marker is `reported-only` |
-| external scheduled worker | yes | yes | configure and verify real recurring `due-review` and `maintenance` runs |
+| repository-capable scheduler | yes | yes | wake the same main agent and verify real recurring `due-review` and `maintenance` runs |
 | prompt-only scheduler | no | no | reminder or handoff only; never `verified` |
-| local cron or CI | depends on configured worker and credentials | depends | `verified` only with a provider receipt and observed repository-capable run |
+| local cron or CI | depends on the configured agent command and credentials | depends | `verified` only with a provider receipt and observed repository-capable run |
 
 All runtimes implement the same intent from the [Automation Adapter](../adapters/automation/README.md).
 No runtime may claim files, questions, commits, provider execution, or scheduling
@@ -24,5 +24,5 @@ upgrade a report to `verified` by itself. Harness panel or Markdown markers are
 always `reported-only`.
 
 Device sleep, lost connectivity, or provider delay may miss an occurrence. The
-next capable worker may catch it up once using the original occurrence key; it
+next capable main-agent run may catch it up once using the original occurrence key; it
 must not redeliver the same due evidence.

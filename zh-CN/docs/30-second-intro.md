@@ -10,7 +10,7 @@ GitLearnOS 让一个有能力的主 AI Agent 使用学习者拥有的 Git 记忆
 
 Agent 先回答眼前问题。只有目标和证据清楚时，`safe-auto` 才允许安全、可撤销的
 写回；`preview` 只提出变更；`manual` 等待批准。即时更新属于当前 Agent；重复的
-后台运行属于外部仓库 Worker，提醒或会话内调度都不能证明它已经执行。
+后台运行是调度器对同一个主 Agent 的仓库级定时调用；提醒或会话内调度都不能证明它已经执行。
 
 请从[快速开始](../QUICKSTART.md)中的唯一标准设置指令开始，并以
 [GITLEARNOS.md](../GITLEARNOS.md)为行为协议。

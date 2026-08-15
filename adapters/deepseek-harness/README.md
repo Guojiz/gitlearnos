@@ -143,9 +143,12 @@ dependencies are declared in `package.json`.
 - DeepSeek Harness Schedule is session-local. It cannot wake a cold session and
   does not by itself satisfy GitLearnOS verified, repository-capable recurring
   `maintenance` and `due-review` automation.
-- The official DeepSeek provider is text-only. Images, screenshots, boards, and
-  other visual evidence require a verified multimodal provider or an
-  authorized OCR/parser path; the agent must not infer unseen content.
+- The default DeepSeek provider is text-only, but Harness supports two
+  user-chosen visual paths: configure a third-party model whose declared input
+  includes `text` and `image`, or keep DeepSeek as the main model and install an
+  authorized vision/OCR bridge plugin that returns structured evidence. Review
+  third-party source and pin a commit before installation. Without either path,
+  the agent asks for transcription and must not infer unseen content.
 - `safe-auto` authorizes only the smallest safe, reversible learning writeback
   allowed by learner configuration. It does not bypass Harness tool policy, the
   operating-system sandbox, credentials, or approval for destructive or
@@ -160,6 +163,5 @@ The shipped Host provides typed atomic Git writeback, bounded due/gap scans,
 machine-receipt-aware external status, and a read-only canonical queue panel.
 External RAG ingestion and recurring automation remain replaceable adapters:
 this bundle records their markers or strict receipts but never invokes them or
-claims execution without a receipt. Use the normal GitLearnOS agent workflow
-for evidence decisions and the repository-capable automation adapters for
-background work.
+claims execution without a receipt. A repository-capable scheduler may wake the
+same main agent for recurring work; it does not create a second learning agent.

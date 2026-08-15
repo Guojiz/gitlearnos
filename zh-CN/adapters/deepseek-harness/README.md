@@ -119,8 +119,10 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
 - DeepSeek Harness Schedule 只在当前会话中运行，不能唤醒已经停止的会话，单独
   使用它不满足 GitLearnOS 对 `maintenance` 和 `due-review` 的已验证、可操作
   仓库的重复自动化要求。
-- 官方 DeepSeek provider 只处理文本。图片、截图、板书等视觉证据需要已验证的
-  多模态 provider，或获授权 OCR/解析器路径；Agent 不得推断未看到的内容。
+- DeepSeek 默认 provider 只处理文本，但 Harness 支持两条由用户选择的视觉路径：
+  配置声明同时接受 `text` 与 `image` 的第三方模型，或保留 DeepSeek 主模型并安装
+  返回结构化证据的获授权视觉/OCR桥接插件。安装第三方插件前应审查源码并固定 commit。
+  两条路径都没有启用时，Agent 应请求转写，不得推断未看到的内容。
 - `safe-auto` 只允许学习者配置范围内最小、安全、可撤销的学习写回。它不会绕过
   Harness 工具策略、操作系统沙箱、凭据要求，或破坏性及其他高风险操作的审批。
 - 完整 GitLearnOS 协议仍是最高依据。只安装 bundle 不等于完成学习者部署、
@@ -131,5 +133,4 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
 当前 Host 已提供 typed atomic Git 写回、有界 due/gap 扫描、基于机器 receipt 的
 外部状态，以及只读 canonical 队列面板。外部 RAG 摄取与周期自动化仍由可替换适配器
 负责；本 bundle 只记录 marker 或严格 receipt，不调用外部系统，也不会无 receipt 声称
-已经执行。证据决策继续由正常 GitLearnOS Agent 流程负责，后台工作使用具备仓库能力的
-自动化适配器。
+已经执行。具备仓库能力的调度器可以按时唤起同一个主 Agent，不会创建第二个学习 Agent。

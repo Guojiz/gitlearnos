@@ -556,8 +556,9 @@ Record the portable schedule and learner delivery preferences in
 with the provider, opaque task identifier, time zone, recurrence, next run, and
 last verified run. Keep provider expressions and credentials outside learner
 state. A schedule is `verified` only after the recurring task is observed in
-the scheduler and one real test run proves the worker can read the intended
-repository and safely complete or skip the operation.
+the scheduler and one real test run proves that the scheduled invocation of the
+same main agent can read the intended repository and safely complete or skip
+the operation.
 
 A complete deployment requires both recurring operations to be `verified`.
 Use `requested` while an approved task is awaiting provisioning; use
@@ -586,8 +587,9 @@ separate explicit authorization for the intended private remote.
 
 A date, prompt, scheduler entry, or reminder is not proof that repository work
 ran. Credentials and tokens stay outside Git and run logs. Without a real
-worker, record exact pending setup without claiming successful deployment or
-background execution.
+repository-capable scheduled invocation, record exact pending setup without
+claiming successful deployment or background execution. Scheduling does not
+create a second learning agent; it wakes the same main-agent behavior.
 
 ## Skills and adapters
 

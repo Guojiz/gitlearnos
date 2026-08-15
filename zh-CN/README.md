@@ -50,7 +50,7 @@ Agent 先处理眼前请求。在 `safe-auto` 下，只有目标、证据、目�
 ```
 
 成功标准是学习者在后续问题中独立表现得更好，而不是生成更多整齐笔记。回执会区
-分当前 Agent 立即完成的工作与外部 Worker 实际执行的后台工作。
+分当前 Agent 立即完成的工作与同一个主 Agent 的已验证定时运行。
 
 ## 小而有用的仓库
 
@@ -92,11 +92,12 @@ GitLearnOS 为官方 DeepSeek Harness Developer Preview 提供可安装的原生
   并明确标记开发演示数据；
 - 队列提供五个动作，把“复习、练习、用一道题收尾、问老师、看笔记”请求放入对话输入框。
 
-RAG provider 访问和冷会话重复 Worker 仍是独立层，尚未内建在该 bundle 中。DeepSeek
-官方 provider 是纯文本的：图片、截图、白板及其他视觉证据必须交给已验证的多模态
-provider 或获授权的 OCR/解析路径；不能让文本模型臆测看不见的内容。一次即时选择题
-答对只是有支持的证据，不等于已经掌握。后续路线只包括更丰富的视觉编辑、RAG bridge
-和外部重复 Worker。见[发布说明](docs/deepseek-harness-launch.md)和[适配器的限制与验证步骤](../adapters/deepseek-harness/README.md)。
+RAG provider 访问仍是可选独立层，尚未内建在该 bundle 中。DeepSeek 默认 provider
+是纯文本的，但 Harness 本身不限于文本。学习者可以直接配置支持图片输入的第三方
+多模态模型，也可以保留 DeepSeek 主模型并安装获授权的视觉/OCR桥接插件；两者都没有
+启用时，Agent 应请求转写而不是猜图。一次即时选择题答对只是有支持的证据，不等于
+已经掌握。重复检查由真实调度器按时唤起同一个主 Agent，不需要第二个学习 Agent。
+见[发布说明](docs/deepseek-harness-launch.md)和[适配器的限制与验证步骤](../adapters/deepseek-harness/README.md)。
 
 ## RAG 与后台工作是分开的层
 
@@ -107,9 +108,9 @@ provider 或获授权的 OCR/解析路径；不能让文本模型臆测看不见
 - **RAG** 是可重建的检索层，用于获授权来源和晋升后的长期知识；由同一个主 Agent
   管理，不增加第二个 Agent。
 - **当前 Agent** 可以整理证据并立即提交变化。
-- **后台自动化** 是外部的、能够访问仓库的 Worker。日期、提醒、Harness 会话内调度
-  或 `requested` 标记都不证明 Worker 已运行；`maintenance` 与 `due-review` 只有在
-  真正的调度器中创建并观察到测试运行后才算完成。
+- **定时自动化** 由能够访问仓库的真实调度器按时唤起同一个主 Agent。日期、提醒、
+  Harness 会话内调度或 `requested` 标记都不证明任务已经运行；`maintenance` 与
+  `due-review` 只有在真正的调度器中创建并观察到测试运行后才算完成。
 
 学习者可以拒绝 RAG，GitLearnOS 仍可用。一次性练习不会自动进入 RAG。主 Agent 已
 理解图片时，应保存忠实 Markdown 或结构化表示，不重复 OCR；纯文本 Agent 不得推断

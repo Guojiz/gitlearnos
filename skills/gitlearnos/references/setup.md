@@ -104,12 +104,12 @@ File presence is not successful installation. Verify all of the following:
    reference;
 4. report the result as `installed`, `source-only`, `unavailable`, or `unknown`.
 
-For a scheduled OpenCode worker, explicitly select the learner-approved model
+For a scheduled OpenCode main-agent run, explicitly select the learner-approved model
 instead of inheriting OpenCode's interactive default. Verify the model shown in
-the worker log. If the worker must read an authorized source outside the learner
+the scheduled-run log. If it must read an authorized source outside the learner
 repository, grant that exact directory to the non-interactive runtime before
 verification; an auto-rejected `external_directory` request leaves source
-access unverified even when the worker exits successfully.
+access unverified even when the scheduled run exits successfully.
 
 Explain the result to the learner. In particular, tell them which future
 surfaces can notice questions, answers, photographed material, notes, feedback,
@@ -184,7 +184,7 @@ from its template as the single scheduler-status record.
 Create each recurring task through a real repository-capable scheduler, record
 its opaque provider ID and next run as `configured`, then execute one safe test
 occurrence. Mark it `verified` only after observing both the scheduler entry and
-the worker's repository access. A no-work test may correctly return `skipped`
+the scheduled main-agent run's repository access. A no-work test may correctly return `skipped`
 without a commit.
 
 Do not report deployment automation complete until both jobs are `verified`.

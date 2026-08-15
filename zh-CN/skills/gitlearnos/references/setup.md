@@ -86,10 +86,10 @@ OpenCode 也会发现 `.claude/skills/` 和 `.opencode/skills/`，但默认使�
 3. 选中的 Skill 能打开 `references/core-contract.md` 和一个操作参考文件；
 4. 将结果报告为 `installed`、`source-only`、`unavailable` 或 `unknown`。
 
-OpenCode 定时 Worker 必须显式选择学习者批准的模型，不能继承 OpenCode 的交互
-默认值，并要从 Worker 日志核对实际模型。Worker 需要读取学习仓库外已授权来源
+OpenCode 的主 Agent 定时运行必须显式选择学习者批准的模型，不能继承 OpenCode 的交互
+默认值，并要从定时运行日志核对实际模型。定时运行需要读取学习仓库外已授权来源
 时，验证前必须把该精确目录授权给非交互运行环境；出现自动拒绝的
-`external_directory` 请求时，即使 Worker 成功退出，来源访问仍属于未验证。
+`external_directory` 请求时，即使定时运行成功退出，来源访问仍属于未验证。
 
 向学习者说明设置结果，尤其要说明以后哪些界面能自动注意到问题、作答、拍摄材料、笔记、反馈和结果。若记忆、Skills、Git 或远程同步不可用，应实话说明，并用剩余持久层保留行为。
 仅起草但没有验证的记忆条目必须报告为 `suggested` 或 `unknown`，不能说已经保存。
@@ -144,7 +144,7 @@ archive/
 
 通过真实具备仓库能力的调度器创建每个重复任务，记录不透明提供方 ID 和下次
 运行并标记为 `configured`，然后安全试运行一次。只有同时观察到调度条目与
-Worker 的仓库访问，才能标记 `verified`。没有工作时，试运行可以正确返回
+主 Agent 定时运行的仓库访问，才能标记 `verified`。没有工作时，试运行可以正确返回
 `skipped`，无需提交。
 
 两个任务都未 `verified` 时，不能报告部署自动化完整。创建尚未完成时使用

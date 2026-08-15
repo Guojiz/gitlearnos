@@ -39,7 +39,7 @@ safe, reversible writeback; `preview` proposes; `manual` waits for approval.
 The current agent can answer, organize evidence, and commit an immediate
 learning event when authorized. `maintenance` and `due-review` are external
 recurring jobs. A reminder, Harness session schedule, or requested task is not
-proof that a background worker exists or ran. If the scheduler cannot be
+proof that a scheduled main-agent run exists or happened. If the scheduler cannot be
 verified, keep interactive learning usable and report automation as incomplete.
 
 ## Optional retrieval

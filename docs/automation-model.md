@@ -24,7 +24,7 @@ documents must not be consulted to override them.
 
 Daily is a check cadence, not a promise to produce work. No due or changed
 evidence means `skipped` with no content, notification, timestamp-only commit,
-or duplicate delivery. A worker uses an idempotency key and writer lock,
+or duplicate delivery. The scheduled main-agent run uses an idempotency key and writer lock,
 inspects the current Git base revision, stops on a concurrent change, and
 catch-ups at most once.
 
@@ -38,5 +38,5 @@ does not create, run, or contact schedulers. Text in `automation.md`, a date,
 prompt, or Harness panel is always `reported-only`.
 
 DeepSeek Harness Schedule is session-local and cannot wake a cold session. It is
-not a substitute for an external cold-capable worker. See the adapter for the
+not proof of a cold-capable repository invocation. See the adapter for the
 exact boundary and local check command.

@@ -34,7 +34,7 @@ The defaults are editable local times, not evidence that a scheduler exists.
 
 Daily means “check daily”, not “create content daily”. With no due or changed
 evidence, return `skipped` without a question, notification, timestamp-only
-commit, or duplicate delivery. Workers use one writer lock, inspect the current
+commit, or duplicate delivery. Scheduled main-agent runs use one writer lock, inspect the current
 Git revision, stop on a changed base, and catch up a missed occurrence at most
 once. Never include answer keys in delivery or push unattended without explicit
 private-remote authorization.
@@ -74,8 +74,8 @@ provider.
 
 DeepSeek Harness **Schedule** is a session-local prompt/timer facility. It can
 help a warm interactive session notice a task, but it cannot wake a cold
-session, grant repository access, or prove a recurring worker run. A verified
-background deployment requires an external cold-capable worker whose provider
+session, grant repository access, or prove a recurring main-agent run. A verified
+background deployment requires a cold-capable scheduled invocation whose provider
 receipt contains the fields above and whose run actually read the intended
 repository. Harness text markers remain `reported-only`.
 

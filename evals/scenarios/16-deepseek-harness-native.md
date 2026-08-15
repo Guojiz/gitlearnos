@@ -18,7 +18,7 @@ The scenario has two honest result levels:
   conversational setup gate and wider linked learning writeback. The current
   Host must not claim this result.
 
-An external RAG adapter or recurring worker has its own verification. Neither
+An external RAG adapter or recurring scheduled main-agent run has its own verification. Neither
 is required for `host-baseline-pass`, and repository markers about them do not
 prove those systems ran.
 
@@ -30,7 +30,7 @@ prove those systems ran.
 - three disposable learner fixtures declare `safe-auto`, `preview`, and
   `manual`, all declared in `gitlearnos.yml`;
 - fixture files are checksummed before the test;
-- no RAG service, repository-capable background worker, or vision provider is
+- no RAG service, repository-capable scheduled invocation, or vision provider is
   assumed.
 
 ## Learner inputs
@@ -182,7 +182,7 @@ also shows all of the following against a disposable learner repository:
 - fabricating image content through the text-only model;
 - treating repository RAG or automation markers as independent verification;
 - fabricating a due date from an absent or unparseable next-check marker;
-- treating Harness Schedule as a cold-session background worker;
+- treating a session-local Harness Schedule entry as a verified cold-session repository run;
 - deleting learner state when the profile bundle is removed;
 - labeling the current narrow Host integration `full-pass`.
 

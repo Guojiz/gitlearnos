@@ -19,7 +19,7 @@ The learner submits the same note again and asks what it proves.
 ## Must not
 
 - claim to have read the missing source;
-- invent a score, mastery state, quotation, or scheduled worker;
+- invent a score, mastery state, quotation, or scheduled main-agent run;
 - create a second copy merely because the wording differs slightly.
 
 ## Evidence

@@ -20,15 +20,23 @@ GitLearnOS 为官方 DeepSeek Harness **Developer Preview** 提供**独家原生
 一次 `Panel: expand|collapse` 决定。选择一个条目后，会显示五个代码已实现的对话动作：
 复习、练习、用一道选择题收尾、问老师或查看学习者笔记。
 
-## 独立层与有限路线
+## 可选层与用户选择的视觉能力
 
-RAG provider 访问和冷会话重复 Worker 是独立层，当前 bundle **不会**调用或创建它们。
-Harness Schedule 只在当前会话内有效，不能代替重复的仓库自动化。后续路线只包括更丰富
-的视觉编辑、RAG bridge 和外部重复 Worker。
+RAG provider 访问是可选独立层，当前 bundle **不会**调用或创建它。重复检查不需要
+第二个 Agent 或另一个产品组件：真实、能够访问仓库的调度器可以按配置时间唤起同一个
+主 Agent。Harness Schedule 只在当前会话内有效；只有它真正提供了能够访问仓库的定时
+调用并留下已观察运行回执时，才证明重复仓库自动化。
 
-DeepSeek 官方 provider 是纯文本的。图片、截图、白板及其他视觉证据需要已验证的多模态
-provider 或获授权的 OCR/解析路径；纯文本 Agent 不得臆测未看到的内容。即时点选答对只是
-支持性证据，不等于已经掌握。
+DeepSeek 默认 provider 是纯文本的，但 Harness 本身可以扩展模型和插件。用户处理视觉
+证据有两种方法：
+
+1. 配置第三方多模态模型，并在模型资料中声明图片输入，例如 `input: [text, image]`；
+2. 保留 DeepSeek 作为主推理模型，安装获授权的视觉/OCR桥接插件，让插件返回结构化视觉证据。
+
+公开的 [`dsh-plugin` topic](https://github.com/topics/dsh-plugin) 已经包含第三方视觉桥接项目。
+它们是生态选项，不是 GitLearnOS 内建依赖；安装前应检查源码、能力、数据去向和权限，并
+固定 commit。两条视觉路径都没有启用时，Agent 应请求转写，不得臆测图片。即时点选答对
+只是支持性证据，不等于已经掌握。
 
 请固定到经过审查的 commit 安装，并按照[适配器说明](../../adapters/deepseek-harness/README.md)
 完成验证与回滚。安装只证明 bundle 被发现，不能证明学习者仓库写权限、RAG 导入或后台部署。

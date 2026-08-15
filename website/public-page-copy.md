@@ -31,16 +31,19 @@ independent delayed checks remain separate from immediate feedback.
 
 ## Harness Developer Preview line
 
-GitLearnOS-exclusive native DeepSeek Harness support. The reviewed bundle proves
-bounded status and routing reads, plus `learning_apply`: a strict, `gitlearnos.yml`-authorized
-typed Git transaction that atomically commits event, gap, model, review, and
-dashboard operations. Its loopback-only read-only panel renders the main
-agent's ordered `Next up` queue, with five code-backed actions for review,
-practice, close-with-one-question, ask-a-teacher, or read-notes. RAG providers
-and cold-session workers remain separate layers, not built-in services.
-DeepSeek's official provider is text-only, so visual evidence needs verified
-multimodal or OCR/parser support. The narrow roadmap is richer visual editing,
-a RAG bridge, and an external recurring worker.
+GitLearnOS runs inside DeepSeek Harness. This is native support, not a
+compatibility note or a copied Skill: the installable bundle loads a Host, three
+native tools (`learning_status`, `learning_route`, and `learning_apply`), and a
+conversation panel. `learning_apply` can atomically commit event, gap, model,
+review, and dashboard changes as one reversible Git update. The read-only panel
+renders the main agent's ordered `Next up` queue and offers five code-backed
+learning actions. RAG remains an optional layer, not a built-in service.
+DeepSeek's default provider is text-only, but Harness itself can receive vision
+in either of two user-chosen ways: configure a third-party multimodal model with
+image input, or keep DeepSeek as the main model and install a vision/OCR bridge
+plugin. Without either capability, the agent asks for transcription instead of
+guessing. Recurring checks use a real scheduler to wake the same main agent;
+they do not require a second learning agent or another product component.
 
 ## RAG and background
 
@@ -56,7 +59,7 @@ session schedule is not proof.
 - organize useful learning events without an explicit command;
 - ask from the current gap and preserve answers or external feedback;
 - keep learner state private by default, inspectable, and reversible;
-- keep Git, RAG, and external workers in separate roles;
+- keep Git, optional RAG, and scheduling in separate roles under one main agent;
 - describe only code-backed Harness behavior and label roadmap capabilities.
 
 ## Primary call to action

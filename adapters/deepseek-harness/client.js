@@ -113,6 +113,7 @@ window.__ModuleLoader__.load({
             const ops = [
               { label: "复习一遍", prompt: "请带我复习「" + active + "」" },
               { label: "做几道题", prompt: "请给我出几道关于「" + active + "」的题" },
+              { label: "收尾一道", prompt: "请用一两句话讲清「" + active + "」，然后出一道选择题让我点选收尾（正确项就是刚讲的点，其余是我容易搞混的）" },
               { label: "问老师", prompt: "请帮我准备关于「" + active + "」要问老师的问题" },
               { label: "看我的笔记", prompt: "请展示我关于「" + active + "」的笔记和模型" },
             ];

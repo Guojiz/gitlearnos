@@ -65,10 +65,12 @@ an external learning-method source. Label an unconfirmed cause as
 the learner an opportunity to state their own reasoning before replacing it
 with an AI diagnosis.
 
-A wrong multiple-choice distractor is already a precise diagnosis: it names the
-exact confusion ("similar vs congruent") without asking the learner to describe
-it. Record which distractor was chosen and link it to the gap's error
-mechanism.
+A wrong multiple-choice distractor is evidence for a specific diagnostic
+hypothesis, not proof of its hidden cause: the learner may also have guessed,
+misread, or made an execution error. Record which distractor was chosen, label
+the inferred confusion `agent-hypothesis`, link it to the candidate gap or error
+mechanism, and confirm or revise it from the learner's reasoning or a fresh
+independent item when that distinction matters.
 
 ## Mastery
 

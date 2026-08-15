@@ -230,11 +230,19 @@ OpenSpace 将来可以通过[可选接入](integrations/openspace/README.md)评�
 
 ## DeepSeek Harness Developer Preview
 
-GitLearnOS 现已包含可固定提交安装的 DeepSeek Harness bundle 基座。Host 提供
-诚实的状态与路由，以及一条狭窄、受政策约束的 Git 事件事务；尚不提供 RAG
-调用或已验证后台工作。DeepSeek 官方 provider 只处理文本，Harness 的会话内
-Schedule 也不能代替真正的仓库重复自动化。详见
+GitLearnOS 现已提供 DeepSeek Harness 原生学习入口。会话输入框旁有一条默认收起的
+`GitLearnOS ▸`；点开后看到由主 Agent 在学习者自己的 Git 仓库中维护的学习队列，
+顺序完全保留，并可直接选择复习、做题、问老师或查看自己的笔记。讲完一个点后，
+Agent 还能用 Harness 自带的一道多选做轻量收尾，而不是把会话变成不断弹题的考试。
+
+bundle 同时提供诚实的状态与路由，以及一条狭窄、受政策约束的 Git 事件事务。
+Host 不替学习者排顺序：它只提供证据，由主 Agent 综合目标、难度、重要性、掌握度、
+巩固度和当前限制判断下一步。参见[发布说明](docs/deepseek-harness-launch.md)以及
 [安装、验证、限制与原生路线图](adapters/deepseek-harness/README.md)。
+
+这仍是 Developer Preview：尚未提供原生 RAG 调用或经过验证的冷会话后台工作。
+DeepSeek 官方 provider 只处理文本，Harness 的会话内 Schedule 也不能代替真正的
+仓库重复自动化。
 
 ## 评测
 

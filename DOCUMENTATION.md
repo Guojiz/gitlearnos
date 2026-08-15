@@ -25,6 +25,7 @@ flowchart LR
 | Record verified recurring tasks | [Automation state](templates/automation.md) | [自动化状态](zh-CN/templates/automation.md) |
 | Add optional local knowledge retrieval | [RAG-Anything card](docs/rag-anything.md) | [RAG-Anything 部署卡](zh-CN/docs/rag-anything.md) |
 | Use DeepSeek Harness Developer Preview | [Harness adapter](adapters/deepseek-harness/README.md) | [Harness 适配器](zh-CN/adapters/deepseek-harness/README.md) |
+| Share the DeepSeek Harness release | [Launch note](docs/deepseek-harness-launch.md) | [发布说明](zh-CN/docs/deepseek-harness-launch.md) |
 | Read the AceSAT case | [Impact statement](docs/acesat-build-for-impact.md) | [影响说明](zh-CN/docs/acesat-build-for-impact.md) |
 | Browse the visual site | [Website](https://guojiz.github.io/gitlearnos/) | Use the `中` switch on the same page |
 
@@ -52,10 +53,11 @@ Chinese translations may help a human inspect the system, but they are not
 required for every machine-facing file and never override the English source.
 
 DeepSeek Harness users install the repository root as a pinned Developer
-Preview bundle, then verify its profile configuration. The current Host base
-has two read tools and one narrow Git event transaction; its exact install,
-removal, verification, safety, model, schedule, and roadmap boundaries are in
-the [Harness adapter guide](adapters/deepseek-harness/README.md).
+Preview bundle, then verify its profile configuration and client learning
+panel. The bundle has a read-only agent-maintained learning queue, two read
+tools, and one narrow Git event transaction; its exact install, removal,
+verification, safety, model, schedule, and roadmap boundaries are in the
+[Harness adapter guide](adapters/deepseek-harness/README.md).
 
 ## Deeper documentation
 

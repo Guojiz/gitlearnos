@@ -294,7 +294,7 @@ test('dueReview does not follow a symlinked review file escaping the workspace',
   assert.equal(status.dueReview.due[0].path, 'subjects/math/reviews/real.md')
 })
 
-test('actions projects an ordered learning queue: due reviews first, then knowledge gaps', async () => {
+test('status exposes review and gap evidence without a Host-ranked action queue', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-queue-'))
   await mkdir(join(root, 'subjects', 'math', 'reviews'), { recursive: true })
   await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
@@ -303,14 +303,11 @@ test('actions projects an ordered learning queue: due reviews first, then knowle
   await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'quadratic-sign.md'), '# Gap\n')
   const status = await inspectWorkspace(root, new Date('2025-01-01T00:00:00Z'))
   assert.deepEqual(status.knowledgeGaps, ['subjects/math/knowledge-gaps/quadratic-sign.md'])
-  assert.deepEqual(
-    status.actions.map(a => [a.kind, a.path, a.dueOn]),
-    [
-      ['review', 'subjects/math/reviews/r-earlier.md', '2020-01-01'],
-      ['review', 'subjects/math/reviews/r-later.md', '2020-02-02'],
-      ['gap', 'subjects/math/knowledge-gaps/quadratic-sign.md', null],
-    ],
-  )
+  assert.deepEqual(status.dueReview.due.map(item => item.path).sort(), [
+    'subjects/math/reviews/r-earlier.md',
+    'subjects/math/reviews/r-later.md',
+  ])
+  assert.equal(Object.hasOwn(status, 'actions'), false)
 })
 
 test('queue reads the agent-maintained Next up list verbatim, in order', async () => {
@@ -343,8 +340,8 @@ test('panelStatus returns the agent-maintained queue verbatim and never writes',
   ])
 })
 
-test('panelStatus falls back to collected topics for a learner repo with no queue', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-collect-'))
+test('panelStatus does not invent an order for a learner repo with no agent queue', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-noqueue-'))
   await writeFile(join(root, 'gitlearnos.yml'), 'protocol: 2.0-draft\nmode: safe-auto\n')
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
   await mkdir(join(root, 'subjects', 'math', 'knowledge-gaps'), { recursive: true })
@@ -353,13 +350,23 @@ test('panelStatus falls back to collected topics for a learner repo with no queu
   assert.equal(status.isLearnerRepo, true)
   assert.equal(status.isSample, false)
   assert.equal(status.queueMaintained, false)
-  assert.deepEqual(status.topics, [{ name: '二次函数求最值', verb: '跟进' }])
+  assert.deepEqual(status.topics, [])
 })
 
 test('panelStatus flags a non-learner workspace as sample data, never as real state', async () => {
   const root = await mkdtemp(join(tmpdir(), 'gitlearnos-panel-sample-'))
-  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
+  await writeFile(join(root, 'dashboard.md'), '# Dashboard\n## Next up\n1. 不应冒充真实队列（复习）\n')
   const status = await panelStatus(root)
+  assert.equal(status.isLearnerRepo, false)
   assert.equal(status.isSample, true)
   assert.ok(status.topics.length > 0)
+  assert.equal(status.topics.some(item => item.name === '不应冒充真实队列'), false)
+})
+
+test('client hides an unmaintained learner queue and collapses after every action', async () => {
+  const client = await readFile(new URL('../client.js', import.meta.url), 'utf8')
+  assert.match(client, /if \(!data\.topics \|\| data\.topics\.length === 0\) return null/)
+  assert.match(client, /setDraft\(text\)[\s\S]*setOpen\(false\)[\s\S]*setActive\(null\)/)
+  assert.match(client, /收尾一道/)
+  assert.doesNotMatch(client, /暂无内容|当前为自动收集/)
 })

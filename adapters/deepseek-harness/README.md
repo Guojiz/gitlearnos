@@ -85,9 +85,8 @@ date on the same line:
 - `noSignal`: no parseable next-check date — reported as a count, never guessed.
 
 It also lists `reviewFiles` and `knowledgeGaps` so the agent can notice existing
-review sets and active gaps without manual archaeology, and it returns an
-ordered `actions` queue (due reviews first, by next-check date, then gaps) as a
-projection — never a claim that any action ran.
+review sets and active gaps without manual archaeology. These fields are
+evidence inputs, not a priority queue.
 
 Separately, `queue` returns the learner's **agent-maintained `Next up` list**
 from `dashboard.md` verbatim, in the order the agent wrote it. The agent owns
@@ -111,9 +110,9 @@ The panel is strictly read-only:
   that the Host registers through `ctx.connection.rpc.handle`; remote browsers
   are rejected, and the panel never writes learner state or reorders the queue;
 - it reads the agent-maintained `Next up` list verbatim; for a learner repo
-  without a maintained queue it falls back to a read-only projection of goals,
-  gaps, models, and reviews, and for a non-learner workspace it shows an
-  explicitly flagged sample.
+  without a maintained queue it stays hidden rather than inventing an order,
+  while a non-learner development workspace receives an explicitly flagged
+  sample.
 
 The client entry ships in the already-built `window.__ModuleLoader__.load`
 module format, so there is no build step. `dsh.client` (platform `web` and its

@@ -103,6 +103,7 @@ window.__ModuleLoader__.load({
             react.createElement("div", { className: "gl-card" },
               react.createElement("div", { className: "gl-bar" }, "GitLearnOS")));
         }
+        if (!data.topics || data.topics.length === 0) return null;
 
         const bar = react.createElement("div", {
           className: "gl-bar",
@@ -128,8 +129,6 @@ window.__ModuleLoader__.load({
               label: o.label,
               onClick: () => ask(o.prompt),
             })));
-          } else if (!data.topics || data.topics.length === 0) {
-            body = react.createElement("div", { key: "e", className: "gl-item" }, "暂无内容");
           } else {
             body = data.topics.map(t => react.createElement(Item, {
               key: t.name,
@@ -141,7 +140,7 @@ window.__ModuleLoader__.load({
         }
 
         const foot = open ? react.createElement("div", { className: "gl-foot" },
-          (data.isSample ? "演示数据 · " : "") + (data.queueMaintained ? "" : "Agent 尚未维护队列，当前为自动收集 · ") + "顺序由 Agent 判断") : null;
+          (data.isSample ? "演示数据 · " : "") + "顺序由 Agent 判断") : null;
 
         return react.createElement("div", { className: "gl-wrap" },
           react.createElement("div", { className: "gl-card" }, bar, body, foot));

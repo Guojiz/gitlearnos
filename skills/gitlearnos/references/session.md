@@ -41,12 +41,15 @@ tapping:
 - correct option: the key idea just taught;
 - distractors: the learner's most likely misconceptions (e.g. "similar vs
   congruent");
-- correct tap → record the result and settle this item;
-- wrong distractor → name the exact confusion ("you mixed up X and Y") and
-  patch only that one point.
+- correct tap → record immediate supported performance and close the live turn;
+  do not promote mastery from this immediate check;
+- wrong distractor → treat the selected misconception as a diagnostic
+  hypothesis, explain what it suggests, patch only that likely point, and leave
+  later independent evidence to confirm or revise it.
 
-Use the multiple-choice popup (AskUserQuestion) and one item at a time. Do not
-ask "understand?" and do not pop this unprompted at every opportunity.
+Use the runtime's native multiple-choice prompt when available, otherwise show
+compact numbered choices. Use one item at a time. Do not ask "understand?" and
+do not pop this unprompted at every opportunity.
 
 ## Output
 

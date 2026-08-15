@@ -57,10 +57,11 @@ Do not mix purposes without stating why.
 ## One-tap confirmation vs a full set
 
 A one-tap confirmation (see `session.md`) is the lightweight close of a live
-explanation, not a persisted question set. When a wrong distractor reveals a
-real confusion, promote that one point to a full `diagnostic` set and persist
-it; otherwise record only the tap result in the review record and do not
-manufacture extra questions.
+explanation, not a persisted question set. When a wrong distractor provides
+useful evidence for a likely confusion, promote that one point to a full
+`diagnostic` set and persist the observation plus its hypothesis; otherwise
+record only the tap result in the review record and do not manufacture extra
+questions.
 
 ## Generate learner questions
 

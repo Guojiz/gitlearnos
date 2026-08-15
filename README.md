@@ -295,12 +295,25 @@ OpenSpace may later evaluate this generic Skill through an
 
 ## DeepSeek Harness Developer Preview
 
-GitLearnOS now includes a pinned, installable DeepSeek Harness bundle base. Its
-Host adds honest status and routing plus one narrow, policy-checked Git event
-transaction; it does not yet provide RAG calls or verified background work.
-DeepSeek's official provider is text-only, and Harness's session-local Schedule
-is not a substitute for recurring repository automation. See the
+GitLearnOS now ships a native DeepSeek Harness learning surface. A collapsed
+`GitLearnOS ▸` bar sits beside the conversation input. It opens the learning
+queue that the main agent maintains in the learner's own Git repository, keeps
+the agent's order, and offers plain actions such as review, practice, ask a
+teacher, or read the learner's notes. After teaching, the agent can use one
+native multiple-choice prompt to check the point without turning the session
+into a quiz feed.
+
+The bundle also provides honest status and routing plus one narrow,
+policy-checked Git event transaction. The Host does not rank the queue: it
+exposes evidence, while the main agent judges what comes next from the goal,
+difficulty, importance, mastery, retention, and current constraints. See the
+[launch note](docs/deepseek-harness-launch.md) and the
 [install, verification, limits, and native roadmap](adapters/deepseek-harness/README.md).
+
+This remains a Developer Preview. It does not yet provide native RAG calls or
+verified cold-session background work. DeepSeek's official provider is
+text-only, and Harness's session-local Schedule is not a substitute for
+recurring repository automation.
 
 ## Evaluation
 

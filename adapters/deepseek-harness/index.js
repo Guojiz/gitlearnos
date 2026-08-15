@@ -40,12 +40,6 @@ const dueItemSchema = objectSchema({
   marker: { type: 'string' },
 }, ['path', 'kind', 'dueOn'])
 
-const actionItemSchema = objectSchema({
-  kind: { type: 'string' },
-  path: { type: 'string' },
-  dueOn: { oneOf: [{ type: 'string' }, { type: 'null' }] },
-}, ['kind', 'path', 'dueOn'])
-
 const queueItemSchema = objectSchema({
   name: { type: 'string' },
   verb: { type: 'string' },
@@ -66,12 +60,11 @@ const statusOutputSchema = objectSchema({
   }, ['due', 'upcoming', 'noSignal']),
   reviewFiles: { type: 'array', items: { type: 'string' } },
   knowledgeGaps: { type: 'array', items: { type: 'string' } },
-  actions: { type: 'array', items: actionItemSchema },
   queue: { type: 'array', items: queueItemSchema },
   rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   limitations: { type: 'array', items: { type: 'string' } },
-}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'actions', 'queue', 'rag', 'automation', 'limitations'])
+}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'queue', 'rag', 'automation', 'limitations'])
 
 const routeOutputSchema = objectSchema({
   operation: { type: 'string' },
@@ -267,35 +260,6 @@ function parseQueue(dashboard) {
   return queue
 }
 
-function fileTitle(text) {
-  if (!text) return null
-  const match = text.match(/^#\s+(.+)$/m)
-  if (!match) return null
-  let title = match[1].trim()
-  const colon = title.indexOf(':')
-  if (colon >= 0) title = title.slice(colon + 1).trim()
-  title = title.replace(/^\d{4}-\d{2}-\d{2}\s+/, '')
-  return title
-}
-
-// Auto-collected fallback topics for a learner repo whose Next up queue is not
-// yet maintained by the agent. This is a read-only projection of existing Git
-// files (goals, gaps, models, reviews); it never writes and never implies mastery.
-async function collectTopics(root) {
-  const topics = []
-  const seen = new Set()
-  const add = (name, verb) => {
-    if (!name || seen.has(name)) return
-    seen.add(name)
-    topics.push({ name, verb })
-  }
-  for (const path of await goalPaths(root)) add(fileTitle(await safeRead(root, path)), '预习')
-  for (const path of await subjectFiles(root, 'knowledge-gaps')) add(fileTitle(await safeRead(root, path)), '跟进')
-  for (const path of await subjectFiles(root, 'models')) add(fileTitle(await safeRead(root, path)), '复习')
-  for (const path of await subjectFiles(root, 'reviews')) add(fileTitle(await safeRead(root, path)), '复习')
-  return topics
-}
-
 // Demo payload for a workspace that is not a learner repository, so the panel
 // still previews its shape. It is explicitly flagged isSample and never claimed
 // as real learner state.
@@ -314,17 +278,15 @@ const PANEL_SAMPLE = Object.freeze({
   ]),
 })
 
-// Panel projection: the agent-maintained queue read verbatim, then collected
-// topics for a learner repo, then the flagged sample for anything else.
+// Panel projection: a learner repo gets only the agent-maintained queue read
+// verbatim. The Host never invents an order. A non-learner workspace gets the
+// explicitly flagged sample so maintainers can preview the product shape.
 export async function panelStatus(root = process.cwd()) {
   const yml = await safeRead(root, 'gitlearnos.yml')
   const dashboard = await safeRead(root, 'dashboard.md')
   const queue = parseQueue(dashboard)
-  if (queue.length > 0) {
-    return { isLearnerRepo: yml !== null, isSample: false, queueMaintained: true, topics: queue }
-  }
   if (yml !== null) {
-    return { isLearnerRepo: true, isSample: false, queueMaintained: false, topics: await collectTopics(root) }
+    return { isLearnerRepo: true, isSample: false, queueMaintained: queue.length > 0, topics: queue }
   }
   return PANEL_SAMPLE
 }
@@ -360,11 +322,6 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
   const activeGoals = await goalPaths(root)
   const dueState = await dueReviewState(root, now)
   const gapFiles = await subjectFiles(root, 'knowledge-gaps')
-  const orderedDue = [...dueState.due].sort((a, b) => (a.dueOn < b.dueOn ? -1 : a.dueOn > b.dueOn ? 1 : 0))
-  const actions = [
-    ...orderedDue.map(item => ({ kind: 'review', path: item.path, dueOn: item.dueOn })),
-    ...gapFiles.slice().sort().map(path => ({ kind: 'gap', path, dueOn: null })),
-  ]
   const queue = parseQueue(contents['dashboard.md'])
   const configuredMode = parseSetting(contents['gitlearnos.yml'], 'mode')
   const effectiveMode = effectiveWriteMode(configuredMode, contents['learning-policy.md'])
@@ -391,7 +348,6 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
     dueReview: { due: dueState.due, upcoming: dueState.upcoming, noSignal: dueState.noSignal },
     reviewFiles: dueState.reviewFiles,
     knowledgeGaps: gapFiles.slice().sort(),
-    actions,
     queue,
     rag: {
       state: verifiedRag ? 'reported-with-evidence-markers' : ragEvidence.length ? 'mentioned-not-verified' : 'unknown',
@@ -406,7 +362,7 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
       'Reported markers are repository text, not independent verification of external systems.',
       `Files over ${MAX_FILE_BYTES} bytes, symlink escapes, and directory entries beyond ${MAX_DIRECTORY_ENTRIES} are ignored.`,
       'dueReview is derived from explicit next-review/next-check dates in review and model files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
-      'actions is an ordered learning queue projected from Git (due reviews first by next-check date, then knowledge gaps); it never implies any action already ran.',
+      'dueReview, reviewFiles, and knowledgeGaps are evidence inputs, not a priority ranking; only the main agent maintains the ordered dashboard queue from the learner goal and relevant evidence.',
       'queue is the agent-maintained dashboard Next up list read verbatim in order; it is empty until the agent maintains it, and this tool never writes it.',
     ],
   }

@@ -23,6 +23,7 @@ flowchart LR
 | 记录已验证重复任务 | [Automation state](../templates/automation.md) | [自动化状态](templates/automation.md) |
 | 添加可选本地知识检索 | [RAG-Anything card](../docs/rag-anything.md) | [RAG-Anything 部署卡](docs/rag-anything.md) |
 | 使用 DeepSeek Harness Developer Preview | [Harness adapter](../adapters/deepseek-harness/README.md) | [Harness 适配器](adapters/deepseek-harness/README.md) |
+| 分享 DeepSeek Harness 发布内容 | [Launch note](../docs/deepseek-harness-launch.md) | [发布说明](docs/deepseek-harness-launch.md) |
 | 阅读 AceSAT 案例 | [Impact statement](../docs/acesat-build-for-impact.md) | [影响说明](docs/acesat-build-for-impact.md) |
 | 浏览可视化官网 | [Website](https://guojiz.github.io/gitlearnos/) | 在同一页面点击 `中` |
 
@@ -46,9 +47,9 @@ AGENTS.md
 检查系统，但机器文件不要求全部提供中文，且中文永远不能覆盖英文原文。
 
 DeepSeek Harness 用户应把仓库根目录作为固定提交的 Developer Preview bundle
-安装，再验证 profile 配置。当前 Host 基座含两个只读工具与一条狭窄 Git 事件
-事务；准确的安装、卸载、验证、安全、模型、调度与路线图边界见
-[Harness 适配器说明](adapters/deepseek-harness/README.md)。
+安装，再验证 profile 配置和客户端学习面板。bundle 现在包含 Agent 维护的只读
+学习队列、两个只读工具与一条狭窄 Git 事件事务；准确的安装、卸载、验证、安全、
+模型、调度与路线图边界见[Harness 适配器说明](adapters/deepseek-harness/README.md)。
 
 ## 深入文档
 

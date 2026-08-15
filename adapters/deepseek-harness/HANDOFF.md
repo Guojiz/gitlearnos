@@ -9,12 +9,13 @@ resume without re-deriving the decisions. It is state, not a feature spec.
 
 1. **Richer read-only observation in `learning_status`** — it now returns
    `dueReview` (`due` / `upcoming` / `noSignal` from explicit next-review dates),
-   `reviewFiles`, `knowledgeGaps`, and an ordered `actions` queue (due reviews
-   first by next-check date, then gaps). Pure projection; no write, Git
-   mutation, RAG request, or scheduler request.
+   `reviewFiles`, and `knowledgeGaps` as evidence inputs, not a Host-ranked
+   queue. Pure projection; no write, Git mutation, RAG request, or scheduler
+   request.
 2. **"Close with one tap" in the protocol references** — after teaching a
    point, close with ONE multiple-choice item whose distractors are the likely
-   misconceptions; a wrong distractor names the exact confusion. See
+   misconceptions; a wrong distractor supplies evidence for a likely confusion
+   without claiming to prove its hidden cause. See
    `skills/gitlearnos/references/{session,question,review}.md` (EN + zh-CN).
 3. Docs and eval scenario 16 updated.
 4. **Agent-maintained learning queue** — `learning_status` returns `queue`
@@ -30,7 +31,8 @@ resume without re-deriving the decisions. It is state, not a feature spec.
    build: the client entry ships in the already-built
    `window.__ModuleLoader__.load` module format. `exports["./client"]`,
    `dsh.client`, and peer dependencies are declared in `package.json`.
-   Tests now pass 22/22.
+   Tests now pass 23/23, including the no-Host-ranking and no-empty-state
+   boundaries.
 
 ## Product direction (aligned via /grill-me)
 
@@ -59,10 +61,10 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
 ## Commit / rollback
 
-- Seven local commits on `main`, NOT pushed (newest first): `HEAD` (handoff
-  decision record), then `e3b56fc` (collapse after action), `afadcc6` (收尾一道
-  action), `01d976d` (ordering experiment + rubric), `d2249e8` (panel client
-  half), `7a69284` (agent-maintained queue), `f6e7a13` (richer learning_status).
+- The development commits are local on `main` and NOT pushed. Use `git log`
+  rather than a copied count as the authoritative list; current `HEAD` includes
+  the panel, queue, one-tap close, ordering experiment, and final evidence-boundary
+  corrections.
 - Rollback: `git revert HEAD` (keeps history) or `git reset --hard HEAD~1`
   (discards the commit). Learner Git state is untouched by this round.
 

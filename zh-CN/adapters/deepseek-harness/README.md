@@ -74,8 +74,7 @@ dsh --profile web --dump-config
 - `noSignal`：没有可解析的复测日期——只按数量报告，绝不猜测。
 
 它同时列出 `reviewFiles` 与 `knowledgeGaps`，让 Agent 无需手工翻找即可发现
-已有复测集合和活跃缺口，并返回有序的 `actions` 队列（到期复习在前、按复测
-日期排序，缺口在后）——这只是投影，绝不声称任何动作已经执行。
+已有复测集合和活跃缺口。这些字段只是证据输入，不是优先级队列。
 
 另外，`queue` 原样返回 `dashboard.md` 中 **Agent 维护的「接下来」列表**，
 顺序就是 Agent 写的顺序。这个顺序归 Agent（它综合难度、重要性、掌握度、巩固
@@ -94,8 +93,8 @@ bundle 同时随包发布一个浏览器客户端半部（`adapters/deepseek-har
 - 它通过一个 **仅限 loopback** 的逻辑 RPC 通道（`/gitlearnos`）拉取列表，该通道
   由 Host 通过 `ctx.connection.rpc.handle` 注册；远程浏览器会被拒绝，面板绝不
   写入学习者状态，也不重排队列；
-- 它原样读取 Agent 维护的「接下来」列表；对于尚未维护队列的学习者仓库，回退到
-  目标 / 缺口 / 模型 / 复习的只读投影；对于非学习者工作区，则显示明确标注的示例。
+- 它原样读取 Agent 维护的「接下来」列表；学习者仓库尚未维护队列时，面板保持
+  隐藏而不是编造顺序；非学习者开发工作区则显示明确标注的示例。
 
 客户端入口以已构建的 `window.__ModuleLoader__.load` 模块格式随包发布，因此没有
 构建步骤。`dsh.client`（platform 为 `web` 及其 `inject` 列表）、`exports["./client"]`

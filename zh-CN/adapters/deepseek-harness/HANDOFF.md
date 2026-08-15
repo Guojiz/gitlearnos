@@ -9,10 +9,11 @@
 
 1. **`learning_status` 的只读观察更丰富**——现在返回 `dueReview`
    （`due` / `upcoming` / `noSignal`，来自显式 next-review 日期）、`reviewFiles`、
-   `knowledgeGaps`，以及有序的 `actions` 队列（到期复习在前、按复测日期，缺口
-   在后）。纯投影；不写入、不改 Git、不请求 RAG、不请求调度器。
+   `knowledgeGaps`，作为证据输入而不是 Host 排好的队列。纯投影；不写入、不改
+   Git、不请求 RAG、不请求调度器。
 2. **协议参考加入「一句收尾」**——讲完一个点后，用一道多选收尾，干扰项是
-   最可能的误解；选错某个干扰项就点明具体混淆。见
+   最可能的误解；选错某个干扰项会为可能的混淆提供证据，但不冒充已经证明了
+   隐藏原因。见
    `skills/gitlearnos/references/{session,question,review}.md`（中英同步）。
 3. 文档与场景 16 已更新。
 4. **Agent 维护的学习队列**——`learning_status` 返回 `queue`（`dashboard.md`
@@ -24,7 +25,8 @@
    **仅限 loopback** 的 `/gitlearnos` 逻辑 RPC 通道读取队列（由 Host 半部
    `ctx.connection.rpc.handle` 暴露）。无需 tsdown 构建：客户端入口以已构建的
    `window.__ModuleLoader__.load` 模块格式随包发布。`exports["./client"]`、
-   `dsh.client` 与 peer 依赖已写入 `package.json`。测试通过 22/22。
+   `dsh.client` 与 peer 依赖已写入 `package.json`。测试通过 23/23，包括“不由
+   Host 排序”和“不显示空状态”的边界。
 
 ## 产品方向（通过 /grill-me 对齐）
 
@@ -52,10 +54,9 @@ Harness 原生界面是一个「无脑学习」面板：
 
 ## 提交 / 回滚
 
-- `main` 上有七个本地提交，未 push（新的在前）：`HEAD`（交接决策记录），
-  然后 `e3b56fc`（点完动作收起）、`afadcc6`（收尾一道动作）、
-  `01d976d`（排序实验 + 排兵布阵准则）、`d2249e8`（面板客户端半部）、
-  `7a69284`（Agent 维护队列）、`f6e7a13`（learning_status 更丰富）。
+- 这些开发提交仍在本地 `main`，尚未 push。权威清单以 `git log` 为准，不再复制
+  一个容易漂移的数量；当前 `HEAD` 已包含面板、队列、一句收尾、排序实验与最后
+  的证据边界修正。
 - 回滚：`git revert HEAD`（保留历史）或 `git reset --hard HEAD~1`（丢弃该提交）。
   本轮未触碰学习者 Git 状态。
 

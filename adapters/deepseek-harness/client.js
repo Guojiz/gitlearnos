@@ -42,7 +42,7 @@ window.__ModuleLoader__.load({
       document.head.appendChild(tag);
       ctx.effect(() => () => { tag.remove(); }, "gitlearnos: css");
 
-      const readStatus = () => ctx.connection.rpc.call("/gitlearnos", "status", undefined);
+      const readStatus = () => ctx.connection.rpc.call("/gitlearnos", "status", {});
 
       function Item(props) {
         return react.createElement("button", { className: "gl-item", onClick: props.onClick },

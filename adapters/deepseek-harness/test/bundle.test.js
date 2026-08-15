@@ -365,6 +365,8 @@ test('panelStatus flags a non-learner workspace as sample data, never as real st
 
 test('client hides an unmaintained learner queue and collapses after every action', async () => {
   const client = await readFile(new URL('../client.js', import.meta.url), 'utf8')
+  assert.match(client, /rpc\.call\("\/gitlearnos", "status", \{\}\)/)
+  assert.doesNotMatch(client, /rpc\.call\("\/gitlearnos", "status", undefined\)/)
   assert.match(client, /if \(!data\.topics \|\| data\.topics\.length === 0\) return null/)
   assert.match(client, /setDraft\(text\)[\s\S]*setOpen\(false\)[\s\S]*setActive\(null\)/)
   assert.match(client, /收尾一道/)

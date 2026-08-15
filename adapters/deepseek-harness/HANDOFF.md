@@ -31,15 +31,19 @@ resume without re-deriving the decisions. It is state, not a feature spec.
    build: the client entry ships in the already-built
    `window.__ModuleLoader__.load` module format. `exports["./client"]`,
    `dsh.client`, and peer dependencies are declared in `package.json`.
-   Tests now pass 23/23, including the no-Host-ranking and no-empty-state
-   boundaries.
+   Tests now pass 25/25, including the no-Host-ranking, no-empty-state, and
+   presentation-scope boundaries.
+6. **Agent-controlled presentation** — beside `Next up`, the main agent writes
+   `Panel: expand` or `Panel: collapse`. A stable revision makes each new
+   decision apply once; periodic refresh preserves the learner's manual toggle
+   until the Agent changes the queue or presentation decision.
 
 ## Product direction (aligned via /grill-me)
 
 The Harness-native surface is a "brainless learning" panel:
 
-- one centered bar `GitLearnOS ▸`, collapsed by default; tap to expand a flat
-  ordered list of knowledge points, each rendered as `name (action)`;
+- one centered bar `GitLearnOS ▸`; the Agent decides whether each new queue
+  revision arrives open or folded, while the learner can always toggle it;
 - **no categories, only an order** — and that order is the **agent's judgment**
   (reading difficulty / importance / mastery / retention from Git), never
   host-hardcoded;
@@ -59,7 +63,7 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 
 ## Published and installed evidence
 
-- Feature revision `fdfd3013b355efcc43c2b80d524d559eb49cca09` is on `main`.
+- Feature revision `423716104e812aa49f4be5c7e0c9b167edffb77c` is on `main`.
 - The official `web` profile is pinned to that exact GitHub revision.
 - A fresh Harness process on port 3081 loaded the bundled panel without the old
   dynamic `glearn-1` prototype. The real browser showed the collapsed bar,
@@ -68,6 +72,11 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
   composer and collapsed the panel again. The earlier `invalid client-request
   message` failure was reproduced, traced to an omitted RPC payload, fixed with
   an explicit empty object, and covered by a regression assertion.
+- A second fresh process on port 3082 used a synthetic learner repository. The
+  real browser verified all four presentation transitions: `expand` opened on
+  first load; a manual collapse survived the 30-second refresh; changing the
+  queue while keeping `expand` opened the new revision once; changing the
+  Agent decision to `collapse` folded it again.
 - This proves bundle loading and panel interaction. It does not claim a learner
   write, RAG retrieval, background schedule, or mastery event.
 
@@ -76,7 +85,7 @@ Stop `glearn-1` whenever convenient — it is runtime-only and dies on restart.
 - The reviewed development commits are on `origin/main`. Use `git log` rather
   than a copied count as the authoritative list; the installed revision includes
   the panel, queue, one-tap close, ordering experiment, evidence-boundary
-  corrections, and the real-runtime RPC fix.
+  corrections, the real-runtime RPC fix, and Agent-controlled presentation.
 - Rollback: `git revert HEAD` (keeps history) or `git reset --hard HEAD~1`
   (discards the commit). Learner Git state is untouched by this round.
 

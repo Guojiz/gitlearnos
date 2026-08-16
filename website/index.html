@@ -9,8 +9,6 @@
   <meta property="og:url" content="https://guojiz.github.io/gitlearnos/">
   <meta property="og:title" content="GitLearnOS — learner-owned learning state">
   <meta property="og:description" content="One main agent turns real learning into a private, inspectable Git record. GitLearnOS-exclusive native DeepSeek Harness support adds a verifiable Git learning transaction and panel.">
-  <meta property="og:image" content="https://guojiz.github.io/gitlearnos/media/gitlearnos-harness-mascot.png">
-  <meta property="og:image:alt" content="GitLearnOS comic book Agent wearing an orange Git-branch harness">
   <meta name="twitter:card" content="summary">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
   <title data-zh="GitLearnOS — 学习发生在任何地方，状态属于你" data-en="GitLearnOS — Learn anywhere. Keep the state.">GitLearnOS — 学习发生在任何地方，状态属于你</title>
@@ -33,7 +31,7 @@
       --sans:Inter,ui-sans-serif,system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth;scroll-padding-top:88px}
     body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
     a{color:inherit;text-decoration:none}
     button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -56,14 +54,16 @@
     header.site{position:sticky;top:0;z-index:50;background:rgba(251,252,250,.0);border-bottom:1px solid transparent;transition:background .25s var(--ease),border-color .25s var(--ease),backdrop-filter .25s}
     header.site.scrolled{background:rgba(251,252,250,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--line)}
     .header-in{min-height:80px;display:flex;align-items:center;gap:2rem}
-    .brand-lockup{display:flex;align-items:center;gap:.65rem}
-    .brand-mark{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 5px 8px rgba(2,43,32,.14))}
-    .wordmark{font-family:var(--mono);font-size:1.5rem;font-weight:750;letter-spacing:-.06em;color:var(--deep)}
-    .wordmark em{font-style:normal;color:var(--orange)}
+    .brand-lockup{display:flex;align-items:center}
+    .wordmark{font-family:var(--mono);font-size:1.9rem;font-weight:800;letter-spacing:-.065em;color:var(--deep)}
+    .wordmark .git{color:var(--orange)}
     nav.primary{display:flex;gap:clamp(1.4rem,3vw,3rem);margin-inline:auto;font-size:.88rem;font-weight:650}
     nav.primary a,footer a{border-bottom:1px solid transparent;padding:.35rem 0}
     nav.primary a:hover,footer a:hover{border-bottom-color:currentColor}
     .header-tools{display:flex;align-items:center;gap:1.1rem;margin-left:auto}
+    .home-link{padding:.35rem 0;border-bottom:1px solid transparent;color:var(--muted);font-size:.78rem;font-weight:700;white-space:nowrap}
+    .home-link:hover{color:var(--ink);border-bottom-color:currentColor}
+    .home-link .short{display:none}
     .gh-link{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;color:var(--ink)}
     .gh-link:hover{background:var(--soft)}
     .gh-link .icon{width:22px;height:22px}
@@ -75,9 +75,9 @@
     .hero{padding:clamp(64px,8vw,110px) 0 clamp(56px,7vw,96px);display:grid;grid-template-columns:minmax(320px,.85fr) minmax(600px,1.15fr);align-items:center;gap:clamp(3rem,5vw,6rem)}
     .kicker{display:flex;align-items:center;gap:.6rem;margin:0 0 1.8rem;font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--muted)}
     .kicker::before{content:"";width:26px;height:2px;background:var(--orange)}
-    h1{margin:0;color:var(--deep);font-size:clamp(3.4rem,7.4vw,7rem);font-weight:800;letter-spacing:-.055em;line-height:1.02}
-    html.lang-en h1{font-size:clamp(3rem,5.8vw,5.4rem);letter-spacing:-.045em}
-    h1 .hl{background-image:linear-gradient(var(--orange),var(--orange));background-size:100% .13em;background-repeat:no-repeat;background-position:0 94%;padding-bottom:.05em}
+    .hero-title{margin:0;color:var(--deep);font-size:clamp(3.4rem,7.4vw,7rem);font-weight:800;letter-spacing:-.055em;line-height:1.02}
+    html.lang-en .hero-title{font-size:clamp(3rem,5.8vw,5.4rem);letter-spacing:-.045em}
+    .hero-title .hl{background-image:linear-gradient(var(--orange),var(--orange));background-size:100% .13em;background-repeat:no-repeat;background-position:0 94%;padding-bottom:.05em}
     .intro{max-width:34em;margin:1.9rem 0 0;color:var(--muted);line-height:1.8;font-size:1.02rem}
     .actions{margin-top:2.2rem;display:flex;align-items:center;flex-wrap:wrap;gap:1rem 1.6rem}
     .button{min-height:54px;display:inline-flex;align-items:center;gap:.6rem;padding:.95rem 1.6rem;background:var(--action);color:#fff;font-weight:750;font-size:.98rem;border-radius:12px;transition:transform .18s var(--ease),background .18s var(--ease)}
@@ -234,19 +234,94 @@
     .harness-vision{grid-column:1/-1;margin:0;padding:1rem 1.15rem;border-left:3px solid var(--orange);background:rgba(255,255,255,.05);color:var(--on-dark-muted);font-size:.8rem;line-height:1.7}
     .harness-vision strong{color:var(--on-dark)}
 
-    /* ---------- 参赛演示视频 ---------- */
-    .demo-sec{background:var(--deep);color:var(--on-dark)}
-    .demo-sec .number{color:var(--orange)}
-    .demo-layout{display:grid;grid-template-columns:minmax(250px,.62fr) minmax(560px,1.38fr);gap:clamp(2.5rem,5vw,5rem);align-items:center}
-    .demo-copy h2{margin:0;color:var(--on-dark);font-size:clamp(2.1rem,4.4vw,3.9rem);font-weight:800;line-height:1.12;letter-spacing:-.04em}
-    .demo-copy p{margin:1.4rem 0 0;color:var(--on-dark-muted);font-size:.95rem;line-height:1.8}
-    .demo-copy .actions{margin-top:1.7rem}
-    .demo-copy .button.ghost{color:var(--on-dark);border-color:rgba(234,244,238,.55)}
-    .demo-copy .button.ghost:hover{background:rgba(234,244,238,.08);color:#fff}
-    .video-shell{overflow:hidden;background:#000;border:1px solid var(--line-dark);border-radius:8px;box-shadow:var(--shadow-dark)}
-    .video-shell video{display:block;width:100%;aspect-ratio:16/9;background:#000}
-    .video-meta{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;background:var(--deep-inset);border-top:1px solid var(--line-dark);font-family:var(--mono);font-size:.7rem;color:var(--on-dark-muted)}
-    .video-meta strong{color:var(--on-dark);font-weight:650}
+    /* ---------- DeepSeek Harness 可操作学习演示 ---------- */
+    .harness-demo-sec{padding:clamp(42px,6vw,76px) 0 clamp(72px,8vw,112px);background:#0f1012;color:#f5f5f6;border-top:1px solid rgba(255,255,255,.08)}
+    .agent-first-brand{max-width:980px;margin:0 auto clamp(34px,5vw,58px);text-align:center}
+    .agent-first-brand .wordmark{display:block;font-size:clamp(3.5rem,8vw,7rem);line-height:.92;letter-spacing:-.085em;color:#fff}
+    .agent-first-brand h1{margin:.75rem 0 0;color:#fff;font-size:clamp(2rem,4vw,3.6rem);line-height:1.05;letter-spacing:-.05em}
+    .agent-first-brand p{max-width:46rem;margin:1.1rem auto 0;color:#a7a9af;font-size:.9rem;line-height:1.7}
+    .harness-demo-inner{width:min(1180px,calc(100% - 72px));margin-inline:auto}
+    .harness-demo-head{display:flex;align-items:end;justify-content:space-between;gap:2rem;margin-bottom:2rem}
+    .harness-demo-head h2{margin:0;max-width:18em;color:#fff;font-size:clamp(2.1rem,4.4vw,3.9rem);font-weight:800;line-height:1.08;letter-spacing:-.045em}
+    .harness-demo-head p{max-width:38em;margin:0;color:#a7a9af;line-height:1.75;font-size:.92rem}
+    .script-badge{display:inline-flex;align-items:center;gap:.45rem;margin-bottom:1rem;padding:.38rem .7rem;border:1px solid rgba(138,164,255,.5);border-radius:999px;color:#c8d3ff;background:rgba(83,112,220,.12);font:700 .68rem/1 var(--mono);letter-spacing:.04em}
+    .script-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:#8aa4ff;box-shadow:0 0 0 4px rgba(138,164,255,.12)}
+    .dsh-demo-viewport{position:relative;width:100%;height:740px;overflow:hidden;overflow:clip;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+    .dsh-demo{width:100%;height:740px;min-height:0;display:grid;grid-template-columns:210px minmax(0,1fr);overflow:hidden;border:1px solid #34363b;border-radius:18px;background:#131416;transform-origin:top left;will-change:transform}
+    .dsh-sidebar{display:flex;flex-direction:column;padding:18px 12px 12px;background:#191a1d;border-right:1px solid #303136;color:#e9e9eb}
+    .dsh-wordmark{display:flex;align-items:center;gap:.45rem;padding:0 4px 22px;font-size:1.05rem;font-weight:780;letter-spacing:-.025em}
+    .dsh-wordmark small{padding:.12rem .28rem;border:1px solid #d8d8dc;border-radius:3px;font-size:.48rem;letter-spacing:.06em}
+    .dsh-new{width:100%;padding:.65rem .8rem;border:1px solid #55575e;border-radius:10px;background:#404147;color:#fff;font-size:.8rem;font-weight:650}
+    .dsh-side-label{margin:1.2rem .35rem .55rem;color:#8f9198;font-size:.75rem}
+    .dsh-workspace{display:flex;align-items:center;gap:.45rem;padding:.5rem .5rem;color:#d4d5d8;font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dsh-workspace::before{content:"";width:12px;height:9px;border:1px solid #7595ff;border-radius:2px;box-shadow:inset 0 2px #7595ff}
+    .dsh-session{display:block;width:100%;padding:.58rem .7rem;border-radius:8px;color:#c8c9cc;text-align:left;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dsh-session.active{background:#303136;color:#fff}
+    .dsh-settings{margin-top:auto;padding:.7rem .5rem;color:#d4d5d8;font-size:.75rem}
+    .dsh-main{position:relative;min-width:0;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:radial-gradient(circle at 52% 48%,#181a20 0,#121315 55%,#101113 100%)}
+    .dsh-top{display:flex;align-items:center;justify-content:center;gap:.65rem;padding:17px 20px;color:#b9bbc0;font-size:.72rem}
+    .dsh-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .65rem;border-radius:8px;background:#222328;border:1px solid #33353a}
+    .dsh-progress{position:absolute;top:17px;right:18px;color:#8f9198;font:650 .68rem/1 var(--mono)}
+    .dsh-feed{width:min(820px,calc(100% - 46px));min-height:0;margin:0 auto;padding:15px 0 24px;overflow:auto;scrollbar-width:thin;scrollbar-color:#383a40 transparent}
+    .dsh-guide{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem;padding:.8rem .9rem;border:1px solid rgba(117,149,255,.32);border-radius:10px;background:rgba(80,105,194,.1);color:#dce3ff;font-size:.76rem;line-height:1.55}
+    .dsh-guide b{display:inline-grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;background:#6f8ff4;color:#fff;font:750 .66rem/1 var(--mono)}
+    .dsh-message{display:grid;grid-template-columns:26px minmax(0,1fr);gap:.65rem;margin:.85rem 0;color:#e8e8ea;font-size:.82rem;line-height:1.7}
+    .dsh-avatar{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#2b2d32;color:#cfd0d4;font:750 .66rem/1 var(--mono)}
+    .dsh-message.user .dsh-avatar{background:#4e68c8;color:#fff}
+    .dsh-message p{margin:0}
+    .dsh-evidence{margin-top:.65rem;padding:.78rem .85rem;border:1px solid #34363b;border-radius:10px;background:#1b1c20;color:#c7c8cc}
+    .dsh-evidence strong{display:block;margin-bottom:.25rem;color:#fff;font-size:.75rem}
+    .dsh-tool{margin:.65rem 0;border:1px solid #34363b;border-radius:9px;background:#191a1d;overflow:hidden}
+    .dsh-tool summary{display:flex;align-items:center;gap:.55rem;padding:.65rem .75rem;cursor:pointer;color:#cfd0d4;font:650 .7rem/1.4 var(--mono);list-style:none}
+    .dsh-tool summary::-webkit-details-marker{display:none}
+    .dsh-tool summary::before{content:"";width:7px;height:7px;border-radius:50%;background:#66c28a}
+    .dsh-tool summary .dsh-tool-label{min-width:0;color:#cfd0d4;font-family:var(--mono);font-weight:650}
+    .dsh-tool summary>.dsh-tool-status{margin-left:auto;color:#7f8189;font-family:var(--sans);font-weight:500;text-align:right}
+    .dsh-tool pre{max-height:108px;margin:0;padding:.75rem;border-top:1px solid #303136;color:#9ea0a7;background:#151619;font: .64rem/1.58 var(--mono);white-space:pre-wrap;overflow:auto;overflow-wrap:anywhere;scrollbar-width:thin;scrollbar-color:#3c3e44 transparent}
+    .dsh-process{position:relative;margin:.85rem 0 1rem;padding:.15rem 0 .15rem 1rem;border-left:1px solid #35373d}
+    .dsh-process::before{content:"";position:absolute;top:0;left:-3px;width:5px;height:5px;border-radius:50%;background:#777a82}
+    .dsh-process-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 .1rem .35rem;color:#e8e8ea;font-size:.73rem;font-weight:760}
+    .dsh-process-head small{color:#85878e;font:500 .6rem/1.3 var(--mono)}
+    .dsh-process .dsh-tool{margin:.38rem 0;border-color:#303238;background:#191a1d}
+    .dsh-process .dsh-tool[open]{border-color:#3d4047}
+    .dsh-process .dsh-tool.write summary::before{background:var(--orange)}
+    .dsh-process .dsh-tool.rag summary::before{background:#66c28a}
+    .dsh-process .dsh-tool.decision summary::before{background:#7595ff}
+    .dsh-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.7rem}
+    .dsh-choice{min-height:42px;padding:.55rem .7rem;border:1px solid #3c3e44;border-radius:8px;color:#e8e8ea;background:#232429;font-size:.74rem;text-align:left}
+    .dsh-choice:hover,.dsh-choice.correct{border-color:#6f8ff4;background:rgba(111,143,244,.14)}
+    .dsh-choice.wrong{border-color:#c46d63;background:rgba(196,109,99,.1)}
+    .dsh-composer-wrap{width:min(800px,calc(100% - 40px));margin:0 auto 18px}
+    .dsh-panel{margin-bottom:8px;border:1px solid #3d3f45;border-radius:12px;background:#292a2e;overflow:hidden;color:#f3f3f4}
+    .dsh-panel-bar{width:100%;padding:.52rem 1rem;text-align:center;font-size:.72rem;font-weight:680}
+    .dsh-panel-bar:hover{background:#333439}
+    .dsh-panel-list{max-height:142px;overflow:auto;border-top:1px solid #3d3f45;scrollbar-width:thin;scrollbar-color:#46484f transparent}
+    .dsh-panel-list[hidden]{display:none}
+    .dsh-topic,.dsh-op,.dsh-back{display:flex;align-items:center;justify-content:space-between;width:100%;padding:.52rem .9rem;border-top:1px solid #3d3f45;color:#e7e7e9;text-align:left;font-size:.72rem}
+    .dsh-topic:first-child,.dsh-back:first-child{border-top:0}
+    .dsh-topic:hover,.dsh-op:hover,.dsh-back:hover,.dsh-op.next{background:#34363b}
+    @keyframes dsh-guide-pulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(138,164,255,.46),0 0 0 0 rgba(138,164,255,.13)}50%{box-shadow:inset 0 0 0 1px rgba(138,164,255,.58),0 0 0 5px rgba(138,164,255,0)}}
+    .dsh-attention{position:relative!important;z-index:2;background:rgba(138,164,255,.055)!important;outline:1px solid rgba(138,164,255,.48);outline-offset:-1px;animation:dsh-guide-pulse 2.15s ease-in-out infinite}
+    .dsh-attention::before{content:attr(data-guide-zh);display:inline-flex;flex:none;margin-right:.55rem;padding:.18rem .42rem;border:1px solid rgba(138,164,255,.34);border-radius:999px;background:rgba(138,164,255,.12);color:#cbd5ff;font:750 .57rem/1 var(--mono);letter-spacing:.02em}
+    html.lang-en .dsh-attention::before{content:attr(data-guide-en)}
+    .dsh-choice.dsh-attention{padding-left:.55rem}
+    .dsh-choices.dsh-attention{position:relative;padding:.7rem .5rem .5rem}
+    .dsh-choices.dsh-attention::before{position:absolute;top:-.52rem;left:.6rem;margin:0;width:max-content}
+    .dsh-demo-controls .dsh-attention{outline-offset:2px}
+    .dsh-topic small,.dsh-op small{color:#96989f}
+    .dsh-op.done::after{content:"✓";color:#71d39a;font-weight:800}
+    .dsh-panel-foot{padding:.48rem .9rem;border-top:1px solid #3d3f45;color:#81838a;font-size:.6rem}
+    .dsh-composer{min-height:92px;display:flex;flex-direction:column;padding:.8rem .9rem;border:1px solid #3d3f45;border-radius:14px;background:#292a2e;box-shadow:0 12px 36px rgba(0,0,0,.22)}
+    .dsh-draft{min-height:40px;color:#e9e9eb;font-size:.78rem}
+    .dsh-composer-foot{display:flex;align-items:center;gap:.6rem;margin-top:auto;color:#a2a4aa;font-size:.65rem}
+    .dsh-model{margin-left:auto}
+    .dsh-send{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#7293ff;color:#fff;font-weight:800}
+    .dsh-demo-controls{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
+    .dsh-demo-controls button{min-height:42px;padding:.65rem .9rem;border:1px solid #3c3e44;border-radius:9px;color:#e8e8ea;background:#1d1e21;font-size:.75rem;font-weight:680}
+    .dsh-demo-controls button:hover:not(:disabled){border-color:#6f8ff4}
+    .dsh-demo-controls button.primary{background:#5f7fe9;border-color:#5f7fe9;color:#fff}
+    .dsh-demo-controls button:disabled{opacity:.4;cursor:not-allowed}
+    .dsh-demo-note{margin-left:auto;color:#888a91;font-size:.68rem}
 
     /* ---------- 最终 CTA ---------- */
     .final{border-top:1px solid var(--line);padding:clamp(80px,9vw,130px) 0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2.5rem,5vw,6rem);align-items:center}
@@ -277,20 +352,23 @@
     @media (max-width:1100px){
       .hero{grid-template-columns:1fr;gap:3.5rem}
       .pipe{max-width:860px}
-      h1{font-size:clamp(3.2rem,11vw,6rem)}
-      html.lang-en h1{font-size:clamp(2.9rem,9.5vw,5rem)}
+      .hero-title{font-size:clamp(3.2rem,11vw,6rem)}
+      html.lang-en .hero-title{font-size:clamp(2.9rem,9.5vw,5rem)}
       .loop-grid{grid-template-columns:repeat(3,1fr)}
     }
     @media (max-width:760px){
       .wrap{width:min(100% - 32px,680px)}
       nav.primary{display:none}
-      .header-in{min-height:68px;gap:1rem}
-      .brand-mark{width:40px;height:40px}
+      .header-in{min-height:68px;gap:.65rem}
+      .wordmark{font-size:1.65rem}
+      .header-tools{gap:.65rem}.home-link{font-size:.72rem}.home-link .long{display:none}.home-link .short{display:inline}
       .hero{padding:56px 0 64px}
-      h1{font-size:clamp(2.9rem,15vw,4.6rem)}
-      html.lang-en h1{font-size:clamp(2.6rem,12.5vw,4.2rem)}
+      .hero-title{font-size:clamp(2.9rem,15vw,4.6rem)}
+      html.lang-en .hero-title{font-size:clamp(2.6rem,12.5vw,4.2rem)}
       .pipe{padding:1rem}
       .harness-layout{grid-template-columns:1fr}.harness-points{grid-template-columns:1fr;margin-top:0}.harness-proof-list li{grid-template-columns:1fr;gap:.25rem}
+      .harness-demo-sec{padding-top:34px}.harness-demo-inner{width:calc(100% - 24px)}.agent-first-brand .wordmark{font-size:clamp(3.05rem,18vw,4.8rem)}.agent-first-brand h1{font-size:clamp(1.85rem,10vw,2.8rem)}
+      .harness-demo-head{align-items:flex-start;flex-direction:column}.dsh-demo-viewport{height:720px}.dsh-demo{height:720px;min-height:0;grid-template-columns:1fr}.dsh-sidebar{display:none}.dsh-feed{width:calc(100% - 24px);min-height:0}.dsh-composer-wrap{width:calc(100% - 24px)}.dsh-progress{position:static;margin-left:auto}.dsh-choices{grid-template-columns:1fr}.dsh-demo-note{width:100%;margin-left:0}
       .pipe-lanes{display:none}
       .pipe-grid{grid-template-columns:1fr;gap:.9rem}
       .sources{gap:.6rem}
@@ -355,7 +433,7 @@
 
 <header class="site" id="siteHeader">
   <div class="wrap header-in">
-    <a class="brand-lockup" href="#top"><img class="brand-mark" src="media/gitlearnos-harness-mascot.png" alt=""><span class="wordmark">GitLearn<em>OS</em></span></a>
+    <a class="brand-lockup wordmark" href="#harness-demo"><span class="git">Git</span>LearnOS</a>
     <nav class="primary" aria-label="主导航" data-label-zh="主导航" data-label-en="Primary">
       <a href="#principles"><span class="zh">原理</span><span class="en">Principles</span></a>
       <a href="#example"><span class="zh">示例</span><span class="en">Example</span></a>
@@ -363,10 +441,11 @@
       <a href="#subjects"><span class="zh">学科仓库</span><span class="en">Subjects</span></a>
       <a href="#memory"><span class="zh">主动记忆</span><span class="en">Agent memory</span></a>
       <a href="#harness"><span class="zh">DS Harness</span><span class="en">DS Harness</span></a>
-      <a href="#demo"><span class="zh">参赛演示</span><span class="en">Demo</span></a>
+      <a href="#harness-demo"><span class="zh">上手体验</span><span class="en">Try it</span></a>
       <a href="#start"><span class="zh">快速开始</span><span class="en">Quickstart</span></a>
     </nav>
     <div class="header-tools">
+      <a class="home-link" href="https://guojiz.github.io/"><span class="zh"><span class="long">← Guojiz 主页</span><span class="short">← 主页</span></span><span class="en"><span class="long">← Guojiz home</span><span class="short">← Home</span></span></a>
       <a class="gh-link" href="https://github.com/Guojiz/GitLearnOS" aria-label="GitHub repository"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg></a>
       <button class="lang-toggle" type="button" aria-label="Switch to English"><span id="zhMark" class="active">中</span> · <span id="enMark">EN</span></button>
     </div>
@@ -374,11 +453,70 @@
 </header>
 
 <main id="main">
+  <!-- ================= DeepSeek Harness 可操作学习演示 ================= -->
+  <section class="harness-demo-sec" id="harness-demo">
+    <div class="harness-demo-inner">
+      <div class="agent-first-brand">
+        <span class="wordmark"><span class="git">Git</span>LearnOS</span>
+        <h1><span class="zh">你去学。它收尾。</span><span class="en">You learn. It closes the loop.</span></h1>
+        <p><span class="zh">先别看介绍。直接进入一次真实结构的 DeepSeek Harness 学习会话：Agent 已读取演示学习状态，并主动展开今天最值得继续的一项。</span><span class="en">Skip the pitch. Enter a learning session built around the real DeepSeek Harness structure: the agent has read the sample state and opened today's most useful next step.</span></p>
+      </div>
+
+      <div class="harness-demo-head">
+        <div>
+          <span class="script-badge"><span class="zh">脚本演示 · 不调用模型</span><span class="en">Scripted demo · no model calls</span></span>
+          <h2><span class="zh">像学生一样点。<br>Agent 把每一步接住。</span><span class="en">Learn by clicking.<br>The agent carries every step forward.</span></h2>
+        </div>
+        <p><span class="zh">提示词、回答和回执都是固定脱敏数据。它复刻原生面板的打开、收起、下一步引导与学习状态变化，但不会连接模型、读取你的笔记或改动仓库。</span><span class="en">Prompts, answers, and receipts use fixed synthetic data. It recreates the native panel's open, collapse, next-step guidance, and learning-state changes without contacting a model, reading personal notes, or changing a repository.</span></p>
+      </div>
+
+      <div class="dsh-demo-viewport" id="dshDemoViewport">
+      <div class="dsh-demo" id="dshDemo" aria-label="Scripted DeepSeek Harness learning demo">
+        <aside class="dsh-sidebar" aria-label="Demo sessions">
+          <div class="dsh-wordmark">deepseek <small>HARNESS</small></div>
+          <button class="dsh-new" type="button" data-demo-reset>＋ <span class="zh">新会话</span><span class="en">New session</span></button>
+          <div class="dsh-side-label"><span class="zh">工作区</span><span class="en">Workspace</span></div>
+          <div class="dsh-workspace">high-school-learning</div>
+          <button class="dsh-session active" type="button"><span class="zh">二次函数：最值为什么总搞反</span><span class="en">Quadratics: why I reverse extrema</span></button>
+          <button class="dsh-session" type="button"><span class="zh">化学平衡移动</span><span class="en">Chemical equilibrium shifts</span></button>
+          <button class="dsh-session" type="button"><span class="zh">牛顿第二定律</span><span class="en">Newton's second law</span></button>
+          <div class="dsh-settings">⚙ <span class="zh">设置</span><span class="en">Settings</span></div>
+        </aside>
+        <div class="dsh-main">
+          <div class="dsh-top">
+            <span class="dsh-pill">high-school-learning</span>
+            <span class="dsh-pill"><span class="zh">标准模式</span><span class="en">Standard mode</span></span>
+            <span class="dsh-progress" id="dshProgress">0 / 6</span>
+          </div>
+          <div class="dsh-feed" id="dshFeed" aria-live="polite"></div>
+          <div class="dsh-composer-wrap">
+            <div class="dsh-panel" id="dshPanel">
+              <button class="dsh-panel-bar" id="dshPanelBar" type="button" aria-expanded="true">GitLearnOS <span id="dshCaret">▾</span></button>
+              <div class="dsh-panel-list" id="dshPanelList"></div>
+            </div>
+            <div class="dsh-composer">
+              <div class="dsh-draft" id="dshDraft"><span class="zh">描述你想学的内容</span><span class="en">Describe what you want to learn</span></div>
+              <div class="dsh-composer-foot"><span>＋</span><span>Workspace Write</span><span class="dsh-model"><span class="zh">脚本引擎 · 无模型</span><span class="en">Script engine · no model</span></span><span class="dsh-send">↑</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dsh-demo-controls">
+        <button class="primary" type="button" id="dshStart"><span class="zh">重新跟着 Agent 学一遍</span><span class="en">Restart with the agent</span></button>
+        <button type="button" id="dshNextDay" disabled><span class="zh">快进到次日复测</span><span class="en">Jump to next-day recheck</span></button>
+        <button type="button" data-demo-reset><span class="zh">重置演示</span><span class="en">Reset demo</span></button>
+        <span class="dsh-demo-note"><span class="zh">真实界面结构 · 固定提示词 · 合成学习数据 · 零网络请求</span><span class="en">Real UI structure · fixed prompts · synthetic learning data · zero network requests</span></span>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= HERO ================= -->
-  <section class="hero wrap" id="top">
+  <section class="hero wrap" id="overview">
     <div>
       <p class="kicker"><span class="zh">学习者拥有的 Git 记忆 · Harness Developer Preview</span><span class="en">Learner-owned Git memory · Harness Developer Preview</span></p>
-      <h1><span class="zh b">你去学。<br><span class="hl">它收尾。</span></span><span class="en b">You learn.<br><span class="hl">It closes the loop.</span></span></h1>
+      <h2 class="hero-title"><span class="zh b">一次学习结束，<br><span class="hl">下一步已准备好。</span></span><span class="en b">One learning moment ends.<br><span class="hl">The next step is ready.</span></span></h2>
       <p class="intro"><span class="zh">GitLearnOS 让一个主 Agent 把真实学习整理成学习者拥有的私有 Git 状态：先回答眼前问题，再连接证据、引导下一步，并在权限明确时安全写回。DeepSeek Harness 原生面板目前是 Developer Preview。</span><span class="en">GitLearnOS lets one main agent turn real learning into a learner-owned private Git record: answer the immediate need, connect evidence, guide the next step, and write back only when authority is clear. The native DeepSeek Harness panel is a Developer Preview.</span></p>
       <div class="actions">
         <a class="button" href="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-zh="https://github.com/Guojiz/GitLearnOS/blob/main/zh-CN/QUICKSTART.md" data-href-en="https://github.com/Guojiz/GitLearnOS/blob/main/QUICKSTART.md"><span class="zh">打开核心版快速开始</span><span class="en">Open the core-ready Quickstart</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-r"/></svg></a>
@@ -591,30 +729,6 @@
     </div>
   </section>
 
-  <!-- ================= 06 AceSAT 参赛演示 ================= -->
-  <section class="demo-sec" id="demo">
-    <div class="wrap numbered">
-      <div class="number reveal">06</div>
-      <div class="demo-layout">
-        <div class="demo-copy reveal">
-          <p class="kicker"><span class="zh">AceSAT AI Agent Hackathon · 英文演示</span><span class="en">AceSAT AI Agent Hackathon · Product demo</span></p>
-          <h2><span class="zh">看 Agent 如何把一次练习，变成可持续的学习状态。</span><span class="en">Watch one practice session become durable learning state.</span></h2>
-          <p><span class="zh">2 分 23 秒产品演示：读取学习者约束、定位证据缺口、提出一个精准问题、写回结果，并安排延迟复查。兼容 ChatGPT、Claude、Codex、OpenCode 等实际具备仓库权限的运行环境；完全离线还需要受支持的本地模型与工具链。</span><span class="en">A 2:23 product demo: read learner constraints, locate an evidence gap, ask one precise question, write the result back, and schedule a delayed recheck. It works on ChatGPT, Claude, Codex, OpenCode, or another runtime with verified repository access; fully offline use still requires a supported local model and toolchain.</span></p>
-          <div class="actions">
-            <a class="button ghost" href="media/gitlearnos-acesat.en.srt" download><span class="zh">下载英文字幕</span><span class="en">Download captions</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-d"/></svg></a>
-          </div>
-        </div>
-        <div class="video-shell reveal d1">
-          <video controls playsinline preload="metadata" poster="media/gitlearnos-acesat-poster.jpg" aria-label="GitLearnOS AceSAT product demo">
-            <source src="media/gitlearnos-acesat.mp4" type="video/mp4">
-            <span class="zh">浏览器不支持视频播放。请下载 MP4 后观看。</span><span class="en">Your browser does not support embedded video. Download the MP4 to watch.</span>
-          </video>
-          <div class="video-meta"><strong>GitLearnOS × AceSAT</strong><span>02:23 · 1080p · English subtitles</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ================= 最终 CTA ================= -->
   <section class="final wrap" id="start">
     <div>
@@ -645,7 +759,7 @@ confirming my goal, subject, and materials.</pre>
 
 <footer class="site">
   <div class="wrap footer-in">
-    <a class="wordmark" href="#top">GitLearn<em>OS</em></a>
+    <a class="wordmark" href="#harness-demo"><span class="git">Git</span>LearnOS</a>
     <p><span class="zh">轻量、可检查、可撤销。老师和 AI 都只是你选择的学习协作者。</span><span class="en">Lightweight, inspectable, reversible. Teachers and AI remain collaborators you choose.</span></p>
     <div class="footer-links">
       <a href="https://guojiz.github.io/">Guojiz</a>
@@ -685,6 +799,7 @@ confirming my goal, subject, and materials.</pre>
     document.querySelectorAll('[data-href-en]').forEach(function(link){
       link.href = english ? link.dataset.hrefEn : link.dataset.hrefZh;
     });
+    if(typeof scheduleDshFit==='function')scheduleDshFit();
   }
   applyLang(document.documentElement.classList.contains('lang-en') ? 'en' : 'zh');
   toggle.addEventListener('click', function(){
@@ -739,6 +854,324 @@ confirming my goal, subject, and materials.</pre>
       if(next){ ev.preventDefault(); next.focus(); selectTab(next); }
     });
   });
+
+  /* ---------- DeepSeek Harness 脚本化学习演示 ---------- */
+  var dshDemoViewport = document.getElementById('dshDemoViewport');
+  var dshDemo = document.getElementById('dshDemo');
+  var dshDemoControls = document.querySelector('.dsh-demo-controls');
+  var dshFeed = document.getElementById('dshFeed');
+  var dshPanelBar = document.getElementById('dshPanelBar');
+  var dshPanelList = document.getElementById('dshPanelList');
+  var dshCaret = document.getElementById('dshCaret');
+  var dshDraft = document.getElementById('dshDraft');
+  var dshProgress = document.getElementById('dshProgress');
+  var dshNextDay = document.getElementById('dshNextDay');
+  var dshState = null;
+  var demoRunSeq = 0;
+  var dshFitFrame = 0;
+  function fitDshDemo(){
+    if(!dshDemoViewport || !dshDemo || !dshDemoControls)return;
+    var compact=window.matchMedia('(max-width:760px)').matches;
+    var baseHeight=compact?720:740;
+    var viewportHeight=window.visualViewport?window.visualViewport.height:window.innerHeight;
+    var headerHeight=header?header.getBoundingClientRect().height:80;
+    var controlsHeight=dshDemoControls.getBoundingClientRect().height;
+    var availableHeight=Math.max(120,viewportHeight-headerHeight-controlsHeight-28);
+    var scale=Math.min(1,availableHeight/baseHeight);
+    dshDemo.style.height=baseHeight+'px';
+    dshDemo.style.width=(100/scale)+'%';
+    dshDemo.style.transform='scale('+scale+')';
+    dshDemoViewport.style.height=Math.round(baseHeight*scale)+'px';
+    dshDemoViewport.dataset.scale=scale.toFixed(3);
+  }
+  function scheduleDshFit(){
+    window.cancelAnimationFrame(dshFitFrame);
+    dshFitFrame=window.requestAnimationFrame(fitDshDemo);
+  }
+  function keepDshDemoInView(){
+    window.requestAnimationFrame(function(){
+      dshDemoViewport.scrollTop=0;
+      dshDemoViewport.scrollLeft=0;
+      var demoRect=dshDemoViewport.getBoundingClientRect();
+      var controlsRect=dshDemoControls.getBoundingClientRect();
+      var viewportHeight=window.visualViewport?window.visualViewport.height:window.innerHeight;
+      var headerBottom=header?header.getBoundingClientRect().bottom:80;
+      var desiredTop=headerBottom+7;
+      if(demoRect.top<desiredTop || controlsRect.bottom>viewportHeight-4){
+        window.scrollBy({top:demoRect.top-desiredTop,left:0,behavior:'auto'});
+      }
+    });
+  }
+  window.addEventListener('resize',scheduleDshFit,{passive:true});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',scheduleDshFit,{passive:true});
+  dshDemoViewport.addEventListener('click',keepDshDemoInView);
+  dshDemoControls.addEventListener('click',keepDshDemoInView);
+  var dshActions = [
+    {key:'review',zh:'复习一遍',en:'Review it'},
+    {key:'practice',zh:'做几道题',en:'Try a few questions'},
+    {key:'close',zh:'收尾一道',en:'Close with one question'},
+    {key:'teacher',zh:'问老师',en:'Ask my teacher'},
+    {key:'notes',zh:'看我的笔记',en:'See my notes'}
+  ];
+  var dshTopics = [
+    {zh:'化学平衡移动',en:'Chemical equilibrium shifts',verbZh:'跟进',verbEn:'Follow up'},
+    {zh:'二次函数求最值',en:'Quadratic extrema',verbZh:'复习',verbEn:'Review',target:true},
+    {zh:'相似三角形对应关系',en:'Similar-triangle correspondence',verbZh:'跟进',verbEn:'Follow up'},
+    {zh:'词汇在语境中的含义',en:'Vocabulary in context',verbZh:'复习',verbEn:'Review'},
+    {zh:'牛顿第二定律',en:"Newton's second law",verbZh:'复习',verbEn:'Review'}
+  ];
+  function bi(zh,en,block){ return '<span class="zh'+(block?' b':'')+'">'+zh+'</span><span class="en'+(block?' b':'')+'">'+en+'</span>'; }
+  function esc(value){ return String(value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function toolRow(name,status,data,open,kind){
+    var label=typeof name==='string'?esc(name):bi(name.zh,name.en);
+    return '<details class="dsh-tool '+(kind||'')+'"'+(open?' open':'')+'><summary><span class="dsh-tool-label">'+label+'</span><span class="dsh-tool-status">'+bi(status.zh,status.en)+'</span></summary><pre>'+esc(data)+'</pre></details>';
+  }
+  function assistantMessage(body){ return '<div class="dsh-message"><span class="dsh-avatar">AI</span><div>'+body+'</div></div>'; }
+  function userMessage(body){ return '<div class="dsh-message user"><span class="dsh-avatar">你</span><div><p>'+body+'</p></div></div>'; }
+  function guide(step,zh,en){ return '<div class="dsh-guide"><b>'+step+'</b><div>'+bi(zh,en,true)+'</div></div>'; }
+  function traceText(data,kind){
+    if(kind==='write'){
+      var writeLines=['tool: '+(data.tool||'learning_apply'),'demo: true · executed: false'];
+      if(data.wouldChange)writeLines.push('would change:\n'+data.wouldChange.map(function(path){return '  '+path;}).join('\n'));
+      if(data.content)writeLines.push('content:\n'+Object.keys(data.content).map(function(key){return '  '+key+' → '+data.content[key];}).join('\n'));
+      if(data.promotionEvidence)writeLines.push('promotion evidence:\n'+data.promotionEvidence.map(function(item){return '  '+item;}).join('\n'));
+      if(data.masteryBefore||data.masteryAfter)writeLines.push('mastery: '+(data.masteryBefore||'learning')+' → '+(data.masteryAfter||data.masteryBefore));
+      if(data.wouldReturn)writeLines.push('receipt: '+data.wouldReturn.status+' · '+data.wouldReturn.commit+'\nundo: '+data.wouldReturn.undo);
+      return writeLines.join('\n\n');
+    }
+    if(kind==='rag'){
+      var ragLines=['local RAG · demo: true · executed: false','operation: '+(data.operation||'none')];
+      if(data.query)ragLines.push('query: '+data.query);
+      if(data.scope)ragLines.push('scope: '+data.scope);
+      if(data.source)ragLines.push('source: '+data.source);
+      if(data.doc_id)ragLines.push('doc_id: '+data.doc_id);
+      if(data.authorizationRequired)ragLines.push('gate: source authorization required');
+      if(data.verificationRequired)ragLines.push('verify: nonzero chunks · source-specific query · rebuild path');
+      if(data.reason)ragLines.push('reason: '+data.reason);
+      return ragLines.join('\n');
+    }
+    return JSON.stringify(data,null,2);
+  }
+  function operationTrace(stage){
+    var files={
+      event:'subjects/math/events/2026-08-15-quadratic-extrema.md',
+      gap:'subjects/math/knowledge-gaps/quadratic-extrema.md',
+      model:'subjects/math/models/quadratic-extrema-v1.md',
+      review:'subjects/math/reviews/quadratic-extrema-transfer.md',
+      handoff:'subjects/math/handoffs/quadratic-extrema-teacher.md',
+      dashboard:'dashboard.md'
+    };
+    var commonRead={demo:true,executed:false,operation:'read',files:['gitlearnos.yml','dashboard.md',files.gap,files.review],result:{mode:'safe-auto',mastery:'learning',due:'2026-08-15'}};
+    var rows={
+      boot:[
+        [{zh:'读取学习状态',en:'Read learning state'},{zh:'已读取 · 演示',en:'read · demo'},commonRead,false,''],
+        [{zh:'Agent 决定下一步',en:'Agent chooses next step'},{zh:'主动展开',en:'opened panel'},{demo:true,executed:false,nextUp:'quadratic-extrema',panel:'expand',queueRevision:1,reason:'review due today'},true,'decision'],
+        [{zh:'检查本地 RAG',en:'Check local RAG'},{zh:'跳过',en:'skipped'},{demo:true,executed:false,operation:'none',reason:'this review does not depend on learner-specific sources'},false,'rag']
+      ],
+      review:[
+        [{zh:'读取原始作答与缺口',en:'Read original answer and gap'},{zh:'已读取 · 演示',en:'read · demo'},{demo:true,executed:false,files:[files.event,files.gap],preserveOriginal:true},false,''],
+        [{zh:'判断学习路线',en:'Choose learning route'},{zh:'整理并教学',en:'organize and teach'},{demo:true,executed:false,operations:['organize','session','review'],diagnosisStatus:'agent-hypothesis',nextUp:'practice'},false,'decision'],
+        [{zh:'准备写入 Git',en:'Prepare Git write'},{zh:'拟写入 · 未执行',en:'would write · not executed'},{demo:true,tool:'learning_apply',executed:false,atomic:true,wouldChange:[files.event,files.gap,files.review,files.dashboard],content:{event:'保留原判断：开口向上所以有最大值',gap:'可能混淆开口方向与极值类型',review:'新增一道不同数字的迁移题',dashboard:'Next up → 做几道题'},masteryAfter:'learning',wouldReturn:{status:'committed',commit:'demo-review-01',changedFiles:[files.event,files.gap,files.review,files.dashboard],undo:'git revert demo-review-01'}},true,'write'],
+        [{zh:'判断是否使用 RAG',en:'Decide whether to use RAG'},{zh:'不使用',en:'skipped'},{demo:true,executed:false,operation:'none',reason:'one-off mistake; keep it in Git first'},false,'rag']
+      ],
+      practice:[
+        [{zh:'读取待作答复测',en:'Read planned review'},{zh:'等待作答',en:'awaiting answer'},{demo:true,executed:false,file:files.review,state:'planned',question:'y = −x² + 6x − 2 的顶点是什么极值？'},false,''],
+        [{zh:'暂停写入',en:'Hold writeback'},{zh:'等作答后再写',en:'wait for answer'},{demo:true,executed:false,reason:'answer, independence, and support usage are not known yet'},false,'write'],
+        [{zh:'判断是否使用 RAG',en:'Decide whether to use RAG'},{zh:'不使用',en:'skipped'},{demo:true,executed:false,operation:'none',reason:'independent practice must not be answered by retrieval'},false,'rag']
+      ],
+      practiceWrong:[
+        [{zh:'读取你的本次选择',en:'Read this answer'},{zh:'已获得新证据',en:'new evidence'},{demo:true,executed:false,answer:'A · 最小值',independent:true,supportUsed:false,result:'incorrect'},false,''],
+        [{zh:'写入同一知识缺口',en:'Update the same knowledge gap'},{zh:'拟写入 · 未执行',en:'would write · not executed'},{demo:true,tool:'learning_apply',executed:false,wouldChange:[files.review,files.gap,files.dashboard],content:{review:'保留原选项 A 与作答条件',gap:'追加证据：开口方向与极值类型配反',dashboard:'Next up 保持做几道题'},deduplicatedGap:true,masteryAfter:'learning',wouldReturn:{status:'committed',commit:'demo-practice-wrong-02',changedFiles:[files.review,files.gap,files.dashboard],undo:'git revert demo-practice-wrong-02'}},true,'write'],
+        [{zh:'本地 RAG',en:'Local RAG'},{zh:'不写入',en:'not ingested'},{demo:true,executed:false,reason:'temporary wrong answer remains in Git learning history'},false,'rag']
+      ],
+      practiceRight:[
+        [{zh:'读取你的本次选择',en:'Read this answer'},{zh:'第二条观察',en:'second observation'},{demo:true,executed:false,answer:'B · 最大值',independent:true,result:'correct'},false,''],
+        [{zh:'写入练习证据并修订模型',en:'Write practice evidence and revise model'},{zh:'拟写入 · 未执行',en:'would write · not executed'},{demo:true,tool:'learning_apply',executed:false,atomic:true,wouldChange:[files.review,files.gap,files.model,files.dashboard],promotionEvidence:[files.event+'#original-judgment',files.review+'#variation-1'],content:{review:'本次变式答对',gap:'证据数 2；仍需延迟复测',model:'a<0 → 开口向下 → 顶点最大值',dashboard:'Next up → 收尾一道'},masteryAfter:'learning',wouldReturn:{status:'committed',commit:'demo-practice-right-03',changedFiles:[files.review,files.gap,files.model,files.dashboard],undo:'git revert demo-practice-right-03'}},true,'write'],
+        [{zh:'本地 RAG',en:'Local RAG'},{zh:'等待 Git 正式模型',en:'waits for Git model'},{demo:true,executed:false,operation:'none',reason:'Git first; only durable formal knowledge may be synchronized'},false,'rag']
+      ],
+      close:[
+        [{zh:'读取收尾题',en:'Read close question'},{zh:'等待作答',en:'awaiting answer'},{demo:true,executed:false,file:files.review,supportUsed:false,masteryBefore:'learning'},false,''],
+        [{zh:'暂停写入与检索',en:'Hold writeback and retrieval'},{zh:'等独立作答',en:'wait for answer'},{demo:true,executed:false,git:'pending',rag:'skipped',reason:'this one-tap check tests the learner'},false,'decision']
+      ],
+      closePassed:[
+        [{zh:'读取收尾作答',en:'Read close answer'},{zh:'即时通过',en:'immediate pass'},{demo:true,executed:false,answer:'B · 最小值 3',independent:true,supportUsed:false,masteryBefore:'learning'},false,''],
+        [{zh:'写入 Git 学习事务',en:'Write Git learning transaction'},{zh:'拟提交 · 未执行',en:'would commit · not executed'},{demo:true,tool:'learning_apply',executed:false,atomic:true,baseRevision:'demo-base-6a1f',wouldChange:[files.event,files.gap,files.model,files.review,files.dashboard],content:{event:'收尾题独立答对',gap:'即时表现改善，仍待延迟迁移',model:'二次函数有限定义域最值三步法 v1',review:'安排次日独立变式',dashboard:'状态 5/6；Next up → 次日复测'},masteryAfter:'learning',wouldReturn:{status:'committed',commit:'demo-7c2a9f1',changedFiles:[files.event,files.gap,files.model,files.review,files.dashboard],undo:'git revert demo-7c2a9f1'}},true,'write'],
+        [{zh:'同步长期方法到本地 RAG',en:'Sync durable method to local RAG'},{zh:'待授权与验证 · 未执行',en:'awaiting authorization and verification'},{demo:true,executed:false,operation:'insert',afterGit:true,authorizationRequired:true,scope:'demo-authorized/quadratics',doc_id:'demo-quadratics-01',source:files.model,verificationRequired:{nonzeroChunks:true,sourceSpecificQuery:true,rebuildPath:true},reason:'only after Git formalization, source authorization, and verified insertion'},false,'rag']
+      ],
+      teacher:[
+        [{zh:'整理给老师的问题',en:'Prepare teacher question'},{zh:'已生成 · 演示',en:'prepared · demo'},{demo:true,executed:false,operation:'handoff',status:'awaiting-feedback'},false,'decision'],
+        [{zh:'写入反馈入口',en:'Write feedback handoff'},{zh:'拟写入 · 未执行',en:'would write · not executed'},{demo:true,tool:'learning_apply',executed:false,wouldChange:[files.handoff,files.gap,files.dashboard],content:{handoff:'有限定义域时，顶点和端点如何固定判断？',gap:'链接 handoff；状态 needs-check',dashboard:'等待老师反馈'},wouldReturn:{status:'committed',commit:'demo-handoff-04',changedFiles:[files.handoff,files.gap,files.dashboard],undo:'git revert demo-handoff-04'}},true,'write'],
+        [{zh:'本地 RAG',en:'Local RAG'},{zh:'不使用',en:'skipped'},{demo:true,executed:false,operation:'none',reason:'the handoff does not require personal source retrieval'},false,'rag']
+      ],
+      notes:[
+        [{zh:'读取 Git 正式笔记与出处',en:'Read formal Git note and provenance'},{zh:'只读',en:'read-only'},{demo:true,executed:false,files:[files.model,'subjects/math/sources/quadratics-textbook.md'],commitCreated:false,masteryChanged:false},false,''],
+        [{zh:'查询本地 RAG',en:'Query local RAG'},{zh:'拟查询 · 未执行',en:'would query · not executed'},{demo:true,executed:false,operation:'query',query:'二次函数有限定义域最值步骤',scope:'demo-authorized/quadratics',doc_id:'demo-quadratics-01',result:'看 a → 看顶点是否在定义域 → 比较端点'},true,'rag']
+      ],
+      recheck:[
+        [{zh:'读取次日复测计划',en:'Read next-day review plan'},{zh:'已读取 · 演示',en:'read · demo'},{demo:true,executed:false,file:files.review,state:'planned',independenceRequired:true,masteryBefore:'learning',progress:'5 / 6'},true,''],
+        [{zh:'暂停 Git 与 RAG',en:'Hold Git and RAG'},{zh:'等待独立作答',en:'awaiting answer'},{demo:true,executed:false,git:'pending',rag:'skipped',reason:'do not let stored knowledge answer an independent transfer check'},false,'decision']
+      ],
+      demonstrated:[
+        [{zh:'读取延迟迁移作答',en:'Read delayed transfer answer'},{zh:'独立通过',en:'independent pass'},{demo:true,executed:false,answer:'B · 7',delayed:true,varied:true,independent:true,supportUsed:false},false,''],
+        [{zh:'更新 Git 正式状态',en:'Update formal Git state'},{zh:'拟提交 · 未执行',en:'would commit · not executed'},{demo:true,tool:'learning_apply',executed:false,atomic:true,wouldChange:[files.review,files.gap,files.model,files.dashboard],content:{review:'次日独立变式通过',gap:'resolved by delayed transfer evidence',model:'保留 v1，关联通过证据',dashboard:'mastery → demonstrated；重排 Next up'},masteryBefore:'learning',masteryAfter:'demonstrated',queueRevision:7,wouldReturn:{status:'committed',commit:'demo-b90d2e4',changedFiles:[files.review,files.gap,files.model,files.dashboard],undo:'git revert demo-b90d2e4'}},true,'write'],
+        [{zh:'核对 RAG 边界',en:'Check RAG boundary'},{zh:'不改变掌握',en:'does not set mastery'},{demo:true,executed:false,doc_id:'demo-quadratics-01',role:'retrieval only',formalTruth:'Git evidence'},false,'rag']
+      ]
+    }[stage] || [];
+    return '<section class="dsh-process" aria-label="Agent operation trace"><div class="dsh-process-head"><span>'+bi('Agent 操作过程','Agent operation process')+'</span><small>'+bi('橙色 Git · 绿色 RAG · 脚本数据','orange Git · green RAG · scripted data')+'</small></div>'+rows.map(function(row){return toolRow(row[0],row[1],traceText(row[2],row[4]),row[3],row[4]);}).join('')+'</section>';
+  }
+  function initialFeed(){
+    return guide('1', 'Agent 已经替你展开今天到期的学习项。点高亮的「二次函数求最值」，我会把后面的每一步接住。', 'The agent has opened today’s due learning item. Click the highlighted “Quadratic extrema”; it will carry each step forward.')+
+      assistantMessage('<p>'+bi('欢迎回来。上次你已经能算出顶点，但“开口方向”和“最值类型”还会混在一起。今天我们只修这一处，再做一道变式。面板我已经打开了，点高亮位置就好。','Welcome back. Last time you could find the vertex, but still mixed up opening direction and extremum type. Today we will fix only that, then try one variation. I opened the panel for you—click the highlighted item.')+'</p>'+
+      operationTrace('boot'));
+  }
+  function nextActionKey(){
+    var order=['review','practice','close','teacher','notes'];
+    for(var i=0;i<order.length;i++){ if(!dshState.done[order[i]]) return order[i]; }
+    return dshState.rechecked ? null : 'recheck';
+  }
+  function actionName(key){
+    for(var i=0;i<dshActions.length;i++){ if(dshActions[i].key===key) return dshActions[i]; }
+    return {zh:'次日复测',en:'Next-day recheck'};
+  }
+  function updateProgress(){
+    var count=Object.keys(dshState.done).filter(function(key){return dshState.done[key];}).length+(dshState.rechecked?1:0);
+    dshProgress.textContent=count+' / 6';
+    var next=nextActionKey();
+    var allActions=['review','practice','close','teacher','notes'].every(function(key){return !!dshState.done[key];});
+    dshNextDay.disabled=!allActions || !dshState.closePassed || dshState.rechecked || dshState.recheckStarted;
+    dshNextDay.classList.toggle('dsh-attention',allActions && dshState.closePassed && !dshState.rechecked && !dshState.recheckStarted);
+    dshNextDay.dataset.guideZh='下一步'; dshNextDay.dataset.guideEn='Next';
+    if(next){ var label=actionName(next); dshPanelBar.title='下一步：'+label.zh; }
+  }
+  function renderPanel(){
+    dshPanelBar.setAttribute('aria-expanded',dshState.open?'true':'false');
+    dshCaret.textContent=dshState.open?'▾':'▸';
+    dshPanelList.hidden=!dshState.open;
+    if(!dshState.open){ dshPanelList.innerHTML=''; return; }
+    if(!dshState.topic){
+      dshPanelList.innerHTML=dshTopics.map(function(topic){
+        return '<button class="dsh-topic'+(topic.target?' next dsh-attention':'')+'" '+(topic.target?'aria-current="step" data-guide-zh="点这里" data-guide-en="Click"':'')+' type="button" data-demo-topic="'+(topic.target?'quadratic':'other')+'"><span>'+bi(topic.zh,topic.en)+'</span><small>('+bi(topic.verbZh,topic.verbEn)+')</small></button>';
+      }).join('')+'<div class="dsh-panel-foot">'+bi('Agent 已展开 · 因为这项复测今天到期','Opened by the agent · this review is due today')+'</div>';
+      return;
+    }
+    var next=nextActionKey();
+    dshPanelList.innerHTML='<button class="dsh-back" type="button" data-demo-back>← '+bi('二次函数求最值','Quadratic extrema')+'</button>'+dshActions.map(function(action){
+      var guided=next===action.key && next!=='recheck';
+      return '<button class="dsh-op'+(dshState.done[action.key]?' done':'')+(guided?' next dsh-attention':'')+'" '+(guided?'aria-current="step" data-guide-zh="下一步" data-guide-en="Next"':'')+' type="button" data-demo-action="'+action.key+'"><span>'+bi(action.zh,action.en)+'</span><small>→</small></button>';
+    }).join('')+'<div class="dsh-panel-foot">'+bi('动作后先收起；Agent 更新状态后可再次主动展开','Collapses after action; the agent may reopen it after updating state')+'</div>';
+    var guided=dshPanelList.querySelector('.dsh-attention');
+    if(guided)dshPanelList.scrollTop=Math.max(0,guided.offsetTop-dshPanelList.offsetTop-36);
+  }
+  function promptFor(key){
+    return {
+      review:{zh:'请带我复习「二次函数求最值」',en:'Help me review “Quadratic extrema.”'},
+      practice:{zh:'请给我出几道关于「二次函数求最值」的题',en:'Give me a few questions about “Quadratic extrema.”'},
+      close:{zh:'请用一两句话讲清「二次函数求最值」，然后出一道选择题让我点选收尾',en:'Explain “Quadratic extrema” briefly, then close with one tap-to-answer question.'},
+      teacher:{zh:'请帮我准备关于「二次函数求最值」要问老师的问题',en:'Help me prepare a focused question for my teacher about “Quadratic extrema.”'},
+      notes:{zh:'请展示我关于「二次函数求最值」的笔记和模型',en:'Show my notes and model for “Quadratic extrema.”'}
+    }[key];
+  }
+  function feedFor(key){
+    var p=promptFor(key); var next=actionName(nextActionKey());
+    var route=toolRow('learning_route', {zh:'预设路由 · 未执行',en:'scripted route · not executed'}, '{\n  "operations": ["'+key+'"],\n  "writeAuthorized": true,\n  "persisted": false\n}');
+    if(key==='review') return guide('2', '很好，进入了。先保留你的原始判断，只修最关键的一处；Agent 回答后会主动展开下一步。', 'Good—we are in. Preserve the original judgment and patch only the key point; the agent will open the next step after responding.')+
+      userMessage(bi(p.zh,p.en))+route+assistantMessage('<p>'+bi('你原来的判断是：「开口向上，所以有最大值。」这里不是整道题都错了，关键只差一个方向：开口向上，顶点是<strong>最小值</strong>；有限区间还要比较端点。很好，我们只修这一处，马上用新数字确认。','Your original judgment was: “It opens upward, so it has a maximum.” The whole solution is not wrong—only the direction is reversed: opening upward makes the vertex a <strong>minimum</strong>; on a finite interval, compare endpoints. Good. Let’s patch just that and confirm it with new numbers.')+'</p><div class="dsh-evidence"><strong>'+bi('保留的原始证据','Preserved original evidence')+'</strong>y = x² − 4x + 1；'+bi('学习者判断：最大值在顶点。诊断：可能混淆开口方向与极值类型，尚待更多证据。','learner judgment: the vertex is a maximum. Diagnosis: possible confusion between opening direction and extremum type; more evidence is still needed.')+'</div>'+operationTrace('review'));
+    if(key==='practice') return guide('3', '趁热做一道变式。请选择一个答案；错答会帮助 Agent 精确定位混淆。', 'Try a variation while the idea is fresh. Choose an answer; a wrong tap helps the agent localize the confusion.')+
+      userMessage(bi(p.zh,p.en))+route+assistantMessage('<p>'+bi('来，我们只看这一条判断链：y = −x² + 6x − 2 的顶点是什么极值？先自己点一个，错了也没关系。','Let’s test just this reasoning chain: what kind of extremum is the vertex of y = −x² + 6x − 2? Choose one yourself; a wrong answer is useful too.')+'</p>'+operationTrace('practice')+'<div class="dsh-choices dsh-attention" data-guide-zh="选一个" data-guide-en="Choose one"><button class="dsh-choice" data-demo-choice="practice-wrong" type="button">A · '+bi('最小值','Minimum')+'</button><button class="dsh-choice" data-demo-choice="practice-right" type="button">B · '+bi('最大值','Maximum')+'</button><button class="dsh-choice" data-demo-choice="practice-wrong" type="button">C · '+bi('无法判断','Cannot tell')+'</button></div><div class="dsh-choice-feedback"></div>');
+    if(key==='close') return guide('4', '最后用一句话收束，再独立点一道。答对是今天的即时证据，稳定掌握留给次日复测。', 'Close in one sentence, then answer independently. A pass is immediate evidence; stable mastery waits for the next-day check.')+
+      userMessage(bi(p.zh,p.en))+route+assistantMessage('<p>'+bi('最后收住：先看 a 的正负判断开口，再看顶点，有限区间还要比较端点。现在独立点一下：y = 2(x−1)²+3 的顶点是？','One final rule: use the sign of a for the opening, then inspect the vertex; on a finite interval, compare endpoints. Now answer independently: what is the vertex of y = 2(x−1)²+3?')+'</p>'+operationTrace('close')+'<div class="dsh-choices dsh-attention" data-guide-zh="选一个" data-guide-en="Choose one"><button class="dsh-choice" data-demo-choice="close-wrong" type="button">A · '+bi('最大值 3','Maximum 3')+'</button><button class="dsh-choice" data-demo-choice="close-right" type="button">B · '+bi('最小值 3','Minimum 3')+'</button><button class="dsh-choice" data-demo-choice="close-wrong" type="button">C · '+bi('没有极值','No extremum')+'</button></div><div class="dsh-choice-feedback"></div>');
+    if(key==='teacher') return guide('5', '系统帮你把“哪里卡住”说清楚，但不会伪造老师已经回答。', 'The system turns the confusion into a precise question, but never invents a teacher response.')+
+      userMessage(bi(p.zh,p.en))+route+assistantMessage('<p>'+bi('可以这样问老师：','Ask this:')+'</p><div class="dsh-evidence"><strong>'+bi('等待老师反馈','Awaiting teacher feedback')+'</strong>'+bi('“我会把开口向上和最大值连在一起。遇到有限定义域时，怎样用固定步骤判断顶点和端点谁给出最大、最小值？”','“I associate opening upward with a maximum. On a finite domain, what fixed steps should I use to decide whether the vertex or endpoints give the maximum and minimum?”')+'</div>'+operationTrace('teacher'));
+    return guide('6', '现在看 Git 中的正式模型和出处，再演示一次只针对授权资料的 RAG 查询。', 'Now read the formal Git model and provenance, then preview one RAG query limited to an authorized source.')+
+      userMessage(bi(p.zh,p.en))+assistantMessage('<p>'+bi('很好，你已经把零散规则收成三步了。我先从 Git 找到正式模型和出处，再让本地 RAG 只查授权的二次函数资料；普通练习不会被塞进知识库。','Good—you have compressed scattered rules into three steps. I first locate the formal Git model and provenance, then let local RAG search only the authorized quadratic source; ordinary exercises are never dumped into the knowledge base.')+'</p><div class="dsh-evidence"><strong>'+bi('演示笔记 · 二次函数最值三步','Sample note · three steps for quadratic extrema')+'</strong>1. '+bi('看 a 的正负，判断顶点是最大还是最小。','Check the sign of a to classify the vertex.')+'<br>2. '+bi('看定义域，确认顶点横坐标是否在范围内。','Check whether the vertex lies in the domain.')+'<br>3. '+bi('有限闭区间还要比较两个端点。','On a closed interval, compare both endpoints.')+'</div>'+operationTrace('notes'));
+  }
+  function runAction(key){
+    var prompt=promptFor(key);
+    dshState.open=false; dshState.topic=null; dshState.current=key;
+    if(key==='review' || key==='teacher' || key==='notes')dshState.done[key]=true;
+    dshDraft.innerHTML=bi(prompt.zh,prompt.en);
+    dshFeed.innerHTML=feedFor(key);
+    renderPanel(); updateProgress();
+    dshFeed.scrollTop=dshFeed.scrollHeight;
+    if(key==='review' || key==='teacher')agentReopen();
+    if(key==='notes' && nextActionKey()!=='recheck')agentReopen();
+  }
+  function agentReopen(){
+    var runId=dshState.runId;
+    window.setTimeout(function(){
+      if(!dshState || dshState.runId!==runId || dshState.recheckStarted || dshState.rechecked)return;
+      dshState.open=true; dshState.topic='quadratic'; dshState.panelRevision+=1;
+      renderPanel(); updateProgress();
+    },360);
+  }
+  function choiceFeedback(kind,button){
+    var box=document.querySelector('.dsh-choice-feedback'); if(!box) return;
+    var choiceGroup=button.closest('.dsh-choices'); if(choiceGroup)choiceGroup.classList.remove('dsh-attention');
+    Array.prototype.slice.call(document.querySelectorAll('.dsh-choice')).forEach(function(item){item.classList.remove('correct','wrong');});
+    if(kind==='practice-right'){
+      button.classList.add('correct'); dshState.done.practice=true;
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('对，就是这条判断链','That reasoning chain is correct')+'</strong>'+bi('a&lt;0 → 开口向下 → 顶点最大值。很好，这说明你现在能用出来；一次答对还不算稳定掌握。别停在这里，下一步只剩一道收尾题。','a&lt;0 → opens downward → vertex maximum. Good—you can use it now. One correct answer is not stable mastery yet. Keep going; only one close question is next.')+'</div>'+operationTrace('practiceRight');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+      updateProgress(); agentReopen();
+    }else if(kind==='practice-wrong'){
+      button.classList.add('wrong');
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('没关系，这个错答很有价值','This wrong answer is useful')+'</strong>'+bi('错点已经收窄到“开口方向和极值类型配反”。只修这一句：a&lt;0 → 开口向下 → 顶点最大值。现在再试一次。','The confusion is now narrow: opening direction is paired with the wrong extremum. Patch only this: a&lt;0 → opens downward → vertex maximum. Try once more.')+'</div>'+operationTrace('practiceWrong');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+    }else if(kind==='close-right'){
+      button.classList.add('correct'); dshState.closePassed=true; dshState.done.close=true;
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('收尾通过 · 状态仍是 learning','Close passed · state remains learning')+'</strong>'+bi('答对了。今天这一轮的判断已经连起来了；我会把事件、缺口、模型、延迟复测和 Dashboard 作为一笔可撤销的 Git 事务。正式三步法只有在先进入 Git、且资料授权后，才会同步到 RAG。','Correct. Today’s reasoning now holds together. The event, gap, model, delayed review, and dashboard would form one reversible Git transaction. The durable three-step method enters RAG only after Git formalization and source authorization.')+'</div>'+operationTrace('closePassed');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+      updateProgress(); agentReopen();
+    }else{
+      button.classList.add('wrong');
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('先别急，这次只差一个方向','Pause—only one direction is reversed')+'</strong>'+bi('2&gt;0，所以开口向上，顶点是最小值。你的顶点数值没有问题，只改“最大/最小”这一处，再试一次。','2&gt;0, so it opens upward and the vertex is a minimum. Your vertex value is fine; change only maximum/minimum and try again.')+'</div>'+operationTrace('close');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+    }
+  }
+  function runRecheck(){
+    dshState.recheckStarted=true; dshState.open=false; dshState.topic=null;
+    dshDraft.innerHTML=bi('完成次日独立复测','Complete the next-day independent recheck');
+    dshFeed.innerHTML=guide('7', '欢迎回来。数字、写法和定义域都变了；现在不看笔记、不用 RAG，独立完成这一道。', 'Welcome back. The numbers, form, and domain have changed; answer independently without notes or RAG.')+
+      assistantMessage('<p>'+bi('昨天的即时表现是 5/6，我们没有把它冒充掌握。今天只做这一道：f(x)=−(x−3)²+7，x∈[0,5]，最大值是多少？','Yesterday’s immediate result was 5/6, and we did not call that mastery. One question today: f(x)=−(x−3)²+7 on x∈[0,5]. What is the maximum?')+'</p>'+operationTrace('recheck')+'<div class="dsh-choices dsh-attention" data-guide-zh="独立作答" data-guide-en="Answer"><button class="dsh-choice" data-demo-choice="recheck-wrong" type="button">A · 2</button><button class="dsh-choice" data-demo-choice="recheck-right" type="button">B · 7</button><button class="dsh-choice" data-demo-choice="recheck-wrong" type="button">C · 3</button></div><div class="dsh-choice-feedback"></div>');
+    renderPanel(); updateProgress();
+  }
+  function finishRecheck(kind,button){
+    var box=document.querySelector('.dsh-choice-feedback'); if(!box) return;
+    var choiceGroup=button.closest('.dsh-choices'); if(choiceGroup)choiceGroup.classList.remove('dsh-attention');
+    if(kind==='recheck-right'){
+      button.classList.add('correct'); dshState.rechecked=true; dshState.recheckStarted=false; updateProgress();
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('迁移通过 · 演示状态：demonstrated','Transfer passed · demo state: demonstrated')+'</strong>'+bi('做得漂亮：延迟、换题、没有提示都通过了。现在才有足够证据更新掌握状态，并让 Agent 重排 Next up。RAG 只保存可检索方法，不替 Git 决定掌握。','Well done: delayed, varied, and unassisted. Only now is there enough evidence to update mastery and let the agent reorder Next up. RAG keeps methods retrievable; it never decides mastery for Git.')+'</div>'+operationTrace('demonstrated');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+    }else{
+      button.classList.add('wrong');
+      box.innerHTML='<div class="dsh-evidence"><strong>'+bi('这道变式还没有通过','This variation has not passed yet')+'</strong>'+bi('没关系，记录只会说“换了表达后仍会混淆”，不会把你夸大成完全不会。先判断顶点是否在定义域内，再看开口方向，然后重试。','That is okay. The record only says the changed form still causes confusion; it does not exaggerate this into total failure. Check whether the vertex is in the domain, then use the opening direction and retry.')+'</div>'+operationTrace('recheck');
+      dshFeed.scrollTop=dshFeed.scrollHeight;
+    }
+  }
+  function resetDshDemo(){
+    demoRunSeq+=1;
+    dshState={open:true,topic:null,current:null,done:{},closePassed:false,recheckStarted:false,rechecked:false,panelRevision:1,runId:demoRunSeq};
+    dshDraft.innerHTML=bi('描述你想学的内容','Describe what you want to learn');
+    dshFeed.innerHTML=initialFeed();
+    renderPanel(); updateProgress();
+    scheduleDshFit();
+  }
+  dshPanelBar.addEventListener('click',function(){ dshState.open=!dshState.open; if(!dshState.open)dshState.topic=null; renderPanel(); });
+  dshPanelList.addEventListener('click',function(ev){
+    var topic=ev.target.closest('[data-demo-topic]'); if(topic){ if(topic.dataset.demoTopic==='quadratic'){dshState.topic='quadratic';dshFeed.innerHTML=guide('1','很好，今天只处理一个小缺口。先点高亮的「复习一遍」，我会保留你上次的原始判断，再带你继续。','Good. Today we will handle one small gap. Click the highlighted “Review it”; I will preserve your original judgment and carry you forward.');renderPanel();} return; }
+    if(ev.target.closest('[data-demo-back]')){dshState.topic=null;renderPanel();return;}
+    var action=ev.target.closest('[data-demo-action]'); if(action)runAction(action.dataset.demoAction);
+  });
+  dshFeed.addEventListener('click',function(ev){
+    var button=ev.target.closest('[data-demo-choice]'); if(!button)return;
+    var kind=button.dataset.demoChoice;
+    if(kind.indexOf('recheck-')===0)finishRecheck(kind,button);else choiceFeedback(kind,button);
+  });
+  document.getElementById('dshStart').addEventListener('click',function(){resetDshDemo();dshDemoViewport.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});});
+  dshNextDay.addEventListener('click',runRecheck);
+  document.querySelectorAll('[data-demo-reset]').forEach(function(button){button.addEventListener('click',resetDshDemo);});
+  resetDshDemo();
+  scheduleDshFit();
 
   /* ---------- 复制开场指令 ---------- */
   var copyBtn = document.getElementById('copyBtn');

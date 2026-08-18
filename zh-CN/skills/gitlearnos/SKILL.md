@@ -49,6 +49,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 | 提炼可复用理解 | [`references/model.md`](references/model.md) |
 | 总结已链接证据或准备精简交接 | [`references/summarize.md`](references/summarize.md) |
 | 修复状态、链接、重复或撤销范围 | [`references/maintenance.md`](references/maintenance.md) |
+| 应用质量标准、精简噪音或管理知识生命周期 | [`references/standards.md`](references/standards.md) |
 
 不要把笔记记录、老师反馈或准备向真人求助的问题强行变成 AI 辅导会话。
 

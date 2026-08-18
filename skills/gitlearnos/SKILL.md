@@ -58,6 +58,7 @@ on a surface where Skills are unavailable.
 | extract reusable understanding | [`references/model.md`](references/model.md) |
 | summarize linked evidence or prepare a compact handoff | [`references/summarize.md`](references/summarize.md) |
 | repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |
+| apply quality standards, trim noise, or manage knowledge lifecycle | [`references/standards.md`](references/standards.md) |
 
 Do not turn note capture, teacher feedback, or preparation for human help into
 an AI tutoring session.

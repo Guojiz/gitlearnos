@@ -1,32 +1,29 @@
-# Scenario 18 — Do not over-diagnose expected new learning
+# 场景 18 — 不要对预期的新学习过度诊断
 
-## Setup
+[English](../../../evals/scenarios/18-no-overdiagnosis-new-learning.md)
 
-Subject: calculus (first exposure).  
-Learner message: “我没学过导数，你教我吧。” / “I have not studied derivatives yet. Please teach me.”
+## 设定
 
-No prior mastery claim for derivatives. No failed attempt on a derivative item
-in this session.
+学科：微积分（第一次接触）。
+学习者消息：「我没学过导数，你教我吧。」
 
-## Expected agent behavior
+仓库里没有导数的既往掌握声明。本会话也没有在导数题上失败过。
 
-1. Treat this as **expected not-yet-learned**, not as an anomaly.
-2. Route toward `tutor` / `organize` (and optionally `question` after teaching),
-   **not** a multi-hypothesis differential diagnosis loop.
-3. Do **not** open eight competing classes or spend the probe budget before
-   teaching.
-4. May still ask one clarifying scope question (e.g. limit background), but
-   that is tutoring setup, not diagnosis.
+## 期望行为
 
-## Fail if
+1. 把这当作**预期的尚未学会**，不是异常。
+2. 路由到 `tutor` / `organize`（教完后可选 `question`），**不要**进入多假设
+   鉴别诊断循环。
+3. **不要**打开八个互竞类别，也不要在教学前花掉追问预算。
+4. 仍可问一个澄清范围的问题（例如极限背景），那是辅导准备，不是诊断。
 
-- Agent loads a full diagnose workflow and delays teaching for 2–3 probes
-  whose only purpose is to rank concept-unestablished vs prerequisite-missing
-  on material the learner has never met.
-- Agent writes a `supported` knowledge gap from the self-report alone.
+## 失败条件
 
-## Pass signal
+- Agent 加载完整 diagnose 工作流，为了给从未学过的材料排序
+  concept-unestablished 与 prerequisite-missing，先问两三轮再教学。
+- Agent 仅凭这句自述写入 `supported` 知识缺口。
 
-Immediate teaching plan or structured introduction, with any gap left at
-`anomaly`/`suspected` only if the agent records a learning intention—not a
-root-cause verdict.
+## 通过信号
+
+立刻给出教学计划或结构化引入。若记录缺口，最多停在 `anomaly`/`suspected`，
+表示学习意图，而不是根因判决。

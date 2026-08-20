@@ -1,27 +1,24 @@
-# GitLearnOS 鉴别诊断（Differential Diagnosis）
+# GitLearnOS 鉴别诊断
 
-> 与英文版同构；实现以英文 canonical 为准。
+遵循 Router 的核心契约。本参考说明如何把错误信号变成可修订的假设集。它不取代
+`organize.md`、`session.md`、`question.md` 或 `review.md`。
 
-Follow the Router's core contract. This reference defines how an agent turns
-an error signal into a revisable hypothesis set. It does not replace
-`organize.md`, `session.md`, `question.md`, or `review.md`.
+[English source](../../../../skills/gitlearnos/references/diagnose.md)
 
-Load this reference when the current event is an *unexpected* mistake, a
-stuck attempt after a genuine try, or new evidence that contradicts prior
-mastery.
+当前事件是*非预期*错误、认真尝试后仍卡住、或与既有掌握状态矛盾的新证据时，
+加载本文件。
 
-Do **not** enter differential diagnosis for ordinary new learning
-(“I have not studied derivatives yet—please teach me”). That is expected
-not-yet-learned material: route to `tutor` / `organize`, not `diagnose`.
+普通新学习不要进入鉴别诊断（「我还没学过导数，请你教我」）。那是预期的尚未
+学会内容：走 `tutor` / `organize`，不是 `diagnose`。
 
-Native DeepSeek Harness: when this path is required, call `learning_route`
-with explicit `operations: ["diagnose", ...]` so the Host does not rely on
-regex alone. Gap lifecycle updates use `learning_apply` with
-`action: "update"` and `expectedBlobSha` of the current file content.
+DeepSeek Harness 原生路径：需要诊断时，对 `learning_route` 显式传入
+`operations: ["diagnose", ...]`，不要只靠 Host 正则。缺口生命周期更新使用
+`learning_apply` 的 `action: "update"`，以及当前文件内容的
+`expectedContentSha256`（来自 `learning_status.contentHashes`）。
 
-## Goal
+## 目标
 
-Do not record a surface error as a knowledge gap. Diagnose first.
+不要把表面错误直接写成知识缺口。先诊断。
 
 ```text
 signal
@@ -33,50 +30,46 @@ signal
 → corroborate, falsify, or revise the learner model
 ```
 
-A diagnosis is an evidence-linked hypothesis, not a fact. An agent that
-likes to ask follow-ups and an agent that likes to explain immediately must
-still obey the same write barrier.
+诊断是有证据链接的假设，不是事实。喜欢追问的模型和喜欢立刻讲解的模型，
+都必须遵守同一写入门槛。
 
-## Constitution
+## 宪章
 
-1. Do not only answer; diagnose when the failure is unexpected.
-2. Do not only record the error; explain the error.
-3. Do not trust the first judgment; try to falsify it.
-4. Do not declare mastery without independent evidence.
-5. Do not probe for its own sake. A question that does not split remaining
-   hypotheses is not a diagnostic question.
-6. Prefer teaching when the learner is clearly in expected new-learning
-   territory; over-diagnosis is a protocol failure.
+1. 不要只给答案；失败非预期时要诊断。
+2. 不要只记录错误；要解释错误。
+3. 不要相信第一判断；尝试证伪。
+4. 没有独立证据，不得声称掌握。
+5. 不要为追问而追问。不能劈开剩余假设的问题，不算诊断题。
+6. 学习者明显处于预期新学习时，优先教学；过度诊断是协议失败。
 
-## Hypothesis layers (not a forced eight-way exclusive pick)
+## 假设分层（不是强制八选一）
 
-Classes may co-occur. Prefer a primary class plus optional mechanism and
-model-relation notes.
+类别可以同时成立。优先记一个主类，再可选记下机制和模型关系。
 
-**Knowledge / skill**
+**知识 / 技能**
 
 | Class | Meaning |
 |---|---|
-| `concept-unestablished` | the target object is not stably represented |
-| `prerequisite-missing` | an earlier concept required by this step is missing |
-| `procedure-unavailable` | the procedure is not currently usable (say *forgotten* only with prior mastery evidence) |
+| `concept-unestablished` | 目标对象尚未稳定表征 |
+| `prerequisite-missing` | 本步所需的先前概念缺失 |
+| `procedure-unavailable` | 程序当前不可用（仅当有既往掌握证据时才说遗忘） |
 
-**Task / execution**
-
-| Class | Meaning |
-|---|---|
-| `calculation-error` | concept and steps are present; arithmetic or execution failed |
-| `language-misread` | the item was parsed incorrectly |
-| `incidental` | fatigue, misread numeral, or one-off slip |
-
-**History / generalization**
+**任务 / 执行**
 
 | Class | Meaning |
 |---|---|
-| `transfer-failure` | the prototype works; the variation does not |
-| `mastery-overestimated` | prior `demonstrated` or high confidence was too optimistic |
+| `calculation-error` | 概念和步骤都在，算术或执行失败 |
+| `language-misread` | 题意解析错误 |
+| `incidental` | 疲劳、看错数字或一次性失误 |
 
-Example record shape:
+**历史 / 泛化**
+
+| Class | Meaning |
+|---|---|
+| `transfer-failure` | 原型会，变式不会 |
+| `mastery-overestimated` | 既往 `demonstrated` 或高置信过乐观 |
+
+记录形状示例：
 
 ```text
 primary: transfer-failure
@@ -84,73 +77,60 @@ possible mechanism: prerequisite-missing
 model relation: mastery-overestimated
 ```
 
-Do not collapse the set to the learner's first complaint. “I cannot find the
-maximum” is a signal that may involve several layers above.
+不要把集合收成学习者的第一句抱怨。「不会求最大值」只是信号，可能跨多层。
 
-## Discriminating probes
+## 鉴别性追问
 
-The form of a question does not matter; whether the answer reduces
-hypothesis uncertainty does.
+问题形式不重要；答案是否降低假设不确定性才重要。
 
-Generic metacognitive questions such as “where are you stuck?” do **not**
-count as diagnostic probes *unless* the answer actually discriminates among
-the live hypotheses. When they do discriminate, they are valid probes.
+「你卡在哪」这类元认知问题，默认**不算**诊断探针，*除非*答案确实劈开了
+当前活假设。若能劈开，就是有效探针。
 
-Rules:
+规则：
 
-- qualitative before computational when that split is available;
-- prefer a micro-item over empty metacognitive self-report;
-- default adaptive strategy is about 1–3 probes (not a hard protocol
-  invariant—depth depends on age, subject, and risk);
-- stop probing when remaining classes share the same next intervention,
-  the learner requests teaching/stop, or further probes cost more than they
-  are likely to clarify.
+- 能定性分开时，先定性后计算；
+- 优先微型题目，而不是空洞的元认知自述；
+- 默认策略大约 1–3 个追问（不是硬协议不变量——深度随年龄、学科和风险而变）；
+- 剩余类别导向同一干预、学习者要求讲解/停止、或再问收益低于成本时，停止追问。
 
-Example. For “I cannot find the maximum of this quadratic,” ask first
-whether `y = -2x^2 + 4x + 1` opens up or down without computing. An “up”
-answer supports a link failure between `a` and opening direction; a correct
-“down” answer rules that class out and the next probe should split vertex
-meaning from procedure availability from calculation.
+例如「不会求这道二次函数最大值」时，先问 `y = -2x^2 + 4x + 1` 开口向上还是
+向下、先不要计算。答「上」支持 `a` 与开口方向联系不稳；答对「下」则排除该类，
+下一问应区分顶点含义、程序可用性与计算。
 
-## Stop probing vs write supported diagnosis
+## 停止追问与写入 supported 诊断
 
-These are **two different gates**.
+这是**两道不同的门**。
 
-**Stop probing** when any of:
+**停止追问**，当满足任一项：
 
-- remaining live hypotheses would not change the next intervention;
-- the learner asks to be taught or to stop;
-- further probes are unlikely to pay for their cost.
+- 剩余活假设不会改变下一步干预；
+- 学习者要求讲解或停止；
+- 继续追问不太可能值回成本。
 
-**Write a `supported` diagnosis** only when:
+**写入 `supported` 诊断**，仅当同时满足：
 
-- a specific hypothesis has positive discriminating evidence; **and**
-- reasonable alternatives that would imply a *different* teaching action
-  have been ruled out or substantially weakened.
+- 某一具体假设已有正向鉴别证据；**并且**
+- 会导致*不同*教学动作的合理替代，已被排除或明显削弱。
 
-Consequences:
+后果：
 
-- “remaining hypotheses share one intervention” → may stop asking; write at
-  most `suspected` (or a shared intervention plan), **not** `supported`.
-- “probe budget exhausted” → may stop asking; **never** upgrades a
-  hypothesis to `supported` by itself.
-- Ruling out a single weak class among many does **not** pass the write
-  barrier for `supported`.
+- 「剩余假设共享一种干预」→ 可以停问；最多写 `suspected`（或共享干预计划），
+  **不是** `supported`。
+- 「追问预算耗尽」→ 可以停问；**绝不**单独把假设升级为 `supported`。
+- 在许多候选里只排除一个弱类，**不能**通过 `supported` 写入门槛。
 
-Incidental slips stay events. Retracted hypotheses stay in the record as
-`falsified`. Deleting a wrong tag is worse than leaving a denied one.
+偶然失误留在事件里。被撤回的假设以 `falsified` 留在记录中。删掉错误标签，
+比留下已否定的标签更糟。
 
-## Knowledge-gap grain
+## 知识缺口粒度
 
-The grain of a written gap is the **best-supported blocker** (or supported
-explanation), not the first surface complaint and not a metaphysical
-“root cause.” Prefer language like `best-supported blocker`,
-`supported diagnosis`, or `supported explanation` over `confirmed root cause`.
+写入缺口的粒度是**当前最佳支持的卡点**（或得到支持的解释），不是第一句表面
+抱怨，也不是形而上学的「根因」。优先用 `best-supported blocker`、
+`supported diagnosis` 或 `supported explanation`，不要用 `confirmed root cause`。
 
-## Diagnosis lifecycle
+## 诊断生命周期
 
-Track process status (`open` / `needs-check` / `resolved`) separate from
-interpretation:
+过程状态（`open` / `needs-check` / `resolved`）与解释状态分开：
 
 ```text
 anomaly → suspected → diagnosing → supported
@@ -158,73 +138,60 @@ anomaly → suspected → diagnosing → supported
         → corroborated | falsified | revised
 ```
 
-Use these interpretation states in the gap or event:
+缺口或事件中使用这些解释状态：
 
-- `anomaly`: a signal exists;
-- `suspected`: hypotheses are open; not yet a mastery verdict;
-- `diagnosing`: a probe is in flight;
-- `supported`: one diagnosis now has positive evidence and competing
-  intervention-changing alternatives are weakened;
-- `intervening`: targeted teaching or practice is underway;
-- `retesting`: an independent item is planned or in progress;
-- `corroborated`: delayed independent transfer still supports the diagnosis
-  (prefer this word over `confirmed`);
-- `falsified`: later evidence rejected the diagnosis;
-- `revised`: the diagnosis was rewritten under controlled update.
+- `anomaly`：存在信号；
+- `suspected`：假设仍开着；还不是掌握判决；
+- `diagnosing`：探针进行中；
+- `supported`：某一诊断已有正向证据，且会改变干预的替代已被削弱；
+- `intervening`：针对性教学或练习进行中；
+- `retesting`：独立题目已计划或进行中；
+- `corroborated`：延迟独立迁移仍支持该诊断（优于 `confirmed`）；
+- `falsified`：后续证据否定了该诊断；
+- `revised`：诊断已在受控更新下改写。
 
-Never treat `suspected` as `demonstrated` or as a reason to drop mastery.
+绝不能把 `suspected` 当成 `demonstrated`，也不能据此直接下调掌握。
 
-Controlled updates of an existing gap/model/review file must use
-`learning_apply` with `action: "update"`, the same canonical id/path,
-`expectedBlobSha` of the current utf8 content, exact `baseRevision`, and no
-uncommitted local edits on the target. History of falsified states stays in
-the file body; do not invent a second id to “overwrite” the old judgment.
+已有 gap/model/review 文件的受控更新必须使用 `learning_apply` 的
+`action: "update"`、同一规范 id/path、当前 utf8 内容的 `expectedContentSha256`、
+精确 `baseRevision`，且目标没有未提交本地修改。被否定状态的历史留在正文里；
+不要另造第二个 id 去「覆盖」旧判断。
 
-## Falsification
+## 证伪
 
-Every diagnostic hypothesis must remain retractable. If later evidence
-contradicts it:
+每个诊断假设都必须可撤回。后续证据矛盾时：
 
-1. set interpretation to `falsified`;
-2. record the contradicting evidence and date;
-3. stop using that cause for question selection or mastery change;
-4. keep the history; do not delete the tag.
+1. 把解释状态设为 `falsified`；
+2. 记录矛盾证据和日期；
+3. 停止用该原因选题或改掌握状态；
+4. 保留历史；不要删除标签。
 
-Example. The agent suspected a missing percent-base concept. A later probe
-shows the learner can rewrite the base and only misread a numeral. The
-correct record is: the hypothesis was proposed and later falsified. Silence
-is worse than a retracted tag.
+例如 Agent 曾怀疑百分数「底数」概念缺失。后来探针表明学习者能改写底数，
+只是看错数字。正确记录是：该假设曾提出、后来被证伪。沉默比留下已撤回标签更糟。
 
-## Contradiction with prior mastery
+## 与既有掌握状态的矛盾
 
-When new evidence conflicts with `demonstrated` or a previously strong
-belief, do not only lower mastery. Open competing classes:
+新证据与 `demonstrated` 或以往较强信念冲突时，不能只降低掌握度。打开互竞类别：
 
-- forgetting (only with prior positive evidence);
-- increased complexity;
-- failed transfer after a parameter, representation, or context change;
-- overestimated prior mastery (narrow samples);
-- incidental state.
+- 遗忘（仅当有既往正向证据）；
+- 复杂度上升；
+- 参数、表征或情境变化后的迁移失败；
+- 既往掌握过估（样本过窄）；
+- 偶然状态。
 
-Use one discriminating probe, then revise. A mastery value is a belief with
-a duty to seek disconfirming evidence.
+用一个鉴别探针，再修订。掌握值是带反证义务的信念。
 
-## Relation to other operations
+## 与其他操作的关系
 
-- `organize.md` owns durable writeback and the write barrier;
-- `session.md` owns live tutoring; it must diagnose before a full
-  explanation unless the learner asked for the solution or the material is
-  clearly new learning;
-- `question.md` owns persisted `diagnostic` probes and later transfer
-  checks;
-- `review.md` owns scoring; a passed immediate check never upgrades
-  mastery;
-- `model.md` still requires two linked observations or an explicit method
-  before promotion.
+- `organize.md` 负责持久写回和写入门槛；
+- `session.md` 负责实时辅导；除非学习者要答案或材料明显是新学习，完整讲解前须先诊断；
+- `question.md` 负责持久化 `diagnostic` 探针和之后的迁移检验；
+- `review.md` 负责评分；当场通过的检查不得升级掌握；
+- `model.md` 仍需两条已链接观察或明确方法才可晋升。
 
-## Output
+## 输出
 
-When this workflow runs, include in the ordinary receipt:
+本工作流运行时，在普通回执中包含：
 
 ```text
 Diagnosis:

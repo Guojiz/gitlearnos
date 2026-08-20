@@ -412,7 +412,9 @@ A surface error is a signal, not a diagnosis. Do not promote “cannot find the
 maximum of a quadratic” into a knowledge gap until competing explanations have
 been discriminated. This is protocol, not model personality.
 
-When the signal is an error, a stuck attempt, or a clash with prior mastery:
+When the signal is an *unexpected* error, a stuck attempt after a genuine try,
+or a clash with prior mastery (not ordinary “I have not learned this yet;
+please teach me”):
 
 ```text
 signal
@@ -421,7 +423,7 @@ signal
 → best-supported diagnosis or remaining uncertainty
 → targeted intervention when teaching is requested or justified
 → independent delayed transfer check
-→ confirm, falsify, or revise the learner model
+→ corroborate, falsify, or revise the learner model
 ```
 
 This extends the synthesis loop:
@@ -435,20 +437,30 @@ learner judgment and outcome
 → revise the diagnosis and model from the result
 ```
 
-Keep more than one live hypothesis class until evidence splits them, including
-at least concept, prerequisite, procedure, calculation, language-misread,
-incidental, transfer-failure, and mastery-overestimated when they are
-plausible. Empty “why” or “where are you stuck” questions are not diagnostic.
-A probe must be a smallest item that reduces uncertainty; prefer a qualitative
-discriminator before computation when it splits the set. Budget two or three
-probes and stop when remaining classes share the same next action.
+Keep more than one live hypothesis class until evidence splits them. Classes
+are layered (knowledge/skill, task/execution, history/generalization) and may
+co-occur; include concept-unestablished, prerequisite-missing,
+procedure-unavailable, calculation-error, language-misread, incidental,
+transfer-failure, and mastery-overestimated when they are plausible. Say
+*forgotten* only with prior mastery evidence.
 
-Do not write a knowledge gap from a surface symptom unless at least one
-competing class has been ruled out, remaining classes imply the same
-intervention, or the probe budget is exhausted and one class dominates.
-Otherwise keep a compact event with `diagnosis_status` `unknown` or
-`agent-hypothesis` and the competing list. The grain of a written gap is the
-best-supported diagnosis, not the learner's first complaint.
+The form of a question does not matter; whether it reduces hypothesis
+uncertainty does. Generic metacognitive questions such as “where are you
+stuck?” count as diagnostic only when the answer actually splits live
+hypotheses. Prefer a smallest qualitative discriminator before computation
+when it splits the set. About 1–3 probes is the default strategy, not a hard
+invariant. Stop probing when remaining classes share the next intervention,
+the learner asks to be taught or to stop, or further probes will not pay.
+
+Stopping probes and writing a `supported` diagnosis are different gates.
+Shared intervention or an exhausted probe budget may stop asking and at most
+write `suspected`. Write `supported` only when a specific hypothesis has
+positive discriminating evidence *and* alternatives that would change the
+teaching action are ruled out or substantially weakened. Ruling out one weak
+class among many does not pass the supported-write gate. Otherwise keep a
+compact event with `diagnosis_status` `unknown` or `agent-hypothesis` and the
+competing list. The grain of a written gap is the best-supported blocker, not
+the learner's first complaint and not a metaphysical root cause.
 
 A diagnosis is an evidence-linked hypothesis, not a fact about the learner.
 Do not infer a hidden cause when the work is incomplete; ask one focused

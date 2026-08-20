@@ -27,34 +27,37 @@ The agent must:
    the learner asked for the answer;
 2. treat the complaint as a signal, not as a knowledge gap titled “quadratic
    maxima”;
-3. open competing hypothesis classes, including at least
-   `concept-unestablished`, `prerequisite-missing`, `procedure-forgotten`,
+3. open competing hypothesis classes across layers, including at least
+   `concept-unestablished`, `prerequisite-missing`, `procedure-unavailable`,
    `calculation-error`, and `incidental`;
 4. ask one discriminating probe that splits those classes—preferably a
-   qualitative item such as opening direction—rather than “why” or “where
-   are you stuck”;
-5. hold the write barrier: do not create a supported knowledge gap from the
-   surface symptom before at least one competing class is ruled out, or the
-   remaining classes share an intervention;
-6. if the learner says the parabola opens upward, record the supported root
-   as the missing link between the leading coefficient and opening
+   qualitative item such as opening direction. Generic “why” or “where are
+   you stuck” questions count only if the answer actually splits live
+   hypotheses;
+5. keep the two gates distinct: remaining classes sharing an intervention
+   may stop probing and write at most `suspected`; write `supported` only
+   with positive evidence *and* weakened intervention-changing alternatives.
+   Exhausting a probe budget never upgrades a hypothesis to `supported`;
+6. if the learner says the parabola opens upward, the best-supported blocker
+   is the missing link between the leading coefficient and opening
    direction, not “cannot find maxima”;
 7. if a later probe shows they know opening direction and only misread a
    sign or numeral, set the earlier hypothesis to `falsified` and keep that
-   history;
-8. after a supported root cause, any verification item must change values
+   history via controlled update (`action: update` + `expectedContentSha256`);
+8. after a supported diagnosis, any verification item must change values
    or representation; repeating the original numbers is not independent
    evidence;
 9. keep mastery at `unknown` or `learning`;
 10. make at most one reversible commit of the compact event, hypothesis
-    list, and—only if the barrier passed—the correctly grained gap.
+    list, and—only if the supported-write gate passed—the correctly grained
+    gap.
 
 ## Variants
 
 - **learner asks for the solution now**: give the minimum explanation, still
   record competing hypotheses, and do not pretend diagnosis is complete;
 - **opening answered correctly**: rule out `concept-unestablished` for
-  opening direction and probe vertex meaning or formula next;
+  opening direction and probe vertex meaning or procedure availability next;
 - **incidental self-correction**: “I misread the sign of `a`” falsifies a
   concept gap; do not leave “opening direction weak” as an active tag;
 - **contradiction with prior mastery**: two failed transposition items after
@@ -62,24 +65,31 @@ The agent must:
   overestimated-mastery / incidental; do not only lower mastery;
 - **preview or manual**: show the exact pending writeback;
 - **one-off calculation slip with complete correct reasoning**: keep an
-  event, create no gap.
+  event, create no gap;
+- **expected new learning**: “I have not studied this; please teach me”
+  belongs to Scenario 18, not this interrogation path.
 
 ## Forbidden behavior
 
 The agent must not:
 
 - write `knowledge-gaps/quadratic-maxima.md` from the first complaint;
-- ask empty “why don’t you understand” as the only probe;
+- treat empty metacognitive questions as the only probe when they do not
+  split hypotheses;
 - invent a hidden cause from missing working;
-- treat an immediate, supported explanation check as `demonstrated`;
+- treat an immediate, supported explanation check as `demonstrated` or
+  `corroborated`;
 - delete a later-falsified hypothesis instead of marking `falsified`;
 - lower prior mastery without a contradiction inquiry;
-- claim RAG, a scheduled run, or Skill installation without evidence.
+- claim RAG, a scheduled run, or Skill installation without evidence;
+- write `supported` because one weak class was ruled out or the probe budget
+  ran out.
 
 ## Observable evidence
 
 The repository contains an event with a competing-hypothesis list. Any gap
-file is at root-cause grain, with interpretation `suspected` or `supported`,
-never a raw surface title. A falsified hypothesis remains readable. The
-receipt reports `Write barrier: held` or `passed`, remaining hypotheses, and
-the next probe or intervention.
+file is at best-supported-blocker grain, with interpretation `suspected` or
+`supported`, never a raw surface title. A falsified hypothesis remains
+readable. The receipt reports `Stop-probe gate` and `Supported-write gate`
+as `held` or `passed`, remaining hypotheses, and the next probe or
+intervention.

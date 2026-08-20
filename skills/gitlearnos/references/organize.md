@@ -104,9 +104,12 @@ identify provenance
 One exercise does not automatically need its own permanent event, gap, or
 model. Keep a useful one-off mistake as a compact event or review record. A
 surface complaint (“I cannot find the maximum”) is not itself a gap title.
-Hold the write barrier in `diagnose.md`: create or update a gap at root-cause
-grain only after competing classes are split, share an intervention, or one
-class dominates after the probe budget. When another distinct observation
+Hold both gates in `diagnose.md`: stop probing when remaining classes share
+an intervention, the learner asks to be taught, or further probes will not
+pay; write a `supported` gap only when a specific hypothesis has positive
+evidence and intervention-changing alternatives are weakened. Shared
+intervention or an exhausted probe budget may stop asking and write at most
+`suspected`, never `supported` by themselves. When another distinct observation
 matches the same situation fingerprint, link it to the existing gap and update
 the evidence count instead of creating a second gap. Use a stable semantic
 fingerprint, not the exact problem wording or numbers.

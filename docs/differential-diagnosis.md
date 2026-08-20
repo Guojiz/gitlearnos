@@ -62,14 +62,17 @@ That is what may be written.
 If they answer down correctly, opening is provisionally ruled out; the next
 probe should split vertex meaning from formula memory from calculation.
 
-Two or three such items are a budget, not a conversation style. Stop when
-every remaining hypothesis would lead to the same next action.
+About 1–3 such items is a default strategy, not a conversation style or a
+hard invariant. Stop probing when remaining hypotheses share the next
+intervention, the learner asks to be taught, or further probes will not pay.
 
 ## Write barrier
 
-Do not upgrade a surface error to a knowledge gap unless some reasonable
-alternative has been ruled out, or the remaining alternatives share an
-intervention.
+There are two gates. Stop probing when remaining alternatives share an
+intervention. Write `supported` only when a specific hypothesis has positive
+evidence *and* alternatives that would change the teaching action are
+weakened. Shared intervention or an exhausted probe budget never upgrades a
+label to `supported` by themselves.
 
 Incidental slips stay events. Retracted hypotheses stay in the record as
 `falsified`. Deleting a wrong tag is worse than leaving a denied one.

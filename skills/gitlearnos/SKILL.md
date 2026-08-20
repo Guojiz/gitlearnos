@@ -69,7 +69,7 @@ it”) stay on tutor/organize—do not open a full differential diagnosis.
 
 On DeepSeek Harness native tools, pass `learning_route` with explicit
 `operations: ["diagnose", ...]` when diagnosis is required. Evolve an existing
-gap with `learning_apply` `action: "update"` and matching `expectedBlobSha`;
+gap with `learning_apply` `action: "update"` and matching `expectedContentSha256`;
 naive same-id overwrites remain refused.
 
 Operation routing applies to the action actually taken, not only the learner's

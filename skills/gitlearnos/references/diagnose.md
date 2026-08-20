@@ -15,7 +15,7 @@ not-yet-learned material: route to `tutor` / `organize`, not `diagnose`.
 Native DeepSeek Harness: when this path is required, call `learning_route`
 with explicit `operations: ["diagnose", ...]` so the Host does not rely on
 regex alone. Gap lifecycle updates use `learning_apply` with
-`action: "update"` and `expectedBlobSha` of the current file content.
+`action: "update"` and `expectedContentSha256` of the current file content.
 
 ## Goal
 
@@ -174,7 +174,7 @@ Never treat `suspected` as `demonstrated` or as a reason to drop mastery.
 
 Controlled updates of an existing gap/model/review file must use
 `learning_apply` with `action: "update"`, the same canonical id/path,
-`expectedBlobSha` of the current utf8 content, exact `baseRevision`, and no
+`expectedContentSha256` of the current utf8 content, exact `baseRevision`, and no
 uncommitted local edits on the target. History of falsified states stays in
 the file body; do not invent a second id to “overwrite” the old judgment.
 

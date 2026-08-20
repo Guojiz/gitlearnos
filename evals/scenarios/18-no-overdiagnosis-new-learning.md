@@ -1,5 +1,7 @@
 # Scenario 18 — Do not over-diagnose expected new learning
 
+[中文](../../zh-CN/evals/scenarios/18-no-overdiagnosis-new-learning.md)
+
 ## Setup
 
 Subject: calculus (first exposure).  

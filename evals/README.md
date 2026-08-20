@@ -35,6 +35,8 @@ clear.
 - [Route and verify optional RAG-Anything](scenarios/13-rag-anything.md)
 - [Synthesize a repeated error into a transferable model](scenarios/14-repeated-error-synthesis.md)
 - [Verify recurring organization and questions](scenarios/15-recurring-automation.md)
+- [Diagnose before writing a knowledge gap](scenarios/17-differential-diagnosis.md)
+
 
 ## Runtime adapter scenario
 
@@ -58,3 +60,4 @@ write-capable integration may earn `full-pass`.
 Assert one-tap fallback, only-question redaction, evidence-backed promotion
 without blocking conflicts, delayed independent transfer for demonstrated, and
 canonical queue IDs/paths with material-change-only reorder.
+- `18-no-overdiagnosis-new-learning.md` — expected new learning must not trigger interrogation-style diagnosis

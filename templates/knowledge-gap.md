@@ -40,6 +40,8 @@ not label the learner globally.
 
 - Learner's reported judgment:
 - Diagnosis status: `unknown` / `learner-reported` / `agent-hypothesis` / `source-supported`
+- Interpretation lifecycle: `anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `corroborated` / `falsified` / `revised`
+- Write class: `surface-signal` / `suspected-blocker` / `supported-diagnosis`
 - Missing information:
 - Broken reasoning link:
 - Confused distinction:
@@ -47,6 +49,36 @@ not label the learner globally.
 - Likely blocker:
 - Missing evidence:
 - This interpretation may be revised when:
+
+## Competing hypotheses
+
+Keep live classes until a probe splits them. Do not collapse to the surface
+complaint.
+
+| Class | Status | Posterior or rank | Discriminating evidence |
+|---|---|---|---|
+| `concept-unestablished` | active / supported / ruled_out / falsified |  |  |
+| `prerequisite-missing` |  |  |  |
+| `procedure-unavailable` |  |  |  |
+| `calculation-error` |  |  |  |
+| `language-misread` |  |  |  |
+| `incidental` |  |  |  |
+| `transfer-failure` |  |  |  |
+| `mastery-overestimated` |  |  |  |
+
+Stop-probe gate: `held` / `passed`  
+Supported-write gate: `held` / `passed`  
+Barrier reason:
+
+## Falsification log
+
+| Date | Hypothesis class | Contradicting evidence | Result |
+|---|---|---|---|
+|  |  |  | `falsified` / `revised` |
+
+Do not delete a retracted hypothesis. A denied tag is part of the learner
+model.
+
 
 ## Same-pattern evidence
 

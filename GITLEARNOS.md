@@ -406,7 +406,27 @@ methods, not universal GitLearnOS requirements.
 For mathematics, science, and other tasks where problem patterns matter, a
 mistake record is not a copied problem and solution. Preserve the learner's
 actual judgment or work, then separate observable evidence from a revisable
-diagnosis:
+diagnosis.
+
+A surface error is a signal, not a diagnosis. Do not promote “cannot find the
+maximum of a quadratic” into a knowledge gap until competing explanations have
+been discriminated. This is protocol, not model personality.
+
+When the signal is an *unexpected* error, a stuck attempt after a genuine try,
+or a clash with prior mastery (not ordinary “I have not learned this yet;
+please teach me”):
+
+```text
+signal
+→ competing hypotheses
+→ discriminating probe
+→ best-supported diagnosis or remaining uncertainty
+→ targeted intervention when teaching is requested or justified
+→ independent delayed transfer check
+→ corroborate, falsify, or revise the learner model
+```
+
+This extends the synthesis loop:
 
 ```text
 learner judgment and outcome
@@ -417,12 +437,44 @@ learner judgment and outcome
 → revise the diagnosis and model from the result
 ```
 
+Keep more than one live hypothesis class until evidence splits them. Classes
+are layered (knowledge/skill, task/execution, history/generalization) and may
+co-occur; include concept-unestablished, prerequisite-missing,
+procedure-unavailable, calculation-error, language-misread, incidental,
+transfer-failure, and mastery-overestimated when they are plausible. Say
+*forgotten* only with prior mastery evidence.
+
+The form of a question does not matter; whether it reduces hypothesis
+uncertainty does. Generic metacognitive questions such as “where are you
+stuck?” count as diagnostic only when the answer actually splits live
+hypotheses. Prefer a smallest qualitative discriminator before computation
+when it splits the set. About 1–3 probes is the default strategy, not a hard
+invariant. Stop probing when remaining classes share the next intervention,
+the learner asks to be taught or to stop, or further probes will not pay.
+
+Stopping probes and writing a `supported` diagnosis are different gates.
+Shared intervention or an exhausted probe budget may stop asking and at most
+write `suspected`. Write `supported` only when a specific hypothesis has
+positive discriminating evidence *and* alternatives that would change the
+teaching action are ruled out or substantially weakened. Ruling out one weak
+class among many does not pass the supported-write gate. Otherwise keep a
+compact event with `diagnosis_status` `unknown` or `agent-hypothesis` and the
+competing list. The grain of a written gap is the best-supported blocker, not
+the learner's first complaint and not a metaphysical root cause.
+
 A diagnosis is an evidence-linked hypothesis, not a fact about the learner.
 Do not infer a hidden cause when the work is incomplete; ask one focused
 question or leave it `unknown`. Invite the learner to explain their original
 decision when that answer is necessary to distinguish missing knowledge from
 a broken reasoning chain. Do not replace this productive reflection with an
-AI-written explanation.
+AI-written explanation. If later evidence contradicts a hypothesis, mark it
+`falsified`, keep the history, and stop using that cause for question
+selection or mastery change.
+
+When new evidence conflicts with `demonstrated` or a previously strong
+belief, do not only lower mastery. Open competing explanations—forgetting,
+added complexity, failed transfer, overestimated prior mastery, or incidental
+state—then probe once.
 
 Keep a one-off exercise lightweight. Link repeated situations by subject,
 recognition cues, target concept, and error mechanism instead of copying whole
@@ -596,7 +648,7 @@ create a second learning agent; it wakes the same main-agent behavior.
 GitLearnOS distributes one self-contained Router Skill. Its `name` and
 `description` are the only GitLearnOS metadata that should enter the initial
 Skill list. After selection, the Router loads one operation reference for
-setup, organization, question generation, review, tutoring, source handling,
+setup, organization, differential diagnosis, question generation, review, tutoring, source handling,
 model extraction, or maintenance, plus at most one subject reference when
 useful. A reference cannot weaken this evidence, ownership, or write-authority
 contract.

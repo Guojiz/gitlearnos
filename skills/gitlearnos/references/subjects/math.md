@@ -5,6 +5,8 @@ Follow the Router's core contract and active operation reference.
 - preserve the learner's full working, not only the final answer;
 - distinguish concept, method, representation, calculation, and execution
   errors;
+- keep those classes as competing hypotheses until a discriminating probe
+  splits them; do not write the surface complaint as the gap;
 - distinguish what the learner recognized, what information was missing, and
   where the reasoning chain first stopped being justified;
 - cluster by mathematical structure and decision cues, not surface wording;

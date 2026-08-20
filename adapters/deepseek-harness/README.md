@@ -66,10 +66,13 @@ by the caller.
   the sole stable authority source; legacy policy text is not consulted.
   The tool has no model-supplied approval switch, so the model cannot approve
   its own write.
-- An identical retry is `unchanged` and creates no empty commit. A reused ID
-  with different content, overwrite, traversal, symlink escape, or changed Git
-  base is refused. A successful result includes the commit and `git revert`
-  undo boundary.
+- An identical retry is `unchanged` and creates no empty commit. Naive reuse of
+  an ID with different content, traversal, symlink escape, or a changed Git
+  base is refused. Gap, model, and review records may use `action: "update"`
+  with `expectedContentSha256` from `learning_status.contentHashes` (utf8
+  SHA-256 of the current file, not a Git blob SHA), the exact `baseRevision`,
+  and no uncommitted edits on the target. Events cannot be updated this way.
+  A successful result includes the commit and `git revert` undo boundary.
 
 This is a typed atomic write path, not arbitrary repository maintenance. The
 main GitLearnOS workflow remains responsible for deciding whether evidence is
@@ -86,8 +89,10 @@ date on the same line:
 - `upcoming`: a parseable date in the future;
 - `noSignal`: no parseable next-check date — reported as a count, never guessed.
 
-It also lists `reviewFiles` and `knowledgeGaps` so the agent can notice existing
-review sets and active gaps without manual archaeology. These fields are
+It also lists `reviewFiles`, `knowledgeGaps`, and `contentHashes` so the agent
+can notice existing review sets and active gaps without manual archaeology,
+and can fill `expectedContentSha256` for a controlled update. `contentHashes`
+is utf8 SHA-256 of current file contents, not Git blob SHA. These fields are
 evidence inputs, not a priority queue.
 
 Separately, `queue` returns the learner's **agent-maintained `Next up` list**

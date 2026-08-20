@@ -312,6 +312,9 @@ test('status exposes review and gap evidence without a Host-ranked action queue'
   await writeFile(join(root, 'subjects', 'math', 'knowledge-gaps', 'quadratic-sign.md'), '# Gap\n')
   const status = await inspectWorkspace(root, new Date('2025-01-01T00:00:00Z'))
   assert.deepEqual(status.knowledgeGaps, ['subjects/math/knowledge-gaps/quadratic-sign.md'])
+  assert.equal(status.contentHashes[0].path, 'subjects/math/knowledge-gaps/quadratic-sign.md')
+  assert.equal(status.contentHashes[0].kind, 'gap')
+  assert.match(status.contentHashes[0].contentSha256, /^[0-9a-f]{64}$/)
   assert.deepEqual(status.dueReview.due.map(item => item.path).sort(), [
     'subjects/math/reviews/r-earlier.md',
     'subjects/math/reviews/r-later.md',
@@ -486,4 +489,173 @@ test('canonical panel queue resolves H1 display names and hides stale references
   const status = await panelStatus(root)
   assert.deepEqual(status.topics, [{ name: 'H1 display', id: 'gap-one', path: 'subjects/math/knowledge-gaps/gap-one.md', verb: '复习', stale: false }])
   assert.equal(status.staleCount, 1)
+})
+
+test('learning_route accepts diagnose in known set and explicit operations', async () => {
+  const root = await learnerRepo('preview')
+  const detected = await routeLearningEvent(root, '这题我卡住了，需要鉴别诊断假设')
+  assert.ok(detected.operations.includes('diagnose'), detected.operations)
+  assert.equal(detected.persisted, false)
+
+  const explicit = await routeLearningEvent(root, {
+    intent: 'I cannot solve this after a real attempt',
+    operations: ['diagnose', 'tutor'],
+  })
+  assert.deepEqual(explicit.operations, ['diagnose', 'tutor'])
+  assert.equal(explicit.operation, 'diagnose')
+})
+
+test('learning_apply still refuses naive overwrite without action update', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const create = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{
+      kind: 'gap',
+      subject: 'math',
+      id: 'gap-percent-base',
+      title: 'Percent base unstable',
+      body: 'Interpretation lifecycle: suspected\nWrite class: suspected-blocker\n',
+    }],
+  })
+  assert.equal(create.status, 'committed')
+  const headAfter = await git(root, 'rev-parse', 'HEAD')
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: headAfter,
+      operations: [{
+        kind: 'gap',
+        subject: 'math',
+        id: 'gap-percent-base',
+        title: 'Percent base unstable',
+        body: 'Interpretation lifecycle: supported\n',
+      }],
+    }),
+    /overwrite refused/,
+  )
+})
+
+test('controlled update commits when expectedContentSha256 matches', async () => {
+  const root = await learnerRepo('safe-auto')
+  let status = await inspectWorkspace(root)
+  const create = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{
+      kind: 'gap',
+      subject: 'math',
+      id: 'gap-diag-1',
+      title: 'Opening direction',
+      body: 'Interpretation lifecycle: suspected\n',
+    }],
+  })
+  assert.equal(create.status, 'committed')
+  const path = join(root, 'subjects', 'math', 'knowledge-gaps', 'gap-diag-1.md')
+  status = await inspectWorkspace(root)
+  const hashed = status.contentHashes.find(item => item.path.endsWith('gap-diag-1.md'))
+  assert.ok(hashed)
+  const updated = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{
+      kind: 'gap',
+      action: 'update',
+      expectedContentSha256: hashed.contentSha256,
+      subject: 'math',
+      id: 'gap-diag-1',
+      title: 'Opening direction',
+      body: 'Interpretation lifecycle: supported\nFalsification log: none yet\n',
+    }],
+  })
+  assert.equal(updated.status, 'committed', JSON.stringify(updated))
+  const next = await readFile(path, 'utf8')
+  assert.match(next, /supported/)
+})
+
+test('controlled update refuses content hash mismatch', async () => {
+  const root = await learnerRepo('safe-auto')
+  let status = await inspectWorkspace(root)
+  const create = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{
+      kind: 'gap',
+      subject: 'math',
+      id: 'gap-hash-mismatch',
+      title: 'Hash mismatch',
+      body: 'Interpretation lifecycle: suspected\n',
+    }],
+  })
+  assert.equal(create.status, 'committed')
+  status = await inspectWorkspace(root)
+  const hashed = status.contentHashes.find(item => item.path.endsWith('gap-hash-mismatch.md'))
+  const bad = '0'.repeat(64)
+  assert.notEqual(hashed.contentSha256, bad)
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{
+        kind: 'gap',
+        action: 'update',
+        expectedContentSha256: bad,
+        subject: 'math',
+        id: 'gap-hash-mismatch',
+        title: 'Hash mismatch',
+        body: 'Interpretation lifecycle: supported\n',
+      }],
+    }),
+    /expectedContentSha256 mismatch/,
+  )
+})
+
+test('controlled update refuses uncommitted target modifications', async () => {
+  const root = await learnerRepo('safe-auto')
+  let status = await inspectWorkspace(root)
+  const create = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{
+      kind: 'gap',
+      subject: 'math',
+      id: 'gap-dirty',
+      title: 'Dirty target',
+      body: 'Interpretation lifecycle: suspected\n',
+    }],
+  })
+  assert.equal(create.status, 'committed')
+  const path = join(root, 'subjects', 'math', 'knowledge-gaps', 'gap-dirty.md')
+  await writeFile(path, await readFile(path, 'utf8') + 'local edit\n')
+  status = await inspectWorkspace(root)
+  const hashed = status.contentHashes.find(item => item.path.endsWith('gap-dirty.md'))
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{
+        kind: 'gap',
+        action: 'update',
+        expectedContentSha256: hashed.contentSha256,
+        subject: 'math',
+        id: 'gap-dirty',
+        title: 'Dirty target',
+        body: 'Interpretation lifecycle: supported\n',
+      }],
+    }),
+    /uncommitted local modifications/,
+  )
+})
+
+test('controlled update refuses event kind', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{
+        kind: 'event',
+        action: 'update',
+        expectedContentSha256: '0'.repeat(64),
+        subject: 'math',
+        id: 'event-no-update',
+        title: 'Cannot update event',
+        body: 'Events are append-only evidence.\n',
+      }],
+    }),
+    /action update is only allowed for gap, model, or review/,
+  )
 })

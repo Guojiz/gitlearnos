@@ -31,6 +31,8 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [路由并验证可选 RAG-Anything](scenarios/13-rag-anything.md)
 - [把重复错误归纳为可迁移模型](scenarios/14-repeated-error-synthesis.md)
 - [验证重复整理与出题](scenarios/15-recurring-automation.md)
+- [写入知识缺口前先做鉴别诊断](scenarios/17-differential-diagnosis.md)
+
 
 ## 运行时适配场景
 
@@ -51,3 +53,4 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 
 断言一句确认回退、只发题隐藏答案、无阻断冲突的证据晋升、延迟独立迁移才能
 demonstrated，以及队列只含规范 ID/路径且仅在实质变化后重排。
+- `18-no-overdiagnosis-new-learning.md` — expected new learning must not trigger interrogation-style diagnosis

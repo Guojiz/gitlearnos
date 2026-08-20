@@ -80,7 +80,10 @@ same_pattern_as:
 Keep the learner's judgment and outcome as evidence. Treat
 `missing_information`, `reasoning_break`, and `execution_error` as revisable
 diagnoses. When the learner's original decision is unavailable, do not infer
-why they made it.
+why they made it. If those fields would pick a single cause from an unsplit
+set, load `diagnose.md`, keep competing classes, and do not write a supported
+knowledge gap from the surface symptom.
+
 
 Use a concise activity record only when the event materially changes state. Do not store full transcripts or hidden reasoning.
 
@@ -99,11 +102,18 @@ identify provenance
 ```
 
 One exercise does not automatically need its own permanent event, gap, or
-model. Keep a useful one-off mistake as a compact event or review record. When
-another distinct observation matches the same situation fingerprint, link it
-to the existing gap and update the evidence count instead of creating a second
-gap. Use a stable semantic fingerprint, not the exact problem wording or
-numbers.
+model. Keep a useful one-off mistake as a compact event or review record. A
+surface complaint (“I cannot find the maximum”) is not itself a gap title.
+Hold both gates in `diagnose.md`: stop probing when remaining classes share
+an intervention, the learner asks to be taught, or further probes will not
+pay; write a `supported` gap only when a specific hypothesis has positive
+evidence and intervention-changing alternatives are weakened. Shared
+intervention or an exhausted probe budget may stop asking and write at most
+`suspected`, never `supported` by themselves. When another distinct observation
+matches the same situation fingerprint, link it to the existing gap and update
+the evidence count instead of creating a second gap. Use a stable semantic
+fingerprint, not the exact problem wording or numbers.
+
 
 Promote a model when at least two linked observations support the same
 structure, or when the learner, a teacher, or an authoritative source explicitly

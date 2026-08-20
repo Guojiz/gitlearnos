@@ -14,11 +14,14 @@ the AI to teach or test now.
 1. resolve one observable objective;
 2. ask for an attempt, recall, prediction, or explanation before giving the
    full solution unless direct reference was requested;
-3. diagnose the smallest current blocker;
-4. give the minimum useful support;
-5. close with one tap (see below);
-6. pass the result to `review.md`;
-7. write back only durable evidence and state changes.
+3. if the attempt is wrong, stuck, or missing, load `diagnose.md` and run a
+   discriminating probe before a full explanation;
+4. diagnose the smallest supported current blocker, not the surface complaint;
+5. give the minimum useful support aimed at that blocker;
+6. close with one tap (see below);
+7. pass the result to `review.md`;
+8. write back only durable evidence and state changes.
+
 
 If the fresh item is assigned for an answer after the current response, it is
 a persisted question set, not merely conversational support. Load

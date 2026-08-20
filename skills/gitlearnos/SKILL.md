@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, evidence-linked error diagnosis, repeated-pattern model synthesis, maintenance, or required recurring organization-and-question scheduling workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports a mistake, feedback, or result, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
+description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, evidence-linked error diagnosis, competing-hypothesis differential diagnosis, repeated-pattern model synthesis, maintenance, or required recurring organization-and-question scheduling workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports a mistake, feedback, or result, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
 ---
 
 # GitLearnOS Router
@@ -50,6 +50,7 @@ on a surface where Skills are unavailable.
 |---|---|
 | create or migrate minimum state | [`references/setup.md`](references/setup.md) |
 | record, organize, deduplicate, or reconcile feedback | [`references/organize.md`](references/organize.md) |
+| diagnose an error, stuck attempt, or mastery contradiction | [`references/diagnose.md`](references/diagnose.md) |
 | generate learner questions or an external handoff | [`references/question.md`](references/question.md) |
 | administer an existing question and write back evidence | [`references/review.md`](references/review.md) |
 | live AI explanation or guided practice requested now | [`references/session.md`](references/session.md) |
@@ -61,7 +62,15 @@ on a surface where Skills are unavailable.
 | apply quality standards, trim noise, or manage knowledge lifecycle | [`references/standards.md`](references/standards.md) |
 
 Do not turn note capture, teacher feedback, or preparation for human help into
-an AI tutoring session.
+an AI tutoring session. A mistake, stuck attempt, or clash with prior mastery
+loads `diagnose.md` before a full explanation or a supported knowledge-gap
+write. Expected not-yet-learned requests (“please teach me X; I have not studied
+it”) stay on tutor/organize—do not open a full differential diagnosis.
+
+On DeepSeek Harness native tools, pass `learning_route` with explicit
+`operations: ["diagnose", ...]` when diagnosis is required. Evolve an existing
+gap with `learning_apply` `action: "update"` and matching `expectedContentSha256`;
+naive same-id overwrites remain refused.
 
 Operation routing applies to the action actually taken, not only the learner's
 opening words. If an organize or live-tutoring response assigns a question for

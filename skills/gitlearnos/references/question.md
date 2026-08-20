@@ -50,13 +50,15 @@ Every persisted set receives a stable `review-<slug>` ID, canonical path,
 
 ## Choose a purpose
 
-- `diagnostic`: locate the failure;
+- `diagnostic`: split remaining hypothesis classes; a probe must reduce
+  uncertainty, not ask empty “why”;
 - `practice`: strengthen a method;
 - `variation`: change number, representation, or surface form;
 - `transfer`: apply the idea in a new context;
 - `review`: delayed retrieval;
 - `exam`: approximate required conditions;
 - `handoff`: ask a teacher, tutor, peer, or another agent.
+
 
 Do not mix purposes without stating why.
 

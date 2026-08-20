@@ -57,9 +57,12 @@ review 与 dashboard projection 组成的有界 typed plan；每条记录都有�
 - `preview` 返回精确 Markdown 提案，零写入。
 - `manual` 与含糊配置返回 `requires-approval`，零写入。工具没有由模型传入的
   approval 开关，因此模型不能自我批准。
-- 相同输入重试返回 `unchanged`，不会形成空提交。不同内容复用 ID、覆盖、路径
-  穿越、符号链接逃逸或 Git base 改变都会被拒绝。成功结果包含 commit 与
-  `git revert` 撤销边界。
+- 相同输入重试返回 `unchanged`，不会形成空提交。不同内容无校验复用 ID、路径
+  穿越、符号链接逃逸或 Git base 改变都会被拒绝。gap / model / review 可用
+  `action: "update"`，并携带 `learning_status.contentHashes` 中的
+  `expectedContentSha256`（当前文件 utf8 的 SHA-256，不是 Git blob SHA）、精确
+  `baseRevision`，且目标没有未提交修改。event 不允许这样更新。成功结果包含
+  commit 与 `git revert` 撤销边界。
 
 这是 typed atomic 写入路径，不是任意仓库维护。主 GitLearnOS 工作流仍负责判断
 证据是否值得长期保存并选择 plan。
@@ -74,8 +77,10 @@ review 与 dashboard projection 组成的有界 typed plan；每条记录都有�
 - `upcoming`：可解析日期在未来；
 - `noSignal`：没有可解析的复测日期——只按数量报告，绝不猜测。
 
-它同时列出 `reviewFiles` 与 `knowledgeGaps`，让 Agent 无需手工翻找即可发现
-已有复测集合和活跃缺口。这些字段只是证据输入，不是优先级队列。
+它同时列出 `reviewFiles`、`knowledgeGaps` 与 `contentHashes`，让 Agent 无需手工
+翻找即可发现已有复测集合和活跃缺口，并为受控更新填写 `expectedContentSha256`。
+`contentHashes` 是当前文件 utf8 的 SHA-256，不是 Git blob SHA。这些字段只是证据
+输入，不是优先级队列。
 
 另外，`queue` 原样返回 `dashboard.md` 中 **Agent 维护的「接下来」列表**，
 顺序就是 Agent 写的顺序。这个顺序归 Agent（它综合难度、重要性、掌握度、巩固

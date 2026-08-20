@@ -4,8 +4,18 @@ Follow the Router's core contract. This reference defines how an agent turns
 an error signal into a revisable hypothesis set. It does not replace
 `organize.md`, `session.md`, `question.md`, or `review.md`.
 
-Load this reference when the current event is a mistake, a stuck attempt, a
-self-report of not knowing, or new evidence that contradicts prior mastery.
+Load this reference when the current event is an *unexpected* mistake, a
+stuck attempt after a genuine try, or new evidence that contradicts prior
+mastery.
+
+Do **not** enter differential diagnosis for ordinary new learning
+(“I have not studied derivatives yet—please teach me”). That is expected
+not-yet-learned material: route to `tutor` / `organize`, not `diagnose`.
+
+Native DeepSeek Harness: when this path is required, call `learning_route`
+with explicit `operations: ["diagnose", ...]` so the Host does not rely on
+regex alone. Gap lifecycle updates use `learning_apply` with
+`action: "update"` and `expectedBlobSha` of the current file content.
 
 ## Goal
 
@@ -15,99 +25,135 @@ Do not record a surface error as a knowledge gap. Diagnose first.
 signal
 → competing hypotheses
 → discriminating probe
-→ supported root cause or remaining uncertainty
+→ best-supported diagnosis or remaining uncertainty
 → targeted intervention only when teaching is requested or justified
 → independent delayed transfer check
-→ confirm, falsify, or revise the learner model
+→ corroborate, falsify, or revise the learner model
 ```
 
-A diagnosis is standing protocol, not a model personality. An agent that
+A diagnosis is an evidence-linked hypothesis, not a fact. An agent that
 likes to ask follow-ups and an agent that likes to explain immediately must
 still obey the same write barrier.
 
 ## Constitution
 
-1. Do not only answer; diagnose.
+1. Do not only answer; diagnose when the failure is unexpected.
 2. Do not only record the error; explain the error.
 3. Do not trust the first judgment; try to falsify it.
 4. Do not declare mastery without independent evidence.
 5. Do not probe for its own sake. A question that does not split remaining
    hypotheses is not a diagnostic question.
+6. Prefer teaching when the learner is clearly in expected new-learning
+   territory; over-diagnosis is a protocol failure.
 
-## Competing hypotheses
+## Hypothesis layers (not a forced eight-way exclusive pick)
 
-Keep more than one live class until evidence splits them. Stable identifiers:
+Classes may co-occur. Prefer a primary class plus optional mechanism and
+model-relation notes.
+
+**Knowledge / skill**
 
 | Class | Meaning |
 |---|---|
 | `concept-unestablished` | the target object is not stably represented |
 | `prerequisite-missing` | an earlier concept required by this step is missing |
-| `procedure-forgotten` | the concept is present; the steps are not |
+| `procedure-unavailable` | the procedure is not currently usable (say *forgotten* only with prior mastery evidence) |
+
+**Task / execution**
+
+| Class | Meaning |
+|---|---|
 | `calculation-error` | concept and steps are present; arithmetic or execution failed |
 | `language-misread` | the item was parsed incorrectly |
 | `incidental` | fatigue, misread numeral, or one-off slip |
+
+**History / generalization**
+
+| Class | Meaning |
+|---|---|
 | `transfer-failure` | the prototype works; the variation does not |
 | `mastery-overestimated` | prior `demonstrated` or high confidence was too optimistic |
 
+Example record shape:
+
+```text
+primary: transfer-failure
+possible mechanism: prerequisite-missing
+model relation: mastery-overestimated
+```
+
 Do not collapse the set to the learner's first complaint. “I cannot find the
-maximum” is a signal that may be any of the classes above.
+maximum” is a signal that may involve several layers above.
 
 ## Discriminating probes
 
-Empty “why” or “where are you stuck” questions almost never reduce
-uncertainty. Ask a smallest item that splits the remaining set.
+The form of a question does not matter; whether the answer reduces
+hypothesis uncertainty does.
+
+Generic metacognitive questions such as “where are you stuck?” do **not**
+count as diagnostic probes *unless* the answer actually discriminates among
+the live hypotheses. When they do discriminate, they are valid probes.
 
 Rules:
 
 - qualitative before computational when that split is available;
-- prefer a micro-item over metacognitive self-report;
-- budget two or three probes;
-- stop when remaining classes share the same next action
-  (`intervention-invariant`);
-- stop if the learner asks to be taught, is fatigued, or says not to quiz;
-- persist a `diagnostic` probe that will be answered later through
-  `question.md`; a live probe in tutoring may stay in the session until
-  writeback.
+- prefer a micro-item over empty metacognitive self-report;
+- default adaptive strategy is about 1–3 probes (not a hard protocol
+  invariant—depth depends on age, subject, and risk);
+- stop probing when remaining classes share the same next intervention,
+  the learner requests teaching/stop, or further probes cost more than they
+  are likely to clarify.
 
-Example. For `y = -2x^2 + 4x + 1`, asking whether the parabola opens up or
-down splits `concept-unestablished` from `calculation-error` and
-`procedure-forgotten` before any vertex formula is discussed.
+Example. For “I cannot find the maximum of this quadratic,” ask first
+whether `y = -2x^2 + 4x + 1` opens up or down without computing. An “up”
+answer supports a link failure between `a` and opening direction; a correct
+“down” answer rules that class out and the next probe should split vertex
+meaning from procedure availability from calculation.
 
-## Write barrier
+## Stop probing vs write supported diagnosis
 
-Do not create or update a knowledge gap as a supported root cause from a
-surface symptom unless at least one of these holds:
+These are **two different gates**.
 
-1. at least one competing class has been ruled out by a probe or by the
-   learner's visible work;
-2. remaining classes imply the same intervention;
-3. the probe budget is exhausted and one class dominates.
+**Stop probing** when any of:
 
-Otherwise:
+- remaining live hypotheses would not change the next intervention;
+- the learner asks to be taught or to stop;
+- further probes are unlikely to pay for their cost.
 
-- keep a compact event;
-- set `diagnosis_status` to `unknown` or `agent-hypothesis`;
-- record the competing list;
-- if a gap file already exists, mark interpretation `suspected`, not
-  supported.
+**Write a `supported` diagnosis** only when:
 
-The grain of a written gap is the supported root cause, not the first
-complaint. A gap titled “cannot find quadratic maxima” is usually the wrong
-object.
+- a specific hypothesis has positive discriminating evidence; **and**
+- reasonable alternatives that would imply a *different* teaching action
+  have been ruled out or substantially weakened.
 
-One-off `incidental` or `calculation-error` results stay events. They become
-gaps only when a later distinct observation contradicts the incidental
-reading.
+Consequences:
 
-## Interpretation lifecycle
+- “remaining hypotheses share one intervention” → may stop asking; write at
+  most `suspected` (or a shared intervention plan), **not** `supported`.
+- “probe budget exhausted” → may stop asking; **never** upgrades a
+  hypothesis to `supported` by itself.
+- Ruling out a single weak class among many does **not** pass the write
+  barrier for `supported`.
 
-Keep resolution (`open` / `needs-check` / `resolved`) separate from
+Incidental slips stay events. Retracted hypotheses stay in the record as
+`falsified`. Deleting a wrong tag is worse than leaving a denied one.
+
+## Knowledge-gap grain
+
+The grain of a written gap is the **best-supported blocker** (or supported
+explanation), not the first surface complaint and not a metaphysical
+“root cause.” Prefer language like `best-supported blocker`,
+`supported diagnosis`, or `supported explanation` over `confirmed root cause`.
+
+## Diagnosis lifecycle
+
+Track process status (`open` / `needs-check` / `resolved`) separate from
 interpretation:
 
 ```text
 anomaly → suspected → diagnosing → supported
         → intervening → retesting
-        → confirmed | falsified | revised
+        → corroborated | falsified | revised
 ```
 
 Use these interpretation states in the gap or event:
@@ -115,14 +161,22 @@ Use these interpretation states in the gap or event:
 - `anomaly`: a signal exists;
 - `suspected`: hypotheses are open; not yet a mastery verdict;
 - `diagnosing`: a probe is in flight;
-- `supported`: one root cause now dominates;
+- `supported`: one diagnosis now has positive evidence and competing
+  intervention-changing alternatives are weakened;
 - `intervening`: targeted teaching or practice is underway;
 - `retesting`: an independent item is planned or in progress;
-- `confirmed`: delayed independent transfer still supports the cause;
-- `falsified`: later evidence rejected the cause;
-- `revised`: the root cause was rewritten.
+- `corroborated`: delayed independent transfer still supports the diagnosis
+  (prefer this word over `confirmed`);
+- `falsified`: later evidence rejected the diagnosis;
+- `revised`: the diagnosis was rewritten under controlled update.
 
 Never treat `suspected` as `demonstrated` or as a reason to drop mastery.
+
+Controlled updates of an existing gap/model/review file must use
+`learning_apply` with `action: "update"`, the same canonical id/path,
+`expectedBlobSha` of the current utf8 content, exact `baseRevision`, and no
+uncommitted local edits on the target. History of falsified states stays in
+the file body; do not invent a second id to “overwrite” the old judgment.
 
 ## Falsification
 
@@ -144,7 +198,7 @@ is worse than a retracted tag.
 When new evidence conflicts with `demonstrated` or a previously strong
 belief, do not only lower mastery. Open competing classes:
 
-- forgetting;
+- forgetting (only with prior positive evidence);
 - increased complexity;
 - failed transfer after a parameter, representation, or context change;
 - overestimated prior mastery (narrow samples);
@@ -157,7 +211,8 @@ a duty to seek disconfirming evidence.
 
 - `organize.md` owns durable writeback and the write barrier;
 - `session.md` owns live tutoring; it must diagnose before a full
-  explanation unless the learner asked for the solution;
+  explanation unless the learner asked for the solution or the material is
+  clearly new learning;
 - `question.md` owns persisted `diagnostic` probes and later transfer
   checks;
 - `review.md` owns scoring; a passed immediate check never upgrades
@@ -173,7 +228,8 @@ When this workflow runs, include in the ordinary receipt:
 Diagnosis:
 Hypotheses remaining:
 Ruled out:
-Write barrier: held / passed
+Stop-probe gate: held / passed
+Supported-write gate: held / passed
 Interpretation:
 Falsified:
 Next probe or intervention:

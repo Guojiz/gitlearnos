@@ -64,7 +64,13 @@ on a surface where Skills are unavailable.
 Do not turn note capture, teacher feedback, or preparation for human help into
 an AI tutoring session. A mistake, stuck attempt, or clash with prior mastery
 loads `diagnose.md` before a full explanation or a supported knowledge-gap
-write.
+write. Expected not-yet-learned requests (“please teach me X; I have not studied
+it”) stay on tutor/organize—do not open a full differential diagnosis.
+
+On DeepSeek Harness native tools, pass `learning_route` with explicit
+`operations: ["diagnose", ...]` when diagnosis is required. Evolve an existing
+gap with `learning_apply` `action: "update"` and matching `expectedBlobSha`;
+naive same-id overwrites remain refused.
 
 Operation routing applies to the action actually taken, not only the learner's
 opening words. If an organize or live-tutoring response assigns a question for

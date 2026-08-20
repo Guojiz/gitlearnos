@@ -39,8 +39,8 @@ ID：`gap-<stable-slug>`
 
 - 学习者报告的原判断：
 - 诊断状态：`unknown` / `learner-reported` / `agent-hypothesis` / `source-supported`
-- 解释生命周期：`anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `confirmed` / `falsified` / `revised`
-- 写入类别：`surface-signal` / `suspected-root` / `supported-root`
+- 解释生命周期：`anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `corroborated` / `falsified` / `revised`
+- 写入类别：`surface-signal` / `suspected-blocker` / `supported-diagnosis`
 - 缺失信息：
 - 推理链断裂：
 - 混淆的区别：
@@ -57,14 +57,15 @@ ID：`gap-<stable-slug>`
 |---|---|---|---|
 | `concept-unestablished` | active / supported / ruled_out / falsified |  |  |
 | `prerequisite-missing` |  |  |  |
-| `procedure-forgotten` |  |  |  |
+| `procedure-unavailable` |  |  |  |
 | `calculation-error` |  |  |  |
 | `language-misread` |  |  |  |
 | `incidental` |  |  |  |
 | `transfer-failure` |  |  |  |
 | `mastery-overestimated` |  |  |  |
 
-写入门槛：`held` / `passed`  
+停止追问门槛：`held` / `passed`  
+支持写入门槛：`held` / `passed`  
 门槛理由：
 
 ## 证伪记录

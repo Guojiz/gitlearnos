@@ -54,7 +54,10 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 
 不要把笔记记录、老师反馈或准备向真人求助的问题强行变成 AI 辅导会话。错误、
 卡住或与旧掌握状态冲突时，必须在完整讲解或写入得到支持的知识缺口之前加载
-`diagnose.md`。
+`diagnose.md`。预期的尚未学习内容（「我还没学过导数，请你教我」）走 tutor/organize，
+不要开启完整鉴别诊断。DeepSeek Harness 原生路径下，需要诊断时对 `learning_route`
+显式传入 `operations: ["diagnose", ...]`；演化已有 gap 用 `learning_apply` 的
+`action: "update"` 与匹配的 `expectedBlobSha`，禁止同 ID 无校验覆盖。
 
 操作路由取决于实际采取的动作，不只取决于学习者开头的措辞。如果整理或实时辅导
 回答布置了一道以后作答的问题，结束前必须加载 `question.md` 并完成其中的持久化

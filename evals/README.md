@@ -60,3 +60,4 @@ write-capable integration may earn `full-pass`.
 Assert one-tap fallback, only-question redaction, evidence-backed promotion
 without blocking conflicts, delayed independent transfer for demonstrated, and
 canonical queue IDs/paths with material-change-only reorder.
+- `18-no-overdiagnosis-new-learning.md` — expected new learning must not trigger interrogation-style diagnosis

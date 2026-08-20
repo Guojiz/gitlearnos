@@ -479,6 +479,7 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
 function chooseOperation(intent) {
   const normalized = intent.toLowerCase()
   if (/set ?up|install|bootstrap|initiali[sz]/.test(normalized)) return 'setup'
+  if (/diagnos|root ?cause|hypothes|falsif|卡住|不会做|做错|mastery.?contradict|knowledge.?gap/.test(normalized)) return 'diagnose'
   if (/question|quiz|practice|review due/.test(normalized)) return 'question'
   if (/answer|feedback|grade|master/.test(normalized)) return 'review'
   if (/rag|source|book|pdf|material/.test(normalized)) return 'source'
@@ -492,6 +493,7 @@ function detectOperations(intent) {
   const found = []
   const add = (name) => { if (!found.includes(name)) found.push(name) }
   if (/设置|安装|初始化|set ?up|install|bootstrap|initiali[sz]/.test(text)) add('setup')
+  if (/诊断|鉴别|假设|证伪|根因|卡住|做错|不会做|diagnos|hypothes|falsif|root.?cause|mastery.?contradict/.test(text)) add('diagnose')
   if (/整理|记录|归纳|organize|note/.test(text)) add('organize')
   if (/总结|概括|summari[sz]e|synthesis/.test(text)) add('summarize')
   if (/题|练习|quiz|question|practice/.test(text)) add('question')
@@ -505,7 +507,7 @@ function detectOperations(intent) {
 
 function normalizeRequestedOperation(value) {
   const normalized = String(value ?? '').trim().toLowerCase()
-  const known = new Set(['setup', 'organize', 'summarize', 'question', 'review', 'source', 'model', 'maintenance', 'tutor'])
+  const known = new Set(['setup', 'diagnose', 'organize', 'summarize', 'question', 'review', 'source', 'model', 'maintenance', 'tutor'])
   return known.has(normalized) ? normalized : chooseOperation(normalized)
 }
 
@@ -642,6 +644,10 @@ function operationMarkdown(kind, id, title, body) {
   return '# ' + title.trim() + '\n\n' + label + ': ' + id + '\n\n' + body.trim() + '\n'
 }
 
+function contentBlobSha(content) {
+  return createHash('sha256').update(content, 'utf8').digest('hex')
+}
+
 function normalizeOperations(input) {
   const operations = Array.isArray(input?.operations) ? input.operations : [input]
   if (operations.length === 0 || operations.length > MAX_TRANSACTION_OPERATIONS) throw new Error('operations count is out of bounds')
@@ -653,12 +659,33 @@ function normalizeOperations(input) {
       if (typeof operation.content !== 'string' || !operation.content.trim() || operation.content.length > MAX_OPERATION_BODY_CHARS) throw new Error('dashboard content is required and bounded')
       return { kind, path: 'dashboard.md', proposal: operation.content.endsWith('\n') ? operation.content : operation.content + '\n' }
     }
+    const action = String(operation?.action ?? 'create').trim().toLowerCase()
+    if (!['create', 'update'].includes(action)) throw new Error('operations[' + index + '].action must be create or update')
+    if (action === 'update' && !['gap', 'model', 'review'].includes(kind)) {
+      throw new Error('operations[' + index + '].action update is only allowed for gap, model, or review')
+    }
     const subject = safeSegment(operation?.subject, 'operations[' + index + '].subject')
     const id = safeSegment(operation?.id ?? operation?.eventId, 'operations[' + index + '].id')
     const folder = { event: 'events', gap: 'knowledge-gaps', model: 'models', review: 'reviews' }[kind]
     const path = 'subjects/' + subject + '/' + folder + '/' + id + '.md'
     if (operation.path && operation.path !== path) throw new Error('operation path must be canonical ' + path)
-    return { kind, subject, id, path, proposal: operationMarkdown(kind, id, operation.title, operation.body) }
+    const expectedBlobSha = operation?.expectedBlobSha == null ? null : String(operation.expectedBlobSha).trim().toLowerCase()
+    if (action === 'update') {
+      if (!expectedBlobSha || !/^[0-9a-f]{64}$/.test(expectedBlobSha)) {
+        throw new Error('operations[' + index + '].expectedBlobSha is required for update (sha256 of current file utf8 content)')
+      }
+    } else if (expectedBlobSha) {
+      throw new Error('operations[' + index + '].expectedBlobSha is only valid with action update')
+    }
+    return {
+      kind,
+      action,
+      expectedBlobSha,
+      subject,
+      id,
+      path,
+      proposal: operationMarkdown(kind, id, operation.title, operation.body),
+    }
   })
 }
 
@@ -737,17 +764,36 @@ export async function applyLearningTransaction(root, input) {
       const filename = operation.path === 'dashboard.md' ? 'dashboard.md' : operation.path.split('/').at(-1)
       const target = resolve(parent, filename)
       const existingStat = await lstat(target).catch(error => error?.code === 'ENOENT' ? null : Promise.reject(error))
+      if (!existingStat && operation.action === 'update') {
+        throw new Error('controlled update requires an existing target file')
+      }
       if (existingStat) {
         if (!existingStat.isFile() || existingStat.isSymbolicLink()) throw new Error('existing target path is not a regular file')
         const existing = await readFile(target, 'utf8')
         if (existing !== operation.proposal) {
-          if (operation.kind !== 'dashboard') throw new Error('target id already exists with different content; overwrite refused')
-          const trackedDashboard = await readTrackedAtHead(canonicalRoot, operation.path)
-          if (trackedDashboard !== existing && trackedDashboard + '\n' !== existing) throw new Error('dashboard has uncommitted user content; projection overwrite refused')
-          replacedTargets.push({ target, existing })
-          allUnchanged = false
-          await writeFile(target, operation.proposal, { encoding: 'utf8' })
-          continue
+          if (operation.kind === 'dashboard') {
+            const trackedDashboard = await readTrackedAtHead(canonicalRoot, operation.path)
+            if (trackedDashboard !== existing && trackedDashboard + '\n' !== existing) throw new Error('dashboard has uncommitted user content; projection overwrite refused')
+            replacedTargets.push({ target, existing })
+            allUnchanged = false
+            await writeFile(target, operation.proposal, { encoding: 'utf8' })
+            continue
+          }
+          if (operation.action === 'update') {
+            const tracked = await readTrackedAtHead(canonicalRoot, operation.path)
+            if (tracked !== existing && tracked + '\n' !== existing) {
+              throw new Error('target has uncommitted local modifications; controlled update refused')
+            }
+            const currentSha = contentBlobSha(existing)
+            if (currentSha !== operation.expectedBlobSha) {
+              throw new Error('expectedBlobSha mismatch; controlled update refused (rerun against current content)')
+            }
+            replacedTargets.push({ target, existing })
+            allUnchanged = false
+            await writeFile(target, operation.proposal, { encoding: 'utf8' })
+            continue
+          }
+          throw new Error('target id already exists with different content; overwrite refused')
         }
         const committedContent = await readTrackedAtHead(canonicalRoot, operation.path)
         if (committedContent !== operation.proposal && committedContent + '\n' !== operation.proposal) throw new Error('identical target exists only as uncommitted user content; ownership and overwrite refused')
@@ -817,10 +863,17 @@ export function apply(ctx, config = {}) {
   ))
   ctx.tools.register(tool(
     'learning_route',
-    'Choose a GitLearnOS operation and authority-aware next action without executing it.',
-    objectSchema({ intent: { type: 'string', description: 'Current learning request or event, capped at 4000 characters.' } }, ['intent']),
+    'Choose a GitLearnOS operation and authority-aware next action without executing it. Pass operations explicitly when the protocol requires diagnose or a multi-step plan; do not rely on Host regex alone.',
+    objectSchema({
+      intent: { type: 'string', description: 'Current learning request or event, capped at 4000 characters.' },
+      operations: {
+        type: 'array',
+        items: { type: 'string' },
+        description: 'Optional explicit operation plan such as diagnose, tutor, question. When present, Host uses this ordered set instead of regex detection.',
+      },
+    }, ['intent']),
     routeOutputSchema,
-    async args => routeLearningEvent(root, args.intent),
+    async args => routeLearningEvent(root, args),
   ))
   ctx.tools.register(tool(
     'learning_apply',

@@ -40,8 +40,8 @@ not label the learner globally.
 
 - Learner's reported judgment:
 - Diagnosis status: `unknown` / `learner-reported` / `agent-hypothesis` / `source-supported`
-- Interpretation lifecycle: `anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `confirmed` / `falsified` / `revised`
-- Write class: `surface-signal` / `suspected-root` / `supported-root`
+- Interpretation lifecycle: `anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `corroborated` / `falsified` / `revised`
+- Write class: `surface-signal` / `suspected-blocker` / `supported-diagnosis`
 - Missing information:
 - Broken reasoning link:
 - Confused distinction:
@@ -59,14 +59,15 @@ complaint.
 |---|---|---|---|
 | `concept-unestablished` | active / supported / ruled_out / falsified |  |  |
 | `prerequisite-missing` |  |  |  |
-| `procedure-forgotten` |  |  |  |
+| `procedure-unavailable` |  |  |  |
 | `calculation-error` |  |  |  |
 | `language-misread` |  |  |  |
 | `incidental` |  |  |  |
 | `transfer-failure` |  |  |  |
 | `mastery-overestimated` |  |  |  |
 
-Write barrier: `held` / `passed`  
+Stop-probe gate: `held` / `passed`  
+Supported-write gate: `held` / `passed`  
 Barrier reason:
 
 ## Falsification log

@@ -418,7 +418,7 @@ When the signal is an error, a stuck attempt, or a clash with prior mastery:
 signal
 → competing hypotheses
 → discriminating probe
-→ supported root cause or remaining uncertainty
+→ best-supported diagnosis or remaining uncertainty
 → targeted intervention when teaching is requested or justified
 → independent delayed transfer check
 → confirm, falsify, or revise the learner model
@@ -448,7 +448,7 @@ competing class has been ruled out, remaining classes imply the same
 intervention, or the probe budget is exhausted and one class dominates.
 Otherwise keep a compact event with `diagnosis_status` `unknown` or
 `agent-hypothesis` and the competing list. The grain of a written gap is the
-supported root cause, not the learner's first complaint.
+best-supported diagnosis, not the learner's first complaint.
 
 A diagnosis is an evidence-linked hypothesis, not a fact about the learner.
 Do not infer a hidden cause when the work is incomplete; ask one focused

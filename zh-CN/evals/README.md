@@ -53,3 +53,4 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 
 断言一句确认回退、只发题隐藏答案、无阻断冲突的证据晋升、延迟独立迁移才能
 demonstrated，以及队列只含规范 ID/路径且仅在实质变化后重排。
+- `18-no-overdiagnosis-new-learning.md` — expected new learning must not trigger interrogation-style diagnosis

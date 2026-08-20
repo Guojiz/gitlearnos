@@ -25,7 +25,7 @@ Required loop when the signal is an error, a stuck attempt, or a clash with
 prior mastery:
 
 ```text
-signal → hypotheses → probe → root cause → intervention → independent check → revise
+signal → hypotheses → probe → best-supported diagnosis → intervention → independent check → revise
 ```
 
 ## Why the first label is usually wrong
@@ -56,7 +56,7 @@ Yes: “For `y = -2x^2 + 4x + 1`, do not compute. Does this parabola open up
 or down?”
 
 If the learner says up, “cannot find the maximum” was the symptom. The
-supported root cause is the missing link between `a` and opening direction.
+best-supported diagnosis is the missing link between `a` and opening direction.
 That is what may be written.
 
 If they answer down correctly, opening is provisionally ruled out; the next

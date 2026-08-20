@@ -6,12 +6,28 @@
 
 <p align="center"><strong>Learner-owned Git memory · GitLearnOS-exclusive native DeepSeek Harness support</strong></p>
 
-**[Open the core-ready Quickstart →](QUICKSTART.md)**
+<p align="center"><em>Learning happens anywhere. State belongs to you.</em></p>
+
+<p align="center">
+  <a href="https://guojiz.github.io/gitlearnos/"><img alt="Official website" src="https://img.shields.io/badge/website-guojiz.github.io%2Fgitlearnos-111111?style=flat-square"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-111111?style=flat-square"></a>
+  <a href="https://github.com/Guojiz/gitlearnos/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Guojiz/gitlearnos?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <a href="https://guojiz.github.io/gitlearnos/"><strong>Open the official website →</strong></a>
+  ·
+  <a href="QUICKSTART.md"><strong>Core-ready Quickstart →</strong></a>
+</p>
 
 [中文](zh-CN/README.md) ·
 [Website](https://guojiz.github.io/gitlearnos/) ·
 [Documentation map](DOCUMENTATION.md) ·
-[Protocol](GITLEARNOS.md)
+[Protocol](GITLEARNOS.md) ·
+[Author site](https://guojiz.github.io/) ·
+[X](https://x.com/guojizh) ·
+[Bilibili](https://space.bilibili.com/3493114115263006) ·
+[Sponsor](https://github.com/Guojiz/Sponsors)
 
 ![GitLearnOS overview](docs/assets/gitlearnos-map.svg)
 
@@ -171,6 +187,27 @@ See the [impact statement](docs/acesat-build-for-impact.md) and the completed
 See [GITLEARNOS.md](GITLEARNOS.md) for the full behavior contract,
 [QUICKSTART.md](QUICKSTART.md) for deployment, and
 [Evaluation](evals/README.md) for documented end-to-end scenarios.
+
+## Official website and other links
+
+The public face of GitLearnOS is the product site. It carries the same promise
+as this repository: a live DeepSeek Harness-shaped demo, the canonical
+Quickstart, and no fake “one-click provisioned scheduler.”
+
+| | |
+| --- | --- |
+| **Website** | https://guojiz.github.io/gitlearnos/ |
+| **Quickstart** | [QUICKSTART.md](QUICKSTART.md) |
+| **Author site** | https://guojiz.github.io/ |
+| **X** | https://x.com/guojizh |
+| **Bilibili** | https://space.bilibili.com/3493114115263006 |
+| **YouTube** | https://youtube.com/@guojizh |
+| **Sponsor** | https://github.com/Guojiz/Sponsors |
+
+### Other projects with official sites
+
+- [Word Snap](https://guojiz.github.io/word-snap/) — bilingual vocabulary matching PWA
+- [Guojiz](https://guojiz.github.io/) — builder site and AI-safety manuscript
 
 ## Project status
 

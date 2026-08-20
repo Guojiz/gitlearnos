@@ -6,12 +6,28 @@
 
 <p align="center"><strong>学习者拥有的 Git 记忆 · GitLearnOS 独家原生 DeepSeek Harness 支持</strong></p>
 
-**[打开核心版快速开始 →](QUICKSTART.md)**
+<p align="center"><em>学习发生在任何地方，状态属于你。</em></p>
+
+<p align="center">
+  <a href="https://guojiz.github.io/gitlearnos/"><img alt="官网" src="https://img.shields.io/badge/官网-guojiz.github.io%2Fgitlearnos-111111?style=flat-square"></a>
+  <a href="../LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-111111?style=flat-square"></a>
+  <a href="https://github.com/Guojiz/gitlearnos/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/Guojiz/gitlearnos?style=flat-square"></a>
+</p>
+
+<p align="center">
+  <a href="https://guojiz.github.io/gitlearnos/"><strong>打开官网 →</strong></a>
+  ·
+  <a href="QUICKSTART.md"><strong>核心版快速开始 →</strong></a>
+</p>
 
 [English](../README.md) ·
 [官网](https://guojiz.github.io/gitlearnos/) ·
 [文档地图](DOCUMENTATION.md) ·
-[协议](GITLEARNOS.md)
+[协议](GITLEARNOS.md) ·
+[作者站点](https://guojiz.github.io/) ·
+[X](https://x.com/guojizh) ·
+[哔哩哔哩](https://space.bilibili.com/3493114115263006) ·
+[赞助](https://github.com/Guojiz/Sponsors)
 
 ![GitLearnOS 中文概览](../docs/assets/gitlearnos-map.svg)
 
@@ -140,6 +156,26 @@ RAG provider 访问仍是可选独立层，尚未内建在该 bundle 中。DeepS
 
 完整行为见[GITLEARNOS.md](GITLEARNOS.md)，部署见[QUICKSTART.md](QUICKSTART.md)，
 端到端场景见[评测](../evals/README.md)。
+
+## 官网与其它入口
+
+GitLearnOS 的对外入口是官网。它与本仓库说同一件事：一次按真实 DeepSeek Harness
+结构组织的学习会话、唯一标准快速开始，以及不会假装“按钮已经创建调度器”。
+
+| | |
+| --- | --- |
+| **官网** | https://guojiz.github.io/gitlearnos/ |
+| **快速开始** | [QUICKSTART.md](QUICKSTART.md) |
+| **作者站点** | https://guojiz.github.io/ |
+| **X** | https://x.com/guojizh |
+| **哔哩哔哩** | https://space.bilibili.com/3493114115263006 |
+| **YouTube** | https://youtube.com/@guojizh |
+| **赞助** | https://github.com/Guojiz/Sponsors |
+
+### 其它已上线官网的项目
+
+- [Word Snap](https://guojiz.github.io/word-snap/) — 双语单词匹配 PWA
+- [Guojiz](https://guojiz.github.io/) — 作者站点与 AI 安全文稿
 
 ## 项目状态
 

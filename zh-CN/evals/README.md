@@ -31,6 +31,8 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [路由并验证可选 RAG-Anything](scenarios/13-rag-anything.md)
 - [把重复错误归纳为可迁移模型](scenarios/14-repeated-error-synthesis.md)
 - [验证重复整理与出题](scenarios/15-recurring-automation.md)
+- [写入知识缺口前先做鉴别诊断](scenarios/17-differential-diagnosis.md)
+
 
 ## 运行时适配场景
 

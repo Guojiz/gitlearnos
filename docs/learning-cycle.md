@@ -11,11 +11,14 @@ Learning should follow this cycle:
 ```text
 learn
 → attempt and preserve the judgment
+→ treat the error as a signal, not a diagnosis
+→ keep competing hypotheses
+→ ask a discriminating probe
 → diagnose missing information or the first broken reasoning link
 → link same-pattern evidence
 → synthesize a model, answer structure, and supported conclusions
 → recall and apply it later in a sufficiently new task
-→ revise the diagnosis and model from feedback
+→ confirm, falsify, or revise the diagnosis and model from feedback
 ```
 
 This is a cycle, not a pipeline that every exercise must enter. A normal

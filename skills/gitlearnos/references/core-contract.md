@@ -56,7 +56,13 @@ explanation, or external resolution alone is never a state transition.
   resolution, and supported success remain `learning` or unassessed.
 - Explanation, summary, model creation, and RAG retrieval never establish
   mastery. Preserve the learner's actual judgment and result. Treat a proposed
-  missing fact or broken reasoning link as a revisable diagnosis.
+  missing fact or broken reasoning link as a revisable diagnosis. A surface
+  error is a signal, not a knowledge gap: keep competing hypothesis classes,
+  use a discriminating probe, and do not write a supported gap until
+  alternatives are split or share an intervention. Falsified hypotheses stay
+  in the record. New evidence that contradicts prior mastery opens a
+  contradiction inquiry instead of only lowering a score.
+
 
 ## Minimum read and write
 

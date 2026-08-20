@@ -8,6 +8,14 @@ records answers and external feedback, and keeps each useful update reversible.
 
 It is not a standalone tutoring app or a GitHub-only workflow.
 
+## Does every mistake become a knowledge gap?
+
+No. A surface error is a signal. The agent must keep competing hypotheses,
+ask a discriminating probe, and write a gap only at root-cause grain after
+some alternative has been ruled out. Retracted hypotheses stay in the record
+as `falsified`. See [Differential diagnosis](docs/differential-diagnosis.md).
+
+
 ## Is this repository my learning repository?
 
 No. This is the public template: protocol, Skills, adapters, examples, and

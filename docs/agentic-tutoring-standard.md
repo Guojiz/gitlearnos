@@ -52,6 +52,17 @@ an answer structure, limits or traps, and a fresh transfer check.
 Fail if the system merely copies a problem and answer, invents a cause, creates
 a model from one ambiguous occurrence, or treats model creation as mastery.
 
+For an incomplete attempt or a self-report of not knowing, organization and
+tutoring must keep competing hypothesis classes, ask a discriminating probe
+rather than empty “why,” hold the write barrier against surface-symptom gaps,
+and leave a falsification path. New evidence that contradicts prior mastery
+opens a contradiction inquiry instead of only lowering a score.
+
+Fail if the agent writes the first complaint as a knowledge gap, asks only
+metacognitive “where are you stuck,” deletes a later-falsified hypothesis, or
+treats an immediate explanation check as `demonstrated`.
+
+
 ### B1. Subject routing
 
 The agent infers the subject, writes subject-specific state under `subjects/<subject>/`, keeps shared configuration at the root, and asks only when an incorrect write is plausible. A learner correction immediately overrides the inference.

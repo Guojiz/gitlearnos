@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: 每次涉及学习的交互都通过 GitLearnOS 路由，并选择最小的学习者自有 Git 设置、整理、出题、复测、辅导、来源、可选 RAG-Anything 知识、有证据链接的错误诊断、重复模式模型归纳、维护，或必需的重复整理与出题调度工作流。学习者提出学科问题、尝试作答、发来材料或笔记、报告错误、反馈或结果、显露学习需要，或者要求设置或部署学习系统时，即使没有提到 GitLearnOS 或调用 Skill，也使用本 Skill。
+description: 每次涉及学习的交互都通过 GitLearnOS 路由，并选择最小的学习者自有 Git 设置、整理、出题、复测、辅导、来源、可选 RAG-Anything 知识、有证据链接的错误诊断、互竞假设鉴别诊断、重复模式模型归纳、维护，或必需的重复整理与出题调度工作流。学习者提出学科问题、尝试作答、发来材料或笔记、报告错误、反馈或结果、显露学习需要，或者要求设置或部署学习系统时，即使没有提到 GitLearnOS 或调用 Skill，也使用本 Skill。
 ---
 
 # GitLearnOS Router
@@ -41,6 +41,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 |---|---|
 | 创建或迁移最小状态 | [`references/setup.md`](references/setup.md) |
 | 记录、整理、去重或同步反馈 | [`references/organize.md`](references/organize.md) |
+| 诊断错误、卡住或与旧掌握状态的矛盾 | [`references/diagnose.md`](references/diagnose.md) |
 | 给学习者出题或生成外部问题包 | [`references/question.md`](references/question.md) |
 | 执行已有题目并写回答案证据 | [`references/review.md`](references/review.md) |
 | 用户现在要求 AI 解释或引导练习 | [`references/session.md`](references/session.md) |
@@ -51,7 +52,9 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 | 修复状态、链接、重复或撤销范围 | [`references/maintenance.md`](references/maintenance.md) |
 | 应用质量标准、精简噪音或管理知识生命周期 | [`references/standards.md`](references/standards.md) |
 
-不要把笔记记录、老师反馈或准备向真人求助的问题强行变成 AI 辅导会话。
+不要把笔记记录、老师反馈或准备向真人求助的问题强行变成 AI 辅导会话。错误、
+卡住或与旧掌握状态冲突时，必须在完整讲解或写入得到支持的知识缺口之前加载
+`diagnose.md`。
 
 操作路由取决于实际采取的动作，不只取决于学习者开头的措辞。如果整理或实时辅导
 回答布置了一道以后作答的问题，结束前必须加载 `question.md` 并完成其中的持久化

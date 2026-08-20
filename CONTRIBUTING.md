@@ -58,10 +58,13 @@ A good demo should show a full learning loop:
 ```text
 goal
 → source or source record
+→ evidence as signal
+→ competing hypotheses and discriminating probe
+→ knowledge gap at root-cause grain
 → model
-→ knowledge gap
 → practice set
-→ review schedule
+→ independent review
+→ confirm, falsify, or revise
 → dashboard
 ```
 

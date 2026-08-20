@@ -19,7 +19,9 @@ Stable principles:
 - use a persistent project/source workspace for large learning materials when
   available;
 - keep learner state inspectable;
-- record knowledge gaps when they appear;
+- record knowledge gaps when they appear, at root-cause grain, after
+  competing explanations have been split;
+- keep falsified hypotheses in the record instead of deleting them;
 - adapt to the actual AI environment instead of pretending every tool has the same abilities.
 
 Adjustable strategies:

@@ -35,6 +35,8 @@ clear.
 - [Route and verify optional RAG-Anything](scenarios/13-rag-anything.md)
 - [Synthesize a repeated error into a transferable model](scenarios/14-repeated-error-synthesis.md)
 - [Verify recurring organization and questions](scenarios/15-recurring-automation.md)
+- [Diagnose before writing a knowledge gap](scenarios/17-differential-diagnosis.md)
+
 
 ## Runtime adapter scenario
 

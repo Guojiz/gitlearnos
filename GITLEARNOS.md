@@ -406,7 +406,25 @@ methods, not universal GitLearnOS requirements.
 For mathematics, science, and other tasks where problem patterns matter, a
 mistake record is not a copied problem and solution. Preserve the learner's
 actual judgment or work, then separate observable evidence from a revisable
-diagnosis:
+diagnosis.
+
+A surface error is a signal, not a diagnosis. Do not promote “cannot find the
+maximum of a quadratic” into a knowledge gap until competing explanations have
+been discriminated. This is protocol, not model personality.
+
+When the signal is an error, a stuck attempt, or a clash with prior mastery:
+
+```text
+signal
+→ competing hypotheses
+→ discriminating probe
+→ supported root cause or remaining uncertainty
+→ targeted intervention when teaching is requested or justified
+→ independent delayed transfer check
+→ confirm, falsify, or revise the learner model
+```
+
+This extends the synthesis loop:
 
 ```text
 learner judgment and outcome
@@ -417,12 +435,34 @@ learner judgment and outcome
 → revise the diagnosis and model from the result
 ```
 
+Keep more than one live hypothesis class until evidence splits them, including
+at least concept, prerequisite, procedure, calculation, language-misread,
+incidental, transfer-failure, and mastery-overestimated when they are
+plausible. Empty “why” or “where are you stuck” questions are not diagnostic.
+A probe must be a smallest item that reduces uncertainty; prefer a qualitative
+discriminator before computation when it splits the set. Budget two or three
+probes and stop when remaining classes share the same next action.
+
+Do not write a knowledge gap from a surface symptom unless at least one
+competing class has been ruled out, remaining classes imply the same
+intervention, or the probe budget is exhausted and one class dominates.
+Otherwise keep a compact event with `diagnosis_status` `unknown` or
+`agent-hypothesis` and the competing list. The grain of a written gap is the
+supported root cause, not the learner's first complaint.
+
 A diagnosis is an evidence-linked hypothesis, not a fact about the learner.
 Do not infer a hidden cause when the work is incomplete; ask one focused
 question or leave it `unknown`. Invite the learner to explain their original
 decision when that answer is necessary to distinguish missing knowledge from
 a broken reasoning chain. Do not replace this productive reflection with an
-AI-written explanation.
+AI-written explanation. If later evidence contradicts a hypothesis, mark it
+`falsified`, keep the history, and stop using that cause for question
+selection or mastery change.
+
+When new evidence conflicts with `demonstrated` or a previously strong
+belief, do not only lower mastery. Open competing explanations—forgetting,
+added complexity, failed transfer, overestimated prior mastery, or incidental
+state—then probe once.
 
 Keep a one-off exercise lightweight. Link repeated situations by subject,
 recognition cues, target concept, and error mechanism instead of copying whole
@@ -596,7 +636,7 @@ create a second learning agent; it wakes the same main-agent behavior.
 GitLearnOS distributes one self-contained Router Skill. Its `name` and
 `description` are the only GitLearnOS metadata that should enter the initial
 Skill list. After selection, the Router loads one operation reference for
-setup, organization, question generation, review, tutoring, source handling,
+setup, organization, differential diagnosis, question generation, review, tutoring, source handling,
 model extraction, or maintenance, plus at most one subject reference when
 useful. A reference cannot weaken this evidence, ownership, or write-authority
 contract.

@@ -64,7 +64,10 @@ verification, safety, model, schedule, and roadmap boundaries are in the
 Files under `docs/` explain architecture, automation, privacy, deployment,
 memory, and learning methods. English versions are primary. A Chinese
 counterpart may be provided when the document is part of a common human
-workflow; advanced implementation notes may remain English-only.
+workflow; advanced implementation notes may remain English-only. The
+diagnostic write barrier is explained in
+[Differential diagnosis](docs/differential-diagnosis.md).
+
 
 ## Locale layout and alignment
 

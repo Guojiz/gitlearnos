@@ -39,6 +39,8 @@ ID：`gap-<stable-slug>`
 
 - 学习者报告的原判断：
 - 诊断状态：`unknown` / `learner-reported` / `agent-hypothesis` / `source-supported`
+- 解释生命周期：`anomaly` / `suspected` / `diagnosing` / `supported` / `intervening` / `retesting` / `confirmed` / `falsified` / `revised`
+- 写入类别：`surface-signal` / `suspected-root` / `supported-root`
 - 缺失信息：
 - 推理链断裂：
 - 混淆的区别：
@@ -46,6 +48,33 @@ ID：`gap-<stable-slug>`
 - 可能的卡点：
 - 缺少的证据：
 - 出现什么证据时应修改本解释：
+
+## 互竞假设
+
+在鉴别追问把它们分开之前，保留有效类别。不要收成表面抱怨。
+
+| 类别 | 状态 | 后验或排序 | 鉴别证据 |
+|---|---|---|---|
+| `concept-unestablished` | active / supported / ruled_out / falsified |  |  |
+| `prerequisite-missing` |  |  |  |
+| `procedure-forgotten` |  |  |  |
+| `calculation-error` |  |  |  |
+| `language-misread` |  |  |  |
+| `incidental` |  |  |  |
+| `transfer-failure` |  |  |  |
+| `mastery-overestimated` |  |  |  |
+
+写入门槛：`held` / `passed`  
+门槛理由：
+
+## 证伪记录
+
+| 日期 | 假设类别 | 否定证据 | 结果 |
+|---|---|---|---|
+|  |  |  | `falsified` / `revised` |
+
+不要删除被撤回的假设。被否定的标签也是学习者模型的一部分。
+
 
 ## 同型证据
 

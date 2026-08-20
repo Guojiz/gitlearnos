@@ -10,9 +10,10 @@ GitLearnOS 是一套 Git 原生学习协议：一个有能力的主 AI Agent，�
 
 ## 每个错误都会变成知识缺口吗？
 
-不会。表面错误只是信号。Agent 必须保留互竞假设，提出鉴别性追问，并在排除
-部分替代解释之后，才按根因粒度写入缺口。被否定的假设以 `falsified` 留在
-记录里。见[鉴别诊断](docs/differential-diagnosis.md)。
+不会。表面错误只是信号。Agent 必须保留互竞假设，提出鉴别性追问；只有会改变
+教学动作的替代解释已被排除或明显削弱时，才按当前最佳支持卡点写入
+`supported` 缺口。共享干预或追问预算耗尽可以停问，最多写成 `suspected`。
+被否定的假设以 `falsified` 留在记录里。见[鉴别诊断](docs/differential-diagnosis.md)。
 
 
 ## 这个仓库就是我的学习仓库吗？

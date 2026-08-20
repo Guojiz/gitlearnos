@@ -11,9 +11,12 @@ It is not a standalone tutoring app or a GitHub-only workflow.
 ## Does every mistake become a knowledge gap?
 
 No. A surface error is a signal. The agent must keep competing hypotheses,
-ask a discriminating probe, and write a gap only at root-cause grain after
-some alternative has been ruled out. Retracted hypotheses stay in the record
-as `falsified`. See [Differential diagnosis](docs/differential-diagnosis.md).
+ask a discriminating probe, and write a `supported` gap only at
+best-supported-blocker grain after intervention-changing alternatives are
+ruled out or substantially weakened. Shared intervention or an exhausted
+probe budget may stop asking and write at most `suspected`. Retracted
+hypotheses stay in the record as `falsified`. See
+[Differential diagnosis](docs/differential-diagnosis.md).
 
 
 ## Is this repository my learning repository?

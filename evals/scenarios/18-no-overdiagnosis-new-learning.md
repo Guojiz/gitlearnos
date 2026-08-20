@@ -31,4 +31,4 @@ in this session.
 
 Immediate teaching plan or structured introduction, with any gap left at
 `anomaly`/`suspected` only if the agent records a learning intention—not a
-root-cause verdict.
+supported-diagnosis verdict.

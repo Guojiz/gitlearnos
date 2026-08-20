@@ -60,11 +60,11 @@ goal
 → source or source record
 → evidence as signal
 → competing hypotheses and discriminating probe
-→ knowledge gap at root-cause grain
+→ knowledge gap at best-supported-blocker grain
 → model
 → practice set
 → independent review
-→ confirm, falsify, or revise
+→ corroborate, falsify, or revise
 → dashboard
 ```
 

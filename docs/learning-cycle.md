@@ -18,7 +18,7 @@ learn
 → link same-pattern evidence
 → synthesize a model, answer structure, and supported conclusions
 → recall and apply it later in a sufficiently new task
-→ confirm, falsify, or revise the diagnosis and model from feedback
+→ corroborate, falsify, or revise the diagnosis and model from feedback
 ```
 
 This is a cycle, not a pipeline that every exercise must enter. A normal

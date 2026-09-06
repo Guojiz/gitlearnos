@@ -33,7 +33,14 @@ const ragReceipt = {
   schema: 'gitlearnos.external-receipt/v1',
   kind: 'rag',
   provider: 'rag-anything',
+  source_id: 'math/algebra-course',
+  knowledge_ids: ['math/algebra/quadratic-functions'],
   doc_id: 'course/algebra.pdf',
+  git_source_record: {
+    path: 'subjects/math/sources/algebra-course.md',
+    base_revision: '0123456789abcdef',
+    content_sha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  },
   source_boundary: { root: '/authorized/materials', allowlist: ['course/algebra.pdf'], evidence: 'allowlist inspected' },
   ingest: { status: 'completed', evidence: 'non-zero chunks', run_id: 'ing-1' },
   query: { status: 'completed', evidence: 'source-specific hit', run_id: 'query-1' },
@@ -103,4 +110,23 @@ test('rejects missing delivery evidence and missing RAG source boundary', async 
     assert.notEqual(result.code, 0)
     assert.match(result.stderr, /source_boundary must be an object/)
   }, 'missing-source-boundary.json')
+})
+
+test('rejects a RAG receipt without stable Git identity linkage', async () => {
+  const { knowledge_ids: ignored, ...missingKnowledgeIds } = ragReceipt
+  await withReceipt(missingKnowledgeIds, async (file) => {
+    const result = await runChecker(file)
+    assert.notEqual(result.code, 0)
+    assert.match(result.stderr, /knowledge_ids must be a non-empty array/)
+  }, 'missing-knowledge-ids.json')
+
+  const invalidHash = {
+    ...ragReceipt,
+    git_source_record: { ...ragReceipt.git_source_record, content_sha256: 'not-a-hash' }
+  }
+  await withReceipt(invalidHash, async (file) => {
+    const result = await runChecker(file)
+    assert.notEqual(result.code, 0)
+    assert.match(result.stderr, /64-character SHA-256/)
+  }, 'invalid-source-hash.json')
 })

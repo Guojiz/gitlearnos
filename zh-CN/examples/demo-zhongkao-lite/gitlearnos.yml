@@ -18,8 +18,11 @@ sources:
   workspace: "fixture-only"
   large_materials: project-sources
 rag:
+  required_for_complete: true
   provider: rag-anything
-  choice: declined
+  status: unavailable
+  working_dir: ""
+  parser_output_dir: ""
   ingest:
     enabled: false
     scope: per-source
@@ -29,7 +32,8 @@ setup:
     goal: "30 天内提升中考数学几何模型识别能力"
     subject: math
     material: "完全虚构的中考数学记录"
-    rag_choice: declined
+    rag_provider: rag-anything
+    rag_storage: "静态示例中不可用"
   completed_at: "2026-07-03T00:00:00Z"
 automation:
   time_zone: Asia/Shanghai

@@ -28,7 +28,7 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 - [用 GitHub 支持教学协作](scenarios/10-github-teaching-collaboration.md)
 - [没有 Skills 时保持连续性](scenarios/11-no-skill-continuity.md)
 - [验证跨 Agent Skill 安装](scenarios/12-cross-agent-skill-install.md)
-- [路由并验证可选 RAG-Anything](scenarios/13-rag-anything.md)
+- [路由并验证必需 RAG](scenarios/13-rag-anything.md)
 - [把重复错误归纳为可迁移模型](scenarios/14-repeated-error-synthesis.md)
 - [验证重复整理与出题](scenarios/15-recurring-automation.md)
 - [写入知识缺口前先做鉴别诊断](scenarios/17-differential-diagnosis.md)
@@ -38,8 +38,8 @@ GitLearnOS 使用文档化学习场景评测，不逐字比较 AI 输出。人�
 
 - [验证 DeepSeek Harness 原生适配](scenarios/16-deepseek-harness-native.md)
 
-这些场景就是 v2 的发布验收条件。OpenSpace、数据库、向量索引、RAG-Anything
-和特定 Git 托管平台都不是必需项。通过场景 15 的已验证部署变体需要真正拥有
+这些场景就是 v2 的发布验收条件。OpenSpace、数据库、RAG-Anything 这一具体实现
+和特定 Git 托管平台都不是必需项；完整部署必须具备已验证的兼容 RAG 层。通过场景 15 的已验证部署变体需要真正拥有
 仓库能力的重复调度器；没有这种调度器时，唯一诚实结果是 `incomplete`。
 场景 16 单独评测可选运行时适配，不会把 DeepSeek Harness 变成 v2 必需项。
 在 Developer Preview 阶段，当前发布的狭窄 Host 可以取得

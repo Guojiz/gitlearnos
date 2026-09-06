@@ -18,8 +18,11 @@ sources:
   workspace: "fixture-only"
   large_materials: project-sources
 rag:
+  required_for_complete: true
   provider: rag-anything
-  choice: declined
+  status: unavailable
+  working_dir: ""
+  parser_output_dir: ""
   ingest:
     enabled: false
     scope: per-source
@@ -29,7 +32,8 @@ setup:
     goal: "Compare three papers about AI-assisted learning systems"
     subject: research
     material: "synthetic paper records"
-    rag_choice: declined
+    rag_provider: rag-anything
+    rag_storage: "unavailable in static fixture"
   completed_at: "2026-07-03T00:00:00Z"
 automation:
   time_zone: UTC

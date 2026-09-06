@@ -19,13 +19,29 @@ async function learnerRepo(mode = 'safe-auto') {
   await git(root, 'config', 'user.name', 'GitLearnOS Test')
   await git(root, 'config', 'user.email', 'test@gitlearnos.invalid')
   await mkdir(join(root, 'subjects', 'math', 'goals'), { recursive: true })
-  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft\nmode: ${mode}\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\nsetup:\n  answers:\n    goal: math\n    subject: math\n    material: worksheet\n    rag_choice: declined\n  completed_at: "2026-08-15T00:00:00Z"\n`)
+  await mkdir(join(root, 'subjects', 'math', 'sources'), { recursive: true })
+  await mkdir(join(root, 'subjects', 'math', 'knowledge', 'algebra'), { recursive: true })
+  await mkdir(join(root, '.gitlearnos', 'receipts'), { recursive: true })
+  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft\nmode: ${mode}\nidentity:\n  repo_id: test-learner\n  role: learner\n  kind: learner-repository\n  template: false\nsetup:\n  answers:\n    goal: math\n    subject: math\n    material: worksheet\n    rag_provider: rag-anything\n    rag_storage: .gitlearnos/rag\n  completed_at: "2026-08-15T00:00:00Z"\n`)
   await writeFile(join(root, 'learning-policy.md'), `# Policy\nMode: ${mode}\n`)
   await writeFile(join(root, 'dashboard.md'), '# Dashboard\n')
   await writeFile(join(root, 'automation.md'), '# Automation\nmaintenance: requested\ndue-review: requested\n')
   await writeFile(join(root, 'AGENTS.md'), '# Agent\n')
   await writeFile(join(root, 'learner-profile.md'), '# Learner\n')
   await writeFile(join(root, 'subjects', 'math', 'goals', 'main-goal.md'), '# Goal\n')
+  await writeFile(join(root, 'subjects', 'math', 'sources', 'worksheet.md'), '# Source\nSource ID: math/worksheet\nKnowledge IDs: math/algebra/sign-rules\n')
+  await writeFile(join(root, 'subjects', 'math', 'knowledge', 'algebra', 'sign-rules.md'), '# Knowledge Point\nKnowledge ID: math/algebra/sign-rules\n')
+  await writeFile(join(root, '.gitlearnos', 'receipts', 'rag.json'), JSON.stringify({
+    schema: 'gitlearnos.external-receipt/v1', kind: 'rag', provider: 'rag-anything',
+    source_id: 'math/worksheet', knowledge_ids: ['math/algebra/sign-rules'], doc_id: 'worksheet',
+    git_source_record: { path: 'subjects/math/sources/worksheet.md', base_revision: 'initialization', content_sha256: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' },
+    source_boundary: { root, allowlist: ['worksheet.md'], evidence: 'fixture boundary inspected' },
+    ingest: { status: 'completed', evidence: 'fixture non-zero chunks' },
+    query: { status: 'completed', evidence: 'fixture source-specific hit' },
+    rebuild: { status: 'available', evidence: 'fixture replay documented' },
+    delete: { status: 'available', evidence: 'fixture delete documented' },
+    observed_at: '2026-08-15T00:00:00Z',
+  }))
   await git(root, 'add', '.')
   await git(root, 'commit', '-m', 'initialize learner state')
   return root
@@ -452,7 +468,8 @@ metadata:
 goal: spoofed
 subject: math
 material: worksheet
-rag_choice: declined
+rag_provider: rag-anything
+rag_storage: .gitlearnos/rag
 completed_at: "2026-08-15T00:00:00Z"
 `)
   const status = await inspectWorkspace(root)
@@ -479,6 +496,35 @@ test('plain external markers stay reported until a structured receipt exists', a
   status = await inspectWorkspace(root)
   assert.equal(status.automation.state, 'externallyVerified')
   assert.equal(status.automation.verifiedReceipt.id, 'task-1')
+})
+
+test('Harness discovers a validated receipt from the bundled RAG adapter path', async () => {
+  const root = await learnerRepo('safe-auto')
+  const fixedReceipt = JSON.parse(await readFile(join(root, '.gitlearnos', 'receipts', 'rag.json'), 'utf8'))
+  await rm(join(root, '.gitlearnos', 'receipts', 'rag.json'))
+  await mkdir(join(root, '.gitlearnos', 'rag-anything', 'receipts'), { recursive: true })
+  await writeFile(
+    join(root, '.gitlearnos', 'rag-anything', 'receipts', 'adapter.json'),
+    JSON.stringify(fixedReceipt),
+  )
+  const status = await inspectWorkspace(root)
+  assert.equal(status.rag.state, 'externallyVerified')
+  assert.equal(status.rag.verifiedReceipt.sourceId, 'math/worksheet')
+  assert.deepEqual(status.rag.verifiedReceipt.knowledgeIds, ['math/algebra/sign-rules'])
+})
+
+test('Harness discovers the adapter published RAG receipt in the learner Git boundary', async () => {
+  const root = await learnerRepo('safe-auto')
+  const receipt = JSON.parse(await readFile(join(root, '.gitlearnos', 'receipts', 'rag.json'), 'utf8'))
+  await rm(join(root, '.gitlearnos', 'receipts', 'rag.json'))
+  await writeFile(
+    join(root, '.gitlearnos', 'receipts', 'rag-adapter-doc-hash.json'),
+    JSON.stringify(receipt),
+  )
+  const status = await inspectWorkspace(root)
+  assert.equal(status.rag.state, 'externallyVerified')
+  assert.equal(status.rag.verifiedReceipt.sourceId, 'math/worksheet')
+  assert.deepEqual(status.rag.verifiedReceipt.knowledgeIds, ['math/algebra/sign-rules'])
 })
 
 test('canonical panel queue resolves H1 display names and hides stale references', async () => {

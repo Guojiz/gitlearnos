@@ -8,7 +8,8 @@ update.
 The core-ready setup is intentionally small: a private local Git repository,
 the protocol and project instructions, one subject or goal, and an agent that
 can actually read and write. The learner does not operate Git during normal
-learning. GitHub, RAG, a database, a server, and a scheduler are optional.
+learning. GitHub and a dedicated server remain optional. Complete deployment
+also verifies RAG and recurring scheduling; without either, label it incomplete.
 
 The agent answers first. `safe-auto` allows only safe, reversible writeback
 when the target and evidence are clear; `preview` proposes; `manual` waits for

@@ -44,7 +44,8 @@
 
 ### 需要 GitHub Actions 或 API key 吗？
 
-答：不需要。它们只是可选高级层。
+答：不需要 GitHub Actions。是否需要 API 凭据取决于选定的 RAG 和模型提供方；
+凭据必须保存在 Git 外，只检查是否已设置。
 
 ### 每次都必须说“使用 GitLearnOS”或调用 Skill 吗？
 

@@ -1,8 +1,11 @@
 # GitLearnOS RAG-Anything Knowledge Layer
 
-Follow the Router's core contract. RAG-Anything is an optional local tool used
-by the one main agent. Git remains the formal, readable, versioned learning
-record; RAG remains a rebuildable retrieval layer.
+Follow the Router's core contract. A verified RAG layer is required for a
+complete GitLearnOS deployment. RAG-Anything is the first supported adapter
+used by the one main agent. Git remains the formal, readable, versioned
+learning record; RAG remains a rebuildable retrieval layer. When RAG is absent
+or unverified, continue safe Git learning operations but report the deployment
+as `incomplete`.
 
 ## Deployment gate
 
@@ -11,9 +14,8 @@ accessible. Ask the learner for:
 
 1. the learning goal and subject;
 2. the current material and its formats;
-3. whether to accept the default recommendation to enable a local RAG knowledge
-   layer, using RAG-Anything as the first supported option;
-4. the authorized local storage boundary and model/provider constraints.
+3. the authorized source boundary and dedicated RAG storage location;
+4. the model/provider constraints and credential environment variable name.
 
 Wait for the answer before installing packages, creating storage, ingesting
 files, committing, or deploying. Never request secrets in chat. Inspect only
@@ -32,6 +34,29 @@ implementation may replace RAG-Anything without changing the rules below.
 | learner note, teacher method, course rule, durable summary | formal knowledge | insert for retrieval |
 | ordinary one-off exercise or temporary mistake | record when useful | no |
 | repeated error pattern, durable gap, reusable method | promote formally | insert after promotion |
+
+## Classify by stable knowledge point
+
+Give every durable knowledge point a stable ID such as
+`<subject>/<topic>/<knowledge-point>` and create its canonical Git record under
+`subjects/<subject>/knowledge/`. Use the same ID across source records, gaps,
+models, reviews, RAG ingestion metadata, and receipts. A display-title change
+does not change the ID.
+
+Before ingestion, create or update the Git source record. It must include:
+
+- stable `source_id`, title, authorized locator/root, and content hash or
+  version when available;
+- one or more `knowledge_ids` and links to their canonical Git records;
+- stable RAG `doc_id`, provider/parser version, index location, and receipt
+  path;
+- rebuild input and deletion boundary.
+
+One source may map to many knowledge points and one knowledge point may cite
+many sources. Do not duplicate a textbook into one copy per knowledge point.
+Pass `source_id`, `knowledge_ids`, `doc_id`, the Git source-record path, and a
+page/section locator into the adapter as metadata or a structured text preamble.
+Never hand-edit generated `kv_store_*`, `vdb_*`, graph, or cache files.
 
 Do not infer promotion from one occurrence. Require repeated evidence, explicit
 learner instruction, or clear durable reuse value. Record why the item was
@@ -94,15 +119,59 @@ anything available.
 An integration may expose Python calls, a local service, MCP tools, or another
 adapter. Verify the actual interface instead of documenting an imagined one.
 
+The bundled `scripts/rag-anything-adapter.py` is the reference CLI when its Python
+dependencies are available. It keeps credentials outside Git, enforces an
+authorized root and Git source record, and supports inspectable ingest, query,
+status, delete, and rebuild operations. Provider endpoints, model IDs,
+embedding dimensions, and credential variable names remain configurable.
+Its default working directory is a repository-specific folder under the user's
+data home, outside learner Git. A configured working directory inside the
+learner repository is rejected so generated vectors, graph data, chunks, and
+caches cannot be mistaken for canonical learning state.
+
+The [Kimi Code](https://www.kimi.com/code/docs/en/) compatibility profile is based on a real 2026-09-05 test against
+`https://api.kimi.com/coding/v1`: chat and embeddings succeeded, embeddings
+returned 1024 dimensions and response model `bge_m3_embed`, and the complete
+text lifecycle passed ingest, source-cited query, new-process reopen, deletion,
+and rebuild. Kimi's public Code documentation did not document an embeddings
+contract at test time, so treat this as tested compatibility, not a guaranteed
+stable provider interface. Probe the actual dimension in a new index and keep
+the embedding implementation replaceable. Never reuse an index with a changed
+embedding model or dimension.
+
+## Reference CLI
+
+This release's bundled adapter accepts authorized UTF-8 text or Markdown through
+structured insertion. Use upstream parsing for PDF, image, table, equation, and
+other formats, then apply the same Git identity and receipt rules. Global flags
+must precede the subcommand:
+
+```text
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> status
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> ingest --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> delete --source-id <id> --doc-id <id>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> rebuild --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
+```
+
+Set the provider credential only through `GITLEARNOS_RAG_API_KEY` or the hidden
+`--prompt-api-key` input. The CLI never writes the credential to Git or receipts.
+It keeps its operational copy under the configured RAG working directory and
+publishes the auditable mirror as
+`.gitlearnos/receipts/rag-<sha256-of-doc-id>.json` in the learner repository.
+Commit that mirror together with the matching source and knowledge-point records.
+
 ## Ingest and query
 
 Before ingestion:
 
 1. confirm the source is authorized and inside the approved boundary;
-2. create or update its compact Git source record;
+2. create or update its compact Git source record and every linked stable
+   knowledge-point record;
 3. choose raw parsing or direct content_list insertion;
 4. use a stable document identifier (`doc_id` when the integration exposes one)
-   and record it in Git so later retrieval can cite the same identifier;
+   and record it together with `source_id`, `knowledge_ids`, Git record path,
+   source version/hash, and retrieval locator;
 5. prevent duplicate submission and preserve parser/version metadata when it
    affects future rebuilds.
 
@@ -126,14 +195,16 @@ Report RAG-Anything as `enabled` only after observing all of these:
    are absent from the index;
 6. the index location, rebuild inputs, and deletion/undo boundary are known.
 
-Otherwise report `disabled`, `unavailable`, or `unknown`. A dry run, package
+Otherwise report `unavailable`, `unknown`, or `incomplete`. A dry run, package
 import, health check, configuration file, or empty-index query is not enough.
+There is no complete-deployment path that merely declines RAG.
 
 ## Output
 
 ```text
 Learning goal:
-RAG-Anything: enabled / disabled / unavailable / unknown
+RAG-Anything: enabled / unavailable / unknown / incomplete
+Knowledge IDs:
 Authorized boundary:
 Git source records:
 Ingested or promoted:

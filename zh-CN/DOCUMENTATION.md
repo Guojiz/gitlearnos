@@ -21,7 +21,7 @@ flowchart LR
 | 配置无 Skill 界面 | [Project instructions](../templates/project-instructions.md) | [项目自定义指令](templates/project-instructions.md) |
 | 配置跨对话激活 | [Memory pointer](../templates/native-memory-pointer.md) | [原生记忆指针](templates/native-memory-pointer.md) |
 | 记录已验证重复任务 | [Automation state](../templates/automation.md) | [自动化状态](templates/automation.md) |
-| 添加可选本地知识检索 | [RAG-Anything card](../docs/rag-anything.md) | [RAG-Anything 部署卡](docs/rag-anything.md) |
+| 配置完整部署必需的知识检索 | [RAG-Anything card](../docs/rag-anything.md) | [RAG-Anything 部署卡](docs/rag-anything.md) |
 | 使用 DeepSeek Harness Developer Preview | [Harness adapter](../adapters/deepseek-harness/README.md) | [Harness 适配器](adapters/deepseek-harness/README.md) |
 | 分享 DeepSeek Harness 发布内容 | [Launch note](../docs/deepseek-harness-launch.md) | [发布说明](docs/deepseek-harness-launch.md) |
 | 阅读 AceSAT 案例 | [Impact statement](../docs/acesat-build-for-impact.md) | [影响说明](docs/acesat-build-for-impact.md) |

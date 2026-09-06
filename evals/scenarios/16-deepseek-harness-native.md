@@ -116,7 +116,8 @@ without an empty commit.
 For the setup prompt, the Host baseline must at least route to `setup`, return
 `persisted: false`, and leave the fixture untouched. The complete GitLearnOS
 protocol still requires the main agent to ask for learning goal, subject,
-current material, and the optional local RAG choice, then wait for the learner's
+current material, authorized source boundary, RAG storage, and provider
+constraints, then wait for the learner's
 answer before installing, initializing, ingesting, committing, or deploying
 learner state.
 
@@ -161,7 +162,7 @@ state, RAG indexes, source files, or external automation records.
 A future write-capable Harness integration may report `full-pass` only when it
 also shows all of the following against a disposable learner repository:
 
-1. the four-part setup gate was asked and answered before any state mutation;
+1. the complete setup gate was asked and answered before any state mutation;
 2. `safe-auto` performed one smallest authorized, reversible Git update;
 3. `preview` produced an exact proposal with no write;
 4. `manual` waited for explicit approval before the demonstrated write;

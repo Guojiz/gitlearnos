@@ -47,9 +47,10 @@ cold-session scheduling, or autonomous ranking. DeepSeek's default provider is
 text-only, while Harness can use either a configured third-party multimodal
 model or a vision/OCR bridge plugin chosen by the user.
 
-Local RAG-Anything is the first recommended retrieval implementation, but it
-is optional. Git remains the formal source of truth; RAG is rebuildable and
-holds authorized long-lived material. The same main agent owns decisions.
+Local RAG-Anything is the first supported retrieval implementation. A verified
+RAG layer is required for complete deployment. Git remains the formal source
+of truth; RAG is rebuildable and holds authorized long-lived material. The same
+main agent owns decisions.
 
 See [GITLEARNOS.md](../GITLEARNOS.md) and the single canonical prompt in
 [Quickstart](../QUICKSTART.md).

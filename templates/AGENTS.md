@@ -10,8 +10,9 @@ Before acting:
    installed `gitlearnos` Skill when available, otherwise use this file's
    minimum router directly;
 2. for learner setup, ask one setup gate for the learning goal, subject,
-   current material, and the optional local RAG choice; recommend a local
-   RAG-Anything layer but keep it optional. Facts already supplied by the
+   current material, authorized source boundary, RAG storage, and provider
+   constraints. Complete deployment requires verified RAG; RAG-Anything is
+   the first supported provider. Facts already supplied by the
    learner or verified in `gitlearnos.yml` count as answered; do not repeat
    those questions. Wait before installing, initializing, ingesting,
    committing, or deploying learner state. Template maintenance and
@@ -45,7 +46,7 @@ file. Use the smallest matching core operation:
 - review an attempted answer without guessing mastery;
 - explain or guide practice when help is requested now;
 - handle source provenance and keep large originals outside Git by default;
-- manage the optional RAG-Anything knowledge layer using the Git/RAG decision
+- manage the required RAG knowledge layer using the Git/RAG decision
   rules below;
 - revise reusable models only from evidence;
 - repair stale state, duplicates, links, or pending writeback.
@@ -78,16 +79,17 @@ background scheduling, cross-conversation memory, or demonstrated mastery
 without verification. If an input is incidental, temporary, ambiguous, or
 unrelated, do not save it merely because this repository exists.
 
-## Git and the recommended local RAG layer
+## Git and the required RAG layer
 
-Recommend enabling a local RAG knowledge layer by default, especially when the
-learner has textbooks, long course materials, notes, or durable personal
-knowledge. The learner may decline, and GitLearnOS must remain fully usable
-without it. RAG-Anything is the first explicitly supported and recommended
-implementation, not the only compatible implementation.
+A complete deployment requires an authorized, verified RAG knowledge layer.
+When it cannot be installed or verified, keep the Git learning loop usable and
+label the deployment `incomplete`. RAG-Anything is the first explicitly
+supported implementation, not the only compatible implementation.
 
 - Git records goals, learning state and history, errors, methods, formal
   durable knowledge, and a compact registration of each source.
+- Git assigns stable `<subject>/<topic>/<knowledge-point>` IDs and links them
+  to stable source IDs before ingestion.
 - RAG-Anything indexes authorized textbooks, foundational materials, notes,
   and promoted long-term knowledge for retrieval.
 - A normal one-off exercise may be recorded in Git but must not enter RAG

@@ -37,7 +37,8 @@ native tools (`learning_status`, `learning_route`, and `learning_apply`), and a
 conversation panel. `learning_apply` can atomically commit event, gap, model,
 review, and dashboard changes as one reversible Git update. The read-only panel
 renders the main agent's ordered `Next up` queue and offers five code-backed
-learning actions. RAG remains an optional layer, not a built-in service.
+learning actions. RAG is required for complete deployment but remains a
+separate service that this bundle does not provision.
 DeepSeek's default provider is text-only, but Harness itself can receive vision
 in either of two user-chosen ways: configure a third-party multimodal model with
 image input, or keep DeepSeek as the main model and install a vision/OCR bridge
@@ -47,8 +48,8 @@ they do not require a second learning agent or another product component.
 
 ## RAG and background
 
-Local RAG is recommended for substantial durable material and may be declined.
-RAG-Anything is the first supported implementation, not a lock-in. Git remains
+Complete deployment requires verified RAG. RAG-Anything is the first supported
+implementation, not a lock-in. Git remains
 the formal source of truth; RAG is rebuildable retrieval for authorized sources.
 The current agent handles immediate work. `maintenance` and `due-review` need
 an external repository-capable scheduler and observed runs; a reminder or
@@ -59,7 +60,7 @@ session schedule is not proof.
 - organize useful learning events without an explicit command;
 - ask from the current gap and preserve answers or external feedback;
 - keep learner state private by default, inspectable, and reversible;
-- keep Git, optional RAG, and scheduling in separate roles under one main agent;
+- keep Git, required RAG, and scheduling in separate roles under one main agent;
 - describe only code-backed Harness behavior and label roadmap capabilities.
 
 ## Primary call to action

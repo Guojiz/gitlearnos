@@ -62,6 +62,8 @@ Agent 不只是记录员，还应主动引导。设置时，它要推荐简单�
 2. 新建和更新文件，同时保留无关内容；
 3. 检查当前 Git 版本或等价的仓库版本；
 4. 把一次有意义的学习事件提交为一次可撤销更新。
+5. 操作获授权的 RAG 知识层，真实导入至少一个来源，检索来源特定事实，并保留
+   重建与删除路径。
 
 仓库可以在本地，也可以托管于 GitHub、GitLab、Gitea 或其他 Git 服务。远程仓库和 `push` 都不是核心必需条件。
 
@@ -86,7 +88,7 @@ GitLearnOS 模板
 Project Sources 或本地来源文件夹
 → 大型教材、PDF、扫描件、媒体与长期参考资料
 
-可选本地 RAG-Anything
+完整部署必需的 RAG 知识层
 → 可检索教材、基础资料、笔记和晋升后的长期知识
 ```
 
@@ -97,11 +99,11 @@ Project Sources 或本地来源文件夹
 查看过的片段和派生学习记录。大型、受版权保护、私密或频繁替换的原件默认
 不提交进 Git。
 
-默认建议学习者启用本地 RAG 知识层，并允许学习者拒绝。RAG-Anything 是首个
-明确支持和推荐的实现，不是唯一兼容实现。学习者拥有需要跨会话重新发现的大量
-资料时它很有用。它不能替代 Git、Project Sources 或主 Agent。Git 始终保存正式、可读、
-版本化的记录；RAG 始终是由同一主 Agent 管理、可以重建的检索层。RAG 禁用或
-不可用时，GitLearnOS 仍必须工作。
+完整 GitLearnOS 部署必须具备获授权的 RAG 知识层。RAG-Anything 是首个明确支持
+的实现，不是唯一兼容实现。它不能替代 Git、Project Sources 或主 Agent。Git
+始终保存正式、可读、版本化的记录；RAG 始终是由同一主 Agent 管理、可以重建的
+检索层。RAG 无法安装、授权或验证时，保留可用的 Git 学习闭环，但将部署标记为
+`incomplete`；绝不能把这个精简版本称为完整部署。
 
 ## 最小学习仓库
 
@@ -119,7 +121,7 @@ subjects/
         └── main-goal.md
 ```
 
-`gitlearnos.yml` 是唯一的持久配置和部署声明，保存稳定协议设置、授权、隐私、来源/RAG 选择和重复调度偏好。最小形状如下：
+`gitlearnos.yml` 是唯一的持久配置和部署声明，保存稳定协议设置、授权、隐私、来源/RAG 设置和重复调度偏好。最小形状如下：
 
 ```yaml
 protocol: "2.0-draft"
@@ -143,10 +145,13 @@ sources:
   workspace: ""
   large_materials: project-sources
 rag:
+  required_for_complete: true
   provider: rag-anything
-  choice: undecided
+  status: pending
+  working_dir: ""
+  parser_output_dir: ""
   ingest:
-    enabled: false
+    enabled: true
     scope: per-source
     authorization: explicit
 setup:
@@ -154,7 +159,8 @@ setup:
     goal: ""
     subject: ""
     material: ""
-    rag_choice: undecided
+    rag_provider: rag-anything
+    rag_storage: ""
   completed_at: ""
 automation:
   time_zone: Asia/Shanghai
@@ -167,19 +173,26 @@ automation:
 
 学习者要求更严格的写入控制时，把 `safe-auto` 改成 `preview` 或
 `manual`。该文件只保存授权与部署偏好，不保存变化中的学习状态；实际调度器证据写入 `automation.md`，目标、证据、题目和掌握度写入其他文件。
-示例中的 `rag.choice: undecided` 是设置门槛前的诚实默认值；只有学习者明确选择
-`enabled` 或 `declined` 后，才满足 `knowledge-ready`。
+示例中的 `rag.status: pending` 是部署前的诚实默认值，不满足 `knowledge-ready`；
+只有真实获授权的导入与来源特定检索才能满足。
+`rag.working_dir` 留空时，随附适配器会在用户数据目录下推导一个仓库专属目录。
+生成的向量、图数据、chunk 与缓存留在学习仓库之外；Git 中只保存来源记录、
+知识点记录，以及 `.gitlearnos/receipts/` 下的可审计回执。
 
 ### 设置门槛与就绪状态
 
-改变学习者状态前，Agent 一次询问目标、学科、当前材料和可选的本地 RAG 选择。若无法安全推断，还可询问 IANA 时区或重复时间。用户当前消息已经提供、或目标配置中已经验证的事实视为已回答，不得重复询问；每次最多就下一个缺失事实问一个简短问题。维护、记录、测试或发布公共模板不受此门槛限制。
+改变学习者状态前，Agent 一次询问目标、学科、当前材料、获授权来源边界、RAG
+存储位置和模型／提供方约束。若无法安全推断，还可询问 IANA 时区或重复时间。
+用户当前消息已经提供、或目标配置中已经验证的事实视为已回答，不得重复询问；
+每次最多就下一个缺失事实问一个简短问题。维护、记录、测试或发布公共模板不受
+此门槛限制。
 
 就绪状态必须由可验证证据计算，不能手写成宣传字段：
 
 | 状态 | 含义 |
 |---|---|
 | `core-ready` | 已验证目标仓库身份、`gitlearnos.yml`、入口说明及基本读写/Git 能力 |
-| `knowledge-ready` | 已回答并记录目标、学科、材料边界、来源工作区及明确的 RAG 选择（`enabled` 或 `declined`）；`undecided` 不算就绪 |
+| `knowledge-ready` | 已验证目标、学科、材料边界、来源工作区、稳定知识点 ID、Git 来源记录，以及一次真实获授权的 RAG 导入与可追溯检索 |
 | `automation-ready` | 两个重复任务均在具备仓库访问能力的调度器中观察到，并各完成一次真实测试运行 |
 | `full-ready` | `core-ready` + `knowledge-ready` + `automation-ready`，且所有声明的能力均独立验证 |
 
@@ -189,6 +202,7 @@ automation:
 
 ```text
 sources/          来源记录、原始材料定位、外部反馈
+knowledge/        稳定知识点记录和前置关系
 models/           AI 提炼的可复用理解
 knowledge-gaps/   当前问题与掌握状态
 handoffs/         交给老师、同伴或其他 Agent 的问题包
@@ -234,13 +248,46 @@ Project Sources 或本地来源文件夹
 启用的 RAG-Anything 与 Git 及其他工具并列，由唯一主 Agent 使用。不能创建
 第二个 RAG Agent，也不能把学习决定交给索引。
 
+## 知识点身份与 Git/RAG 关联
+
+长期学习知识在 Git 中按稳定知识点 ID 整理，不能使用某次会话中模型临时发明的
+文件夹或标签。采用 `<subject>/<topic>/<knowledge-point>` 这类可读 ID，并把规范
+记录放在 `subjects/<subject>/knowledge/` 下。知识点记录包含标题、前置知识、来源
+链接、相关缺口／模型／复习和当前 RAG 文档标识。展示标题改变时，不能静默更换
+稳定 ID。
+
+每次 RAG 导入前都必须已有对应的 Git 来源记录，才能报告部署完成。来源记录包含
+稳定 `source_id`、获授权定位与边界、可用时的内容哈希或版本、一个或多个
+`knowledge_ids`、RAG `doc_id`、提供方／解析器元数据、回执路径，以及重建／删除
+说明。一个来源可对应多个知识点，一个知识点也可引用多个来源；不能为每个知识点
+复制整本教材。
+
+导入时，通过检索元数据或等价的结构化前言保留 `source_id`、`knowledge_ids`、
+`doc_id`、文件／页码或章节定位，以及 Git 来源记录路径。RAG-Anything 内部的
+chunk、向量、图与缓存都是生成产物。Agent 更新规范 Git 记录，再用适配器重建索引；
+不能手工修改 RAG 存储文件。
+
+使用一个可恢复的事务边界：
+
+```text
+获授权来源
+→ 创建或更新 Git 来源与知识点记录
+→ 使用稳定 ID 导入
+→ 验证非空 chunk 与来源特定检索
+→ 写入外部回执
+→ 将 Git 记录与回执提交为一次可撤销的学习改动
+```
+
+导入或检索失败时，记录准确的待处理或失败状态，并保持设置为 `incomplete`；不能
+提交声称成功的回执。
+
 ## Git 与 RAG-Anything 决策规则
 
 这些规则也适用于其他兼容本地 RAG 适配器。替换具体实现不会改变 GitLearnOS
 的归属或证据规则。
 
 - 正式教材、长期课程资料、参考书和学习者指定的基础资料通常进入 RAG。Git
-  记录其存在、用途、出处、访问边界和检索标识。
+  记录其存在、用途、出处、访问边界、稳定知识点 ID、Git 来源记录路径和检索标识。
 - 笔记、老师特殊方法、课程规则、学习者总结和其他可复用长期知识，先作为正式
   知识进入 Git，再进入 RAG 供检索。
 - 一次性练习、临时错误或偶然内容可以按需进入 Git，但不能立即进入 RAG。只有

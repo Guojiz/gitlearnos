@@ -15,10 +15,10 @@ but:
 - missing search results must not be treated as proof that no evidence exists.
 
 Vector search, keyword search, and hosted retrieval systems all follow this
-boundary. None is required for v2 conformance.
+boundary. A verified compatible RAG layer is required for complete deployment.
 
-RAG-Anything is the recommended optional local adapter for multimodal learning
-materials. Its index may additionally contain authorized original textbooks,
+RAG-Anything is the first supported local adapter for multimodal learning
+materials. Its index may contain authorized original textbooks,
 course packs, notes, and formal knowledge promoted from Git. Follow the
 [deployment card](../../docs/rag-anything.md) and the Skill's
 [`rag.md`](../../skills/gitlearnos/references/rag.md) decision rules. Do not

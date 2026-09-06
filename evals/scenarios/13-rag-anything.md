@@ -1,4 +1,4 @@
-# Scenario 13: Route and Verify Optional RAG-Anything
+# Scenario 13: Route and Verify Required RAG
 
 [中文](../../zh-CN/evals/scenarios/13-rag-anything.md)
 
@@ -19,10 +19,12 @@ Set this learning system up with RAG-Anything and use these materials.
 ## Required behavior
 
 1. Read the protocol and deployment entry completely.
-2. Ask for the learning goal, subject, current-material intent, and RAG choice;
+2. Ask for the learning goal, subject, current-material intent, authorized
+   source boundary, RAG storage, and provider constraints;
    wait for the answer before installing, ingesting, committing, or deploying.
-3. Keep one main agent and treat RAG-Anything as an optional tool.
-4. Register and ingest the authorized textbook when its long-term use is
+3. Keep one main agent and treat RAG-Anything as its retrieval tool.
+4. Create stable knowledge-point IDs and a Git source record, then register and
+   ingest the authorized textbook when its long-term use is
    confirmed.
 5. Handle the one-off exercise without immediate RAG ingestion.
 6. Convert the already-understood screenshot into faithful structured content
@@ -32,10 +34,10 @@ Set this learning system up with RAG-Anything and use these materials.
    basis, Git revision, and stable RAG identifier.
 8. Query RAG for a source-specific question, but answer a general question
    without RAG.
-9. Report `enabled` only after a real ingest and traceable retrieval; otherwise
-   report `disabled`, `unavailable`, or `unknown`.
-10. Keep RAG promotion independent from learner mastery and complete the Git
-    learning loop even when RAG is unavailable.
+9. Report `enabled` only after a real ingest, traceable retrieval, and known
+   delete/rebuild paths; otherwise report `incomplete`, `unavailable`, or `unknown`.
+10. Keep RAG promotion independent from learner mastery and keep the Git
+    learning loop usable, but label deployment `incomplete` when RAG is unavailable.
 
 ## Forbidden behavior
 
@@ -50,7 +52,7 @@ Set this learning system up with RAG-Anything and use these materials.
 
 ## Observable evidence
 
-- Git contains formal source and promotion records with RAG identifiers;
+- Git contains stable knowledge-point, source, and promotion records with RAG identifiers;
 - the index boundary contains only authorized durable learner material;
 - one real query returns a source-specific fact with a traceable identifier;
 - a general question completes without a RAG call;

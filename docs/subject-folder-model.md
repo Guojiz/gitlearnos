@@ -16,6 +16,7 @@ my-gitlearnos/
 │   │   ├── goals/
 │   │   ├── inbox/
 │   │   ├── sources/
+│   │   ├── knowledge/
 │   │   ├── models/
 │   │   ├── knowledge-gaps/
 │   │   ├── handoffs/
@@ -32,7 +33,7 @@ This is a location model, not a scaffolding command. Git does not preserve empty
 | Root | Subject folder |
 |---|---|
 | authorization, privacy, and automation configuration | subject goals and constraints |
-| stable learner preferences | subject sources and external feedback |
+| stable learner preferences | subject sources, knowledge points, and external feedback |
 | cross-subject priority view | models and knowledge gaps |
 | truly cross-subject goals | questions, results, handoffs, and activities |
 

@@ -20,8 +20,9 @@ repository or project instructions from this reference and
 1. read `GITLEARNOS.md` and `START-HERE.md` completely when accessible;
 2. unless clearly maintaining or publishing the public template, assume the
    user is the learner. Identify the target, actively ask for the learning
-   goal, subject, and current material, and recommend enabling a local RAG
-   knowledge layer, using RAG-Anything as the first supported option;
+   goal, subject, current material, authorized source boundary, RAG storage,
+   and provider constraints. A complete deployment requires a verified RAG
+   knowledge layer; RAG-Anything is the first supported option;
 3. wait for the answer. Do not install, initialize, ingest, commit, or deploy
    learner state before the learner answers. Do not apply this gate to template
    maintenance, documentation, tests, or open-source release;
@@ -42,7 +43,7 @@ learner Git repository
 native memory when available
 → activation pointer and stable preferences
 
-optional local RAG-Anything
+required local RAG layer for complete deployment
 → authorized foundational materials, notes, and promoted durable knowledge
 ```
 
@@ -154,6 +155,7 @@ Then create real state under only the required subject folders:
 ```text
 subjects/<subject>/inbox/
 subjects/<subject>/sources/
+subjects/<subject>/knowledge/
 subjects/<subject>/models/
 subjects/<subject>/knowledge-gaps/
 subjects/<subject>/handoffs/
@@ -217,8 +219,10 @@ learning may continue.
 10. verify with an implicit trigger that the agent can identify state, act,
    write, report, and honor undo boundaries without requiring a Skill name.
 
-If RAG-Anything is enabled, load [`rag.md`](rag.md) and follow its deployment,
-ingestion, and verification rules.
+Load [`rag.md`](rag.md) during every learner deployment and follow its
+deployment, ingestion, and verification rules. If the RAG layer cannot be
+configured and verified, preserve the usable Git learning loop but label the
+deployment `incomplete`.
 
 ## Migration
 
@@ -240,7 +244,7 @@ Subject path:
 Capabilities:
 Policy:
 Project or source workspace:
-RAG-Anything: enabled / disabled / unavailable / unknown
+RAG-Anything: enabled / incomplete / unavailable / unknown
 Activation surfaces:
 Skill installation: installed / source-only / unavailable / unknown
 Project/custom instructions:

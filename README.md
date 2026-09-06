@@ -90,6 +90,7 @@ subjects/
 └── <subject>/
     ├── goals/
     ├── sources/
+    ├── knowledge/
     ├── models/
     ├── knowledge-gaps/
     ├── reviews/
@@ -125,8 +126,9 @@ The code in this repository currently proves:
 - five queue actions that place a review, practice, close-with-one-question,
   ask-a-teacher, or read-notes request into the conversation input.
 
-RAG provider access remains an optional separate layer; it is not built into
-this bundle. DeepSeek's default provider is text-only, but Harness itself is not
+RAG provider access is a required separate layer for complete deployment; it is
+not built into this bundle. A Harness-only installation is therefore
+`incomplete` until a verified RAG receipt is present. DeepSeek's default provider is text-only, but Harness itself is not
 limited to text. The learner may either configure a third-party multimodal model
 with image input or keep DeepSeek as the main model and install an authorized
 vision/OCR bridge plugin. Without either, the agent asks for a transcription
@@ -138,9 +140,9 @@ agent; they do not require a second learning agent. See the
 
 ## RAG and background work are separate layers
 
-For substantial textbooks, course packs, notes, or durable personal knowledge,
-we recommend (but do not require) a local RAG layer. [RAG-Anything](https://github.com/HKUDS/RAG-Anything)
-is the first explicitly supported option, not a lock-in.
+Complete deployment requires a local or compatible private RAG layer.
+[RAG-Anything](https://github.com/HKUDS/RAG-Anything) is the first explicitly
+supported option, not a lock-in.
 
 - **Git** is the formal, readable source of learning truth.
 - **RAG** is a rebuildable retrieval layer for authorized sources and promoted
@@ -152,8 +154,8 @@ is the first explicitly supported option, not a lock-in.
   complete only after each recurring task is created and observed in a real
   scheduler.
 
-RAG may be declined and GitLearnOS still works. One-off exercises do not enter
-RAG automatically. If the main agent already understands an image, preserve a
+Without verified RAG, the Git learning loop still works as an `incomplete`
+edition. One-off exercises do not enter RAG automatically. If the main agent already understands an image, preserve a
 faithful Markdown or structured representation instead of repeating OCR; a
 text-only agent must not infer unseen visual content.
 
@@ -161,7 +163,7 @@ text-only agent must not infer unseen visual content.
 
 Use the [core-ready Quickstart](QUICKSTART.md), which contains the single
 canonical setup prompt. It asks the agent to identify the private target,
-confirm the learning goal, subject, and current material, recommend local RAG,
+confirm the learning goal, subject, current material, and RAG boundary,
 wait before learner deployment, detect actual capabilities, and report the
 undo boundary. The website CTA links to that same source; it does not create a
 repository or pretend that a button provisioned a scheduler.

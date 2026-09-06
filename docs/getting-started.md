@@ -23,8 +23,9 @@ collaboration, or publishing.
 
 1. Give a write-capable agent the template, a private local or remote target,
    and one subject, goal, or real learning event.
-2. Let it read the protocol, ask for the learning goal, subject, and current
-   material, recommend local RAG, and wait before learner deployment.
+2. Let it read the protocol, ask for the learning goal, subject, current
+   material, authorized source boundary, RAG storage, and provider constraints,
+   and wait before learner deployment.
 3. Let it detect actual read/write, Git, source, memory, Skill, and scheduler
    capability, then create only the minimum files.
 4. Test with an ordinary question or note that does not name GitLearnOS.
@@ -44,11 +45,11 @@ verified, keep interactive learning usable and report automation as incomplete.
 
 ## Optional retrieval
 
-Put large materials in Project Sources or an authorized local folder. A local
-RAG layer is recommended for substantial durable material but may be declined.
-RAG-Anything is the first supported implementation, not a mandatory service.
-Git remains the formal source of truth and the main agent remains the decision
-maker.
+Put large materials in Project Sources or an authorized local folder. A verified
+RAG layer is required for complete deployment. RAG-Anything is the first
+supported implementation. Git remains the formal source of truth and the main
+agent remains the decision maker. Without verified RAG, label the otherwise
+usable Git learning loop `incomplete`.
 
 See [Git adapters](../adapters/git/README.md) and
 [Migration](../MIGRATION-v2.md).

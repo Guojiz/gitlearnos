@@ -11,8 +11,9 @@ GitLearnOS runs through an existing AI agent with Git repository access.
    template is never the learner's state repository.
 3. Unless clearly maintaining or publishing the public template, treat the user
    as the learner. Ask one setup gate for learning goal, subject, current
-   material, and optional local RAG choice; recommend RAG-Anything while keeping
-   it optional. Facts supplied in the current request or verified in
+   material, authorized source boundary, RAG storage, and provider constraints.
+   Complete deployment requires verified RAG; RAG-Anything is the first
+   supported provider. Facts supplied in the current request or verified in
    `gitlearnos.yml` are already answered, so do not repeat them. Stop before
    learner installation or deployment until the next missing answer arrives.
    Template maintenance, documentation, tests, and open-source release are
@@ -37,7 +38,7 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 ## Important boundaries
 
 - Personal state belongs only in the learner repository.
-- Stable authorization, privacy, source/RAG choices, setup answers, and
+- Stable authorization, privacy, source/RAG configuration, setup answers, and
   schedules belong in the learner repository's `gitlearnos.yml`; changing
   learning state belongs in its normal subject files.
 - GitHub is one optional Git host, not a core requirement.
@@ -55,8 +56,8 @@ GitLearnOS runs through an existing AI agent with Git repository access.
 
 Readiness labels are evidence-based: `core-ready` (target/config/instructions
 and basic repository capability), `knowledge-ready` (goal/material boundary,
-source workspace, and an explicit RAG choice of `enabled` or `declined`; an
-`undecided` choice is not ready), `automation-ready` (both recurring jobs
+stable knowledge IDs, Git source records, and a real authorized RAG ingest plus
+traceable query), `automation-ready` (both recurring jobs
 observed and tested), and `full-ready` (all three). Include the computed label
 in the setup receipt; never claim it from a config field alone.
 

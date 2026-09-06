@@ -80,6 +80,7 @@ subjects/
 └── <subject>/
     ├── goals/
     ├── sources/
+    ├── knowledge/
     ├── models/
     ├── knowledge-gaps/
     ├── reviews/
@@ -108,7 +109,8 @@ GitLearnOS 为官方 DeepSeek Harness Developer Preview 提供可安装的原生
   并明确标记开发演示数据；
 - 队列提供五个动作，把“复习、练习、用一道题收尾、问老师、看笔记”请求放入对话输入框。
 
-RAG provider 访问仍是可选独立层，尚未内建在该 bundle 中。DeepSeek 默认 provider
+完整部署必须有独立的 RAG provider 访问，当前 bundle 尚未内建该层。因此，只安装
+Harness 时属于 `incomplete`，直到存在已验证的 RAG 回执。DeepSeek 默认 provider
 是纯文本的，但 Harness 本身不限于文本。学习者可以直接配置支持图片输入的第三方
 多模态模型，也可以保留 DeepSeek 主模型并安装获授权的视觉/OCR桥接插件；两者都没有
 启用时，Agent 应请求转写而不是猜图。一次即时选择题答对只是有支持的证据，不等于
@@ -117,7 +119,7 @@ RAG provider 访问仍是可选独立层，尚未内建在该 bundle 中。DeepS
 
 ## RAG 与后台工作是分开的层
 
-对于大量教材、课程包、笔记或长期个人知识，默认建议（但不强制）启用本地 RAG。
+完整部署必须具备本地或兼容的私有 RAG 层。
 [RAG-Anything](https://github.com/HKUDS/RAG-Anything) 是首个明确支持的选项，不是锁定。
 
 - **Git** 是正式、可阅读的学习事实来源。
@@ -128,14 +130,14 @@ RAG provider 访问仍是可选独立层，尚未内建在该 bundle 中。DeepS
   Harness 会话内调度或 `requested` 标记都不证明任务已经运行；`maintenance` 与
   `due-review` 只有在真正的调度器中创建并观察到测试运行后才算完成。
 
-学习者可以拒绝 RAG，GitLearnOS 仍可用。一次性练习不会自动进入 RAG。主 Agent 已
+缺少已验证 RAG 时，Git 学习闭环仍可作为 `incomplete` 版本使用。一次性练习不会自动进入 RAG。主 Agent 已
 理解图片时，应保存忠实 Markdown 或结构化表示，不重复 OCR；纯文本 Agent 不得推断
 未看到的视觉内容。
 
 ## 从一个学科开始
 
 请使用[核心版快速开始](QUICKSTART.md)，其中保存唯一标准设置指令。它会要求 Agent
-确认私有目标、学习目标、学科和当前资料，建议本地 RAG，在学习者部署前等待，检测
+确认私有目标、学习目标、学科、当前资料及 RAG 边界，在学习者部署前等待，检测
 真实能力并报告撤销边界。官网 CTA 链接到同一来源；它不会创建仓库，也不会假装
 按钮已经创建调度器。
 

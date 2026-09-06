@@ -74,6 +74,8 @@ The complete workflow requires one agent that can:
 2. create and update files without overwriting unrelated work;
 3. inspect the current Git revision or equivalent repository version;
 4. commit a meaningful learning event as one reversible update.
+5. operate an authorized RAG knowledge layer, ingest at least one real source,
+   retrieve a source-specific fact, and preserve rebuild and deletion paths.
 
 The repository may be local or hosted by GitHub, GitLab, Gitea, or another Git
 service. A remote and `push` are optional.
@@ -101,7 +103,7 @@ learner repository
 project sources or local source folder
 → large textbooks, PDFs, scans, media, and long-lived reference files
 
-optional local RAG-Anything
+required RAG knowledge layer for a complete deployment
 → searchable textbooks, foundational materials, notes, and promoted durable knowledge
 ```
 
@@ -113,14 +115,13 @@ the necessary locator, access state, inspected excerpt, and derived learning
 record in Git. Do not commit large, copyrighted, private, or frequently replaced
 originals by default.
 
-By default, recommend that the learner enable a local RAG knowledge layer and
-allow the learner to decline. RAG-Anything is the first explicitly supported
-and recommended implementation, not the only compatible implementation. It is useful when a learner
-has substantial material that should be rediscovered across sessions. It does
-not replace Git, project Sources, or the main agent. Git remains the formal,
-readable, versioned record; RAG remains a rebuildable retrieval layer managed
-by the same main agent. GitLearnOS must continue to work when RAG is disabled
-or unavailable.
+A complete GitLearnOS deployment requires an authorized RAG knowledge layer.
+RAG-Anything is the first explicitly supported implementation, not the only
+compatible implementation. It does not replace Git, project Sources, or the
+main agent. Git remains the formal, readable, versioned record; RAG remains a
+rebuildable retrieval layer managed by the same main agent. When RAG cannot be
+installed, authorized, or verified, keep the Git learning loop usable but label
+the deployment `incomplete`; never present that reduced edition as complete.
 
 ## Minimal learner repository
 
@@ -139,7 +140,7 @@ subjects/
 ```
 
 `gitlearnos.yml` is the one durable configuration and deployment declaration. It
-contains stable protocol settings, authorization, privacy, source/RAG choices,
+contains stable protocol settings, authorization, privacy, source/RAG settings,
 and recurring schedule preferences. A compact starting shape is:
 
 ```yaml
@@ -164,10 +165,13 @@ sources:
   workspace: ""
   large_materials: project-sources
 rag:
+  required_for_complete: true
   provider: rag-anything
-  choice: undecided
+  status: pending
+  working_dir: ""
+  parser_output_dir: ""
   ingest:
-    enabled: false
+    enabled: true
     scope: per-source
     authorization: explicit
 setup:
@@ -175,7 +179,8 @@ setup:
     goal: ""
     subject: ""
     material: ""
-    rag_choice: undecided
+    rag_provider: rag-anything
+    rag_storage: ""
   completed_at: ""
 automation:
   time_zone: Asia/Shanghai
@@ -191,14 +196,19 @@ Use `preview` or `manual` instead of `safe-auto` when the learner requests
 stricter write control. This file contains authorization and deployment preferences,
 not changing learning state. Actual scheduler/provider evidence belongs in
 `automation.md`; goals, evidence, questions, and mastery belong elsewhere.
-The example's `rag.choice: undecided` is an honest pre-gate default; it does
-not satisfy `knowledge-ready` until the learner explicitly chooses `enabled`
-or `declined`.
+The example's `rag.status: pending` is the honest pre-deployment default. It
+does not satisfy `knowledge-ready`; only real authorized ingestion and
+source-specific retrieval do.
+An empty `rag.working_dir` asks the bundled adapter to derive a repository-specific
+directory under the user's data home. Generated vectors, graph data, chunks,
+and caches stay outside learner Git; only source records, knowledge-point
+records, and auditable receipts under `.gitlearnos/receipts/` belong in Git.
 
 ### Setup gate and readiness
 
 Before changing learner state, the agent asks for one setup gate consisting of
-the learning goal, subject, current material, and the optional local RAG choice.
+the learning goal, subject, current material, authorized source boundary, RAG
+storage location, and model/provider constraints.
 It may also ask for an IANA time zone or recurring times when they cannot be
 inferred safely. A fact supplied in the user's current message or an already
 verified repository/config record is answered; do not ask for it again. Ask at
@@ -211,7 +221,7 @@ marketing flag. Report setup as one of four cumulative states:
 | State | Meaning |
 |---|---|
 | `core-ready` | target repository identity, `gitlearnos.yml`, entry instructions, and basic read/write/Git capability are verified |
-| `knowledge-ready` | goal, subject, material boundary, source workspace, and an explicit RAG choice (`enabled` or `declined`) are answered and recorded; `undecided` is not ready |
+| `knowledge-ready` | goal, subject, material boundary, source workspace, stable knowledge IDs, Git source records, and a real authorized RAG ingest plus traceable retrieval are verified |
 | `automation-ready` | both recurring jobs are observed in a repository-capable scheduler and each has one real test run |
 | `full-ready` | `core-ready` + `knowledge-ready` + `automation-ready`, with every claimed surface independently verified |
 
@@ -222,6 +232,7 @@ Add these subject folders only on first real use:
 
 ```text
 sources/          source records, original locators, external feedback
+knowledge/        stable knowledge-point records and prerequisite links
 models/           reusable derived understanding
 knowledge-gaps/   current problem and mastery state
 handoffs/         focused packs for teachers, peers, or another agent
@@ -273,6 +284,44 @@ An enabled RAG-Anything layer sits beside Git and other tools under the one
 main agent. Do not create a second RAG agent or delegate learning decisions to
 the index.
 
+## Knowledge-point identity and Git/RAG linkage
+
+Organize durable learning knowledge in Git by stable knowledge-point ID, not by
+whatever folder or label a model happens to invent during one session. Use a
+readable ID such as `<subject>/<topic>/<knowledge-point>` and keep its canonical
+record under `subjects/<subject>/knowledge/`. A knowledge-point record names
+its title, prerequisites, source links, related gaps/models/reviews, and current
+RAG document identifiers. Renaming a display title must not silently change the
+stable ID.
+
+Every RAG ingestion must have a corresponding Git source record before the
+deployment can be reported complete. The source record contains a stable
+`source_id`, authorized locator and boundary, content hash or version when
+available, one or more `knowledge_ids`, the RAG `doc_id`, provider/parser
+metadata, receipt path, and rebuild/delete instructions. One source may map to
+many knowledge points and one knowledge point may cite many sources; do not
+duplicate whole textbooks into one folder per point.
+
+During ingestion, preserve `source_id`, `knowledge_ids`, `doc_id`, file/page or
+section locator, and Git source-record path as retrieval metadata or an
+equivalent structured preamble. RAG-Anything's internal chunks, vectors, graph,
+and caches are generated artifacts. Agents update canonical Git records and use
+the adapter to rebuild the index; they do not hand-edit RAG storage files.
+
+Use one recoverable transaction boundary:
+
+```text
+authorized source
+→ create or update Git source and knowledge-point records
+→ ingest with stable IDs
+→ verify non-empty chunks and source-specific retrieval
+→ write the external receipt
+→ commit the Git records and receipt as one reversible learning change
+```
+
+If ingestion or retrieval fails, record the exact pending or failed state and
+leave setup `incomplete`; do not commit a receipt that claims success.
+
 ## Git and RAG-Anything decision rules
 
 These rules apply to RAG-Anything and to any compatible local RAG adapter. The
@@ -281,7 +330,8 @@ evidence rules.
 
 - Foundational textbooks, long-term course materials, reference books, and
   learner-designated base materials normally enter RAG. Git records their
-  existence, purpose, provenance, access boundary, and retrieval identifier.
+  existence, purpose, provenance, access boundary, stable knowledge IDs, Git
+  source-record path, and retrieval identifier.
 - Notes, special teacher methods, course rules, learner summaries, and other
   durable reusable knowledge enter Git first as formal knowledge and then RAG
   for retrieval.

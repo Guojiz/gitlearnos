@@ -10,25 +10,25 @@ repository; never write personal learning state here.
 Before acting:
 
 1. read `GITLEARNOS.md` completely;
-2. distinguish this public template from the learner's target Git repository;
-3. distinguish this public template from the learner's target repository. For
-   learner setup, ask one setup gate for goal, subject, current material, and
-   the optional local RAG choice; wait before installing, initializing,
+2. distinguish this public template from the learner's target repository. For
+   learner setup, ask one setup gate for goal, subject, current material,
+   authorized source boundary, RAG storage, and model/provider constraints;
+   wait before installing, initializing,
    ingesting, committing, or deploying learner state. Treat facts already
    supplied by the user or verified in the target config as answered and do
    not ask them again. This gate does not block template maintenance,
    documentation, tests, or open-source release work;
-4. inspect actual read, write, Git, source, RAG, and scheduler capability;
-5. read target `gitlearnos.yml`, dashboard, active subject goal, and only
+3. inspect actual read, write, Git, source, RAG, and scheduler capability;
+4. read target `gitlearnos.yml`, dashboard, active subject goal, and only
    relevant evidence. Read a target `learning-policy.md` only as a one-time
    migration input, never as active configuration;
-6. silently assess whether the current input is a useful learning event even
+5. silently assess whether the current input is a useful learning event even
    when the user does not mention GitLearnOS or invoke a Skill. After answering
    the immediate need, proactively perform the smallest authorized learning
    operation under the mode in `gitlearnos.yml`; if one necessary fact is
    missing, ask one concise question instead of waiting for a repository
    command;
-7. route every learning-related request through GitLearnOS behavior. Use the
+6. route every learning-related request through GitLearnOS behavior. Use the
    single Router at `skills/gitlearnos/SKILL.md` when available, then
    load only one operation reference and one subject reference when needed.
    If Skills are unavailable, execute the same minimum router from this file;
@@ -63,16 +63,20 @@ memory may carry the compact activation pointer in
 `templates/native-memory-pointer.md`, but not the changing learner state.
 
 Never claim repository access, Skill installation, a commit, a scheduled
-main-agent run, RAG ingestion or retrieval, or demonstrated mastery without evidence
-that it actually exists. A local RAG knowledge layer is recommended by default
-but remains optional. RAG-Anything is the first explicitly supported and
-recommended implementation, not a mandatory or exclusive dependency. It is a
-tool of the one main agent, not another agent and not the source of formal
-learning state. Index only explicitly authorized learner material within the
-configured per-source scope. Never index this public template or its examples
-as personal knowledge. Do not send temporary exercises directly to RAG;
-promote repeated, durable knowledge only after organizing it in Git. If the
-main agent already understood an image or excerpt, insert its faithful
-Markdown or structured representation instead of repeating OCR or vision
-parsing. Use RAG only when user-specific sources or durable knowledge are
-relevant, not on every answer.
+main-agent run, RAG ingestion or retrieval, or demonstrated mastery without
+evidence that it actually exists. A complete deployment requires an authorized,
+verified RAG knowledge layer; if RAG cannot be installed or verified, keep the
+Git learning loop usable and label the deployment `incomplete`. RAG-Anything is
+the first explicitly supported implementation, not an exclusive dependency. It
+is a tool of the one main agent, not another agent and not the source of formal
+learning state. Organize canonical knowledge in Git by stable
+`<subject>/<topic>/<knowledge-point>` IDs. Before every ingestion, create or
+update a Git source record containing the stable source ID, knowledge IDs,
+authorized locator, RAG document ID, and rebuild/delete boundary. Index only
+explicitly authorized learner material within the configured per-source scope.
+Never index this public template or its examples as personal knowledge. Do not
+send temporary exercises directly to RAG; promote repeated, durable knowledge
+only after organizing it in Git. If the main agent already understood an image
+or excerpt, insert its faithful Markdown or structured representation instead
+of repeating OCR or vision parsing. Query RAG when user-specific sources or
+durable knowledge are relevant, not on every answer.

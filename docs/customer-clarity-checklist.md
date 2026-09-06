@@ -44,7 +44,8 @@ Answer: yes, for testing or local workflows. But local access is not the same as
 
 ### Does it require GitHub Actions or API keys?
 
-Answer: no. Those are optional advanced layers.
+Answer: GitHub Actions are not required. API credentials depend on the selected
+RAG and model providers; keep them outside Git and verify only whether they are set.
 
 ### Must I say “use GitLearnOS” or invoke a Skill every time?
 

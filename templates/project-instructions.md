@@ -27,8 +27,9 @@ On every learner interaction:
 
 Unless the task clearly concerns maintaining or publishing the public template,
 treat the user as the learner. For learner setup, ask one gate for the learning
-goal, subject, current material, and the optional local RAG choice; recommend
-RAG-Anything while keeping it optional. Facts supplied in the current request
+goal, subject, current material, authorized source boundary, RAG storage, and
+provider constraints. Complete deployment requires verified RAG;
+RAG-Anything is the first supported provider. Facts supplied in the current request
 or verified in `gitlearnos.yml` are already answered; do not repeat them. Wait
 before installing, initializing, ingesting, committing, or deploying learner
 state. Template maintenance, documentation, tests, and open-source release
@@ -53,8 +54,8 @@ An on-handoff check or reminder is not a substitute.
   preserve only durable learning evidence;
 - **source**: keep large originals in project Sources or an authorized local
   area; store compact locators, inspected excerpts, and provenance in Git;
-- **rag**: recommend optional local RAG-Anything for substantial learning
-  materials; formalize durable knowledge in Git, ingest only authorized
+- **rag**: require an authorized, verified RAG layer for complete deployment;
+  formalize stable knowledge IDs and source records in Git, ingest only authorized
   long-term material, avoid duplicate OCR, and query only for learner-specific
   knowledge;
 - **model**: revise reusable understanding only from traceable evidence;

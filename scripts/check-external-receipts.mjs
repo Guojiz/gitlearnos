@@ -29,7 +29,20 @@ function requiredString(file, object, key) {
 
 function checkRag(file, receipt) {
   requiredString(file, receipt, 'provider')
+  requiredString(file, receipt, 'source_id')
   requiredString(file, receipt, 'doc_id')
+  if (!Array.isArray(receipt.knowledge_ids) || receipt.knowledge_ids.length === 0 || receipt.knowledge_ids.some(value => !nonEmpty(value))) {
+    fail(file, 'knowledge_ids must be a non-empty array of non-empty strings')
+  }
+  const sourceRecord = receipt.git_source_record
+  if (!sourceRecord || typeof sourceRecord !== 'object' || Array.isArray(sourceRecord)) {
+    fail(file, 'git_source_record must be an object')
+  } else {
+    for (const key of ['path', 'base_revision', 'content_sha256']) requiredString(file, sourceRecord, key)
+    if (nonEmpty(sourceRecord.content_sha256) && !/^[a-fA-F0-9]{64}$/.test(sourceRecord.content_sha256)) {
+      fail(file, 'git_source_record.content_sha256 must be a 64-character SHA-256')
+    }
+  }
   const boundary = receipt.source_boundary ?? receipt['source-boundary']
   if (!boundary || typeof boundary !== 'object' || Array.isArray(boundary)) {
     fail(file, 'source_boundary must be an object (root/allowlist are recommended)')

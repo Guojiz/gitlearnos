@@ -30,12 +30,13 @@ sources:
   store_in_git: locators-and-inspected-excerpts
 
 rag:
+  required_for_complete: true
   provider: rag-anything
-  # New setup starts undecided; knowledge-ready requires an explicit enabled
-  # or declined choice after the learner answers the setup gate.
-  choice: undecided # enabled | declined | undecided
+  status: pending # pending | configured | verified | unavailable | failed
+  working_dir: ""
+  parser_output_dir: ""
   ingest:
-    enabled: false
+    enabled: true
     scope: per-source # per-source | configured-folder
     authorization: explicit
 
@@ -44,7 +45,8 @@ setup:
     goal: ""
     subject: ""
     material: ""
-    rag_choice: undecided
+    rag_provider: rag-anything
+    rag_storage: ""
   completed_at: ""
 
 automation:

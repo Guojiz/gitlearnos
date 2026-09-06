@@ -85,10 +85,12 @@ ID：`model-<stable-slug>`
 - 计划日期：
 - 下次检查原因：
 
-## 可选 RAG 晋升
+## RAG 同步
 
-- 状态：`not-needed` / `pending-authorization` / `unavailable` / `inserted`
+- 状态：`not-applicable` / `pending-authorization` / `unavailable` / `inserted` / `verified`
+- 知识点 ID：
 - 检索标识：
+- 回执路径：
 - 导入时的 Git 版本：
 
 ## 学习者证据

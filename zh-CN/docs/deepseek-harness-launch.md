@@ -20,9 +20,10 @@ GitLearnOS 为官方 DeepSeek Harness **Developer Preview** 提供**独家原生
 一次 `Panel: expand|collapse` 决定。选择一个条目后，会显示五个代码已实现的对话动作：
 复习、练习、用一道选择题收尾、问老师或查看学习者笔记。
 
-## 可选层与用户选择的视觉能力
+## 必需的外部 RAG 与用户选择的视觉能力
 
-RAG provider 访问是可选独立层，当前 bundle **不会**调用或创建它。重复检查不需要
+完整部署必须具备 RAG provider 访问；当前 bundle **不会**调用或创建它，因此单独
+安装 bundle 属于 `incomplete`。重复检查不需要
 第二个 Agent 或另一个产品组件：真实、能够访问仓库的调度器可以按配置时间唤起同一个
 主 Agent。Harness Schedule 只在当前会话内有效；只有它真正提供了能够访问仓库的定时
 调用并留下已观察运行回执时，才证明重复仓库自动化。

@@ -7,7 +7,8 @@ Deployment attaches GitLearnOS to one learner-owned target repository and one ma
 ```text
 0. read GITLEARNOS.md and START-HERE.md completely
 1. unless maintaining the public template, assume the user is the learner; ask for
-   the learning goal, subject, and current material; recommend a local RAG layer
+   the learning goal, subject, current material, authorized source boundary,
+   RAG storage, and provider constraints
 2. wait for the learner's answer; do not install, initialize, ingest, commit, or deploy
 3. select project sources and the target Git repository
 4. verify memory/instructions/Skills/read/write/source/RAG/scheduler capability
@@ -18,7 +19,8 @@ Deployment attaches GitLearnOS to one learner-owned target repository and one ma
    (default daily 07:00)
 8. create both jobs in a real repository-capable scheduler, record their actual
    task IDs and next runs in `automation.md`, and run one safe test of each
-9. if RAG is enabled, apply the Git/RAG policy and verify one real ingest and query
+9. apply the Git/RAG policy and verify one real ingest, traceable query, delete path,
+   rebuild path, stable knowledge IDs, and Git source record
 10. organize the first real input or generate the first targeted questions
 11. test with a normal learning event that does not name GitLearnOS
 12. verify writeback and return a receipt
@@ -86,4 +88,4 @@ automation as `incomplete`; interactive GitLearnOS may still operate.
 Creating folders or running a forced AI session is not the success criterion.
 Neither is installing a Python package or writing RAG configuration. RAG is
 enabled only after an authorized source is really ingested and a traceable
-query retrieves it; otherwise report `unavailable` or `unknown`.
+query retrieves it; otherwise report `incomplete`, `unavailable`, or `unknown`.

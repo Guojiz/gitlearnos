@@ -2,8 +2,10 @@
 
 [English source](../../../../skills/gitlearnos/references/rag.md)
 
-遵守 Router 的核心契约。RAG-Anything 是唯一主 Agent 使用的可选本地工具。
-Git 保存正式、可读、版本化的学习记录；RAG 保存可以重建的检索层。
+遵守 Router 的核心契约。完整 GitLearnOS 部署必须具备已验证的 RAG 层。
+RAG-Anything 是首个支持的适配器，由唯一主 Agent 使用。Git 保存正式、可读、
+版本化的学习记录；RAG 保存可以重建的检索层。RAG 缺失或未经验证时，继续执行
+安全的 Git 学习操作，但把部署报告为 `incomplete`。
 
 ## 部署门槛
 
@@ -11,9 +13,8 @@ Git 保存正式、可读、版本化的学习记录；RAG 保存可以重建的
 
 1. 学习目标与学科；
 2. 当前资料及其格式；
-3. 是否接受默认建议，启用本地 RAG 知识层，并把 RAG-Anything 作为首个支持
-   选项；
-4. 获授权的本地存储边界与模型／提供方限制。
+3. 获授权来源边界与专用 RAG 存储位置；
+4. 模型／提供方约束与凭据环境变量名。
 
 回答前不得安装包、创建存储、导入文件、提交或部署。绝不能在聊天中索取秘密；
 只检查必要配置是否已设置。
@@ -30,6 +31,24 @@ Git 保存正式、可读、版本化的学习记录；RAG 保存可以重建的
 | 用户笔记、老师方法、课程规则、长期总结 | 正式知识 | 插入供检索 |
 | 普通一次性练习或临时错误 | 有用时记录 | 否 |
 | 反复错误模式、长期缺口、可复用方法 | 正式晋升 | 晋升后插入 |
+
+## 按稳定知识点分类
+
+每个长期知识点都使用稳定 ID，例如 `<subject>/<topic>/<knowledge-point>`，并在
+`subjects/<subject>/knowledge/` 下创建规范 Git 记录。来源记录、缺口、模型、
+复习、RAG 导入元数据和回执都使用同一 ID。展示标题改变时不要更换 ID。
+
+导入前创建或更新 Git 来源记录，其中必须包含：
+
+- 稳定的 `source_id`、标题、获授权定位／根目录，以及可用时的内容哈希或版本；
+- 一个或多个 `knowledge_ids`，以及各自的规范 Git 记录链接；
+- 稳定 RAG `doc_id`、提供方／解析器版本、索引位置和回执路径；
+- 重建输入和删除边界。
+
+一个来源可以对应多个知识点，一个知识点也可引用多个来源。不能按知识点重复复制
+同一本教材。通过适配器元数据或结构化文本前言传入 `source_id`、`knowledge_ids`、
+`doc_id`、Git 来源记录路径和页码／章节定位。绝不能手工修改生成的 `kv_store_*`、
+`vdb_*`、图或缓存文件。
 
 不能根据单次出现自行晋升。必须有反复证据、学习者明确要求，或清晰长期复用
 价值。记录晋升原因，并把 Git 路径与 RAG 文档标识互相连接。
@@ -78,15 +97,49 @@ RAG-Anything 上游是 Python 框架；不能假设存在 MCP 服务器或一键
 集成可能提供 Python 调用、本地服务、MCP 工具或其他适配器。必须验证真实接口，
 不能记录想象中的接口。
 
+依赖可用时，使用随附的 `scripts/rag-anything-adapter.py` 作为参考 CLI。它把凭据留在 Git
+之外，强制检查获授权根目录和 Git 来源记录，并支持可检查的 ingest、query、
+status、delete 与 rebuild 操作。提供方端点、模型 ID、嵌入维度和凭据环境变量名
+保持可配置。
+默认工作目录是用户数据目录下按仓库区分的文件夹，位于学习仓库之外。如果配置的
+工作目录处于学习仓库内，适配器会拒绝运行，防止生成的向量、图数据、chunk 与缓存
+被误当成规范学习状态。
+
+[Kimi Code](https://www.kimi.com/code/docs/en/) 兼容配置来自 2026-09-05 对 `https://api.kimi.com/coding/v1` 的真实测试：
+聊天与 embeddings 成功，embeddings 返回 1024 维及响应模型 `bge_m3_embed`，完整
+文本生命周期通过导入、有来源引用的查询、新进程重开、删除和重建。测试时 Kimi
+Code 公共文档没有承诺 embeddings 契约，因此这是已测试兼容性，不是稳定接口保证。
+新索引要先探测实际维度，嵌入实现必须可替换；模型或维度改变时绝不能复用旧索引。
+
+## 参考 CLI
+
+当前随附适配器通过结构化插入接收获授权的 UTF-8 文本或 Markdown。PDF、图片、
+表格、公式及其他格式使用上游解析器，再应用相同的 Git 身份与回执规则。全局参数
+必须放在子命令之前：
+
+```text
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> status
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> ingest --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> delete --source-id <id> --doc-id <id>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> rebuild --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
+```
+
+提供方凭据只能通过 `GITLEARNOS_RAG_API_KEY` 或隐藏的 `--prompt-api-key` 输入。
+CLI 绝不会把凭据写入 Git 或回执。
+CLI 会把运行副本放在配置的 RAG 工作目录，并把可审计镜像发布到学习仓库的
+`.gitlearnos/receipts/rag-<doc-id 的 sha256>.json`。提交时要把这份镜像与对应的
+来源记录、知识点记录放在同一个 Git 变更中。
+
 ## 导入与查询
 
 导入前：
 
 1. 确认资料已获授权且处于批准边界；
-2. 创建或更新精简 Git 来源记录；
+2. 创建或更新精简 Git 来源记录和每个关联的稳定知识点记录；
 3. 选择原文件解析或 content_list 直接插入；
-4. 使用稳定文档标识（集成暴露时用 `doc_id`）并在 Git 记录，让后续检索能
-   引用同一标识；
+4. 使用稳定文档标识（集成暴露时用 `doc_id`），并记录 `source_id`、
+   `knowledge_ids`、Git 记录路径、来源版本／哈希和检索定位；
 5. 防止重复提交；解析器或版本影响未来重建时一并记录。
 
 只有请求依赖用户特定教材、笔记或长期知识时才查询 RAG；每次查询都会对图与
@@ -106,14 +159,15 @@ RAG-Anything 上游是 Python 框架；不能假设存在 MCP 服务器或一键
 5. 索引不含公开模板、示例、未授权文件和临时练习；
 6. 已知索引位置、重建输入与删除／撤销边界。
 
-否则报告 `disabled`、`unavailable` 或 `unknown`。Dry run、包导入、健康检查、
-配置文件或空索引查询都不够。
+否则报告 `unavailable`、`unknown` 或 `incomplete`。Dry run、包导入、健康检查、
+配置文件或空索引查询都不够。不存在仅拒绝 RAG 仍可完成完整部署的路径。
 
 ## 输出
 
 ```text
 Learning goal:
-RAG-Anything: enabled / disabled / unavailable / unknown
+RAG-Anything: enabled / unavailable / unknown / incomplete
+Knowledge IDs:
 Authorized boundary:
 Git source records:
 Ingested or promoted:

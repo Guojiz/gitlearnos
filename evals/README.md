@@ -32,7 +32,7 @@ clear.
 - [Use GitHub for teaching collaboration](scenarios/10-github-teaching-collaboration.md)
 - [Continue without Skills](scenarios/11-no-skill-continuity.md)
 - [Verify cross-agent Skill installation](scenarios/12-cross-agent-skill-install.md)
-- [Route and verify optional RAG-Anything](scenarios/13-rag-anything.md)
+- [Route and verify required RAG](scenarios/13-rag-anything.md)
 - [Synthesize a repeated error into a transferable model](scenarios/14-repeated-error-synthesis.md)
 - [Verify recurring organization and questions](scenarios/15-recurring-automation.md)
 - [Diagnose before writing a knowledge gap](scenarios/17-differential-diagnosis.md)
@@ -42,8 +42,9 @@ clear.
 
 - [Verify native DeepSeek Harness integration](scenarios/16-deepseek-harness-native.md)
 
-These scenarios are the v2 acceptance gate. OpenSpace, a database, a vector
-index, RAG-Anything, and a particular Git host are not required. A real
+These scenarios are the v2 acceptance gate. OpenSpace, a database,
+RAG-Anything specifically, and a particular Git host are not required; a
+verified compatible RAG layer is required for complete deployment. A real
 repository-capable recurring scheduler is required to pass Scenario 15's
 verified-deployment variant; without one the only truthful result is
 `incomplete`. Scenario 16 separately evaluates an optional runtime adapter and

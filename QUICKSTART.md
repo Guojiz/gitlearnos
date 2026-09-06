@@ -11,8 +11,9 @@
 
 For learner deployment, the agent must read the protocol completely, assume the
 user is the learner, ask one setup gate for the learning goal, subject, current
-material, and optional local RAG choice, and recommend a local RAG knowledge
-layer. Facts supplied in the request or already verified in `gitlearnos.yml`
+material, authorized source boundary, RAG storage, and provider constraints.
+Complete deployment requires a verified RAG knowledge layer. Facts supplied in
+the request or already verified in `gitlearnos.yml`
 count as answered and must not be asked again. It must wait for the learner's
 answer before installing, initializing, ingesting, committing, or deploying.
 This gate does not apply to maintaining, documenting, testing, or publishing
@@ -36,7 +37,7 @@ source folder. Keep compact learning state and source locators in Git. A remote
 is only needed when the learner chooses sync, collaboration, backup, or
 publishing.
 
-When enabled, RAG-Anything indexes authorized foundational materials, notes,
+RAG-Anything can index authorized foundational materials, notes,
 and promoted durable knowledge. Git remains the formal source of truth. Do not
 send one-off exercises to RAG, repeat OCR the main agent already completed, add
 a separate RAG agent, or query RAG for every answer.
@@ -82,8 +83,9 @@ Use https://github.com/Guojiz/GitLearnOS as the GitLearnOS template.
 My learning Git repository or local checkout is: <target>
 
 Read GITLEARNOS.md and START-HERE.md completely. Before changing anything, ask
-me for the setup gate: my learning goal, subject, current material, and whether
-to enable the optional local RAG knowledge layer (RAG-Anything is the first
+me for the setup gate: my learning goal, subject, current material, authorized
+source boundary, RAG storage location, and provider constraints. Configure and
+verify a RAG knowledge layer for complete deployment (RAG-Anything is the first
 supported option). Treat any of those facts already present in this request or
 verified in my target `gitlearnos.yml` as answered; do not ask again. Wait for
 the next missing answer before any learner
@@ -148,9 +150,9 @@ Deployment automation: verified / incomplete
 ```
 
 `core-ready` means the target, config, instructions, and basic repository
-capabilities were verified. `knowledge-ready` additionally means goal,
-subject, material boundary, source workspace, and an explicit RAG choice
-(`enabled` or `declined`) were answered; `undecided` is not ready.
+capabilities were verified. `knowledge-ready` additionally means the goal,
+subject, material boundary, stable knowledge IDs, Git source records, and a
+real authorized RAG ingest plus traceable query were verified.
 `automation-ready` means both recurring jobs were observed and each had a real
 test run. `full-ready` requires all three; compute these labels from evidence,
 not from a hand-written claim.

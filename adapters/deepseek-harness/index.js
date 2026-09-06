@@ -415,15 +415,33 @@ async function verifiedReceipt(root, kind) {
   const paths = kind === 'rag'
     ? ['.gitlearnos/receipts/rag.json', '.gitlearnos/receipts/external-rag.json']
     : ['.gitlearnos/receipts/automation.json', '.gitlearnos/receipts/scheduler.json']
+  if (kind === 'rag') {
+    try {
+      const entries = await readdir(resolve(root, '.gitlearnos/receipts'), { withFileTypes: true })
+      for (const entry of entries.slice(0, MAX_DIRECTORY_ENTRIES)) {
+        if (entry.isFile() && entry.name.startsWith('rag-') && entry.name.endsWith('.json')) paths.push(`.gitlearnos/receipts/${entry.name}`)
+      }
+    } catch {}
+    try {
+      const entries = await readdir(resolve(root, '.gitlearnos/rag-anything/receipts'), { withFileTypes: true })
+      for (const entry of entries.slice(0, MAX_DIRECTORY_ENTRIES)) {
+        if (entry.isFile() && entry.name.endsWith('.json')) paths.push(`.gitlearnos/rag-anything/receipts/${entry.name}`)
+      }
+    } catch {}
+  }
   for (const path of paths) {
     const text = await safeRead(root, path)
     if (!text) continue
     try {
       const receipt = JSON.parse(text)
       if (receipt?.schema === 'gitlearnos.external-receipt/v1' && receipt.kind === 'rag') {
-        const evidence = ['ingest', 'query', 'rebuild', 'delete'].map(key => receipt[key])
-        if (receipt.provider && receipt.doc_id && receipt.source_boundary?.evidence && receipt.observed_at && evidence.every(item => item?.status === 'completed' && typeof item.evidence === 'string' && item.evidence.trim())) {
-          return { kind: 'rag', provider: receipt.provider, id: receipt.doc_id, observedAt: receipt.observed_at }
+        const requiredCompleted = ['ingest', 'query'].every(key => receipt[key]?.status === 'completed' && typeof receipt[key]?.evidence === 'string' && receipt[key].evidence.trim())
+        const requiredReversible = ['rebuild', 'delete'].every(key => ['completed', 'available'].includes(receipt[key]?.status) && typeof receipt[key]?.evidence === 'string' && receipt[key].evidence.trim())
+        const knowledgeIds = receipt.knowledge_ids
+        const sourceRecord = receipt.git_source_record
+        const linkedRecord = sourceRecord?.path && await safeRead(root, sourceRecord.path)
+        if (receipt.provider && receipt.source_id && Array.isArray(knowledgeIds) && knowledgeIds.length > 0 && knowledgeIds.every(item => typeof item === 'string' && item.trim()) && receipt.doc_id && sourceRecord?.base_revision && /^[a-fA-F0-9]{64}$/.test(sourceRecord?.content_sha256 ?? '') && linkedRecord && receipt.source_boundary?.evidence && receipt.observed_at && requiredCompleted && requiredReversible) {
+          return { kind: 'rag', provider: receipt.provider, id: receipt.doc_id, sourceId: receipt.source_id, knowledgeIds, observedAt: receipt.observed_at }
         }
       }
       if (receipt?.schema === 'gitlearnos.external-receipt/v1' && receipt.kind === 'scheduler') {
@@ -607,11 +625,12 @@ export async function setupGate(root, status = null) {
   const setupBlock = indentedBlock(config, 'setup')
   const answersBlock = indentedBlock(setupBlock, 'answers', 2)
   const answerLines = answersBlock?.split(/\r?\n/) ?? []
-  for (const key of ['goal', 'subject', 'material', 'rag_choice']) {
+  for (const key of ['goal', 'subject', 'material', 'rag_provider', 'rag_storage']) {
     const line = answerLines.find(item => item.trim().startsWith(key + ':'))
     const value = line?.slice(line.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
-    if (!value || (key === 'rag_choice' ? !['enabled', 'declined'].includes(value) : value === 'undecided')) missing.push('setup.answers.' + key)
+    if (!value || value === 'undecided') missing.push('setup.answers.' + key)
   }
+  if (!await verifiedReceipt(root, 'rag')) missing.push('valid RAG receipt: verified lifecycle and Git linkage')
   const completedLine = setupBlock?.split(/\r?\n/).find(item => /^\s{2}completed_at\s*:/.test(item))
   const completedAt = completedLine?.slice(completedLine.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
   if (!completedAt || Number.isNaN(Date.parse(completedAt))) missing.push('setup.completed_at')

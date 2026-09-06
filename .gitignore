@@ -1,3 +1,6 @@
 node_modules/
 *.tgz
 pnpm-lock.yaml
+__pycache__/
+*.py[cod]
+rag-test/

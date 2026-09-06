@@ -86,10 +86,12 @@ When I see ..., I will ...
 - Planned date:
 - Next-check reason:
 
-## Optional RAG promotion
+## RAG synchronization
 
-- Status: `not-needed` / `pending-authorization` / `unavailable` / `inserted`
+- Status: `not-applicable` / `pending-authorization` / `unavailable` / `inserted` / `verified`
+- Knowledge IDs:
 - Retrieval identifier:
+- Receipt path:
 - Git version inserted:
 
 ## Learner evidence

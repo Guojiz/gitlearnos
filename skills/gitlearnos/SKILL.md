@@ -1,6 +1,6 @@
 ---
 name: gitlearnos
-description: On every learning-related interaction, route the learner through GitLearnOS and select the smallest learner-owned Git setup, organization, question, review, tutoring, source, optional RAG-Anything knowledge, evidence-linked error diagnosis, competing-hypothesis differential diagnosis, repeated-pattern model synthesis, maintenance, or required recurring organization-and-question scheduling workflow. Use when the learner asks a subject question, attempts an answer, shares a page or notes, reports a mistake, feedback, or result, reveals a learning need, or wants learning setup or deployment—even without naming GitLearnOS or invoking a Skill.
+description: Use on any learning-related interaction, including subject questions, attempted answers, shared study material, mistakes, feedback, results, or learning-system setup, even when GitLearnOS is not named. Route through the smallest authorized GitLearnOS workflow, organize learner-owned Git evidence by stable knowledge point, and require verified RAG for complete deployment.
 ---
 
 # GitLearnOS Router
@@ -31,8 +31,9 @@ on a surface where Skills are unavailable.
 
 1. distinguish the public template and the learner repository;
 2. unless clearly maintaining or publishing the public template, treat the user
-   as the learner. For learner setup, ask for the learning goal, subject, and
-   current material, and recommend enabling a local RAG knowledge layer;
+   as the learner. For learner setup, ask for the learning goal, subject,
+   current material, authorized source boundary, RAG storage location, and
+   model/provider constraints; a complete deployment requires verified RAG;
    wait for the answer before installing, initializing, ingesting, committing,
    or deploying learner state. Do not apply this gate to template maintenance,
    documentation, tests, or open-source release;
@@ -55,7 +56,7 @@ on a surface where Skills are unavailable.
 | administer an existing question and write back evidence | [`references/review.md`](references/review.md) |
 | live AI explanation or guided practice requested now | [`references/session.md`](references/session.md) |
 | source access, provenance, privacy, or completeness | [`references/source.md`](references/source.md) |
-| decide, deploy, ingest, promote, or query RAG-Anything | [`references/rag.md`](references/rag.md) |
+| classify knowledge points; deploy, ingest, promote, query, delete, or rebuild RAG | [`references/rag.md`](references/rag.md) |
 | extract reusable understanding | [`references/model.md`](references/model.md) |
 | summarize linked evidence or prepare a compact handoff | [`references/summarize.md`](references/summarize.md) |
 | repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |

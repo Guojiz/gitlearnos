@@ -29,10 +29,10 @@ Selecting an item exposes five code-backed conversation actions: review,
 practice, close with one multiple-choice question, ask a teacher, or read the
 learner's notes.
 
-## Optional layers and user-chosen vision
+## Required external RAG and user-chosen vision
 
-RAG provider access is an optional separate layer; the current bundle does
-**not** call or provision it. Recurring checks do not need a second agent or a
+RAG provider access is required for complete deployment; the current bundle does
+**not** call or provision it, so the bundle alone is `incomplete`. Recurring checks do not need a second agent or a
 separate product component: a real repository-capable scheduler may wake the
 same main agent at the configured time. Harness Schedule is session-local, so
 it proves recurring repository automation only when it actually provides that

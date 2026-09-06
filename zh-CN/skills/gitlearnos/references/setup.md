@@ -17,8 +17,8 @@
 
 1. 能访问时完整阅读 `GITLEARNOS.md` 和 `START-HERE.md`；
 2. 除非明显是在维护或发布公开模板，否则默认用户就是学习者。识别目标，再主动
-   询问学习目标、学科和当前资料，建议启用本地 RAG 知识层，并把 RAG-Anything
-   作为首个支持选项；
+   询问学习目标、学科、当前资料、获授权来源边界、RAG 存储位置和提供方约束。
+   完整部署必须具备已验证的 RAG 知识层；RAG-Anything 是首个支持选项；
 3. 等待回答。回答前不得安装、初始化、导入、提交或部署学习者状态。模板维护、
    文档、测试和开源发布不适用此门槛；
 4. 用日常语言解释推荐层次；
@@ -37,7 +37,7 @@
 可用时的原生记忆
 → 激活指针与稳定偏好
 
-可选本地 RAG-Anything
+完整部署必需的本地 RAG 层
 → 获授权基础资料、笔记和晋升后的长期知识
 ```
 
@@ -120,6 +120,7 @@ subjects/<subject>/goals/main-goal.md
 ```text
 subjects/<subject>/inbox/
 subjects/<subject>/sources/
+subjects/<subject>/knowledge/
 subjects/<subject>/models/
 subjects/<subject>/knowledge-gaps/
 subjects/<subject>/handoffs/
@@ -169,8 +170,8 @@ archive/
 9. 只在学习者要求时运行 AI 会话；
 10. 用一个隐式触发进行验证：无需说出 Skill 名，智能体也能识别状态、行动、写入、报告，并遵守撤销边界。
 
-启用 RAG-Anything 时，读取 [`rag.md`](rag.md)，并遵循其中的部署、导入与验证
-规则。
+每次学习者部署都要读取 [`rag.md`](rag.md)，并遵循其中的部署、导入与验证规则。
+若无法配置并验证 RAG 层，保留可用的 Git 学习闭环，但把部署标记为 `incomplete`。
 
 ## 迁移
 
@@ -190,7 +191,7 @@ Subject path:
 Capabilities:
 Policy:
 Project or source workspace:
-RAG-Anything: enabled / disabled / unavailable / unknown
+RAG-Anything: enabled / incomplete / unavailable / unknown
 Activation surfaces:
 Skill installation: installed / source-only / unavailable / unknown
 Project/custom instructions:

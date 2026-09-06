@@ -2,6 +2,8 @@
 
 状态：`active` / `archived` / `needs-source`  
 学科：  
+来源 ID：`<subject>/<stable-source-slug>`
+知识点 ID：`<subject>/<topic>/<knowledge-point>`
 渠道：`teacher` / `class` / `tutoring` / `paper` / `book` / `platform` / `exam` / `peer` / `ai` / `other`  
 可用性：`full` / `excerpt` / `summary-only` / `local-only` / `missing` / `uncertain`  
 证据类型：`reported` / `source-supported` / `demonstrated` / `not-assessed`  
@@ -17,6 +19,21 @@
 - 稳定链接、文件名、页码或定位：
 - 原件保存位置：
 - 版权与隐私边界：
+- 获授权来源根目录与允许列表：
+- 内容哈希或不可变版本：
+
+## Git 与 RAG 关联
+
+- Git 来源记录路径：
+- 导入前观察到的基础版本：
+- RAG 提供方：
+- 提供方文档 ID：
+- RAG 状态：`pending` / `configured` / `verified` / `unavailable` / `failed` / `deleted`
+- 解析器及版本：
+- 回执路径：
+- 上次同步版本：
+- 重建方式：
+- 删除方式：
 
 ## Agent 实际检查了什么
 

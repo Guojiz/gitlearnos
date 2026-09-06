@@ -77,6 +77,9 @@ Event and operation:
 Target and subject:
 Changed paths, proposed change, or pending writeback:
 Evidence:
+Git persistence:
+RAG synchronization:
+Mastery:
 Memory: saved / suggested / unavailable / unknown
 Skill installation: installed / source-only / unavailable / unknown
 Actual automation:

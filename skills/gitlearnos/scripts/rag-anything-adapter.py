@@ -28,14 +28,14 @@ from urllib.parse import parse_qsl, urlsplit
 
 ADAPTER_VERSION = "1"
 REQUIRED_PACKAGES = {"raganything": "1.3.1", "lightrag-hku": "1.5.6"}
-DEFAULT_BASE_URL = "https://api.kimi.com/coding/v1"
-DEFAULT_MODEL = "kimi-for-coding"
-OBSERVED_EMBEDDING_RESPONSE_MODEL = "bge_m3_embed"
-DEFAULT_EMBEDDING_DIM = 1024
+DEFAULT_BASE_URL = ""
+DEFAULT_MODEL = ""
+DEFAULT_EMBEDDING_DIM = 0
 DENIED_PATH_PARTS = {".git", "example", "examples", "template", "templates"}
 DENIED_FILENAMES = {".env", ".env.local", "credentials.json", "id_rsa", "id_ed25519"}
 DENIED_SUFFIXES = {".key", ".p12", ".pfx", ".pem"}
 TRACE_ID_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,255}$")
+ENV_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 SENSITIVE_VALUES: set[str] = set()
 
 
@@ -51,6 +51,9 @@ class Settings:
     chat_model: str
     embedding_model: str
     embedding_dim: int
+    embedding_base_url: str = ""
+    chat_api_key_env: str = "GITLEARNOS_RAG_API_KEY"
+    embedding_api_key_env: str = "GITLEARNOS_RAG_EMBEDDING_API_KEY"
 
     @property
     def receipts_dir(self) -> Path:
@@ -84,7 +87,7 @@ def resolve_path(value: str | Path) -> Path:
 
 def is_within(path: Path, boundary: Path) -> bool:
     try:
-        path.relative_to(boundary)
+        resolve_path(path).relative_to(resolve_path(boundary))
         return True
     except ValueError:
         return False
@@ -111,6 +114,117 @@ def validate_base_url(value: str) -> str:
     if any(name.lower() in sensitive_names for name, _ in parse_qsl(parsed.query)):
         raise AdapterError("base URL must not contain credential query parameters")
     return value.rstrip("/")
+
+
+def mapping_value(value: Any, label: str) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        raise AdapterError(f"{label} must be a mapping")
+    return value
+
+
+def configured_env_name(value: Any, *, label: str, default: str) -> str:
+    name = value if value is not None else default
+    if not isinstance(name, str) or not ENV_NAME_PATTERN.fullmatch(name):
+        raise AdapterError(f"{label} must be a valid environment variable name")
+    return name
+
+
+def optional_base_url(value: Any, *, label: str) -> str:
+    if value is None or value == "":
+        return ""
+    if not isinstance(value, str):
+        raise AdapterError(f"{label} must be a string")
+    return validate_base_url(value)
+
+
+def optional_text(value: Any, *, label: str) -> str:
+    if value is None or value == "":
+        return ""
+    if not isinstance(value, str):
+        raise AdapterError(f"{label} must be a string")
+    return value
+
+
+def yaml_scalar(value: str) -> Any:
+    value = value.strip()
+    if value in {"", "null", "Null", "NULL", "~"}:
+        return None
+    if value in {"true", "True", "TRUE"}:
+        return True
+    if value in {"false", "False", "FALSE"}:
+        return False
+    if re.fullmatch(r"[+-]?\d+", value):
+        return int(value)
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+        return value[1:-1]
+    return value
+
+
+def strip_yaml_comment(value: str) -> str:
+    quote = ""
+    for index, character in enumerate(value):
+        if character in {"'", '"'}:
+            quote = "" if quote == character else (character if not quote else quote)
+        elif character == "#" and not quote and (index == 0 or value[index - 1].isspace()):
+            return value[:index].rstrip()
+    return value.rstrip()
+
+
+def minimal_yaml_mapping(text: str) -> dict[str, Any]:
+    """Parse the simple mapping-only GitLearnOS configuration without PyYAML.
+
+    This fallback intentionally accepts the documented scalar/mapping layout and
+    rejects constructs it cannot interpret, rather than guessing a provider
+    configuration or silently ignoring a credential reference.
+    """
+    root: dict[str, Any] = {}
+    stack: list[tuple[int, dict[str, Any]]] = [(-1, root)]
+    for line_number, raw_line in enumerate(text.splitlines(), start=1):
+        if not raw_line.strip() or raw_line.lstrip().startswith("#"):
+            continue
+        if "\t" in raw_line:
+            raise AdapterError(f"gitlearnos.yml line {line_number}: tabs are not supported")
+        indent = len(raw_line) - len(raw_line.lstrip(" "))
+        content = strip_yaml_comment(raw_line.strip())
+        if not content:
+            continue
+        match = re.fullmatch(r"([^:#][^:]*):(?:\s*(.*))?", content)
+        if not match:
+            raise AdapterError(
+                f"gitlearnos.yml line {line_number}: install PyYAML for this YAML construct"
+            )
+        key, raw_value = match.groups()
+        key = key.strip()
+        while stack and indent <= stack[-1][0]:
+            stack.pop()
+        if not stack:
+            raise AdapterError(f"gitlearnos.yml line {line_number}: invalid indentation")
+        parent = stack[-1][1]
+        if raw_value is None or raw_value == "":
+            child: dict[str, Any] = {}
+            parent[key] = child
+            stack.append((indent, child))
+        else:
+            parent[key] = yaml_scalar(raw_value)
+    return root
+
+
+def load_configuration(config_path: Path) -> dict[str, Any]:
+    try:
+        text = config_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise AdapterError("cannot read gitlearnos.yml") from exc
+    try:
+        import yaml
+    except ImportError:
+        config = minimal_yaml_mapping(text)
+    else:
+        config = yaml.safe_load(text) or {}
+    if not isinstance(config, dict):
+        raise AdapterError("gitlearnos.yml must be a mapping")
+    return config
 
 
 def public_template_root(path: Path) -> bool:
@@ -400,13 +514,13 @@ def verified_retrieval_chunks(
     ]
 
 
-def get_api_key(prompt: bool) -> str:
-    key = os.environ.get("GITLEARNOS_RAG_API_KEY", "")
+def get_api_key(prompt: bool, env_name: str = "GITLEARNOS_RAG_API_KEY") -> str:
+    key = os.environ.get(env_name, "")
     if not key and prompt:
-        key = getpass.getpass("RAG provider API key (hidden): ")
+        key = getpass.getpass(f"RAG provider API key for {env_name} (hidden): ")
     if not key:
         raise AdapterError(
-            "set GITLEARNOS_RAG_API_KEY or pass --prompt-api-key; the key is never stored"
+            f"set {env_name} or pass --prompt-api-key; the key is never stored"
         )
     SENSITIVE_VALUES.add(key)
     return key
@@ -423,12 +537,30 @@ class Runtime:
         except ImportError as exc:
             raise AdapterError(f"RAG runtime import failed: {type(exc).__name__}") from exc
 
+        if (
+            not settings.base_url
+            or not settings.embedding_base_url
+            or not settings.chat_model
+            or not settings.embedding_model
+            or settings.embedding_dim <= 0
+        ):
+            raise AdapterError("complete rag.chat and rag.embedding configuration during setup")
         self.settings = settings
         self.observed_embedding_response_models: set[str] = set()
         self.successful_llm_calls = 0
+        embedding_key = os.environ.get(settings.embedding_api_key_env, "")
+        if not embedding_key:
+            raise AdapterError("set the configured embedding credential environment variable")
+        SENSITIVE_VALUES.add(embedding_key)
         self.client = AsyncOpenAI(
             api_key=api_key,
             base_url=settings.base_url,
+            timeout=120,
+            max_retries=1,
+        )
+        self.embedding_client = AsyncOpenAI(
+            api_key=embedding_key,
+            base_url=settings.embedding_base_url,
             timeout=120,
             max_retries=1,
         )
@@ -458,7 +590,7 @@ class Runtime:
             return choice.message.content
 
         async def embed(texts: list[str], **_: Any):
-            result = await self.client.embeddings.create(
+            result = await self.embedding_client.embeddings.create(
                 model=settings.embedding_model,
                 input=texts,
                 encoding_format="float",
@@ -506,6 +638,7 @@ class Runtime:
         if self.rag.lightrag:
             await self.rag.lightrag.finalize_storages()
         await self.client.close()
+        await self.embedding_client.close()
 
 
 def make_settings(args: argparse.Namespace) -> Settings:
@@ -515,9 +648,25 @@ def make_settings(args: argparse.Namespace) -> Settings:
     learner_root = resolve_path(learner_value)
     if not learner_root.is_dir():
         raise AdapterError("learner root does not exist")
+    config_path = learner_root / "gitlearnos.yml"
+    config = {}
+    if config_path.exists():
+        config = load_configuration(config_path)
+    rag_config = mapping_value(config.get("rag"), "rag")
+    chat = mapping_value(rag_config.get("chat"), "rag.chat")
+    embedding = mapping_value(rag_config.get("embedding"), "rag.embedding")
     working_value = args.working_dir or os.environ.get("GITLEARNOS_RAG_WORKING_DIR")
     if working_value:
         working_dir = resolve_path(working_value)
+    elif rag_config.get("working_dir"):
+        if not isinstance(rag_config["working_dir"], str):
+            raise AdapterError("rag.working_dir must be a string")
+        configured_working_dir = Path(rag_config["working_dir"]).expanduser()
+        working_dir = resolve_path(
+            configured_working_dir
+            if configured_working_dir.is_absolute()
+            else learner_root / configured_working_dir
+        )
     else:
         data_home = resolve_path(
             os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")
@@ -527,10 +676,11 @@ def make_settings(args: argparse.Namespace) -> Settings:
     if working_dir in {Path("/").resolve(), Path.home().resolve(), learner_root}:
         raise AdapterError("working directory must be a dedicated subdirectory")
     if is_within(working_dir, learner_root):
-        raise AdapterError(
-            "RAG working directory must stay outside the learner Git repository; "
-            "only the auditable receipt belongs under .gitlearnos/receipts"
-        )
+        relative = working_dir.relative_to(learner_root).as_posix()
+        ignored = subprocess.run(["git", "-C", str(learner_root), "check-ignore", "-q", "--", relative + "/"], capture_output=True)
+        tracked = git_output(learner_root, "ls-files", "--", relative)
+        if ignored.returncode != 0 or tracked:
+            raise AdapterError("index must be outside the learner Git repository or ignored and untracked")
     if is_within(working_dir, Path(__file__).resolve().parents[3]) and public_template_root(
         Path(__file__).resolve().parents[3]
     ):
@@ -538,22 +688,61 @@ def make_settings(args: argparse.Namespace) -> Settings:
     try:
         embedding_dim = int(
             args.embedding_dim
-            or os.environ.get("GITLEARNOS_RAG_EMBEDDING_DIM", str(DEFAULT_EMBEDDING_DIM))
+            if args.embedding_dim is not None
+            else os.environ.get("GITLEARNOS_RAG_EMBEDDING_DIM")
+            if os.environ.get("GITLEARNOS_RAG_EMBEDDING_DIM") is not None
+            else embedding.get("dimensions", DEFAULT_EMBEDDING_DIM)
         )
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise AdapterError("embedding dimension must be an integer") from exc
-    if embedding_dim <= 0:
+    if embedding_dim < 0:
         raise AdapterError("embedding dimension must be positive")
     return Settings(
         learner_root=learner_root,
         working_dir=working_dir,
-        base_url=validate_base_url(
-            args.base_url or os.environ.get("GITLEARNOS_RAG_BASE_URL", DEFAULT_BASE_URL)
+        base_url=optional_base_url(
+            args.base_url
+            if args.base_url is not None
+            else os.environ.get("GITLEARNOS_RAG_BASE_URL")
+            if os.environ.get("GITLEARNOS_RAG_BASE_URL") is not None
+            else chat.get("base_url", DEFAULT_BASE_URL),
+            label="rag.chat.base_url",
         ),
-        chat_model=args.chat_model or os.environ.get("GITLEARNOS_RAG_CHAT_MODEL", DEFAULT_MODEL),
-        embedding_model=args.embedding_model
-        or os.environ.get("GITLEARNOS_RAG_EMBEDDING_MODEL", DEFAULT_MODEL),
+        chat_model=optional_text(
+            args.chat_model
+            if args.chat_model is not None
+            else os.environ.get("GITLEARNOS_RAG_CHAT_MODEL")
+            if os.environ.get("GITLEARNOS_RAG_CHAT_MODEL") is not None
+            else chat.get("model", DEFAULT_MODEL),
+            label="rag.chat.model",
+        ),
+        embedding_model=optional_text(
+            args.embedding_model
+            if args.embedding_model is not None
+            else os.environ.get("GITLEARNOS_RAG_EMBEDDING_MODEL")
+            if os.environ.get("GITLEARNOS_RAG_EMBEDDING_MODEL") is not None
+            else embedding.get("model", DEFAULT_MODEL),
+            label="rag.embedding.model",
+        ),
         embedding_dim=embedding_dim,
+        embedding_base_url=optional_base_url(
+            getattr(args, "embedding_base_url", None)
+            if getattr(args, "embedding_base_url", None) is not None
+            else os.environ.get("GITLEARNOS_RAG_EMBEDDING_BASE_URL")
+            if os.environ.get("GITLEARNOS_RAG_EMBEDDING_BASE_URL") is not None
+            else embedding.get("base_url", ""),
+            label="rag.embedding.base_url",
+        ),
+        chat_api_key_env=configured_env_name(
+            chat.get("api_key_env"),
+            label="rag.chat.api_key_env",
+            default="GITLEARNOS_RAG_API_KEY",
+        ),
+        embedding_api_key_env=configured_env_name(
+            embedding.get("api_key_env"),
+            label="rag.embedding.api_key_env",
+            default="GITLEARNOS_RAG_EMBEDDING_API_KEY",
+        ),
     )
 
 
@@ -576,7 +765,7 @@ def base_receipt(
         "provider": "rag-anything",
         "schema_version": 1,
         "adapter_version": ADAPTER_VERSION,
-        "status": "ingested",
+        "status": "pending",
         "doc_id": doc_id,
         "source_id": source_id,
         "knowledge_ids": knowledge_ids,
@@ -604,7 +793,7 @@ def base_receipt(
         },
         "query": {
             "status": "available",
-            "evidence": "source-specific query command is available but not yet observed",
+            "evidence": "known-fact verification has not yet observed source-specific retrieval",
         },
         "rebuild": {
             "status": "available",
@@ -616,18 +805,20 @@ def base_receipt(
         },
         "runtime": {
             "packages": require_runtime_versions(),
-            "base_url": settings.base_url,
+            "chat_base_url": settings.base_url,
             "chat_model": settings.chat_model,
+            "chat_api_key_env": settings.chat_api_key_env,
+            "embedding_base_url": settings.embedding_base_url,
             "embedding_request_model": settings.embedding_model,
+            "embedding_api_key_env": settings.embedding_api_key_env,
             "embedding_dimension": settings.embedding_dim,
-            "observed_compatibility": {
-                "provider": "Kimi Code OpenAI-compatible API",
-                "embedding_response_model": OBSERVED_EMBEDDING_RESPONSE_MODEL,
-                "embedding_dimension": DEFAULT_EMBEDDING_DIM,
-                "stability": "observed compatibility, not an upstream stable contract",
-            },
+            "index_embedding_fingerprint": embedding_fingerprint(settings),
         },
         "query_verification": {"status": "not-run"},
+        "synchronization": {
+            "status": "pending",
+            "evidence": "committed Git source record was verified before external index synchronization",
+        },
         "deletion_boundary": {
             "doc_id": doc_id,
             "adapter_receipt": str(receipt_path(settings, doc_id)),
@@ -637,6 +828,51 @@ def base_receipt(
             "index": str(settings.working_dir),
         },
     }
+
+
+def embedding_fingerprint(settings: Settings) -> dict[str, Any]:
+    """The embedding identity that determines whether an index can be reused."""
+    return {
+        "base_url": settings.embedding_base_url,
+        "model": settings.embedding_model,
+        "dimensions": settings.embedding_dim,
+    }
+
+
+def require_matching_embedding_fingerprint(
+    settings: Settings, receipt: dict[str, Any], *, doc_id: str
+) -> None:
+    runtime = receipt.get("runtime")
+    recorded = runtime.get("index_embedding_fingerprint") if isinstance(runtime, dict) else None
+    if not isinstance(recorded, dict):
+        # Older receipts did not record enough information to safely decide if
+        # their vectors can be reused. Treat them as a required replay, not as
+        # a compatible default.
+        raise AdapterError(
+            f"receipt {doc_id} lacks an embedding index fingerprint; choose a new index and replay sources"
+        )
+    if recorded != embedding_fingerprint(settings):
+        raise AdapterError(
+            f"receipt {doc_id} uses a different embedding endpoint, model, or dimension; choose a new index and replay sources"
+        )
+
+
+def receipt_staleness_reason(settings: Settings, receipt: dict[str, Any]) -> str:
+    record_meta = receipt.get("git_source_record")
+    source_path = receipt.get("source_path")
+    if not isinstance(record_meta, dict) or not isinstance(source_path, str):
+        return "receipt is missing traceable Git/source metadata"
+    record_path = settings.learner_root / str(record_meta.get("path", ""))
+    if (
+        not is_within(record_path.resolve(), settings.learner_root.resolve())
+        or not record_path.is_file()
+        or file_sha256(record_path) != record_meta.get("content_sha256")
+    ):
+        return "Git source record is missing or differs from the recorded hash"
+    source = Path(source_path)
+    if not source.is_file() or file_sha256(source) != receipt.get("source_sha256"):
+        return "source is missing or differs from the recorded hash"
+    return ""
 
 
 def prepare_ingest(args: argparse.Namespace, settings: Settings) -> PreparedIngest:
@@ -715,10 +951,16 @@ async def ingest(
             raise AdapterError("active doc_id already exists; use rebuild to replace it")
 
     receipt = prepared.receipt
-    api_key = api_key_override or get_api_key(args.prompt_api_key)
-    runtime = Runtime(settings, api_key)
+    # Persist the recoverable pending boundary before any provider call. The
+    # adapter never commits this receipt; callers commit it when authorized.
+    receipt["deployment_status"] = "incomplete"
+    receipt["deployment_reason"] = "external index synchronization is pending"
+    write_receipt(settings, prepared.doc_id, redact(receipt))
+    api_key = api_key_override or get_api_key(args.prompt_api_key, settings.chat_api_key_env)
+    runtime: Runtime | None = None
     runtime_closed = False
     try:
+        runtime = Runtime(settings, api_key)
         await runtime.initialize()
         await runtime.rag.insert_content_list(
             [{"type": "text", "text": prepared.inserted_text, "page_idx": 0}],
@@ -758,6 +1000,10 @@ async def ingest(
         }
         receipt["deployment_status"] = "incomplete"
         receipt["deployment_reason"] = "source-specific query has not been verified"
+        receipt["synchronization"] = {
+            "status": "synchronized",
+            "evidence": "provider reported a processed receipt-owned document with nonzero chunks",
+        }
         write_receipt(settings, prepared.doc_id, redact(receipt, [api_key]))
         return receipt
     except Exception as exc:
@@ -769,10 +1015,14 @@ async def ingest(
         }
         receipt["deployment_status"] = "incomplete"
         receipt["deployment_reason"] = "ingestion did not complete with verified nonzero chunks"
+        receipt["synchronization"] = {
+            "status": "failed",
+            "evidence": "the pending Git evidence remains recoverable; inspect or delete the provider document before retrying",
+        }
         write_receipt(settings, prepared.doc_id, redact(receipt, [api_key]))
         raise
     finally:
-        if not runtime_closed:
+        if runtime is not None and not runtime_closed:
             await runtime.close()
 
 
@@ -790,7 +1040,7 @@ async def delete_document(
         raise AdapterError("source_id does not match the existing receipt")
     if receipt.get("status") not in {"ingested", "ingest-failed"}:
         raise AdapterError("receipt is not active; there is nothing in its deletion boundary")
-    api_key = api_key_override or get_api_key(args.prompt_api_key)
+    api_key = api_key_override or get_api_key(args.prompt_api_key, settings.chat_api_key_env)
     runtime = Runtime(settings, api_key)
     try:
         await runtime.initialize()
@@ -830,7 +1080,7 @@ async def delete_document(
         await runtime.close()
 
 
-async def query(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
+async def verify(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
     doc_id = validate_trace_id("doc_id", args.doc_id)
     source_id = validate_trace_id("source_id", args.source_id)
     receipt = load_receipt(settings, doc_id)
@@ -840,7 +1090,7 @@ async def query(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
         f"Use the source whose GitLearnOS provenance has doc_id={doc_id} and "
         f"source_id={source_id}. Cite that provenance.\n\nQuestion: {args.question}"
     )
-    api_key = get_api_key(args.prompt_api_key)
+    api_key = get_api_key(args.prompt_api_key, settings.chat_api_key_env)
     runtime = Runtime(settings, api_key)
     try:
         await runtime.initialize()
@@ -857,10 +1107,9 @@ async def query(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
         doc_id_matched = bool(matched_chunks)
         source_id_matched = bool(matched_chunks)
         provenance_matched = bool(matched_chunks)
-        answer = None
-        if provenance_matched and not args.context_only:
-            answer = await runtime.rag.aquery(constrained_question, mode=args.mode)
-        combined_retrieval = context_text + "\n" + (answer or "")
+        # Deployment acceptance is a retrieval check. Do not treat a generated
+        # response as proof that the known fact is present in source evidence.
+        combined_retrieval = context_text
         expected_matches = {item: item in combined_retrieval for item in args.expect}
         matched = provenance_matched and all(expected_matches.values())
         receipt["query_verification"] = {
@@ -897,8 +1146,18 @@ async def query(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
             "source_id": source_id,
             "source_specific": matched,
             "deployment_status": receipt["deployment_status"],
-            "answer": answer,
-            "context": context_text if args.context_only else None,
+            "evidence": [
+                {
+                    "chunk_id": chunk["chunk_id"],
+                    "text": chunk["content"],
+                    "source_id": source_id,
+                    "doc_id": doc_id,
+                    "locator": receipt["source_path"],
+                    "source_sha256": receipt["source_sha256"],
+                    "git_source_record": receipt["git_source_record"],
+                }
+                for chunk in matched_chunks
+            ],
         }
         if not matched:
             raise AdapterError(
@@ -933,13 +1192,22 @@ async def rebuild(args: argparse.Namespace, settings: Settings) -> dict[str, Any
     )
     if not same_boundary or existing.get("status") != "ingested":
         raise AdapterError("rebuild requires a matching active receipt")
-    api_key = get_api_key(args.prompt_api_key)
+    api_key = get_api_key(args.prompt_api_key, settings.chat_api_key_env)
     deletion = await delete_document(
         args,
         settings,
         for_rebuild=True,
         api_key_override=api_key,
     )
+    # Keep the completed deletion boundary in every replacement outcome. If
+    # reinsertion fails, the pending/failed receipt still tells the caller what
+    # happened and how to recover from the committed source record.
+    prepared.receipt["rebuild"] = {
+        "status": "available",
+        "run_id": f"rebuild-{prepared.doc_id}-{utc_now()}",
+        "evidence": "the receipt-owned prior document was deleted before replacement insertion",
+        "delete_evidence": deletion,
+    }
     ingestion = await ingest(
         args,
         settings,
@@ -957,6 +1225,87 @@ async def rebuild(args: argparse.Namespace, settings: Settings) -> dict[str, Any
     ingestion["observed_at"] = utc_now()
     write_receipt(settings, args.doc_id, ingestion)
     return ingestion
+
+
+def active_receipts_for_query(
+    settings: Settings, knowledge_ids: list[str]
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """Return current receipt evidence before provider retrieval.
+
+    A receipt is not live service health, but its source and Git record hashes
+    are enough to prevent stale material from being presented as current.
+    """
+    active: list[dict[str, Any]] = []
+    stale: list[dict[str, str]] = []
+    if not settings.receipts_dir.is_dir():
+        return active, stale
+    for path in sorted(settings.receipts_dir.glob("*.json")):
+        try:
+            receipt = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise AdapterError(f"cannot inspect adapter receipt {path.name}: {type(exc).__name__}") from exc
+        if not isinstance(receipt, dict) or receipt.get("status") != "ingested":
+            continue
+        if knowledge_ids and not set(knowledge_ids).intersection(receipt.get("knowledge_ids", [])):
+            continue
+        doc_id = receipt.get("doc_id")
+        source_id = receipt.get("source_id")
+        record_meta = receipt.get("git_source_record")
+        source_path = receipt.get("source_path")
+        if not isinstance(doc_id, str) or not isinstance(source_id, str) or not isinstance(record_meta, dict) or not isinstance(source_path, str):
+            raise AdapterError(f"active receipt {path.name} is missing traceable source identity")
+        stale_reason = receipt_staleness_reason(settings, receipt)
+        if stale_reason:
+            stale.append({"doc_id": doc_id, "source_id": source_id, "reason": stale_reason})
+            continue
+        active.append(receipt)
+    return active, stale
+
+
+async def search(args: argparse.Namespace, settings: Settings) -> dict[str, Any]:
+    """Read-only cross-source retrieval; never change deployment acceptance."""
+    knowledge_ids = [validate_trace_id("knowledge_id", item) for item in args.knowledge_id]
+    active, stale = active_receipts_for_query(settings, knowledge_ids)
+    if not active:
+        return {
+            "status": "stale" if stale else "no-hit",
+            "evidence": [],
+            "stale_documents": stale,
+        }
+    from lightrag import QueryParam
+    runtime: Runtime | None = None
+    try:
+        runtime = Runtime(settings, get_api_key(False, settings.chat_api_key_env))
+        await runtime.initialize()
+        data = await runtime.rag.lightrag.aquery_data(
+            args.question, param=QueryParam(mode=args.mode, enable_rerank=False))
+        if not isinstance(data, dict) or data.get("status") != "success":
+            if isinstance(data, dict) and data.get("status") == "failure":
+                raise AdapterError("retrieval provider returned failure; this is not a no-hit result")
+            raise AdapterError("unexpected retrieval response")
+        evidence: list[dict[str, Any]] = []
+        for receipt in active:
+            for chunk in verified_retrieval_chunks(data, doc_id=receipt["doc_id"], source_id=receipt["source_id"]):
+                evidence.append(
+                    {
+                        "text": chunk["content"],
+                        "chunk_id": chunk["chunk_id"],
+                        "source_id": receipt["source_id"],
+                        "doc_id": receipt["doc_id"],
+                        "knowledge_ids": receipt["knowledge_ids"],
+                        "locator": receipt["source_path"],
+                        "source_sha256": receipt["source_sha256"],
+                        "git_source_record": receipt["git_source_record"],
+                    }
+                )
+        return {
+            "status": "ok" if evidence else ("stale" if stale else "no-hit"),
+            "evidence": evidence,
+            "stale_documents": stale,
+        }
+    finally:
+        if runtime is not None:
+            await runtime.close()
 
 
 def status(settings: Settings) -> dict[str, Any]:
@@ -1016,6 +1365,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--learner-root", help="learner Git root; or set GITLEARNOS_REPO")
     parser.add_argument("--working-dir", help="local index/receipt directory")
     parser.add_argument("--base-url", help=f"OpenAI-compatible base URL (default: {DEFAULT_BASE_URL})")
+    parser.add_argument("--embedding-base-url", help="independent embedding endpoint")
     parser.add_argument("--chat-model", help=f"chat model (default: {DEFAULT_MODEL})")
     parser.add_argument("--embedding-model", help=f"embedding request model (default: {DEFAULT_MODEL})")
     parser.add_argument("--embedding-dim", type=int, help=f"embedding dimensions (default: {DEFAULT_EMBEDDING_DIM})")
@@ -1046,7 +1396,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     ingest_parser = subparsers.add_parser("ingest", help="insert one authorized source and write a receipt")
     add_ingest(ingest_parser)
-    query_parser = subparsers.add_parser("query", help="run and verify a source-specific query")
+    query_parser = subparsers.add_parser("verify", help="setup acceptance: source-specific known-fact check")
     add_identity(query_parser)
     query_parser.add_argument("--question", required=True)
     query_parser.add_argument(
@@ -1056,7 +1406,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="source-specific fact that must appear in retrieved context or answer; repeatable",
     )
     query_parser.add_argument("--mode", default="naive", choices=["naive", "local", "global", "hybrid", "mix"])
-    query_parser.add_argument("--context-only", action="store_true")
+    search_parser = subparsers.add_parser("query", help="retrieve evidence for an unknown learning question")
+    search_parser.add_argument("--question", required=True)
+    search_parser.add_argument("--knowledge-id", action="append", default=[])
+    search_parser.add_argument("--mode", default="naive", choices=["naive", "local", "global", "hybrid", "mix"])
     delete_parser = subparsers.add_parser("delete", help="delete only one receipt-owned document boundary")
     add_identity(delete_parser)
     rebuild_parser = subparsers.add_parser("rebuild", help="delete then reinsert one receipt-owned document")
@@ -1070,8 +1423,10 @@ async def run(args: argparse.Namespace) -> dict[str, Any]:
         return status(settings)
     if args.command == "ingest":
         return await ingest(args, settings)
+    if args.command == "verify":
+        return await verify(args, settings)
     if args.command == "query":
-        return await query(args, settings)
+        return await search(args, settings)
     if args.command == "delete":
         return await delete_document(args, settings)
     if args.command == "rebuild":

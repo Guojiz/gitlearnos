@@ -34,8 +34,10 @@ on a surface where Skills are unavailable.
    as the learner. For learner setup, ask for the learning goal, subject,
    current material, authorized source boundary, RAG storage location, and
    model/provider constraints; a complete deployment requires verified RAG;
-   wait for the answer before installing, initializing, ingesting, committing,
-   or deploying learner state. Do not apply this gate to template maintenance,
+   reuse facts supplied by the user or verified in target configuration. Ask
+   only for the next missing fact and wait before the dependent setup action.
+   Once setup choices are answered, unavailable RAG does not block authorized
+   Git learning writes. Do not apply this gate to template maintenance,
    documentation, tests, or open-source release;
 3. detect actual read, write, Git, source, RAG, and scheduler capability;
 4. read target `gitlearnos.yml`, dashboard, active subject goal, and only
@@ -94,3 +96,8 @@ review exists, create one canonical `review` record with `origin: one-tap` and
 Return the receipt required by the core contract. Do not claim a write, commit,
 scheduled run, source access, Skill installation, or demonstrated mastery that
 was not observed.
+
+Save Git evidence before RAG synchronization; report persistence, synchronization,
+and mastery separately. For a required retrieval or synchronization step, route
+to `references/rag.md` next; do not preload it on every learning event. Daily
+retrieval needs no known answer, and setup acceptance uses `verify`.

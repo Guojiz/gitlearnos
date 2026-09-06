@@ -18,6 +18,15 @@ rag:
   status: pending       # pending | configured | verified | unavailable | failed
   working_dir: ""
   parser_output_dir: ""
+  chat:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_CHAT_API_KEY
+  embedding:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_EMBEDDING_API_KEY
+    dimensions: 0 # set to the selected provider's verified dimension
   ingest:
     enabled: true
     scope: per-source
@@ -28,8 +37,8 @@ rag:
 推断授权。绝不能索引这个公开模板、示例、秘密或未经批准的资料边界。
 
 `working_dir` 留空时，随附适配器会在用户数据目录中推导仓库专属目录。生成的向量、
-chunk、图数据与缓存留在学习仓库之外；配置到学习仓库内部的工作目录会被拒绝。
-只有可审计的回执镜像发布到 `.gitlearnos/receipts/`。
+chunk、图数据与缓存默认留在学习仓库之外；仓库内工作目录必须明确忽略且未被
+跟踪。可审计回执镜像发布到 `.gitlearnos/receipts/`，应提交到 Git。
 
 主 Agent 决定导入和查询内容。每个长期知识点使用稳定的
 `<subject>/<topic>/<knowledge-point>` ID，并在导入前创建 Git 记录。对获授权的

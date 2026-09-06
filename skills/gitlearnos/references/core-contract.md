@@ -78,6 +78,36 @@ one meaningful learning event per commit. Repeated input updates or links
 existing state instead of producing duplicates. Push only with an authorized
 remote.
 
+## Setup, knowledge, and synchronization
+
+Keep the public template separate from learner state. For setup, reuse the goal,
+subject, material, authorized source boundary, storage, and provider constraints
+already supplied or verified in `gitlearnos.yml`; ask only for missing facts
+before dependent setup actions. Do not repeat setup for ordinary learning.
+A complete deployment requires a real authorized RAG ingest and source-specific
+verification, plus verified recurring jobs. Missing RAG leaves deployment
+`incomplete`, but does not block learning writes already authorized by config.
+
+Classify useful evidence under stable `<subject>/<topic>/<knowledge-point>` IDs.
+Classification may be provisional; keep aliases or `supersedes` when it changes.
+Sources and knowledge points may have many-to-many links. Preserve original
+answers and teacher feedback when revising an AI interpretation.
+
+Use RAG only when user-specific sources or durable knowledge matter. Configure
+its chat and embedding providers independently of the main agent and each other;
+store environment-variable names, not keys. For details route to `rag.md`.
+Daily `query` accepts a question and optional knowledge ID, with no expected
+answer. It returns traceable evidence and `ok`, `no-hit`, or `stale`; connection
+failures remain failures. Compare conflicting sources without hiding the conflict.
+`verify` is separate known-fact setup/regression acceptance, never mastery proof.
+
+Save and commit learning evidence and source identity first, then synchronize
+only authorized durable material. Commit the synchronization receipt separately.
+Keep Git persistence, RAG synchronization, and mastery independent. An outage
+leaves pending work; preserve Git evidence and inspect actual provider state
+before retrying. Rebuild from the preserved source after a failed replacement.
+Git rollback does not roll back the index; reconcile versions explicitly.
+
 ## Review timing and automation honesty
 
 When no date is specified, use deterministic local defaults and record the
@@ -118,12 +148,17 @@ After any write-capable operation, report exactly these fields (use `none` or
 `unknown` rather than omitting one):
 
 ```text
+Setup status: core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Mode:
 Subject:
 Organized:
 Questions:
 Changed files:
 Evidence:
+Git persistence:
+RAG synchronization:
+Mastery:
+Natural-language override: none / <one-event instruction>
 Automation actually completed:
 Skill installation:
 Next action:

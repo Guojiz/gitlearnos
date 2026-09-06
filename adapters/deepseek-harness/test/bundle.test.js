@@ -456,6 +456,109 @@ test('setupGate returns a structured blocked answer and ignores learning-policy 
   assert.equal(gate.answer.setup, 'complete')
 })
 
+test('a no-material-yet setup remains writable while the RAG deployment is incomplete', async () => {
+  const root = await learnerRepo('safe-auto')
+  await rm(join(root, '.gitlearnos', 'receipts', 'rag.json'))
+  await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft
+mode: safe-auto
+identity:
+  repo_id: test-learner
+  role: learner
+  kind: learner-repository
+  template: false
+rag:
+  provider: learner-selected-rag
+  status: pending
+  chat:
+    base_url: https://chat.example.invalid/v1
+    model: learner-chat
+    api_key_env: LEARNER_RAG_CHAT_KEY
+  embedding:
+    base_url: https://embed.example.invalid/v1
+    model: learner-embed
+    api_key_env: LEARNER_RAG_EMBEDDING_KEY
+    dimensions: 1024
+setup:
+  answers:
+    goal: math
+    subject: math
+    material: no-material-yet
+    rag_provider: learner-selected-rag
+    rag_storage: .gitlearnos/rag
+  completed_at: "2026-08-15T00:00:00Z"
+`)
+  await git(root, 'add', 'gitlearnos.yml', '.gitlearnos/receipts/rag.json')
+  await git(root, 'commit', '-m', 'record no material yet')
+
+  const status = await inspectWorkspace(root)
+  const gate = await setupGate(root, status)
+  assert.equal(gate.complete, true)
+  assert.equal(gate.deployment, 'incomplete')
+  assert.equal(status.persistence.state, 'versioned')
+  assert.equal(status.rag.state, 'configured')
+  assert.deepEqual(status.rag.configuration, { declaredState: 'pending', providerConfigured: true, chatConfigured: true, embeddingConfigured: true })
+  assert.equal(status.mastery.state, 'unknown')
+
+  const saved = await recordLearningEvent(root, sample(status.gitRevision))
+  assert.equal(saved.status, 'committed')
+  assert.equal(saved.persisted, true)
+})
+
+test('a configured but unverified RAG layer never blocks Git evidence or claims mastery', async () => {
+  const root = await learnerRepo('safe-auto')
+  await rm(join(root, '.gitlearnos', 'receipts', 'rag.json'))
+  await writeFile(join(root, 'gitlearnos.yml'), (await readFile(join(root, 'gitlearnos.yml'), 'utf8')) + `rag:
+  status: failed
+  chat:
+    base_url: https://chat.example.invalid/v1
+    model: learner-chat
+    api_key_env: LEARNER_RAG_CHAT_KEY
+  embedding:
+    base_url: https://embed.example.invalid/v1
+    model: learner-embed
+    api_key_env: LEARNER_RAG_EMBEDDING_KEY
+    dimensions: 1024
+`)
+  await git(root, 'add', 'gitlearnos.yml', '.gitlearnos/receipts/rag.json')
+  await git(root, 'commit', '-m', 'record unavailable rag')
+
+  const before = await inspectWorkspace(root)
+  const route = await routeLearningEvent(root, 'Teacher feedback says my sign explanation is incomplete; diagnose the attempt.')
+  assert.ok(route.operations.includes('review'))
+  assert.ok(route.operations.includes('diagnose'))
+  assert.match(route.reason, /RAG is reported and does not alter Git write authority/)
+  const result = await applyLearningTransaction(root, {
+    baseRevision: before.gitRevision,
+    operations: [{
+      kind: 'event', subject: 'math', id: 'teacher-sign-feedback', title: 'Teacher sign feedback',
+      body: 'Teacher feedback: the sign explanation was incomplete.\n\nDiagnosis status: agent-hypothesis; competing explanations remain open.',
+    }],
+  })
+  assert.equal(result.status, 'committed')
+  const after = await inspectWorkspace(root)
+  assert.equal(after.rag.state, 'reported')
+  assert.equal(after.rag.configuration.declaredState, 'failed')
+  assert.equal(after.mastery.state, 'unknown')
+  assert.equal(after.persistence.state, 'versioned')
+})
+
+test('status parses annotated scalar values from the shipped example without treating an empty model as configured', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'gitlearnos-example-comments-'))
+  const example = await readFile(new URL('../../../gitlearnos.example.yml', import.meta.url), 'utf8')
+  const config = example
+    .replace(/^  status:.*$/m, '  status: failed # adapter cannot currently connect')
+    .replace(/(  embedding:\n)    base_url: ""\n    model: ""/, '$1    base_url: https://embed.example.invalid/v1\n    model: learner-embed')
+    .replace(/^    model: ""$/m, '    model: "" # learner has not selected a chat model')
+    .replace(/^    dimensions:.*$/m, '    dimensions: 1024 # verified with the selected embedding provider')
+  await writeFile(join(root, 'gitlearnos.yml'), config)
+
+  const status = await inspectWorkspace(root)
+  assert.equal(status.rag.state, 'reported')
+  assert.equal(status.rag.configuration.declaredState, 'failed')
+  assert.equal(status.rag.configuration.chatConfigured, false)
+  assert.equal(status.rag.configuration.embeddingConfigured, true)
+})
+
 test('identity and setup evidence must come from their canonical YAML blocks', async () => {
   const root = await learnerRepo('safe-auto')
   await writeFile(join(root, 'gitlearnos.yml'), `protocol: 2.0-draft

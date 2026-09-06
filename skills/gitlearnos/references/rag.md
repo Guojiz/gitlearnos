@@ -1,5 +1,70 @@
 # GitLearnOS RAG-Anything Knowledge Layer
 
+## Setup and adapter contract
+
+Setup completes provider selection, credentials, storage and source authorization once.
+Inspect existing `gitlearnos.yml` first; reuse answered choices. Ask only for missing
+facts. Keep the main agent independent from RAG's generation and embedding models.
+Store separate `rag.chat` and `rag.embedding` blocks with `base_url`, `model`, and
+`api_key_env`; embedding also requires `dimensions`. These environment variable
+names refer to secrets; never store actual keys in YAML. No provider is selected
+implicitly. Kimi is a historical compatibility example only.
+
+Before reporting knowledge-ready, install the chosen dependencies, verify both
+endpoints, commit an authorized source record and provisional knowledge-point
+links, ingest it, then run a known-fact acceptance query with traceable evidence.
+Persist the resulting receipt in a follow-up Git commit. No material or missing
+credentials means setup remains incomplete, with the precise missing item shown.
+Do not repeat setup in ordinary learning; repair only changed or failed components.
+Changing an embedding model or dimension requires a new index and replay, never
+silent reuse. Independent provider addresses and credentials must remain separate.
+
+Daily learning follows: recognize event → identify goal and tentative knowledge
+points → retrieve only if relevant → answer/diagnose/practice → save original
+evidence and justified interpretation in Git → synchronize durable RAG material.
+Classification may start provisional. Preserve IDs or record aliases/supersession
+when splitting or merging points; do not rewrite historical evidence. A topic
+can link many sources, and a source can support many topics. Teacher feedback can
+revise an AI diagnosis; neither a retrieval hit nor a prompted correct answer
+proves independent mastery. Schedule the next check only when evidence warrants it.
+
+The adapter's operations have these boundaries:
+
+- `query --question <text> [--knowledge-id <id>]`: ordinary read-only retrieval
+  across active sources. Return evidence text, source and document IDs, locator,
+  version/hash, and `ok`, `no-hit`, or `stale`. No expected answer is required.
+  Connection errors are failures, not no-hit results. A failed read does not
+  prove the index needs synchronization: do not mark documents pending or ingest
+  again unless source versions or inspected provider state justify it. The main
+  agent compares contradictory sources, cites evidence, and states uncertainty.
+- `verify --source-id <id> --doc-id <id> --question <text> --expect <fact>`:
+  setup/regression acceptance only; match the fact in retrieved evidence, not
+  generated answers. Successful verification does not prove mastery.
+- `ingest`: synchronize a committed source version with stable identity.
+- `rebuild`: explicit update of an existing document; preserve prior Git evidence,
+  mark synchronization pending, delete the owned old index entry, insert the
+  replacement, then verify. Index replacement is recoverable, not atomic.
+- `delete`: remove the receipt-owned indexed document. The current adapter retains
+  LLM cache; this is not an erasure guarantee. Full source erasure requires the
+  provider's cache deletion workflow and authorization for that boundary.
+- `status`: inspect recorded evidence; a receipt is historical evidence, not a
+  live service health check. Report Git persistence, RAG synchronization, and
+  learner mastery separately.
+
+Save the learning event and source version first, with `pending` synchronization
+and the intended document ID. Commit successful or failed sync evidence separately.
+An outage must not roll back learning evidence or block unrelated authorized Git
+writes. Retry only pending documents after inspecting actual provider state;
+identical active ingestion is refused to prevent duplicates. After deletion during
+a failed rebuild, recover from the preserved Git source and receipt, not by
+fabricating success. The adapter never commits Git on the learner's behalf.
+
+Generated indexes may live outside Git (default), or in an explicitly ignored,
+untracked directory inside it. Commit compact knowledge/source records and receipts;
+do not commit vectors/caches. Git rollback alone does not roll back the index:
+reconcile source hashes and replay affected documents. An unavailable RAG leaves a
+usable incomplete edition; it does not cancel existing write authority.
+
 Follow the Router's core contract. A verified RAG layer is required for a
 complete GitLearnOS deployment. RAG-Anything is the first supported adapter
 used by the one main agent. Git remains the formal, readable, versioned
@@ -120,14 +185,14 @@ An integration may expose Python calls, a local service, MCP tools, or another
 adapter. Verify the actual interface instead of documenting an imagined one.
 
 The bundled `scripts/rag-anything-adapter.py` is the reference CLI when its Python
-dependencies are available. It keeps credentials outside Git, enforces an
+dependencies are available (including PyYAML for `gitlearnos.yml`, OpenAI client,
+and NumPy). Verify imports in the selected virtualenv during setup. It keeps
+credentials outside Git, enforces an
 authorized root and Git source record, and supports inspectable ingest, query,
-status, delete, and rebuild operations. Provider endpoints, model IDs,
+verify, status, delete, and rebuild operations. Provider endpoints, model IDs,
 embedding dimensions, and credential variable names remain configurable.
 Its default working directory is a repository-specific folder under the user's
-data home, outside learner Git. A configured working directory inside the
-learner repository is rejected so generated vectors, graph data, chunks, and
-caches cannot be mistaken for canonical learning state.
+data home, outside learner Git. An internal directory must be explicitly ignored and untracked.
 
 The [Kimi Code](https://www.kimi.com/code/docs/en/) compatibility profile is based on a real 2026-09-05 test against
 `https://api.kimi.com/coding/v1`: chat and embeddings succeeded, embeddings
@@ -149,17 +214,21 @@ must precede the subcommand:
 ```text
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> status
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> ingest --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
-python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --question <question> --knowledge-id <id>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> verify --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> delete --source-id <id> --doc-id <id>
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> rebuild --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
 ```
 
-Set the provider credential only through `GITLEARNOS_RAG_API_KEY` or the hidden
-`--prompt-api-key` input. The CLI never writes the credential to Git or receipts.
+Set each credential through the environment variable named by `rag.chat.api_key_env`
+or `rag.embedding.api_key_env`. `--prompt-api-key` provides hidden input for the
+chat credential only; the embedding credential is configured separately. The CLI
+never writes credentials to Git or receipts.
 It keeps its operational copy under the configured RAG working directory and
 publishes the auditable mirror as
 `.gitlearnos/receipts/rag-<sha256-of-doc-id>.json` in the learner repository.
-Commit that mirror together with the matching source and knowledge-point records.
+Commit source and knowledge-point records before ingestion; commit the receipt
+mirror afterwards, including failure evidence when synchronization did not complete.
 
 ## Ingest and query
 
@@ -176,8 +245,8 @@ Before ingestion:
    affects future rebuilds.
 
 Query RAG only when the request depends on learner-specific textbooks, notes,
-or durable knowledge; each query runs an LLM pass over graph and vector
-retrieval, so routine questions should stay direct. Treat retrieved output as a
+or durable knowledge. Ordinary queries return retrieved evidence rather than
+requiring a generated answer; unrelated general questions should stay direct. Treat retrieved output as a
 locator and grounding aid, not as proof of learning or correctness. Cite the
 returned `doc_id` or file reference when linking an important conclusion back
 to an authorized source or formal Git record.

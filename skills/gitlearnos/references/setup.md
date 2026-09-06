@@ -1,5 +1,21 @@
 # GitLearnOS Setup
 
+
+## Configure once, resume from evidence
+
+Read existing `gitlearnos.yml` and reuse the user's answered setup choices before
+asking for missing information. Provider credentials, storage, and source
+authorization belong to setup; ordinary learning does not repeat the gate.
+Configure `rag.chat` and `rag.embedding` independently (address, model, credential
+environment-variable name, and embedding dimensions). Do not select Kimi or
+reuse the main agent's provider implicitly. Never write keys into YAML.
+
+For knowledge-layer installation and acceptance, follow [`rag.md`](rag.md).
+Commit the authorized source and knowledge-point records first, then ingest and
+run `verify` against a known source fact. Commit the resulting receipt separately.
+Missing material or an unavailable endpoint leaves deployment `incomplete`; it
+does not revoke existing authority to preserve learning evidence in Git.
+
 Follow the core contract loaded by the Router. GitHub is one possible location
 for the public template or a target remote; the learner repository may also be
 any remote or local Git checkout.
@@ -23,8 +39,9 @@ repository or project instructions from this reference and
    goal, subject, current material, authorized source boundary, RAG storage,
    and provider constraints. A complete deployment requires a verified RAG
    knowledge layer; RAG-Anything is the first supported option;
-3. wait for the answer. Do not install, initialize, ingest, commit, or deploy
-   learner state before the learner answers. Do not apply this gate to template
+3. reuse answers already supplied or verified in target configuration; ask only
+   for missing setup facts and wait before dependent actions. Do not repeat
+   completed setup during learning. This gate does not apply to template
    maintenance, documentation, tests, or open-source release;
 4. explain the recommended layers in plain language;
 5. test actual read, write, Git, source, RAG, memory, project-instruction, Skill, and

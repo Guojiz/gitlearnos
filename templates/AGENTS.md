@@ -66,9 +66,10 @@ alone is not verified installation.
 After setup or a write-capable event, return the canonical receipt: setup
 status (`core-ready`, `knowledge-ready`, `automation-ready`, `full-ready`, or
 `incomplete`), mode, subject, organized evidence, questions, changed paths or
-pending writeback, evidence, one-event natural-language override, actual
-automation, Skill status, next action, and undo boundary. Include
-`unavailable`/`unknown` capabilities instead of omitting them.
+pending writeback, evidence, Git persistence, RAG synchronization, mastery,
+one-event natural-language override, actual automation, Skill status, next
+action, and undo boundary. Include `unavailable`/`unknown` capabilities
+instead of omitting them.
 
 Natural-language instructions in the current interaction (such as “record
 only”, “preview first”, or “do not store this”) override the stable config for

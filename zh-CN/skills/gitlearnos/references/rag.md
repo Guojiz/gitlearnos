@@ -1,5 +1,50 @@
 # GitLearnOS RAG-Anything 知识层
 
+
+## Setup 与适配器契约
+
+在 setup 一次完成提供方选择、凭据、存储及来源授权。先检查已有 `gitlearnos.yml`，
+复用用户已经回答的选择，只补问缺失项。主 Agent 与 RAG 生成、embedding 模型独立。
+分别配置 `rag.chat`、`rag.embedding` 的 `base_url`、`model`、`api_key_env`；
+embedding 还需要 `dimensions`。YAML 只存凭据环境变量名，不存密钥。不得隐式指定
+提供方；Kimi 仅是历史兼容性示例。
+
+安装选定依赖并验证两个端点，提交获授权来源记录与暂定知识点关联，真实导入，
+再用已知事实完成来源可追溯验收，随后另一次 Git 提交保存回执，才算知识层就绪。
+没有资料或凭据时报告 setup 未完成与具体缺失项。日常学习不重复设置；只修复变化
+或失败的部分。更换 embedding 模型或维度必须使用新索引并重放资料。
+
+日常流程：识别事件 → 判断目标与暂定知识点 → 按需检索 → 回答/诊断/练习 →
+Git 保存原始证据和有依据的解释 → 同步需要长期检索的知识。分类可以暂定；拆分、
+合并知识点时保留 ID 或记录别名和替代关系，不改写历史证据。知识点与来源是多对多。
+老师反馈可以推翻 AI 诊断；检索命中或提示后答对不证明独立掌握。根据证据安排复测。
+
+适配器操作边界：
+
+- `query --question <text> [--knowledge-id <id>]`：日常跨来源只读检索，返回片段、
+  来源与文档 ID、定位、版本/哈希和 `ok`、`no-hit`、`stale`，不要求预期答案。
+  连接失败不能当无命中；一次读取失败不证明索引需要同步，只有来源版本或已检查
+  的提供方状态表明确有需要时，才能标记待同步或重新导入。主 Agent 比较冲突来源、
+  引用依据并说明不确定性。
+- `verify --source-id <id> --doc-id <id> --question <text> --expect <fact>`：仅供
+  setup/回归验收；在检索证据中匹配事实，不能靠生成答案通过。通过不代表掌握。
+- `ingest`：同步已提交来源版本与稳定身份。
+- `rebuild`：显式更新文档；保留 Git 证据，标记同步待处理，删除索引旧文档并插入
+  新版，再验证。替换可恢复，但不是跨 Git 与 RAG 的原子事务。
+- `delete`：删除回执归属的索引文档。当前适配器保留 LLM 缓存，不等于彻底擦除；
+  彻底移除来源需执行提供方缓存删除流程并取得对应边界授权。
+- `status`：检查已记录证据；回执是历史证据，不是实时健康检查。分别报告 Git 保存、
+  RAG 同步和学习掌握状态。
+
+先把事件、来源版本、待同步状态和目标文档 ID 保存并提交 Git，再单独提交同步成功
+或失败证据。RAG 断开不能回滚学习证据或阻止无关获授权写入。重试前检查真实状态，
+只处理待同步文档；拒绝重复导入活跃 ID。重建删除后失败时，从保留来源及回执恢复，
+不能制造成功。适配器本身不代替主 Agent 提交 Git。
+
+生成索引默认在 Git 外，也可放到明确忽略且未被跟踪的仓库内目录。Git 保存紧凑
+知识点、来源记录及回执，不提交向量或缓存。Git 回滚不会自动回滚索引，须核对哈希
+并重放受影响文档。RAG 不可用时属于可用但不完整版本，不取消已有写入授权。
+
 [English source](../../../../skills/gitlearnos/references/rag.md)
 
 遵守 Router 的核心契约。完整 GitLearnOS 部署必须具备已验证的 RAG 层。
@@ -97,13 +142,13 @@ RAG-Anything 上游是 Python 框架；不能假设存在 MCP 服务器或一键
 集成可能提供 Python 调用、本地服务、MCP 工具或其他适配器。必须验证真实接口，
 不能记录想象中的接口。
 
-依赖可用时，使用随附的 `scripts/rag-anything-adapter.py` 作为参考 CLI。它把凭据留在 Git
+依赖可用时，使用随附的 `scripts/rag-anything-adapter.py` 作为参考 CLI。读取
+`gitlearnos.yml` 需要 PyYAML，运行还需 OpenAI 客户端与 NumPy；setup 时在选定
+虚拟环境验证导入。它把凭据留在 Git
 之外，强制检查获授权根目录和 Git 来源记录，并支持可检查的 ingest、query、
-status、delete 与 rebuild 操作。提供方端点、模型 ID、嵌入维度和凭据环境变量名
+verify、status、delete 与 rebuild 操作。提供方端点、模型 ID、嵌入维度和凭据环境变量名
 保持可配置。
-默认工作目录是用户数据目录下按仓库区分的文件夹，位于学习仓库之外。如果配置的
-工作目录处于学习仓库内，适配器会拒绝运行，防止生成的向量、图数据、chunk 与缓存
-被误当成规范学习状态。
+默认工作目录是用户数据目录下按仓库区分的文件夹，位于学习仓库之外。仓库内的工作目录必须明确忽略且未被跟踪。
 
 [Kimi Code](https://www.kimi.com/code/docs/en/) 兼容配置来自 2026-09-05 对 `https://api.kimi.com/coding/v1` 的真实测试：
 聊天与 embeddings 成功，embeddings 返回 1024 维及响应模型 `bge_m3_embed`，完整
@@ -120,16 +165,19 @@ Code 公共文档没有承诺 embeddings 契约，因此这是已测试兼容性
 ```text
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> status
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> ingest --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
-python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> query --question <question> --knowledge-id <id>
+python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> verify --source-id <id> --doc-id <id> --question <question> --expect <source-specific-fact>
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> delete --source-id <id> --doc-id <id>
 python skills/gitlearnos/scripts/rag-anything-adapter.py --learner-root <repo> rebuild --source <file> --source-record <tracked-record> --source-id <id> --knowledge-id <id> --doc-id <id> --authorized-root <root>
 ```
 
-提供方凭据只能通过 `GITLEARNOS_RAG_API_KEY` 或隐藏的 `--prompt-api-key` 输入。
+分别通过 `rag.chat.api_key_env` 与 `rag.embedding.api_key_env` 指定的环境变量
+配置凭据。`--prompt-api-key` 只为聊天凭据提供隐藏输入；embedding 凭据单独配置。
 CLI 绝不会把凭据写入 Git 或回执。
 CLI 会把运行副本放在配置的 RAG 工作目录，并把可审计镜像发布到学习仓库的
 `.gitlearnos/receipts/rag-<doc-id 的 sha256>.json`。提交时要把这份镜像与对应的
-来源记录、知识点记录放在同一个 Git 变更中。
+来源记录、知识点记录分开：先提交来源与知识点，再导入，随后提交回执；同步
+失败时也保存失败证据。
 
 ## 导入与查询
 
@@ -142,8 +190,8 @@ CLI 会把运行副本放在配置的 RAG 工作目录，并把可审计镜像�
    `knowledge_ids`、Git 记录路径、来源版本／哈希和检索定位；
 5. 防止重复提交；解析器或版本影响未来重建时一并记录。
 
-只有请求依赖用户特定教材、笔记或长期知识时才查询 RAG；每次查询都会对图与
-向量检索跑一次 LLM，普通问题应直接回答。检索输出是定位与依据辅助，不是学习
+只有请求依赖用户特定教材、笔记或长期知识时才查询 RAG。日常查询返回检索证据，
+不要求生成答案；无关的一般问题直接回答。检索输出是定位与依据辅助，不是学习
 或正确性的证明。重要结论链接回获授权来源或 Git 正式记录时，引用返回的
 `doc_id` 或文件引用。
 

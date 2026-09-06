@@ -20,6 +20,15 @@ rag:
   status: pending       # pending | configured | verified | unavailable | failed
   working_dir: ""
   parser_output_dir: ""
+  chat:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_CHAT_API_KEY
+  embedding:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_EMBEDDING_API_KEY
+    dimensions: 0 # set to the selected provider's verified dimension
   ingest:
     enabled: true
     scope: per-source
@@ -33,9 +42,9 @@ source boundary.
 
 When `working_dir` is empty, the bundled adapter derives a repository-specific
 directory under the user's data home. Generated vectors, chunks, graph data,
-and caches stay outside learner Git. The adapter rejects a configured working
-directory inside the learner repository; only the auditable receipt mirror is
-published under `.gitlearnos/receipts/`.
+and caches stay outside learner Git by default. An internal working directory
+is allowed only when explicitly ignored and untracked. The auditable receipt
+mirror is published under `.gitlearnos/receipts/` and should be committed.
 
 The main agent decides what to ingest and query. Give each durable knowledge
 point a stable `<subject>/<topic>/<knowledge-point>` ID and create its Git

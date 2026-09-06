@@ -64,6 +64,29 @@ event（观察证据）
 写入前检查 Git 状态并保留无关工作。每个有意义学习事件优先一次提交。重复输入
 更新或链接现有状态，不产生重复。只有远程和授权都确认时才推送。
 
+## 设置、知识与同步
+
+区分公开模板与学习者状态。Setup 复用用户已经提供或 `gitlearnos.yml` 已核实的
+目标、学科、资料、获授权边界、存储与提供方约束，只补问缺失信息并等待依赖该
+信息的设置操作。日常学习不重复 setup。完整部署需要真实获授权 RAG 导入、来源
+特定事实验收和已验证的定时任务。RAG 缺失时部署为 `incomplete`，但不阻止配置
+已经授权的学习记录写入。
+
+用稳定 `<subject>/<topic>/<knowledge-point>` ID 组织有价值的证据。分类可暂定，
+变更时保留别名或 `supersedes`；来源与知识点可多对多关联。修改 AI 解释时仍保留
+原始作答和老师反馈。
+
+仅在需要用户特定来源或长期知识时检索。RAG 聊天与 embedding 分别配置，不沿用
+主 Agent 或彼此的提供方；配置只存环境变量名，不存密钥。详细操作路由到 `rag.md`。
+日常 `query` 只需问题和可选知识点，不要求预期答案，返回可追溯证据及 `ok`、
+`no-hit` 或 `stale`；连接失败仍是失败。比较冲突来源，不掩盖矛盾。`verify` 独立
+用于 setup／回归的已知事实验收，不能证明掌握。
+
+先保存并提交学习证据和来源身份，再同步获授权的长期资料，随后单独提交同步回执。
+分别报告 Git 保存、RAG 同步与掌握状态。断线时保留 Git 证据和待处理任务，重试前
+检查真实提供方状态；替换失败时从保留来源重建。Git 回滚不等于索引回滚，须显式
+核对版本。
+
 ## 复测日期与自动化诚实边界
 
 学习者未指定日期时使用确定的本地默认值，并记录原因：新缺口或错误/有辅助结果为
@@ -94,12 +117,17 @@ event（观察证据）
 任何可能写入的操作后都必须报告以下字段（没有值写 `none` 或 `unknown`，不能省略）：
 
 ```text
+Setup status: core-ready / knowledge-ready / automation-ready / full-ready / incomplete
 Mode:
 Subject:
 Organized:
 Questions:
 Changed files:
 Evidence:
+Git persistence:
+RAG synchronization:
+Mastery:
+Natural-language override: none / <one-event instruction>
 Automation actually completed:
 Skill installation:
 Next action:

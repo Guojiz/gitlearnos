@@ -51,8 +51,8 @@ GitLearnOS 协议。
 
 设置或可写事件后，返回统一回执：设置状态（`core-ready`、`knowledge-ready`、
 `automation-ready`、`full-ready` 或 `incomplete`）、模式、学科、整理证据、问题、
-改动路径或待写回、证据、本次自然语言覆盖、实际自动化、Skill 状态、下一步和撤销边界。
-能力缺失时写出 `unavailable`/`unknown`，不能省略。
+改动路径或待写回、证据、Git 保存、RAG 同步、掌握状态、本次自然语言覆盖、实际自动化、
+Skill 状态、下一步和撤销边界。能力缺失时写出 `unavailable`/`unknown`，不能省略。
 
 不要保存普通聊天，不要编造无法访问的证据，也不要在未经验证时声称完成远程
 push、后台调度、跨对话记忆或证明掌握。输入只是临时、含糊或无关内容时，

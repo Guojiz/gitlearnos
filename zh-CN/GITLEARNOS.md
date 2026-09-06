@@ -150,6 +150,15 @@ rag:
   status: pending
   working_dir: ""
   parser_output_dir: ""
+  chat:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_CHAT_API_KEY
+  embedding:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_EMBEDDING_API_KEY
+    dimensions: 0 # set to the selected provider's verified dimension
   ingest:
     enabled: true
     scope: per-source
@@ -267,19 +276,49 @@ Project Sources 或本地来源文件夹
 chunk、向量、图与缓存都是生成产物。Agent 更新规范 Git 记录，再用适配器重建索引；
 不能手工修改 RAG 存储文件。
 
-使用一个可恢复的事务边界：
+## Setup 与适配器契约
 
-```text
-获授权来源
-→ 创建或更新 Git 来源与知识点记录
-→ 使用稳定 ID 导入
-→ 验证非空 chunk 与来源特定检索
-→ 写入外部回执
-→ 将 Git 记录与回执提交为一次可撤销的学习改动
-```
+在 setup 一次完成提供方选择、凭据、存储及来源授权。先检查已有 `gitlearnos.yml`，
+复用用户已经回答的选择，只补问缺失项。主 Agent 与 RAG 生成、embedding 模型独立。
+分别配置 `rag.chat`、`rag.embedding` 的 `base_url`、`model`、`api_key_env`；
+embedding 还需要 `dimensions`。YAML 只存凭据环境变量名，不存密钥。不得隐式指定
+提供方；Kimi 仅是历史兼容性示例。
 
-导入或检索失败时，记录准确的待处理或失败状态，并保持设置为 `incomplete`；不能
-提交声称成功的回执。
+安装选定依赖并验证两个端点，提交获授权来源记录与暂定知识点关联，真实导入，
+再用已知事实完成来源可追溯验收，随后另一次 Git 提交保存回执，才算知识层就绪。
+没有资料或凭据时报告 setup 未完成与具体缺失项。日常学习不重复设置；只修复变化
+或失败的部分。更换 embedding 模型或维度必须使用新索引并重放资料。
+
+日常流程：识别事件 → 判断目标与暂定知识点 → 按需检索 → 回答/诊断/练习 →
+Git 保存原始证据和有依据的解释 → 同步需要长期检索的知识。分类可以暂定；拆分、
+合并知识点时保留 ID 或记录别名和替代关系，不改写历史证据。知识点与来源是多对多。
+老师反馈可以推翻 AI 诊断；检索命中或提示后答对不证明独立掌握。根据证据安排复测。
+
+适配器操作边界：
+
+- `query --question <text> [--knowledge-id <id>]`：日常跨来源只读检索，返回片段、
+  来源与文档 ID、定位、版本/哈希和 `ok`、`no-hit`、`stale`，不要求预期答案。
+  连接失败不能当无命中；一次读取失败不证明索引需要同步，只有来源版本或已检查
+  的提供方状态表明确有需要时，才能标记待同步或重新导入。主 Agent 比较冲突来源、
+  引用依据并说明不确定性。
+- `verify --source-id <id> --doc-id <id> --question <text> --expect <fact>`：仅供
+  setup/回归验收；在检索证据中匹配事实，不能靠生成答案通过。通过不代表掌握。
+- `ingest`：同步已提交来源版本与稳定身份。
+- `rebuild`：显式更新文档；保留 Git 证据，标记同步待处理，删除索引旧文档并插入
+  新版，再验证。替换可恢复，但不是跨 Git 与 RAG 的原子事务。
+- `delete`：删除回执归属的索引文档。当前适配器保留 LLM 缓存，不等于彻底擦除；
+  彻底移除来源需执行提供方缓存删除流程并取得对应边界授权。
+- `status`：检查已记录证据；回执是历史证据，不是实时健康检查。分别报告 Git 保存、
+  RAG 同步和学习掌握状态。
+
+先把事件、来源版本、待同步状态和目标文档 ID 保存并提交 Git，再单独提交同步成功
+或失败证据。RAG 断开不能回滚学习证据或阻止无关获授权写入。重试前检查真实状态，
+只处理待同步文档；拒绝重复导入活跃 ID。重建删除后失败时，从保留来源及回执恢复，
+不能制造成功。适配器本身不代替主 Agent 提交 Git。
+
+生成索引默认在 Git 外，也可放到明确忽略且未被跟踪的仓库内目录。Git 保存紧凑
+知识点、来源记录及回执，不提交向量或缓存。Git 回滚不会自动回滚索引，须核对哈希
+并重放受影响文档。RAG 不可用时属于可用但不完整版本，不取消已有写入授权。
 
 ## Git 与 RAG-Anything 决策规则
 
@@ -605,6 +644,9 @@ Code 使用 `.claude/skills/gitlearnos/`。安装状态必须报告为 `installe
 题目：
 改动文件：
 证据：
+Git 保存：
+RAG 同步：
+掌握：
 本次自然语言覆盖：无 / <一次性指令>
 真实完成的自动化：
 Skill 安装：

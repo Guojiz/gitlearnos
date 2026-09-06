@@ -35,6 +35,15 @@ rag:
   status: pending # pending | configured | verified | unavailable | failed
   working_dir: ""
   parser_output_dir: ""
+  chat:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_CHAT_API_KEY
+  embedding:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_EMBEDDING_API_KEY
+    dimensions: 0 # set to the selected provider's verified dimension
   ingest:
     enabled: true
     scope: per-source # per-source | configured-folder

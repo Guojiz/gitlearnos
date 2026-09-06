@@ -12,6 +12,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -243,11 +244,243 @@ class RagAnythingAdapterTests(unittest.TestCase):
                 / repository_key,
             )
             self.assertEqual(settings.base_url, adapter.DEFAULT_BASE_URL)
-            self.assertEqual(settings.embedding_dim, 1024)
+            self.assertEqual(settings.embedding_dim, 0)
 
+            subprocess.run(["git", "init", "-q", str(learner)], check=True)
             args.working_dir = str(learner / ".gitlearnos" / "rag-anything")
             with self.assertRaisesRegex(adapter.AdapterError, "outside the learner Git"):
                 adapter.make_settings(args)
+
+    def test_setup_reads_independent_provider_configuration_and_allows_ignored_index(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            learner = root / "learner"
+            learner.mkdir()
+            (learner / "gitlearnos.yml").write_text(
+                """rag:
+  working_dir: .gitlearnos/rag-anything
+  chat:
+    base_url: https://chat.example.invalid/v1
+    model: learner-chat
+    api_key_env: LEARNER_CHAT_KEY
+  embedding:
+    base_url: https://embed.example.invalid/v1
+    model: learner-embed
+    api_key_env: LEARNER_EMBEDDING_KEY
+    dimensions: 1536
+""",
+                encoding="utf-8",
+            )
+            (learner / ".gitignore").write_text("/.gitlearnos/rag-anything/\n", encoding="utf-8")
+            subprocess.run(["git", "init", "-q", str(learner)], check=True)
+            subprocess.run(["git", "-C", str(learner), "config", "user.email", "test@example.invalid"], check=True)
+            subprocess.run(["git", "-C", str(learner), "config", "user.name", "Test"], check=True)
+            subprocess.run(["git", "-C", str(learner), "add", "gitlearnos.yml", ".gitignore"], check=True)
+            subprocess.run(["git", "-C", str(learner), "commit", "-qm", "configure RAG"], check=True)
+            settings = adapter.make_settings(
+                argparse.Namespace(
+                    learner_root=str(learner),
+                    working_dir=None,
+                    base_url=None,
+                    embedding_base_url=None,
+                    chat_model=None,
+                    embedding_model=None,
+                    embedding_dim=None,
+                )
+            )
+            self.assertEqual(settings.base_url, "https://chat.example.invalid/v1")
+            self.assertEqual(settings.chat_model, "learner-chat")
+            self.assertEqual(settings.chat_api_key_env, "LEARNER_CHAT_KEY")
+            self.assertEqual(settings.embedding_base_url, "https://embed.example.invalid/v1")
+            self.assertEqual(settings.embedding_model, "learner-embed")
+            self.assertEqual(settings.embedding_api_key_env, "LEARNER_EMBEDDING_KEY")
+            self.assertEqual(settings.embedding_dim, 1536)
+            self.assertTrue(adapter.is_within(settings.working_dir, learner))
+
+    def test_query_returns_cross_source_evidence_and_provider_failure_is_not_no_hit(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source, record = self.make_git_repo(root)
+            learner = root / "learner"
+            settings = adapter.Settings(
+                learner_root=learner,
+                working_dir=root / "index",
+                base_url="https://chat.example.invalid/v1",
+                chat_model="learner-chat",
+                embedding_base_url="https://embed.example.invalid/v1",
+                embedding_model="learner-embed",
+                embedding_dim=1536,
+                chat_api_key_env="TEST_CHAT_KEY",
+                embedding_api_key_env="TEST_EMBEDDING_KEY",
+            )
+            receipt = {
+                "doc_id": "math-book-v1",
+                "source_id": "math/book",
+                "status": "ingested",
+                "knowledge_ids": ["math/algebra/facts"],
+                "source_path": str(source),
+                "source_sha256": adapter.file_sha256(source),
+                "git_source_record": {
+                    "path": record.relative_to(learner).as_posix(),
+                    "base_revision": adapter.git_output(learner, "rev-parse", "HEAD"),
+                    "content_sha256": adapter.file_sha256(record),
+                },
+            }
+            adapter.write_receipt(settings, receipt["doc_id"], receipt)
+            content = (
+                'GitLearnOS provenance: {"doc_id": "math-book-v1", '
+                '"source_id": "math/book"}\n\nThe stable fact is 7392.'
+            )
+
+            class FakeLightRag:
+                async def aquery_data(self, _question, param):
+                    self.param = param
+                    return {
+                        "status": "success",
+                        "data": {"chunks": [{"chunk_id": "math-book-v1-chunk-000", "content": content}]},
+                    }
+
+            class FakeRuntime:
+                def __init__(self, _settings, _key):
+                    self.rag = types.SimpleNamespace(lightrag=FakeLightRag())
+
+                async def initialize(self):
+                    return None
+
+                async def close(self):
+                    return None
+
+            fake_lightrag = types.ModuleType("lightrag")
+            fake_lightrag.QueryParam = lambda **kwargs: kwargs
+            args = argparse.Namespace(question="What is the stable fact?", knowledge_id=["math/algebra/facts"], mode="naive")
+            with (
+                mock.patch.object(adapter, "Runtime", FakeRuntime),
+                mock.patch.dict(sys.modules, {"lightrag": fake_lightrag}),
+                mock.patch.dict(os.environ, {"TEST_CHAT_KEY": "chat-test-key"}),
+            ):
+                result = asyncio.run(adapter.search(args, settings))
+            self.assertEqual(result["status"], "ok", result)
+            self.assertEqual(result["evidence"][0]["doc_id"], "math-book-v1")
+            self.assertEqual(result["evidence"][0]["source_id"], "math/book")
+            self.assertEqual(result["evidence"][0]["git_source_record"]["path"], "subjects/math/sources/book.md")
+
+            class FailedLightRag:
+                async def aquery_data(self, _question, param):
+                    return {"status": "failure"}
+
+            class FailedRuntime(FakeRuntime):
+                def __init__(self, _settings, _key):
+                    self.rag = types.SimpleNamespace(lightrag=FailedLightRag())
+
+            with (
+                mock.patch.object(adapter, "Runtime", FailedRuntime),
+                mock.patch.dict(sys.modules, {"lightrag": fake_lightrag}),
+                mock.patch.dict(os.environ, {"TEST_CHAT_KEY": "chat-test-key"}),
+            ):
+                with self.assertRaisesRegex(adapter.AdapterError, "not a no-hit"):
+                    asyncio.run(adapter.search(args, settings))
+
+    def test_query_reports_stale_local_evidence_without_provider_access(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source, record = self.make_git_repo(root)
+            learner = root / "learner"
+            settings = adapter.Settings(
+                learner_root=learner,
+                working_dir=root / "index",
+                base_url="https://chat.example.invalid/v1",
+                chat_model="learner-chat",
+                embedding_base_url="https://embed.example.invalid/v1",
+                embedding_model="learner-embed",
+                embedding_dim=1536,
+            )
+            receipt = {
+                "doc_id": "math-book-v1",
+                "source_id": "math/book",
+                "status": "ingested",
+                "knowledge_ids": ["math/algebra/facts"],
+                "source_path": str(source),
+                "source_sha256": "0" * 64,
+                "git_source_record": {
+                    "path": record.relative_to(learner).as_posix(),
+                    "base_revision": adapter.git_output(learner, "rev-parse", "HEAD"),
+                    "content_sha256": adapter.file_sha256(record),
+                },
+            }
+            adapter.write_receipt(settings, receipt["doc_id"], receipt)
+            result = asyncio.run(
+                adapter.search(
+                    argparse.Namespace(question="What is the stable fact?", knowledge_id=[], mode="naive"),
+                    settings,
+                )
+            )
+            self.assertEqual(result["status"], "stale")
+            self.assertEqual(result["evidence"], [])
+            self.assertEqual(result["stale_documents"][0]["doc_id"], "math-book-v1")
+
+    def test_verify_matches_known_fact_in_retrieved_evidence_without_generation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            learner = root / "learner"
+            learner.mkdir()
+            settings = adapter.Settings(
+                learner_root=learner,
+                working_dir=root / "index",
+                base_url="https://chat.example.invalid/v1",
+                chat_model="learner-chat",
+                embedding_base_url="https://embed.example.invalid/v1",
+                embedding_model="learner-embed",
+                embedding_dim=1536,
+                chat_api_key_env="TEST_CHAT_KEY",
+            )
+            receipt = {
+                "doc_id": "math-book-v1",
+                "source_id": "math/book",
+                "status": "ingested",
+                "source_path": "/authorized/book.md",
+                "source_sha256": "a" * 64,
+                "git_source_record": {"path": "subjects/math/sources/book.md", "base_revision": "base", "content_sha256": "b" * 64},
+                "deployment_status": "incomplete",
+            }
+            adapter.write_receipt(settings, receipt["doc_id"], receipt)
+            content = (
+                'GitLearnOS provenance: {"doc_id": "math-book-v1", '
+                '"source_id": "math/book"}\n\nThe stable fact is 7392.'
+            )
+
+            class VerifyLightRag:
+                async def aquery_data(self, _question, param):
+                    return {"status": "success", "data": {"chunks": [{"chunk_id": "math-book-v1-chunk-000", "content": content}]}}
+
+            class VerifyRuntime:
+                def __init__(self, _settings, _key):
+                    # There is intentionally no generated aquery method.
+                    self.rag = types.SimpleNamespace(lightrag=VerifyLightRag())
+
+                async def initialize(self):
+                    return None
+
+                async def close(self):
+                    return None
+
+            fake_lightrag = types.ModuleType("lightrag")
+            fake_lightrag.QueryParam = lambda **kwargs: kwargs
+            args = argparse.Namespace(
+                doc_id="math-book-v1",
+                source_id="math/book",
+                question="What is the stable fact?",
+                expect=["7392"],
+                mode="naive",
+                prompt_api_key=False,
+            )
+            with (
+                mock.patch.object(adapter, "Runtime", VerifyRuntime),
+                mock.patch.dict(sys.modules, {"lightrag": fake_lightrag}),
+                mock.patch.dict(os.environ, {"TEST_CHAT_KEY": "chat-test-key"}),
+            ):
+                result = asyncio.run(adapter.verify(args, settings))
+            self.assertTrue(result["source_specific"])
+            self.assertIn("7392", result["evidence"][0]["text"])
 
     def test_receipt_identity_defends_delete_boundary(self):
         with tempfile.TemporaryDirectory() as temporary:

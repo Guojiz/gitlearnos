@@ -170,6 +170,15 @@ rag:
   status: pending
   working_dir: ""
   parser_output_dir: ""
+  chat:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_CHAT_API_KEY
+  embedding:
+    base_url: ""
+    model: ""
+    api_key_env: GITLEARNOS_RAG_EMBEDDING_API_KEY
+    dimensions: 0 # set to the selected provider's verified dimension
   ingest:
     enabled: true
     scope: per-source
@@ -308,19 +317,70 @@ equivalent structured preamble. RAG-Anything's internal chunks, vectors, graph,
 and caches are generated artifacts. Agents update canonical Git records and use
 the adapter to rebuild the index; they do not hand-edit RAG storage files.
 
-Use one recoverable transaction boundary:
+## Setup and adapter contract
 
-```text
-authorized source
-→ create or update Git source and knowledge-point records
-→ ingest with stable IDs
-→ verify non-empty chunks and source-specific retrieval
-→ write the external receipt
-→ commit the Git records and receipt as one reversible learning change
-```
+Setup completes provider selection, credentials, storage and source authorization once.
+Inspect existing `gitlearnos.yml` first; reuse answered choices. Ask only for missing
+facts. Keep the main agent independent from RAG's generation and embedding models.
+Store separate `rag.chat` and `rag.embedding` blocks with `base_url`, `model`, and
+`api_key_env`; embedding also requires `dimensions`. These environment variable
+names refer to secrets; never store actual keys in YAML. No provider is selected
+implicitly. Kimi is a historical compatibility example only.
 
-If ingestion or retrieval fails, record the exact pending or failed state and
-leave setup `incomplete`; do not commit a receipt that claims success.
+Before reporting knowledge-ready, install the chosen dependencies, verify both
+endpoints, commit an authorized source record and provisional knowledge-point
+links, ingest it, then run a known-fact acceptance query with traceable evidence.
+Persist the resulting receipt in a follow-up Git commit. No material or missing
+credentials means setup remains incomplete, with the precise missing item shown.
+Do not repeat setup in ordinary learning; repair only changed or failed components.
+Changing an embedding model or dimension requires a new index and replay, never
+silent reuse. Independent provider addresses and credentials must remain separate.
+
+Daily learning follows: recognize event → identify goal and tentative knowledge
+points → retrieve only if relevant → answer/diagnose/practice → save original
+evidence and justified interpretation in Git → synchronize durable RAG material.
+Classification may start provisional. Preserve IDs or record aliases/supersession
+when splitting or merging points; do not rewrite historical evidence. A topic
+can link many sources, and a source can support many topics. Teacher feedback can
+revise an AI diagnosis; neither a retrieval hit nor a prompted correct answer
+proves independent mastery. Schedule the next check only when evidence warrants it.
+
+The adapter's operations have these boundaries:
+
+- `query --question <text> [--knowledge-id <id>]`: ordinary read-only retrieval
+  across active sources. Return evidence text, source and document IDs, locator,
+  version/hash, and `ok`, `no-hit`, or `stale`. No expected answer is required.
+  Connection errors are failures, not no-hit results. A failed read does not
+  prove the index needs synchronization: do not mark documents pending or ingest
+  again unless source versions or inspected provider state justify it. The main
+  agent compares contradictory sources, cites evidence, and states uncertainty.
+- `verify --source-id <id> --doc-id <id> --question <text> --expect <fact>`:
+  setup/regression acceptance only; match the fact in retrieved evidence, not
+  generated answers. Successful verification does not prove mastery.
+- `ingest`: synchronize a committed source version with stable identity.
+- `rebuild`: explicit update of an existing document; preserve prior Git evidence,
+  mark synchronization pending, delete the owned old index entry, insert the
+  replacement, then verify. Index replacement is recoverable, not atomic.
+- `delete`: remove the receipt-owned indexed document. The current adapter retains
+  LLM cache; this is not an erasure guarantee. Full source erasure requires the
+  provider's cache deletion workflow and authorization for that boundary.
+- `status`: inspect recorded evidence; a receipt is historical evidence, not a
+  live service health check. Report Git persistence, RAG synchronization, and
+  learner mastery separately.
+
+Save the learning event and source version first, with `pending` synchronization
+and the intended document ID. Commit successful or failed sync evidence separately.
+An outage must not roll back learning evidence or block unrelated authorized Git
+writes. Retry only pending documents after inspecting actual provider state;
+identical active ingestion is refused to prevent duplicates. After deletion during
+a failed rebuild, recover from the preserved Git source and receipt, not by
+fabricating success. The adapter never commits Git on the learner's behalf.
+
+Generated indexes may live outside Git (default), or in an explicitly ignored,
+untracked directory inside it. Commit compact knowledge/source records and receipts;
+do not commit vectors/caches. Git rollback alone does not roll back the index:
+reconcile source hashes and replay affected documents. An unavailable RAG leaves a
+usable incomplete edition; it does not cancel existing write authority.
 
 ## Git and RAG-Anything decision rules
 
@@ -740,6 +800,9 @@ Organized:
 Questions:
 Changed files:
 Evidence:
+Git persistence:
+RAG synchronization:
+Mastery:
 Natural-language override: none / <one-event instruction>
 Automation actually completed:
 Skill installation:

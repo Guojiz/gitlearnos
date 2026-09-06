@@ -58,3 +58,24 @@ Set this learning system up with RAG-Anything and use these materials.
 - a general question completes without a RAG call;
 - the receipt names skipped inputs, verification evidence, and undo/deletion
   boundaries.
+
+## Continuity and recovery cases
+
+Run these variants with an existing learner repository whose setup answers are
+already recorded. Preserve the initial Git revision and inspect resulting records.
+
+| Case | Required observable result |
+|---|---|
+| No textbook is currently accessible; learner supplies a useful answer | Answer and preserve authorized evidence; identify the missing source, keep deployment incomplete, and do not repeat answered setup questions |
+| Chat and embedding use different endpoints and credential variable names | Each provider receives only its configured credential; no implicit provider or main-agent model selection |
+| An ordinary question spans two authorized sources | `query` needs no expected answer or document ID, returns linked source evidence, and exposes conflicts to the main agent |
+| The query endpoint times out | Report retrieval failure rather than `no-hit`; do not invent textbook content or roll back a saved learning event |
+| Source content changes after ingest | Report stale evidence; preserve old source history, commit the new source version, rebuild, then verify and save a separate receipt |
+| Rebuild fails after deletion | Keep the source and failure receipt recoverable; inspect provider state before replay; do not call the index synchronized |
+| Teacher feedback contradicts an AI diagnosis | Preserve the original answer, append feedback, revise the hypothesis with evidence, and avoid claiming independent mastery |
+| A topic was provisionally misclassified | Preserve canonical evidence and maintain aliases or supersession when correcting knowledge-point links |
+| The next session opens after an interrupted sync | Read Git evidence and pending sync state, continue from recorded work, and retry only the affected document after inspection |
+
+Distinguish executable local adapter tests, simulated agent behavior, and a real
+provider lifecycle. Passing one category does not prove the others. A fixture or
+mock source must never be reported as a deployed learner knowledge base.

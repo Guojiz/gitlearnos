@@ -27,7 +27,7 @@ const STATUS_PATHS = Object.freeze([
 // Bare words like "due dates" without a date never match.
 const DUE_MARKER = /next\s*review|next\s*check|review\s*date|review\s+on|due\s*review|date\s+or\s+next\s+handoff|next\s+handoff/i
 
-const SYSTEM_PROMPT = '## GitLearnOS\nUse gitlearnos.yml as the sole stable configuration and require a learner repository identity. Never write the public template or examples. Answer the immediate request first. learning_status and learning_route are read-only observations. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled main-agent run, or demonstrated mastery without direct evidence. learning_apply is the only composite native write path; learning_record is a compatibility wrapper. Never claim external RAG or automation verification from plain text: only a machine receipt proves it. Preview and manual modes never write. Preserve unrelated dirty work, use exact base revisions, one lock and one reversible commit.'
+const SYSTEM_PROMPT = '## GitLearnOS\nUse gitlearnos.yml as the sole stable configuration and require a learner repository identity. Never write the public template or examples. Answer the immediate request first. learning_status and learning_route are read-only observations. Never claim a file write, Git commit, RAG ingestion or retrieval, scheduled main-agent run, or demonstrated mastery without direct evidence. Git persistence, RAG synchronization, and learner mastery are independent: an unavailable or unverified RAG layer leaves the deployment incomplete but does not revoke an authorized Git learning write. learning_apply is the only composite native write path; learning_record is a compatibility wrapper. Never treat plain text as external verification: a valid machine receipt is historical evidence of a completed external operation, not a current provider-health check. Preview and manual modes never write. Preserve unrelated dirty work, use exact base revisions, one lock and one reversible commit.'
 
 function objectSchema(properties, required = []) {
   return { type: 'object', additionalProperties: false, properties, required }
@@ -78,10 +78,12 @@ const statusOutputSchema = objectSchema({
     contentSha256: { type: 'string' },
   }, ['path', 'kind', 'contentSha256']) },
   queue: { type: 'array', items: queueItemSchema },
-  rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } }, marker: { type: 'object' }, verifiedReceipt: { oneOf: [{ type: 'object' }, { type: 'null' }] } }, ['state', 'evidence', 'marker', 'verifiedReceipt']),
+  persistence: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
+  rag: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } }, marker: { type: 'object' }, verifiedReceipt: { oneOf: [{ type: 'object' }, { type: 'null' }] }, configuration: objectSchema({ declaredState: { oneOf: [{ type: 'string' }, { type: 'null' }] }, providerConfigured: { type: 'boolean' }, chatConfigured: { type: 'boolean' }, embeddingConfigured: { type: 'boolean' } }, ['declaredState', 'providerConfigured', 'chatConfigured', 'embeddingConfigured']) }, ['state', 'evidence', 'marker', 'verifiedReceipt', 'configuration']),
   automation: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } }, marker: { type: 'object' }, verifiedReceipt: { oneOf: [{ type: 'object' }, { type: 'null' }] } }, ['state', 'evidence', 'marker', 'verifiedReceipt']),
+  mastery: objectSchema({ state: { type: 'string' }, evidence: { type: 'array', items: { type: 'string' } } }, ['state', 'evidence']),
   limitations: { type: 'array', items: { type: 'string' } },
-}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'learner', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'contentHashes', 'queue', 'rag', 'automation', 'limitations'])
+}, ['workspace', 'gitRevision', 'protocol', 'configuredMode', 'effectiveMode', 'learner', 'files', 'activeGoals', 'dueReview', 'reviewFiles', 'knowledgeGaps', 'contentHashes', 'queue', 'persistence', 'rag', 'automation', 'mastery', 'limitations'])
 
 const routeOutputSchema = objectSchema({
   operation: { type: 'string' },
@@ -111,9 +113,17 @@ function textResult(value) {
   return [{ type: 'text', text: JSON.stringify(value, null, 2) }]
 }
 
+function yamlScalar(value) {
+  if (typeof value !== 'string') return null
+  const trimmed = value.trim()
+  const quoted = trimmed.match(/^(["'])(.*?)\1(?:\s+#.*)?$/)
+  if (quoted) return quoted[2] || null
+  return trimmed.replace(/\s+#.*$/, '').trim() || null
+}
+
 function parseSetting(text, key) {
-  const match = text?.match(new RegExp(`^${key}\\s*:\\s*["']?([^\\s#"']+)`, 'm'))
-  return match?.[1] ?? null
+  const match = text?.match(new RegExp(`^${key}\\s*:\\s*(.*)$`, 'm'))
+  return yamlScalar(match?.[1])
 }
 
 function indentedBlock(text, key, indent = 0) {
@@ -411,6 +421,24 @@ function evidenceLines(text, pattern, cap = 8) {
   return text.split(/\r?\n/).filter(line => pattern.test(line)).slice(0, cap).map(line => line.trim().slice(0, 240))
 }
 
+function nestedSetting(text, key) {
+  const line = text?.split(/\r?\n/).find(item => item.trim().startsWith(key + ':'))
+  return yamlScalar(line?.slice(line.indexOf(':') + 1))
+}
+
+function ragConfiguration(config) {
+  const rag = indentedBlock(config, 'rag')
+  const chat = indentedBlock(rag, 'chat', 2)
+  const embedding = indentedBlock(rag, 'embedding', 2)
+  const configured = block => ['base_url', 'model', 'api_key_env'].every(key => Boolean(nestedSetting(block, key)))
+  return {
+    declaredState: nestedSetting(rag, 'status'),
+    providerConfigured: Boolean(nestedSetting(rag, 'provider')),
+    chatConfigured: configured(chat),
+    embeddingConfigured: configured(embedding) && Number(nestedSetting(embedding, 'dimensions')) > 0,
+  }
+}
+
 async function verifiedReceipt(root, kind) {
   const paths = kind === 'rag'
     ? ['.gitlearnos/receipts/rag.json', '.gitlearnos/receipts/external-rag.json']
@@ -472,7 +500,11 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
   const protocol = parseSetting(contents['gitlearnos.yml'], 'protocol')
   const learner = await learnerIdentity(canonicalRoot, contents['gitlearnos.yml'], files)
   const combined = Object.values(contents).filter(Boolean).join('\n')
-  const ragEvidence = evidenceLines(combined, /RAG|retriev|ingest|index/i)
+  const ragConfigurationState = ragConfiguration(contents['gitlearnos.yml'])
+  const ragEvidence = [
+    ...evidenceLines(combined, /RAG|retriev|ingest|index/i),
+    ...(ragConfigurationState.declaredState ? ['gitlearnos.yml rag.status: ' + ragConfigurationState.declaredState] : []),
+  ].slice(0, 8)
   const ragReceipt = await verifiedReceipt(canonicalRoot, 'rag')
   const automationEvidence = evidenceLines(contents['automation.md'], /due-review|maintenance|verified|configured|requested|unavailable|disabled|provider|task/i)
   const automationReceipt = await verifiedReceipt(canonicalRoot, 'automation')
@@ -494,11 +526,16 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
     knowledgeGaps: gapFiles.slice().sort(),
     contentHashes: await hashedStateFiles(canonicalRoot),
     queue: queue.filter(item => !item.stale),
+    persistence: {
+      state: gitRevision && learner.identified ? 'versioned' : gitRevision ? 'unbound' : 'unavailable',
+      evidence: gitRevision ? ['Git revision observed: ' + gitRevision] : [],
+    },
     rag: {
-      state: ragReceipt ? 'externallyVerified' : ragEvidence.length ? 'reported' : 'unknown',
+      state: ragReceipt ? 'externallyVerified' : ['failed', 'unavailable'].includes(ragConfigurationState.declaredState) ? 'reported' : ragConfigurationState.chatConfigured && ragConfigurationState.embeddingConfigured ? 'configured' : ragEvidence.length ? 'reported' : 'unknown',
       evidence: ragEvidence,
       marker: { state: ragEvidence.length ? 'reported' : 'none', evidence: ragEvidence },
       verifiedReceipt: ragReceipt,
+      configuration: ragConfigurationState,
     },
     automation: {
       state: automationReceipt ? 'externallyVerified' : automationEvidence.length ? 'reported' : 'unknown',
@@ -506,13 +543,15 @@ export async function inspectWorkspace(root = process.cwd(), now = new Date()) {
       marker: { state: automationEvidence.length ? 'reported' : 'none', evidence: automationEvidence },
       verifiedReceipt: automationReceipt,
     },
+    mastery: { state: 'unknown', evidence: [] },
     limitations: [
       'Read-only scan; no file write, Git commit, RAG request, or scheduler request was performed.',
-      'Reported markers are repository text, not independent verification; externallyVerified requires a machine receipt under .gitlearnos/receipts/.',
+      'Reported markers are repository text, not independent verification; externallyVerified requires a machine receipt under .gitlearnos/receipts/, which is historical operation evidence rather than a current provider-health check.',
       `Files over ${MAX_FILE_BYTES} bytes, symlink escapes, and directory entries beyond ${MAX_DIRECTORY_ENTRIES} are ignored.`,
       'dueReview is derived from explicit next-review/next-check dates in review, model, and knowledge-gap files (compared in UTC, so near-midnight boundaries are advisory); files without a parseable date are counted as noSignal, never guessed.',
       'dueReview, reviewFiles, knowledgeGaps, and contentHashes are evidence inputs, not a priority ranking; contentHashes is utf8 SHA-256 of current file contents for controlled learning_apply updates (not Git blob SHA); only the main agent maintains the ordered dashboard queue from the learner goal and relevant evidence.',
       'queue is the agent-maintained dashboard Next up list read verbatim in order; it is empty until the agent maintains it, and this tool never writes it.',
+      'persistence reports only the observed Git boundary, RAG reports configuration or receipt evidence, and mastery remains unknown until the main agent evaluates traceable independent learning evidence; none implies another.',
     ],
   }
 }
@@ -574,7 +613,7 @@ export async function routeLearningEvent(root, intent) {
         : `Answer the immediate request, then request approval before any ${operationPlan} write.`,
     writeAuthorized,
     persisted: false,
-    reason: 'This route is derived from bounded workspace reads and the effective GitLearnOS write mode; no action was executed.',
+    reason: `This route is derived from bounded workspace reads and the effective GitLearnOS write mode; no action was executed. Git persistence is ${status.persistence.state}; RAG is ${status.rag.state} and does not alter Git write authority; mastery is ${status.mastery.state}.`,
   }
 }
 
@@ -624,23 +663,22 @@ export async function setupGate(root, status = null) {
   const config = await safeRead(root, 'gitlearnos.yml')
   const setupBlock = indentedBlock(config, 'setup')
   const answersBlock = indentedBlock(setupBlock, 'answers', 2)
-  const answerLines = answersBlock?.split(/\r?\n/) ?? []
   for (const key of ['goal', 'subject', 'material', 'rag_provider', 'rag_storage']) {
-    const line = answerLines.find(item => item.trim().startsWith(key + ':'))
-    const value = line?.slice(line.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
+    const value = nestedSetting(answersBlock, key)
     if (!value || value === 'undecided') missing.push('setup.answers.' + key)
   }
-  if (!await verifiedReceipt(root, 'rag')) missing.push('valid RAG receipt: verified lifecycle and Git linkage')
-  const completedLine = setupBlock?.split(/\r?\n/).find(item => /^\s{2}completed_at\s*:/.test(item))
-  const completedAt = completedLine?.slice(completedLine.indexOf(':') + 1).trim().replace(/^["']|["']$/g, '')
+  const ragVerified = Boolean(await verifiedReceipt(root, 'rag'))
+  const completedAt = nestedSetting(setupBlock, 'completed_at')
   if (!completedAt || Number.isNaN(Date.parse(completedAt))) missing.push('setup.completed_at')
   if (!status.learner?.identified) missing.push('gitlearnos.yml: identity: learner')
   return {
     complete: missing.length === 0,
+    deployment: missing.length === 0 && ragVerified ? "knowledge-ready" : "incomplete",
+    ragVerified,
     missing,
     marker: missing.length === 0 ? 'setup-complete' : 'setup-incomplete',
     answer: missing.length === 0
-      ? { setup: 'complete', learner: status.learner?.identity ?? 'unknown', next: 'answer immediate request' }
+      ? { setup: 'complete', deployment: missing.length === 0 && ragVerified ? 'knowledge-ready' : 'incomplete', learner: status.learner?.identity ?? 'unknown', next: 'answer immediate request; synchronize RAG only when durable authorized material is available' }
       : { setup: 'blocked', missing, next: 'complete learner repository setup' },
   }
 }

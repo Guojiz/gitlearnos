@@ -8,8 +8,8 @@ GitLearnOS gives one capable, replaceable main AI agent a learner-owned Git memo
 
 Choose the package that matches what you want to do:
 
-- **`GitLearnOS-Starter-Template-v2.0.0-dev.1.zip`**: recommended for most learners and AI-agent setups. It contains the v2 protocol, Quickstart, setup templates, the complete GitLearnOS Skill, bilingual documentation, and the generic agent/Git/search/automation adapters needed to deploy GitLearnOS into a learner-owned repository.
-- **`GitLearnOS-DeepSeek-Harness-Plugin-v2.0.0-dev.1.zip`**: the native DeepSeek Harness Developer Preview bundle. Extract it and install from its root with `dsh plugin --profile web add .`, then verify discovery with `dsh --profile web --dump-config`.
+- **`GitLearnOS-Starter-Template-2.0.0-dev.1.zip`**: recommended for most learners and AI-agent setups. It contains the v2 protocol, Quickstart, setup templates, the complete GitLearnOS Skill, bilingual documentation, and the generic agent/Git/search/automation adapters needed to deploy GitLearnOS into a learner-owned repository.
+- **`GitLearnOS-DeepSeek-Harness-Plugin-2.0.0-dev.1.zip`**: the native DeepSeek Harness Developer Preview bundle. Extract it and install from its root with `dsh plugin --profile web add .`, then verify discovery with `dsh --profile web --dump-config`.
 
 The automatically generated **Source code (zip)** and **Source code (tar.gz)** remain full repository snapshots for developers. They are not the recommended end-user packages.
 

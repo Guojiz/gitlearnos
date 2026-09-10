@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - .github/workflows/publish-v2-dev-release.yml
+      - RELEASE-NOTES-v2.0.0-dev.1.md
 
 permissions:
   contents: write
@@ -14,9 +15,14 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      TAG: v2.0.0-dev.1
+      VERSION: 2.0.0-dev.1
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -26,18 +32,125 @@ jobs:
       - name: Verify English and Chinese alignment
         run: node scripts/check-language-alignment.mjs
 
-      - name: Publish v2.0.0-dev.1 pre-release
+      - name: Export tagged release source
+        run: |
+          rm -rf release-src dist
+          mkdir -p release-src dist
+          git archive "$TAG" | tar -x -C release-src
+
+      - name: Build Starter Template ZIP
+        run: |
+          STARTER="dist/GitLearnOS-Starter-Template-$VERSION"
+          mkdir -p "$STARTER/adapters"
+
+          cp release-src/START-HERE.md "$STARTER/"
+          cp release-src/QUICKSTART.md "$STARTER/"
+          cp release-src/GITLEARNOS.md "$STARTER/"
+          cp release-src/MIGRATION-v2.md "$STARTER/"
+          cp release-src/LICENSE "$STARTER/"
+          cp -R release-src/templates "$STARTER/"
+          cp -R release-src/skills "$STARTER/"
+          cp release-src/adapters/README.md "$STARTER/adapters/"
+          cp -R release-src/adapters/agents "$STARTER/adapters/"
+          cp -R release-src/adapters/automation "$STARTER/adapters/"
+          cp -R release-src/adapters/git "$STARTER/adapters/"
+          cp -R release-src/adapters/search "$STARTER/adapters/"
+          cp -R release-src/zh-CN "$STARTER/"
+
+          cat > "$STARTER/README.md" <<'EOF'
+          # GitLearnOS Starter Template
+
+          This is the curated end-user starter package for GitLearnOS v2.0.0-dev.1.
+
+          ## Start
+
+          1. Read `START-HERE.md`.
+          2. Use the canonical setup request in `QUICKSTART.md`.
+          3. Give the package to one capable AI agent with Git repository access.
+          4. Deploy into a separate learner-owned Git repository. Do not use this extracted distribution folder as personal learning state.
+
+          The package includes the v2 protocol, setup templates, the complete `skills/gitlearnos/` Skill, bilingual documentation, and generic agent/Git/search/automation adapters. DeepSeek Harness integration is distributed separately.
+
+          Complete deployment still requires a verified authorized RAG layer and verified recurring automation as described by the protocol.
+          EOF
+
+          (
+            cd dist
+            zip -qr "$GITHUB_WORKSPACE/GitLearnOS-Starter-Template-$VERSION.zip" "GitLearnOS-Starter-Template-$VERSION"
+          )
+
+      - name: Build DeepSeek Harness Plugin ZIP
+        run: |
+          PLUGIN="dist/GitLearnOS-DeepSeek-Harness-Plugin-$VERSION"
+          mkdir -p "$PLUGIN/adapters"
+
+          cp release-src/package.json "$PLUGIN/"
+          cp release-src/LICENSE "$PLUGIN/"
+          cp release-src/AGENTS.md "$PLUGIN/"
+          cp release-src/GITLEARNOS.md "$PLUGIN/"
+          cp -R release-src/skills "$PLUGIN/"
+          cp -R release-src/adapters/deepseek-harness "$PLUGIN/adapters/"
+
+          node - "$PLUGIN/package.json" "$VERSION" <<'NODE'
+          const fs = require('fs');
+          const [file, version] = process.argv.slice(2);
+          const pkg = JSON.parse(fs.readFileSync(file, 'utf8'));
+          pkg.version = version;
+          fs.writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+
+          cat > "$PLUGIN/README.md" <<'EOF'
+          # GitLearnOS DeepSeek Harness Plugin
+
+          Native GitLearnOS bundle for the DeepSeek Harness Developer Preview, packaged for GitLearnOS v2.0.0-dev.1.
+
+          ## Install from this ZIP
+
+          Extract the archive, open a terminal in the extracted folder, and run:
+
+          ```sh
+          dsh plugin --profile web add .
+          dsh --profile web --dump-config
+          ```
+
+          Verify that the configuration contains the `gitlearnos-host` row before treating the bundle as discovered.
+
+          This plugin is only the Harness integration surface. A complete learner deployment also requires a learner-owned Git repository, the GitLearnOS protocol, verified RAG, and verified recurring automation where required.
+
+          See `adapters/deepseek-harness/README.md` for limits, verification, removal, and Developer Preview guidance.
+          EOF
+
+          (
+            cd dist
+            zip -qr "$GITHUB_WORKSPACE/GitLearnOS-DeepSeek-Harness-Plugin-$VERSION.zip" "GitLearnOS-DeepSeek-Harness-Plugin-$VERSION"
+          )
+
+      - name: Create or refresh pre-release
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: v2.0.0-dev.1
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "$TAG already exists; nothing to publish."
-            exit 0
+            gh release edit "$TAG" \
+              --title "GitLearnOS v2 Developer Preview" \
+              --prerelease \
+              --notes-file RELEASE-NOTES-v2.0.0-dev.1.md
+          else
+            gh release create "$TAG" \
+              --title "GitLearnOS v2 Developer Preview" \
+              --prerelease \
+              --notes-file RELEASE-NOTES-v2.0.0-dev.1.md
           fi
 
-          gh release create "$TAG" \
-            --target "$GITHUB_SHA" \
-            --title "GitLearnOS v2 Developer Preview" \
-            --prerelease \
-            --notes-file RELEASE-NOTES-v2.0.0-dev.1.md
+      - name: Upload curated packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$TAG" \
+            "GitLearnOS-Starter-Template-$VERSION.zip#Starter Template - recommended for most users" \
+            "GitLearnOS-DeepSeek-Harness-Plugin-$VERSION.zip#DeepSeek Harness Plugin" \
+            --clobber
+
+      - name: Verify release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release view "$TAG" --json tagName,isPrerelease,assets,url

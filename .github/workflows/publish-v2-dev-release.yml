@@ -1,0 +1,43 @@
+name: Publish GitLearnOS v2 Developer Preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/publish-v2-dev-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify English and Chinese alignment
+        run: node scripts/check-language-alignment.mjs
+
+      - name: Publish v2.0.0-dev.1 pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v2.0.0-dev.1
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "$TAG already exists; nothing to publish."
+            exit 0
+          fi
+
+          gh release create "$TAG" \
+            --target "$GITHUB_SHA" \
+            --title "GitLearnOS v2 Developer Preview" \
+            --prerelease \
+            --notes-file RELEASE-NOTES-v2.0.0-dev.1.md

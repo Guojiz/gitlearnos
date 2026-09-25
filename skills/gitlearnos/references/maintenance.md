@@ -17,7 +17,9 @@ last-run timestamp, or commit.
 5. planned, due, and unscored questions;
 6. source/model links;
 7. repeated problem evidence waiting for synthesis or transfer checks;
-8. duplicate, stale, orphaned, or excessive state.
+8. assistance strategies awaiting induction, promotion, or a planned check
+   (see [`strategy.md`](strategy.md); reconcile only on this recurring run);
+9. duplicate, stale, orphaned, or excessive state.
 
 ## High-value checks
 

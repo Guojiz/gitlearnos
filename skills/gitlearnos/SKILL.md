@@ -60,6 +60,7 @@ on a surface where Skills are unavailable.
 | source access, provenance, privacy, or completeness | [`references/source.md`](references/source.md) |
 | classify knowledge points; deploy, ingest, promote, query, delete, or rebuild RAG | [`references/rag.md`](references/rag.md) |
 | extract reusable understanding | [`references/model.md`](references/model.md) |
+| extract, apply, or revise a learner-assistance strategy | [`references/strategy.md`](references/strategy.md) |
 | summarize linked evidence or prepare a compact handoff | [`references/summarize.md`](references/summarize.md) |
 | repair state, links, duplicates, or undo scope | [`references/maintenance.md`](references/maintenance.md) |
 | apply quality standards, trim noise, or manage knowledge lifecycle | [`references/standards.md`](references/standards.md) |

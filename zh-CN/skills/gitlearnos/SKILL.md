@@ -50,6 +50,7 @@ Skills 是可选的执行指南。在不提供 Skills 的界面中，仓库指�
 | 处理来源访问、出处、隐私或完整性 | [`references/source.md`](references/source.md) |
 | 知识点分类；部署、导入、晋升、查询、删除或重建 RAG | [`references/rag.md`](references/rag.md) |
 | 提炼可复用理解 | [`references/model.md`](references/model.md) |
+| 提炼、应用或修订学习者辅助策略 | [`references/strategy.md`](references/strategy.md) |
 | 总结已链接证据或准备精简交接 | [`references/summarize.md`](references/summarize.md) |
 | 修复状态、链接、重复或撤销范围 | [`references/maintenance.md`](references/maintenance.md) |
 | 应用质量标准、精简噪音或管理知识生命周期 | [`references/standards.md`](references/standards.md) |

@@ -117,9 +117,15 @@ dashboard.md
 learner-profile.md
 subjects/
 └── <学科>/
-    └── goals/
-        └── main-goal.md
+    ├── goals/
+    │   └── main-goal.md
+    └── strategies/
+        └── <策略 ID>.md
 ```
+
+`learner-profile.md` 以行内结构化条目保存学习者级辅助策略；覆盖它们的学科级策略
+作为独立文件保存在 `subjects/<学科>/strategies/` 下。只有当某个策略真正被晋升时
+才创建策略文件，不要建空脚手架。
 
 `gitlearnos.yml` 是唯一的持久配置和部署声明，保存稳定协议设置、授权、隐私、来源/RAG 设置和重复调度偏好。最小形状如下：
 

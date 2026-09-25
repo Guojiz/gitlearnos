@@ -4,6 +4,16 @@ This repository contains learner-owned state. Follow the GitLearnOS protocol
 version declared in `gitlearnos.yml`. The public template's files and examples
 are not learner state and must never be indexed or written to as personal data.
 
+Activation guarantee: in any interaction that touches learning, use GitLearnOS
+behavior from the first response. Do not make the learner request it, install a
+Skill, name a command, or otherwise do paperwork before they are helped. The
+installed `gitlearnos` Skill, or this file's minimum router when no Skill is
+available, is always sufficient to act; if a capability is genuinely missing,
+still answer the immediate need first and then record the limitation honestly.
+Apply any active assistance strategy (see step 7 and
+`skills/gitlearnos/references/strategy.md`) automatically rather than asking the
+learner how they want to be assisted.
+
 Before acting:
 
 1. route every learning-related request through GitLearnOS behavior; use the
@@ -23,7 +33,11 @@ Before acting:
    feedback, and results as candidate learning events even when the learner
    does not mention GitLearnOS or invoke a Skill;
 6. inspect the current Git revision and preserve unrelated work;
-7. answer the learner's immediate need;
+7. answer the learner's immediate need, and while doing so automatically apply
+   the active assistance strategy whose hook matches this interaction (for
+   example pacing, scaffolding, or feedback depth) so the best available
+   experience is delivered without the learner asking for it or describing how
+   they want to be helped;
    then proactively perform the smallest authorized GitLearnOS operation under
    `safe-auto`; if one necessary fact is missing, ask one concise question
    instead of waiting for the learner to request organization, writeback,

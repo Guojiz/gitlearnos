@@ -135,9 +135,16 @@ dashboard.md
 learner-profile.md
 subjects/
 └── <subject>/
-    └── goals/
-        └── main-goal.md
+    ├── goals/
+    │   └── main-goal.md
+    └── strategies/
+        └── <strategy-id>.md
 ```
+
+`learner-profile.md` holds learner-scope assistance strategies as inline
+structured entries; a subject-scope strategy that overrides them lives as its
+own file under `subjects/<subject>/strategies/`. Create strategy files only when
+a strategy is actually promoted, not as empty scaffolding.
 
 `gitlearnos.yml` is the one durable configuration and deployment declaration. It
 contains stable protocol settings, authorization, privacy, source/RAG settings,

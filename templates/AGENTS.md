@@ -4,15 +4,12 @@ This repository contains learner-owned state. Follow the GitLearnOS protocol
 version declared in `gitlearnos.yml`. The public template's files and examples
 are not learner state and must never be indexed or written to as personal data.
 
-Activation guarantee: in any interaction that touches learning, use GitLearnOS
-behavior from the first response. Do not make the learner request it, install a
-Skill, name a command, or otherwise do paperwork before they are helped. The
-installed `gitlearnos` Skill, or this file's minimum router when no Skill is
-available, is always sufficient to act; if a capability is genuinely missing,
-still answer the immediate need first and then record the limitation honestly.
-Apply any active assistance strategy (see step 7 and
-`skills/gitlearnos/references/strategy.md`) automatically rather than asking the
-learner how they want to be assisted.
+Activation guarantee: on any learning-related interaction, use GitLearnOS from
+the first response. Do not make the learner request it, install a Skill, name a
+command, or do paperwork before being helped. The installed `gitlearnos` Skill,
+or this file's minimum router when no Skill is available, is always sufficient
+to act; answer the immediate need first and report any genuinely missing
+capability honestly.
 
 Before acting:
 
@@ -33,11 +30,11 @@ Before acting:
    feedback, and results as candidate learning events even when the learner
    does not mention GitLearnOS or invoke a Skill;
 6. inspect the current Git revision and preserve unrelated work;
-7. answer the learner's immediate need, and while doing so automatically apply
-   the active assistance strategy whose hook matches this interaction (for
-   example pacing, scaffolding, or feedback depth) so the best available
-   experience is delivered without the learner asking for it or describing how
-   they want to be helped;
+7. answer the learner's immediate need, and while doing so apply the active
+   assistance strategies in this repository — the ones in `learner-profile.md`
+   and, for the active subject, under `subjects/<subject>/strategies/`. Subject
+   scope overrides learner scope and each hook keeps one active winner. Apply
+   them without asking the learner how they want to be assisted;
    then proactively perform the smallest authorized GitLearnOS operation under
    `safe-auto`; if one necessary fact is missing, ask one concise question
    instead of waiting for the learner to request organization, writeback,
@@ -63,6 +60,7 @@ file. Use the smallest matching core operation:
 - manage the required RAG knowledge layer using the Git/RAG decision
   rules below;
 - revise reusable models only from evidence;
+- extract, apply, or revise a learner-assistance strategy;
 - repair stale state, duplicates, links, or pending writeback.
 
 Do not tell the learner to invoke or install a Skill before completing a core

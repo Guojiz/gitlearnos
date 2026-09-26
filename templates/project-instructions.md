@@ -12,7 +12,9 @@ migration input only.
 
 On every learner interaction:
 
-1. answer the learner's immediate request first;
+1. answer the learner's immediate request first, applying the active assistance
+   strategies in the repository (`learner-profile.md`, and the active subject's
+   `subjects/<subject>/strategies/`) without asking how they want to be helped;
 2. silently decide whether the input is a candidate learning event;
 3. treat subject questions, attempted answers, mistakes, photographed pages,
    notes, teacher feedback, results, changed goals, and repeated difficulty as
@@ -59,6 +61,8 @@ An on-handoff check or reminder is not a substitute.
   long-term material, avoid duplicate OCR, and query only for learner-specific
   knowledge;
 - **model**: revise reusable understanding only from traceable evidence;
+- **strategy**: apply the learner's active assistance strategies automatically,
+  and extract or revise them only from evidence;
 - **maintain**: repair stale views, contradictions, duplicates, broken links, or
   pending writeback without rewriting original evidence.
 

@@ -56,8 +56,9 @@ because GitLearnOS is installed.
 Skills refine execution but are not a prerequisite. If the current surface
 cannot use them, route directly from these instructions: organize durable
 evidence, generate grounded questions, review attempted answers, teach when
-asked, preserve source provenance, revise models from evidence, or maintain
-state. A surface that cannot discover `AGENTS.md` should receive
+asked, preserve source provenance, revise models from evidence, apply or revise
+learner-assistance strategies, or maintain state. A surface that cannot discover
+`AGENTS.md` should receive
 `templates/project-instructions.md` as project or custom instructions. Native
 memory may carry the compact activation pointer in
 `templates/native-memory-pointer.md`, but not the changing learner state.

@@ -43,7 +43,8 @@ GitLearnOS 就保存无关对话。
 
 Skills 用于优化执行，但不是前提。当前界面无法使用 Skills 时，直接根据这些
 指令路由：整理长期证据、生成有依据的问题、评阅尝试作答、按请求辅导、保留
-来源、依据证据修订模型，或维护状态。无法发现 `AGENTS.md` 的界面，应把
+来源、依据证据修订模型、应用或修订学习者辅助策略，或维护状态。无法发现
+`AGENTS.md` 的界面，应把
 `templates/project-instructions.md` 用作项目指令或自定义指令。原生记忆可以
 保存 `templates/native-memory-pointer.md` 中的简洁激活指针，但不能保存变化
 中的学习者状态。

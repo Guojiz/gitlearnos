@@ -9,8 +9,8 @@ DeepSeek Harness **Developer Preview**. It mounts a Host plugin that adds a
   read-only due-review observation (see [Revisit-ready read](#revisit-ready-read));
 - `learning_route` selects the relevant GitLearnOS operation and an
   authority-aware next action without performing or claiming writeback.
-- `learning_apply` applies a typed event/gap/model/review/dashboard plan as
-  one atomic Git commit; `learning_record` remains a compatibility wrapper.
+- `learning_apply` applies a typed event/gap/model/review/strategy/dashboard plan
+  as one atomic Git commit; `learning_record` remains a compatibility wrapper.
 
 DeepSeek Harness and this adapter are both early integration surfaces. Expect
 breaking upstream changes and review the pinned revisions before installing.
@@ -51,9 +51,11 @@ dsh --profile web --dump-config
 ## Native write transaction
 
 `learning_apply` is intentionally narrower than a general file or shell tool.
-It accepts a bounded typed plan of event, gap, model, review, and dashboard
-projection operations. Each record receives a canonical lowercase ID and
-schema-owned path; dashboard projections may update only `dashboard.md`.
+It accepts a bounded typed plan of event, gap, model, review, strategy, and
+dashboard projection operations. Each record receives a canonical lowercase ID
+and schema-owned path; dashboard projections may update only `dashboard.md`. A
+learner-scope strategy is the one merged-file case: it supplies only an entry
+body, which the tool appends or replaces inside `learner-profile.md`.
 Before writing it requires explicit learner identity, completed setup answers,
 an active goal, a clean Git worktree root, and the exact base revision observed
 by the caller.

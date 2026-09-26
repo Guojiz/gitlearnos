@@ -9,7 +9,7 @@
   [复测就绪读取](#复测就绪读取)）；
 - `learning_route` 选择对应的 GitLearnOS 操作与符合权限的下一步，但不会执行或
   声称已经写回。
-- `learning_apply` 把 event/gap/model/review/dashboard 计划作为一个原子 Git 提交执行；
+- `learning_apply` 把 event/gap/model/review/strategy/dashboard 计划作为一个原子 Git 提交执行；
   `learning_record` 保留为兼容用的单事件包装器。
 
 DeepSeek Harness 和本适配器都仍是早期接入面。上游可能发生破坏性变化，安装前

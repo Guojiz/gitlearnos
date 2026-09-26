@@ -11,7 +11,7 @@ GitLearnOS 为官方 DeepSeek Harness **Developer Preview** 提供**独家原生
 经审查的 bundle 包含无构建 Host 和浏览器客户端。Host 提供有边界的
 `learning_status`、`learning_route` 读取，以及一条由 `gitlearnos.yml` 配置授权的
 `learning_apply` 事务。`safe-auto` 下，完成严格的学习者身份、设置/配置、写入权限
-和基线版本检查后，它可以把 event、knowledge-gap、model、review、dashboard 的类型化
+和基线版本检查后，它可以把 event、knowledge-gap、model、review、strategy、dashboard 的类型化
 操作原子地合并为一次 Git 提交；`preview` 输出精确提案；`manual` 需要批准。回执包括
 改动文件和 `git revert` 撤销边界。`learning_record` 仍是单事件兼容包装器。
 

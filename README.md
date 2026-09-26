@@ -117,7 +117,7 @@ The code in this repository currently proves:
 - a no-build Host plus browser bundle discovered by the Harness profile;
 - `learning_status` and `learning_route` bounded, read-only observations;
 - one `gitlearnos.yml`-authorized `learning_apply` transaction that atomically applies typed
-  event, knowledge-gap, model, review, and dashboard operations in one
+  event, knowledge-gap, model, review, strategy, and dashboard operations in one
   reversible Git commit (with strict learner identity, setup/config, base
   revision, and write-authority checks); `learning_record` remains a
   compatibility wrapper;

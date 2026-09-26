@@ -14,8 +14,8 @@ owner of learning order.
 The reviewed bundle includes a no-build Host and browser client. The Host
 exposes bounded `learning_status` and `learning_route` reads plus a
 `gitlearnos.yml`-authorized `learning_apply` transaction. In `safe-auto`, `learning_apply`
-can atomically apply typed event, knowledge-gap, model, review, and dashboard
-operations in one Git commit after strict learner identity, setup/config,
+can atomically apply typed event, knowledge-gap, model, review, strategy, and
+dashboard operations in one Git commit after strict learner identity, setup/config,
 authority, and base-revision checks. `preview` emits the exact proposal;
 `manual` requires approval. The receipt includes changed files and a
 `git revert` boundary. `learning_record` remains a compatibility wrapper for a

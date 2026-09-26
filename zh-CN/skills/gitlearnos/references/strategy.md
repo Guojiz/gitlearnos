@@ -83,6 +83,8 @@
 
 subject 作用域文件 `subjects/<subject>/strategies/<slug>.md` 使用相同字段，在其 front matter 里写 `scope: subjects/<subject>`。
 
+learner 作用域条目由 `learning_apply`（`kind: strategy`、`scope: learner`）写入：内容正是这段条目主体，外面用一对哨兵注释 `<!-- gitlearnos:strategy id=<id> -->` … `<!-- /gitlearnos:strategy -->` 包裹，放在 `## Assistance strategies` 标题下的 `yaml` 围栏块里。哨兵让工具能追加新条目或就地替换某个 `id`，而无需重新生成整份 profile，因此旁边的观察记录和其它策略保持逐字节不变。你只提供条目主体；不要手改哨兵或手动重建该区块。如果 `learner-profile.md` 存在未提交的本地改动，合并会被拒绝；Git 承担历史、回滚与审计层，因此不维护条目级校验和。
+
 `check_after_deliveries` 是该策略约束过的交付次数的整数计数；`check_after_event` 是一个命名条件。两者都可选，但对 stated 策略至少应设一个，因为它按构造没有结果证据。
 
 保持文件合并（learner 作用域），同时每个条目保留自己的 `status`/`version`，这样能同时保住学习者要的两个属性：一个可检查的整体供阅读，以及逐条修订/归档，让被证伪的计划能降级而不动它周围稳定的画像观察。

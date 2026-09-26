@@ -808,3 +808,184 @@ test('controlled update refuses event kind', async () => {
     /action update is only allowed for gap, model, or review/,
   )
 })
+
+function learnerStrategyBody(id, version = 1, status = 'active') {
+  return [
+    `- id: ${id}`,
+    `  version: ${version}`,
+    `  status: ${status}`,
+    '  basis: stated',
+    '  scope: learner',
+    '  hooks:',
+    '    delivery: one-item-per-turn',
+    `  promotion_reason: explicit contribution for ${id}`,
+    '',
+  ].join('\n')
+}
+
+test('learner-scope strategy appends a new block into learner-profile.md without touching neighbors', async () => {
+  const root = await learnerRepo('safe-auto')
+  await writeFile(join(root, 'learner-profile.md'), '# Learner Profile\n\n## Evidence-backed observation\n\n- Context-clue selection needs checking.\n')
+  await git(root, 'add', 'learner-profile.md')
+  await git(root, 'commit', '-m', 'seed profile')
+  const status = await inspectWorkspace(root)
+  const result = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-one-thing', body: learnerStrategyBody('strat-one-thing') }],
+  })
+  assert.equal(result.status, 'committed', JSON.stringify(result))
+  const text = await readFile(join(root, 'learner-profile.md'), 'utf8')
+  assert.match(text, /Context-clue selection needs checking\./, 'pre-existing observation preserved')
+  assert.match(text, /## Assistance strategies/, 'assistance section created')
+  assert.match(text, /<!-- gitlearnos:strategy id=strat-one-thing -->/, 'sentinel block present')
+  assert.match(text, /- id: strat-one-thing/, 'entry body present')
+})
+
+test('learner-scope strategy replaces an existing id block in place and preserves a second strategy', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status0 = await inspectWorkspace(root)
+  const first = await applyLearningTransaction(root, {
+    baseRevision: status0.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-a', body: learnerStrategyBody('strat-a', 1, 'active') }],
+  })
+  assert.equal(first.status, 'committed')
+  let status = await inspectWorkspace(root)
+  await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-b', body: learnerStrategyBody('strat-b', 1, 'active') }],
+  })
+  status = await inspectWorkspace(root)
+  const revised = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-a', body: learnerStrategyBody('strat-a', 2, 'draft') }],
+  })
+  assert.equal(revised.status, 'committed', JSON.stringify(revised))
+  const text = await readFile(join(root, 'learner-profile.md'), 'utf8')
+  assert.equal(text.match(/<!-- gitlearnos:strategy id=strat-a -->/g).length, 1, 'strat-a appears once')
+  assert.match(text, /- id: strat-b/, 'strat-b preserved')
+  assert.match(text, /  version: 2[\s\S]*?  status: draft/, 'strat-a revised in place')
+  assert.equal(text.match(/- id: strat-a/g).length, 1, 'no duplicate strat-a body')
+})
+
+test('learner-scope strategy is idempotent when the block already matches', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const body = learnerStrategyBody('strat-idem')
+  const first = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-idem', body }],
+  })
+  assert.equal(first.status, 'committed')
+  const retryStatus = await inspectWorkspace(root)
+  const retry = await applyLearningTransaction(root, {
+    baseRevision: retryStatus.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-idem', body }],
+  })
+  assert.equal(retry.status, 'unchanged', JSON.stringify(retry))
+})
+
+test('learner-scope strategy refuses to merge over uncommitted profile edits', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const before = await readFile(join(root, 'learner-profile.md'), 'utf8')
+  await writeFile(join(root, 'learner-profile.md'), before + '\n## Uncommitted note\n')
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-dirty', body: learnerStrategyBody('strat-dirty') }],
+    }),
+    /uncommitted local modifications; strategy merge refused/,
+  )
+  assert.match(await readFile(join(root, 'learner-profile.md'), 'utf8'), /Uncommitted note/, 'user edit untouched')
+})
+
+test('learner-scope strategy body must match its id and reject fences', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-x', body: '- id: strat-other\n' }],
+    }),
+    /must begin with "- id: strat-x"/,
+  )
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{ kind: 'strategy', scope: 'learner', id: 'strat-y', body: '- id: strat-y\n```\ninjected\n```\n' }],
+    }),
+    /must not contain code fences/,
+  )
+})
+
+test('subject-scope strategy writes its own file and supports controlled update', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const create = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [{ kind: 'strategy', scope: 'subject', subject: 'math', id: 'strat-predict-blank', body: learnerStrategyBody('strat-predict-blank', 1, 'draft') }],
+  })
+  assert.equal(create.status, 'committed', JSON.stringify(create))
+  assert.equal(create.path, 'subjects/math/strategies/strat-predict-blank.md')
+  const filePath = join(root, 'subjects', 'math', 'strategies', 'strat-predict-blank.md')
+  assert.match(await readFile(filePath, 'utf8'), /- id: strat-predict-blank/)
+  const next = await inspectWorkspace(root)
+  const hashed = next.contentHashes.find(item => item.path.endsWith('strat-predict-blank.md'))
+  assert.ok(hashed, 'subject strategy is hashed for controlled update')
+  assert.equal(hashed.kind, 'strategy')
+  const updated = await applyLearningTransaction(root, {
+    baseRevision: next.gitRevision,
+    operations: [{
+      kind: 'strategy', scope: 'subject', subject: 'math', id: 'strat-predict-blank',
+      action: 'update', expectedContentSha256: hashed.contentSha256,
+      body: learnerStrategyBody('strat-predict-blank', 2, 'active'),
+    }],
+  })
+  assert.equal(updated.status, 'committed', JSON.stringify(updated))
+  assert.match(await readFile(filePath, 'utf8'), /  status: active/)
+})
+
+test('strategy id must match the strat- slug pattern', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  await assert.rejects(
+    () => applyLearningTransaction(root, {
+      baseRevision: status.gitRevision,
+      operations: [{ kind: 'strategy', scope: 'learner', id: 'not-a-strategy', body: '- id: not-a-strategy\n' }],
+    }),
+    /must match/,
+  )
+})
+
+test('two learner-scope strategies in one transaction merge onto each other', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const result = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [
+      { kind: 'strategy', scope: 'learner', id: 'strat-first', body: learnerStrategyBody('strat-first') },
+      { kind: 'strategy', scope: 'learner', id: 'strat-second', body: learnerStrategyBody('strat-second') },
+    ],
+  })
+  assert.equal(result.status, 'committed', JSON.stringify(result))
+  const text = await readFile(join(root, 'learner-profile.md'), 'utf8')
+  assert.match(text, /- id: strat-first/)
+  assert.match(text, /- id: strat-second/, 'second merge did not clobber or self-refuse')
+  assert.equal(text.match(/## Assistance strategies/g).length, 1, 'one section only')
+})
+
+test('a learner-scope strategy and a subject-scope strategy commit together', async () => {
+  const root = await learnerRepo('safe-auto')
+  const status = await inspectWorkspace(root)
+  const result = await applyLearningTransaction(root, {
+    baseRevision: status.gitRevision,
+    operations: [
+      { kind: 'strategy', scope: 'learner', id: 'strat-cross', body: learnerStrategyBody('strat-cross') },
+      { kind: 'strategy', scope: 'subject', subject: 'math', id: 'strat-subj', body: learnerStrategyBody('strat-subj') },
+    ],
+  })
+  assert.equal(result.status, 'committed', JSON.stringify(result))
+  assert.equal(result.changedFiles.length, 2)
+  assert.match(await readFile(join(root, 'learner-profile.md'), 'utf8'), /- id: strat-cross/)
+  assert.match(await readFile(join(root, 'subjects', 'math', 'strategies', 'strat-subj.md'), 'utf8'), /- id: strat-subj/)
+})

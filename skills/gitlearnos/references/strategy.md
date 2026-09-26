@@ -110,6 +110,17 @@ A learner-scope entry inside `learner-profile.md`:
 A subject-scope file `subjects/<subject>/strategies/<slug>.md` uses the same
 fields with `scope: subjects/<subject>` in its front matter.
 
+A learner-scope entry is written by `learning_apply` (`kind: strategy`,
+`scope: learner`) as exactly this entry body, wrapped in a sentinel comment pair
+`<!-- gitlearnos:strategy id=<id> -->` … `<!-- /gitlearnos:strategy -->` inside a
+fenced `yaml` block under the `## Assistance strategies` heading. The sentinels
+let the tool append a new entry or replace one `id` in place without regenerating
+the whole profile, so neighboring observations and other strategies stay
+byte-for-byte intact. You supply only the entry body; never hand-edit the
+sentinels or rebuild the section by hand. The merge is refused if
+`learner-profile.md` has uncommitted local edits; Git is the history, rollback,
+and audit layer, so no entry-level checksum is kept.
+
 `check_after_deliveries` is an integer count of deliveries the strategy
 constrained; `check_after_event` is a named condition. Both are optional, and
 at least one should be set for a stated strategy because it has no outcome

@@ -22,6 +22,66 @@ const STATUS_PATHS = Object.freeze([
   'automation.md',
 ])
 
+const LEARNER_PROFILE_PATH = 'learner-profile.md'
+const ASSISTANCE_SECTION = '## Assistance strategies'
+const STRATEGY_OPEN = id => `<!-- gitlearnos:strategy id=${id} -->`
+const STRATEGY_CLOSE = '<!-- /gitlearnos:strategy -->'
+const STRATEGY_ID_RE = /^strat-[a-z0-9][a-z0-9-]{0,58}$/
+
+// A learner-scope strategy is one bounded block merged into learner-profile.md,
+// never a full-file regeneration. The application layer owns the file structure
+// (section heading + sentinel-delimited yaml block); the model supplies only the
+// entry body. Git owns history, rollback, and audit; no entry-level sha is kept.
+function renderStrategyBlock(id, body) {
+  const entry = String(body).replace(/\s+$/, '')
+  if (entry.includes('```')) throw new Error('strategy body must not contain code fences')
+  if (entry.includes('<!--')) throw new Error('strategy body must not contain HTML comments')
+  if (/(^|\n)#{1,6}\s/.test(entry)) throw new Error('strategy body must not contain Markdown headings')
+  const first = entry.split('\n').find(line => line.trim() !== '') ?? ''
+  if (first.trim() !== `- id: ${id}`) throw new Error(`strategy body must begin with "- id: ${id}"`)
+  return `${STRATEGY_OPEN(id)}\n\`\`\`yaml\n${entry}\n\`\`\`\n${STRATEGY_CLOSE}`
+}
+
+function locateAssistanceSection(content) {
+  const lines = content.split('\n')
+  let start = lines.findIndex(line => line.trim() === ASSISTANCE_SECTION)
+  if (start === -1) return null
+  let end = lines.length
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (/^##\s/.test(lines[i])) { end = i; break }
+  }
+  return { start, end }
+}
+
+// Replace the sentinel block for `id`, or insert a new one at the end of the
+// "## Assistance strategies" section (creating the section when absent). Text
+// outside the section, and other blocks inside it, are preserved byte-for-byte.
+function mergeStrategyBlock(existing, id, block) {
+  let content = existing == null ? `# Learner Profile\n\n${ASSISTANCE_SECTION}\n` : existing
+  if (!content.endsWith('\n')) content += '\n'
+  let section = locateAssistanceSection(content)
+  if (!section) {
+    content = content.replace(/\s*$/, '') + `\n\n${ASSISTANCE_SECTION}\n`
+    section = locateAssistanceSection(content)
+  }
+  const lines = content.split('\n')
+  const openIdx = lines.indexOf(STRATEGY_OPEN(id))
+  if (openIdx !== -1 && openIdx > section.start && openIdx < section.end) {
+    const closeIdx = lines.indexOf(STRATEGY_CLOSE, openIdx)
+    if (closeIdx === -1 || closeIdx >= section.end) {
+      throw new Error(`strategy block for ${id} is malformed; refusing to merge`)
+    }
+    lines.splice(openIdx, closeIdx - openIdx + 1, ...block.split('\n'))
+  } else {
+    let insertAt = section.end
+    while (insertAt > section.start + 1 && lines[insertAt - 1].trim() === '') insertAt -= 1
+    lines.splice(insertAt, 0, ...(insertAt > section.start + 1 ? [''] : []), ...block.split('\n'), '')
+  }
+  // Canonical single trailing newline so the uncommitted-change guard can
+  // compare against Git HEAD content (which readTrackedAtHead trims).
+  return lines.join('\n').replace(/\n+$/, '\n')
+}
+
 // A review or model file is only "due" when it carries an explicit
 // next-review / next-check marker AND a parseable ISO date on the same line.
 // Bare words like "due dates" without a date never match.
@@ -246,7 +306,7 @@ async function subjectFiles(root, folder) {
 
 async function hashedStateFiles(root) {
   const items = []
-  for (const [folder, kind] of [['knowledge-gaps', 'gap'], ['models', 'model'], ['reviews', 'review']]) {
+  for (const [folder, kind] of [['knowledge-gaps', 'gap'], ['models', 'model'], ['reviews', 'review'], ['strategies', 'strategy']]) {
     for (const path of await subjectFiles(root, folder)) {
       const text = await safeRead(root, path)
       if (text === null) continue
@@ -730,11 +790,40 @@ function normalizeOperations(input) {
   if (operations.length === 0 || operations.length > MAX_TRANSACTION_OPERATIONS) throw new Error('operations count is out of bounds')
   return operations.map((operation, index) => {
     const kind = operation?.kind ?? 'event'
-    if (!['event', 'gap', 'model', 'review', 'dashboard'].includes(kind)) throw new Error('operations[' + index + '].kind is not allowed')
+    if (!['event', 'gap', 'model', 'review', 'dashboard', 'strategy'].includes(kind)) throw new Error('operations[' + index + '].kind is not allowed')
     if (kind === 'dashboard') {
       if (operation.path && operation.path !== 'dashboard.md') throw new Error('dashboard path must be dashboard.md')
       if (typeof operation.content !== 'string' || !operation.content.trim() || operation.content.length > MAX_OPERATION_BODY_CHARS) throw new Error('dashboard content is required and bounded')
       return { kind, path: 'dashboard.md', proposal: operation.content.endsWith('\n') ? operation.content : operation.content + '\n' }
+    }
+    if (kind === 'strategy') {
+      const id = safeSegment(operation?.id, 'operations[' + index + '].id')
+      if (!STRATEGY_ID_RE.test(id)) throw new Error('operations[' + index + '].id must match ' + STRATEGY_ID_RE)
+      const body = operation.body
+      if (typeof body !== 'string' || !body.trim() || body.length > MAX_OPERATION_BODY_CHARS) throw new Error('strategy body is required and bounded')
+      const block = renderStrategyBlock(id, body)
+      const scope = operation.scope == null ? (operation.subject == null ? 'learner' : 'subject') : String(operation.scope).trim().toLowerCase()
+      if (scope === 'learner') {
+        // Fixed-path merged-file write: the application layer merges the block
+        // into learner-profile.md; the model never supplies whole-file content.
+        return { kind, scope: 'learner', id, strategyBlock: block, path: LEARNER_PROFILE_PATH, learnerStrategyMerge: true }
+      }
+      if (scope !== 'subject') throw new Error('operations[' + index + '].scope must be learner or subject')
+      const action = String(operation?.action ?? 'create').trim().toLowerCase()
+      if (!['create', 'update'].includes(action)) throw new Error('operations[' + index + '].action must be create or update')
+      const subject = safeSegment(operation?.subject, 'operations[' + index + '].subject')
+      const path = 'subjects/' + subject + '/strategies/' + id + '.md'
+      if (operation.path && operation.path !== path) throw new Error('operation path must be canonical ' + path)
+      const expectedContentSha256 = operation?.expectedContentSha256 == null ? null : String(operation.expectedContentSha256).trim().toLowerCase()
+      if (action === 'update') {
+        if (!expectedContentSha256 || !/^[0-9a-f]{64}$/.test(expectedContentSha256)) {
+          throw new Error('operations[' + index + '].expectedContentSha256 is required for update (sha256 of current file utf8 content)')
+        }
+      } else if (expectedContentSha256) {
+        throw new Error('operations[' + index + '].expectedContentSha256 is only valid with action update')
+      }
+      const proposal = '# Strategy ' + id + '\n\n' + block + '\n'
+      return { kind, scope: 'subject', action, expectedContentSha256, subject, id, path, proposal }
     }
     const action = String(operation?.action ?? 'create').trim().toLowerCase()
     if (!['create', 'update'].includes(action)) throw new Error('operations[' + index + '].action must be create or update')
@@ -766,13 +855,29 @@ function normalizeOperations(input) {
   })
 }
 
+// Read learner-profile.md (or null when absent) so a learner-scope strategy can
+// precompute an honest merged preview. The authoritative merge happens again
+// inside the write lock against the freshly read file.
+async function hydrateLearnerStrategyProposals(operations, root) {
+  for (const operation of operations) {
+    if (!operation.learnerStrategyMerge) continue
+    const target = resolve(root, LEARNER_PROFILE_PATH)
+    const stat = await lstat(target).catch(error => error?.code === 'ENOENT' ? null : Promise.reject(error))
+    if (stat && (!stat.isFile() || stat.isSymbolicLink())) throw new Error('learner-profile.md must be a regular file')
+    const current = stat ? await readFile(target, 'utf8') : null
+    operation.proposal = mergeStrategyBlock(current, operation.id, operation.strategyBlock)
+  }
+  return operations
+}
+
 async function ensureParentForPath(root, path) {
   if (path === 'dashboard.md') return root
+  if (path === LEARNER_PROFILE_PATH) return root
   const parts = path.split('/')
   if (parts.length !== 4 || parts[0] !== 'subjects') throw new Error('target path is outside the learning state schema')
   const subject = safeSegment(parts[1], 'subject')
   const folder = parts[2]
-  if (!['events', 'knowledge-gaps', 'models', 'reviews'].includes(folder)) throw new Error('target path folder is not allowed')
+  if (!['events', 'knowledge-gaps', 'models', 'reviews', 'strategies'].includes(folder)) throw new Error('target path folder is not allowed')
   const subjectPath = resolve(root, 'subjects', subject)
   const stat = await lstat(subjectPath).catch(error => { if (error?.code === 'ENOENT') throw new Error('subject does not exist: ' + subject); throw error })
   if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error('subject path must be a real directory')
@@ -799,6 +904,7 @@ export async function recordLearningEvent(root, input) {
 export async function applyLearningTransaction(root, input) {
   const canonicalRoot = await requireGitWorkspace(root)
   const operations = normalizeOperations(input)
+  await hydrateLearnerStrategyProposals(operations, canonicalRoot)
   const path = operations.length === 1 ? operations[0].path : null
   const proposal = operations.length === 1 ? operations[0].proposal : operations.map(item => '### ' + item.path + '\n\n' + item.proposal).join('\n')
   const status = await inspectWorkspace(canonicalRoot)
@@ -831,7 +937,45 @@ export async function applyLearningTransaction(root, input) {
     }
     const existingCommits = []
     let allUnchanged = true
+    // In-memory working copy for learner-profile.md within this transaction, so
+    // multiple learner-scope strategy operations in one commit merge onto each
+    // other instead of clashing with the intermediate file on disk.
+    let learnerProfileState
+    let learnerProfileDirtyChecked = false
     for (const operation of operations) {
+      if (operation.learnerStrategyMerge) {
+        // Authoritative merge inside the lock: read the committed file once,
+        // refuse when it carries uncommitted user changes, then append/replace
+        // this id's block. Git records history; no entry-level sha is kept.
+        const target = resolve(canonicalRoot, LEARNER_PROFILE_PATH)
+        if (!learnerProfileDirtyChecked) {
+          const stat = await lstat(target).catch(error => error?.code === 'ENOENT' ? null : Promise.reject(error))
+          if (stat && (!stat.isFile() || stat.isSymbolicLink())) throw new Error('learner-profile.md must be a regular file')
+          learnerProfileState = stat ? await readFile(target, 'utf8') : null
+          if (learnerProfileState !== null) {
+            const tracked = await readTrackedAtHead(canonicalRoot, LEARNER_PROFILE_PATH)
+            if (tracked !== learnerProfileState && tracked + '\n' !== learnerProfileState) {
+              throw new Error('learner-profile.md has uncommitted local modifications; strategy merge refused')
+            }
+          }
+          learnerProfileDirtyChecked = true
+        }
+        const existing = learnerProfileState
+        const merged = mergeStrategyBlock(existing, operation.id, operation.strategyBlock)
+        operation.proposal = merged
+        if (existing !== null && existing === merged) continue
+        if (existing !== null) {
+          // Keep only the earliest snapshot per target so a rollback restores
+          // the original content, not an intermediate merge.
+          if (!replacedTargets.some(item => item.target === target)) replacedTargets.push({ target, existing })
+        } else if (!createdTargets.includes(target)) {
+          createdTargets.push(target)
+        }
+        learnerProfileState = merged
+        allUnchanged = false
+        await writeFile(target, merged, { encoding: 'utf8' })
+        continue
+      }
       if (operation.path !== 'dashboard.md') {
         const parentCandidate = resolve(canonicalRoot, 'subjects', operation.subject, operation.path.split('/')[2])
         const hadParent = await lstat(parentCandidate).then(() => true).catch(error => error?.code === 'ENOENT' ? false : Promise.reject(error))
@@ -954,7 +1098,7 @@ export function apply(ctx, config = {}) {
   ))
   ctx.tools.register(tool(
     'learning_apply',
-    'Apply one bounded composite learning transaction (event, gap, model, review, and dashboard projection) as one reversible commit. Gap/model/review lifecycle edits use action update plus expectedContentSha256 from learning_status.contentHashes.',
+    'Apply one bounded composite learning transaction (event, gap, model, review, strategy, and dashboard projection) as one reversible commit. Gap/model/review and subject-scope strategy lifecycle edits use action update plus expectedContentSha256 from learning_status.contentHashes. A learner-scope strategy (kind strategy, scope learner) supplies only the entry body; the tool merges it as one block into learner-profile.md and refuses when that file has uncommitted local edits.',
     objectSchema({
       baseRevision: { type: 'string', description: 'Exact HEAD revision observed while preparing this transaction.' },
       operations: { type: 'array', minItems: 1, maxItems: MAX_TRANSACTION_OPERATIONS, items: { type: 'object' } },

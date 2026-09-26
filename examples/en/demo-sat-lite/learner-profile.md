@@ -13,6 +13,7 @@ No broader learner trait is inferred from this small fictional example.
 
 ## Assistance strategies
 
+<!-- gitlearnos:strategy id=strat-one-thing-at-a-time -->
 ```yaml
 - id: strat-one-thing-at-a-time
   version: 1
@@ -32,8 +33,11 @@ No broader learner trait is inferred from this small fictional example.
   check_after_deliveries: 4
   check_after_event: first contradicting outcome
 ```
+<!-- /gitlearnos:strategy -->
 
 This entry records what the agent should do differently, not what the learner is.
 It is a stated, falsifiable plan: the learner can revoke it in one sentence, and
-a contradicting outcome moves it back to `draft` with the record linked. See
+a contradicting outcome moves it back to `draft` with the record linked. The
+sentinel comments are written by `learning_apply` so a later revise or archive
+replaces only this block and leaves the observations above intact. See
 `skills/gitlearnos/references/strategy.md`.
